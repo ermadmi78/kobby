@@ -4,7 +4,7 @@ plugins {
     kotlin("jvm")
 }
 group = "io.kobby"
-version = "0.0-SNAPSHOT"
+version = "0.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
