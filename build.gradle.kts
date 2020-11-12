@@ -1,17 +1,58 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-plugins {
-    kotlin("jvm") version "1.4.10"
-}
-group = "io.kobby"
-version = "0.0.0-SNAPSHOT"
+description = "Library for generate Kotlin DSL over GraphQL schema"
 
-repositories {
-    mavenCentral()
+plugins {
+    kotlin("jvm")
 }
-dependencies {
-    testImplementation(kotlin("test-junit5"))
+
+allprojects {
+    buildscript {
+        repositories {
+            mavenLocal()
+            jcenter()
+            mavenCentral()
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+    }
 }
-tasks.withType<KotlinCompile>() {
-    kotlinOptions.jvmTarget = "1.8"
+
+subprojects {
+    val kotlinJvmVersion: String by project
+    val kotlinVersion: String by project
+    val kotestVersion: String by project
+
+    apply(plugin = "kotlin")
+
+    tasks {
+        withType<KotlinCompile> {
+            kotlinOptions {
+                jvmTarget = kotlinJvmVersion
+                freeCompilerArgs = listOf("-Xjsr305=strict")
+            }
+        }
+
+        test {
+            testLogging.showStandardStreams = true
+            testLogging.exceptionFormat = FULL
+            useJUnitPlatform()
+        }
+    }
+
+    dependencies {
+        implementation(kotlin("stdlib", kotlinVersion))
+        implementation(kotlin("reflect", kotlinVersion))
+        testImplementation(kotlin("test", kotlinVersion))
+        testImplementation(kotlin("test-junit5", kotlinVersion))
+
+        testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+        testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+        testImplementation("io.kotest:kotest-property:$kotestVersion")
+    }
 }

@@ -1,8 +1,14 @@
-
 rootProject.name = "kobby"
 
+pluginManagement {
+    val kotlinVersion: String by settings
 
-include(":kobby-core")
+    plugins{
+        kotlin("jvm") version kotlinVersion
+    }
+}
+
+include(":kobby-generator")
 include(":kobby-gradle-plugin")
 include(":kobby-maven-plugin")
 
