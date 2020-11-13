@@ -1,0 +1,92 @@
+scalar JSON
+scalar DateTime
+
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    country(id: ID!): Country
+    countries(condition: String = "", limit: Int = -1, offset: Int = -1): [Country!]!
+
+    actor(id: ID!): Actor
+    actors(condition: String = "", limit: Int = -1, offset: Int = -1): [Actor!]!
+
+    film(id: ID!): Film
+    films(condition: String = "", limit: Int = -1, offset: Int = -1): [Film!]!
+}
+
+type Mutation {
+    createActor(countryId: ID!, actor: ActorInput!): Actor!
+    createFilm(countryId: ID!, film: FilmInput!): Film!
+    associate(actorId: ID!, filmId: ID!): Boolean!
+}
+
+interface Entity {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+}
+
+type Country implements Entity {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+
+    actor(id: ID!): Actor
+    actors(condition: String = "", limit: Int = -1, offset: Int = -1): [Actor!]!
+
+    film(id: ID!): Film
+    films(condition: String = "", limit: Int = -1, offset: Int = -1): [Film!]!
+}
+
+type Actor implements Entity{
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+
+    firstName: String!
+    lastName: String!
+    middleName: String
+
+    fields: JSON!
+
+    countryId: ID!
+    country: Country!
+
+    films(condition: String = "", limit: Int = -1, offset: Int = -1): [Film!]!
+}
+
+input ActorInput {
+    firstName: String!
+    lastName: String!
+    middleName: String
+    fields: JSON!
+}
+
+type Film implements Entity {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+
+    name: String!
+    genre: Genre!
+
+    countryId: ID!
+    country: Country!
+
+    actors(condition: String = "", limit: Int = -1, offset: Int = -1): [Actor!]!
+}
+
+enum Genre {
+    DRAMA
+    COMEDY
+    THRILLER
+    HORROR
+}
+
+input FilmInput {
+    name: String!
+    genre: Genre!
+}

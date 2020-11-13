@@ -11,7 +11,8 @@ import java.io.Reader
  */
 
 data class GeneratorConfig(
-    val packageName: String
+    val rootPackage: String,
+    val dtoPackage: String?
 )
 
 fun generate(config: GeneratorConfig, schema: Reader): List<FileSpec> {

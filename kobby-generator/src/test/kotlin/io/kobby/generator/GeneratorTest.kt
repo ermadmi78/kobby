@@ -1,5 +1,6 @@
 package io.kobby.generator
 
+import graphql.schema.idl.SchemaParser
 import io.kotest.core.spec.style.AnnotationSpec
 
 /**
@@ -10,6 +11,7 @@ import io.kotest.core.spec.style.AnnotationSpec
 class GeneratorTest: AnnotationSpec() {
     @Test
     fun temp() {
+        val graphQLSchema = SchemaParser().parse(this.javaClass.getResourceAsStream("kobby.graphqls"))
         println("!!!!!!!!!!!!!!!!!!!!!!!!!!! TESTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     }
 }
