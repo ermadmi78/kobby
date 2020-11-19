@@ -1,17 +1,22 @@
 package io.kobby.generator
 
-import graphql.schema.idl.SchemaParser
 import io.kotest.core.spec.style.AnnotationSpec
+import java.io.InputStreamReader
 
 /**
  * Created on 12.11.2020
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-class GeneratorTest: AnnotationSpec() {
+class GeneratorTest : AnnotationSpec() {
     @Test
     fun temp() {
-        val graphQLSchema = SchemaParser().parse(this.javaClass.getResourceAsStream("kobby.graphqls"))
-        println("!!!!!!!!!!!!!!!!!!!!!!!!!!! TESTS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        val layout = GeneratorLayout(
+            PackageSpec("api.dto"),
+            PackageSpec("api"),
+            PackageSpec("api.impl")
+        )
+        val files = generate(layout, InputStreamReader(this.javaClass.getResourceAsStream("kobby.graphqls")))
+        println("!!!!")
     }
 }
