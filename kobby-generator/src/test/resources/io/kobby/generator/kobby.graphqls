@@ -21,6 +21,7 @@ type Mutation {
     createActor(countryId: ID!, actor: ActorInput!): Actor!
     createFilm(countryId: ID!, film: FilmInput!): Film!
     associate(actorId: ID!, filmId: ID!): Boolean!
+    doSingle(single: SingleInput!): Single
 }
 
 interface Entity {
@@ -89,4 +90,12 @@ enum Genre {
 input FilmInput {
     name: String!
     genre: Genre!
+}
+
+type Single {
+    id: ID!
+}
+
+input SingleInput {
+    id: ID!
 }

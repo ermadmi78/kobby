@@ -42,7 +42,7 @@ class PackageSpec(packageName: String, prefix: PackageSpec? = null) {
 
     private fun String.toPath(): List<String> = splitToSequence('.')
         .map { it.trim() }
-        .filter { it.isEmpty() }
+        .filter { it.isNotEmpty() }
         .onEach {
             require(it.isIdentifier()) {
                 "Invalid package name [$this] - [$it] is not identifier"

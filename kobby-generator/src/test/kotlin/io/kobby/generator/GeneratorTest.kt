@@ -1,5 +1,10 @@
 package io.kobby.generator
 
+import com.squareup.kotlinpoet.ANY
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.MAP
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.STRING
 import io.kotest.core.spec.style.AnnotationSpec
 import java.io.InputStreamReader
 
@@ -12,11 +17,23 @@ class GeneratorTest : AnnotationSpec() {
     @Test
     fun temp() {
         val layout = GeneratorLayout(
-            PackageSpec("api.dto"),
-            PackageSpec("api"),
-            PackageSpec("api.impl")
+            DtoLayout(PackageSpec("api.dto")),
+            ApiLayout(PackageSpec("api")),
+            ImplLayout(PackageSpec("api.impl")),
+            Scalars.PREDEFINED + mapOf(
+                "DateTime" to ClassName("java.time", "OffsetDateTime"),
+                "JSON" to MAP.parameterizedBy(STRING, ANY.copy(true))
+            )
         )
         val files = generate(layout, InputStreamReader(this.javaClass.getResourceAsStream("kobby.graphqls")))
-        println("!!!!")
+
+        println("************************************************************************************************")
+        println("DTO:")
+        println("************************************************************************************************")
+        files.dtoFiles.forEach {
+            println()
+            it.writeTo(System.out)
+            println("---------")
+        }
     }
 }

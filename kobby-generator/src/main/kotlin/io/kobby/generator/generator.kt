@@ -10,15 +10,35 @@ import java.io.Reader
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 data class GeneratorLayout(
-    val dtoPackage: PackageSpec,
-    val apiPackage: PackageSpec,
-    val implPackage: PackageSpec,
-    val dtoPrefix: String? = null,
-    val dtoPostfix: String? = "Dto",
-    val implPrefix: String? = null,
-    val implPostfix: String? = "Impl",
+    val dto: DtoLayout,
+    val api: ApiLayout,
+    val impl: ImplLayout,
     val scalars: Map<String, TypeName> = Scalars.PREDEFINED
 )
+
+data class DtoLayout(
+    val packageSpec: PackageSpec,
+    val prefix: String? = null,
+    val postfix: String? = "Dto",
+    val jacksonized: Boolean = true,
+    val builders: Boolean = true
+) {
+    val packageName: String get() = packageSpec.name
+}
+
+data class ApiLayout(
+    val packageSpec: PackageSpec
+) {
+    val packageName: String get() = packageSpec.name
+}
+
+data class ImplLayout(
+    val packageSpec: PackageSpec,
+    val prefix: String? = null,
+    val postfix: String? = "Impl"
+) {
+    val packageName: String get() = packageSpec.name
+}
 
 data class FilesLayout(
     val dtoFiles: List<FileSpec> = listOf(),
@@ -29,7 +49,12 @@ data class FilesLayout(
 fun generate(layout: GeneratorLayout, schema: Reader): FilesLayout {
     val graphQLSchema = SchemaParser().parse(schema)
 
-    return FilesLayout()
+    val dto = generateDto(layout, graphQLSchema)
+
+
+    return FilesLayout(
+        dtoFiles = dto.values.map { FileSpec.get(layout.dto.packageName, it) }
+    )
 }
 
 object Scalars {
