@@ -1,7 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-description = "Library for generate Kotlin DSL over GraphQL schema"
+description = "Kotlin DSL over GraphQL schema generator"
 
 plugins {
     kotlin("jvm")
@@ -54,5 +54,15 @@ subprojects {
         testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
         testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
         testImplementation("io.kotest:kotest-property:$kotestVersion")
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
+            force("org.jetbrains.kotlin:kotlin-stdlib-common:1.3.72")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72")
+            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
+            force("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
+        }
     }
 }
