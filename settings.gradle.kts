@@ -1,9 +1,11 @@
+@file:Suppress("UnstableApiUsage")
+
 rootProject.name = "kobby"
 
 pluginManagement {
     val kotlinVersion: String by settings
 
-    plugins{
+    plugins {
         kotlin("jvm") version kotlinVersion
     }
 }
