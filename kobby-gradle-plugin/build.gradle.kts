@@ -1,7 +1,7 @@
 description = "Kobby Gradle Plugin"
 
 dependencies {
-    implementation(project(":kobby-generator"))
+    implementation(project(":kobby-generator-kotlin"))
 }
 
 plugins {

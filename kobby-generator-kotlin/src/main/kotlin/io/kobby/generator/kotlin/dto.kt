@@ -1,4 +1,4 @@
-package io.kobby.generator
+package io.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy

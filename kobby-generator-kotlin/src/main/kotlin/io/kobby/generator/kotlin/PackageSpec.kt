@@ -1,4 +1,4 @@
-package io.kobby.generator
+package io.kobby.generator.kotlin
 
 import java.lang.Character.isJavaIdentifierPart
 import java.lang.Character.isJavaIdentifierStart

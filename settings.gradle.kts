@@ -8,7 +8,7 @@ pluginManagement {
     }
 }
 
-include(":kobby-generator")
+include(":kobby-generator-kotlin")
 include(":kobby-gradle-plugin")
 include(":kobby-maven-plugin")
 

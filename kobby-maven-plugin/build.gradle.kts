@@ -1,5 +1,5 @@
 description = "Kobby Maven Plugin"
 
 dependencies {
-    implementation(project(":kobby-generator"))
+    implementation(project(":kobby-generator-kotlin"))
 }
