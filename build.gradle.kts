@@ -30,6 +30,12 @@ subprojects {
 
     apply(plugin = "kotlin")
 
+    @Suppress("UnstableApiUsage")
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     tasks {
         withType<KotlinCompile> {
             kotlinOptions {
@@ -42,23 +48,6 @@ subprojects {
             testLogging.showStandardStreams = true
             testLogging.exceptionFormat = FULL
             useJUnitPlatform()
-        }
-
-        val sourcesJar by creating(Jar::class) {
-            //dependsOn(JavaPlugin.CLASSES_TASK_NAME)
-            archiveClassifier.set("sources")
-            from(sourceSets.main.get().allSource)
-        }
-
-        val javadocJar by creating(Jar::class) {
-            //dependsOn(JavaPlugin.JAVADOC_TASK_NAME)
-            archiveClassifier.set("javadoc")
-            from(javadoc)
-        }
-
-        artifacts {
-            add("archives", sourcesJar)
-            add("archives", javadocJar)
         }
     }
 
