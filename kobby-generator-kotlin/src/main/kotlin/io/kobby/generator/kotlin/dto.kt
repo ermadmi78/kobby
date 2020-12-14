@@ -52,7 +52,7 @@ internal fun generateDto(layout: GeneratorLayout, graphQLSchema: TypeDefinitionR
                 val className = type.name.decorate(dtoLayout.prefix, dtoLayout.postfix)
                 val classBuilder = TypeSpec.classBuilder(className).apply {
                     addModifiers(KModifier.DATA)
-                    type.implements.asSequence().map { it.resolve(types) }.forEach {
+                    type.implements.asSequence().map { it.resolve(types, true) }.forEach {
                         addSuperinterface(it)
                     }
                 }
@@ -104,7 +104,7 @@ internal fun generateDto(layout: GeneratorLayout, graphQLSchema: TypeDefinitionR
             }
             is InterfaceTypeDefinition ->
                 TypeSpec.interfaceBuilder(type.name.decorate(dtoLayout.prefix, dtoLayout.postfix)).apply {
-                    type.implements.asSequence().map { it.resolve(types) }.forEach {
+                    type.implements.asSequence().map { it.resolve(types, true) }.forEach {
                         addSuperinterface(it)
                     }
                     for (field in type.fieldDefinitions) {

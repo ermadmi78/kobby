@@ -24,13 +24,17 @@ type Mutation {
     doSingle(single: SingleInput!): Single
 }
 
-interface Entity {
+interface Base {
+    id: ID!
+}
+
+interface Entity implements Base {
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime!
 }
 
-type Country implements Entity {
+type Country implements Entity, Base {
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -42,7 +46,7 @@ type Country implements Entity {
     films(condition: String = "", limit: Int = -1, offset: Int = -1): [Film!]!
 }
 
-type Actor implements Entity{
+type Actor implements Entity, Base{
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -66,7 +70,7 @@ input ActorInput {
     fields: JSON!
 }
 
-type Film implements Entity {
+type Film implements Entity, Base {
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime!
