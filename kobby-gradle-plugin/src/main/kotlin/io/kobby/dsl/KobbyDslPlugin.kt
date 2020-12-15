@@ -1,4 +1,4 @@
-package io.kobby.gradle
+package io.kobby.dsl
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -9,7 +9,7 @@ import org.gradle.api.Project
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-class KobbyGradlePlugin: Plugin<Project> {
+class KobbyDslPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         TODO("Not yet implemented")
     }
