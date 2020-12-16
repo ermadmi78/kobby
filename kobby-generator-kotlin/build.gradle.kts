@@ -1,5 +1,9 @@
 description = "Kobby DSL generator"
 
+plugins {
+    `java-library`
+}
+
 val graphQLJavaVersion: String by project
 val kotlinPoetVersion: String by project
 
