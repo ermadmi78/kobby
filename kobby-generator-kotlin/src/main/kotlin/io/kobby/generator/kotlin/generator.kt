@@ -2,6 +2,7 @@ package io.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
 import graphql.schema.idl.SchemaParser
+import graphql.schema.idl.TypeDefinitionRegistry
 import java.io.Reader
 
 /**
@@ -46,8 +47,11 @@ data class FilesLayout(
     val implFiles: List<FileSpec> = listOf()
 )
 
-fun generate(layout: GeneratorLayout, schema: Reader): FilesLayout {
-    val graphQLSchema = SchemaParser().parse(schema)
+fun generate(layout: GeneratorLayout, vararg schemas: Reader): FilesLayout {
+    val graphQLSchema = TypeDefinitionRegistry()
+    for (schema in schemas) {
+        graphQLSchema.merge(SchemaParser().parse(schema))
+    }
 
     val dto = generateDto(layout, graphQLSchema)
 
