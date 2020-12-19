@@ -1,4 +1,5 @@
-description = "Kobby Gradle Plugin"
+val title = "Kobby Gradle Plugin"
+description = title
 
 dependencies {
     implementation(project(":kobby-generator-kotlin"))
@@ -10,4 +11,11 @@ plugins {
 }
 
 gradlePlugin {
+    plugins {
+        create("kobbyDSLPlugin") {
+            id = "io.kobby"
+            implementationClass = "io.kobby.dsl.KobbyDslPlugin"
+            displayName = title
+        }
+    }
 }
