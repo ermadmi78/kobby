@@ -1,9 +1,11 @@
-package io.kobby.dsl
+package io.kobby
 
+import io.kobby.generator.kotlin.KotlinType
+import io.kobby.generator.kotlin.KotlinTypes
 import org.gradle.api.Action
 import org.gradle.api.file.Directory
 
-@KobbyDsl
+@Kobby
 open class KobbyKotlinExtension {
     var enabled: Boolean = true
 
@@ -66,51 +68,52 @@ open class KobbyKotlinExtension {
     //                                       Scalars
     // *****************************************************************************************************************
 
-    var scalars: Map<String, KobbyTypeName> = mapOf()
+    var scalars: Map<String, KotlinType> = mapOf()
 
-    fun typeOf(packageName: String, className: String, vararg arguments: KobbyTypeName) =
-        KobbyTypeName(packageName, className, false, arguments.toList())
+    fun typeOf(packageName: String, className: String, vararg arguments: KotlinType) =
+        KotlinType(packageName, className, false, arguments.toList())
 
-    fun typeOf(packageName: String, className: String, nullable: Boolean, vararg arguments: KobbyTypeName) =
-        KobbyTypeName(packageName, className, nullable, arguments.toList())
+    fun typeOf(packageName: String, className: String, nullable: Boolean, vararg arguments: KotlinType) =
+        KotlinType(packageName, className, nullable, arguments.toList())
 
-    val typeAny by lazy { KobbyTypeName("kotlin", "Any") }
-    val typeBoolean by lazy { KobbyTypeName("kotlin", "Boolean") }
-    val typeNumber by lazy { KobbyTypeName("kotlin", "Number") }
-    val typeByte by lazy { KobbyTypeName("kotlin", "Byte") }
-    val typeShort by lazy { KobbyTypeName("kotlin", "Short") }
-    val typeInt by lazy { KobbyTypeName("kotlin", "Int") }
-    val typeLong by lazy { KobbyTypeName("kotlin", "Long") }
-    val typeChar by lazy { KobbyTypeName("kotlin", "Char") }
-    val typeFloat by lazy { KobbyTypeName("kotlin", "Float") }
-    val typeDouble by lazy { KobbyTypeName("kotlin", "Double") }
-    val typeString by lazy { KobbyTypeName("kotlin", "String") }
-    val typeCharSequence by lazy { KobbyTypeName("kotlin", "CharSequence") }
+    val typeAny get() = KotlinTypes.ANY
+    val typeNumber get() = KotlinTypes.NUMBER
+    val typeByte get() = KotlinTypes.BYTE
+    val typeShort get() = KotlinTypes.SHORT
+    val typeInt get() = KotlinTypes.INT
+    val typeLong get() = KotlinTypes.LONG
+    val typeFloat get() = KotlinTypes.FLOAT
+    val typeDouble get() = KotlinTypes.DOUBLE
+    val typeChar get() = KotlinTypes.CHAR
+    val typeString get() = KotlinTypes.STRING
+    val typeCharSequence get() = KotlinTypes.CHAR_SEQUENCE
+    val typeBoolean get() = KotlinTypes.BOOLEAN
 
-    val typeEnum by lazy { KobbyTypeName("kotlin", "Enum") }
-    val typeThrowable by lazy { KobbyTypeName("kotlin", "Throwable") }
-    val typeIterable by lazy { KobbyTypeName("kotlin.collections", "Iterable") }
-    val typeComparable by lazy { KobbyTypeName("kotlin", "Comparable") }
+    val typeEnum get() = KotlinTypes.ENUM
+    val typeThrowable get() = KotlinTypes.THROWABLE
+    val typeComparable get() = KotlinTypes.COMPARABLE
 
-    val typeArray by lazy { KobbyTypeName("kotlin", "Array") }
-    val typeCollection by lazy { KobbyTypeName("kotlin.collections", "Collection") }
-    val typeList by lazy { KobbyTypeName("kotlin.collections", "List") }
-    val typeSet by lazy { KobbyTypeName("kotlin.collections", "Set") }
-    val typeMap by lazy { KobbyTypeName("kotlin.collections", "Map") }
+    val typeIterable get() = KotlinTypes.ITERABLE
+    val typeCollection get() = KotlinTypes.COLLECTION
+    val typeList get() = KotlinTypes.LIST
+    val typeSet get() = KotlinTypes.SET
+    val typeMap get() = KotlinTypes.MAP
 
-    val typeMutableIterable by lazy { KobbyTypeName("kotlin.collections", "MutableIterable") }
-    val typeMutableCollection by lazy { KobbyTypeName("kotlin.collections", "MutableCollection") }
-    val typeMutableList by lazy { KobbyTypeName("kotlin.collections", "MutableList") }
-    val typeMutableSet by lazy { KobbyTypeName("kotlin.collections", "MutableSet") }
-    val typeMutableMap by lazy { KobbyTypeName("kotlin.collections", "MutableMap") }
-    val typeBooleanArray by lazy { KobbyTypeName("kotlin", "BooleanArray") }
-    val typeByteArray by lazy { KobbyTypeName("kotlin", "ByteArray") }
-    val typeCharArray by lazy { KobbyTypeName("kotlin", "CharArray") }
-    val typeShortArray by lazy { KobbyTypeName("kotlin", "ShortArray") }
-    val typeIntArray by lazy { KobbyTypeName("kotlin", "IntArray") }
-    val typeLongArray by lazy { KobbyTypeName("kotlin", "LongArray") }
-    val typeFloatArray by lazy { KobbyTypeName("kotlin", "FloatArray") }
-    val typeDoubleArray by lazy { KobbyTypeName("kotlin", "DoubleArray") }
+    val typeMutableIterable get() = KotlinTypes.MUTABLE_ITERABLE
+    val typeMutableCollection get() = KotlinTypes.MUTABLE_COLLECTION
+    val typeMutableList get() = KotlinTypes.MUTABLE_LIST
+    val typeMutableSet get() = KotlinTypes.MUTABLE_SET
+    val typeMutableMap get() = KotlinTypes.MUTABLE_MAP
+
+    val typeArray get() = KotlinTypes.ARRAY
+    val typeBooleanArray get() = KotlinTypes.BOOLEAN_ARRAY
+    val typeByteArray get() = KotlinTypes.BYTE_ARRAY
+    val typeCharArray get() = KotlinTypes.CHAR_ARRAY
+    val typeShortArray get() = KotlinTypes.SHORT_ARRAY
+    val typeIntArray get() = KotlinTypes.INT_ARRAY
+    val typeLongArray get() = KotlinTypes.LONG_ARRAY
+    val typeFloatArray get() = KotlinTypes.FLOAT_ARRAY
+    val typeDoubleArray get() = KotlinTypes.DOUBLE_ARRAY
 
     //******************************************************************************************************************
 
@@ -118,7 +121,7 @@ open class KobbyKotlinExtension {
         "KobbyKotlinExtension(packageName=$packageName, scalars=$scalars)"
 }
 
-@KobbyDsl
+@Kobby
 open class KobbyKotlinDtoExtension {
     var packageName: String? = null
     var prefix: String? = null
@@ -134,15 +137,16 @@ open class KobbyKotlinDtoExtension {
             "builders=$builders)"
 }
 
-@KobbyDsl
+@Kobby
 open class KobbyKotlinApiExtension {
+    var enabled: Boolean = true
     var packageName: String? = "api"
 
     override fun toString(): String =
-        "KobbyKotlinApiExtension(packageName=$packageName)"
+        "KobbyKotlinApiExtension(enabled=$enabled, packageName=$packageName)"
 }
 
-@KobbyDsl
+@Kobby
 open class KobbyKotlinImplExtension {
     var packageName: String? = "impl"
     var prefix: String? = null

@@ -1,10 +1,8 @@
 package io.kobby.generator.kotlin
 
-import com.squareup.kotlinpoet.ANY
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.MAP
-import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.STRING
+import io.kobby.generator.kotlin.KotlinTypes.ANY
+import io.kobby.generator.kotlin.KotlinTypes.MAP
+import io.kobby.generator.kotlin.KotlinTypes.STRING
 import io.kotest.core.spec.style.AnnotationSpec
 import java.io.InputStreamReader
 
@@ -16,16 +14,16 @@ import java.io.InputStreamReader
 class GeneratorTest : AnnotationSpec() {
     @Test
     fun temp() {
-        val layout = GeneratorLayout(
-            DtoLayout(PackageSpec("api.dto")),
-            ApiLayout(PackageSpec("api")),
-            ImplLayout(PackageSpec("api.impl")),
-            Scalars.PREDEFINED + mapOf(
-                "DateTime" to ClassName("java.time", "OffsetDateTime"),
-                "JSON" to MAP.parameterizedBy(STRING, ANY.copy(true))
+        val layout = KotlinGeneratorLayout(
+            KotlinDtoLayout(KotlinPackage("api.dto")),
+            KotlinApiLayout(true, KotlinPackage("api")),
+            KotlinImplLayout(KotlinPackage("api.impl")),
+            KotlinTypes.PREDEFINED_SCALARS + mapOf(
+                "DateTime" to KotlinType("java.time", "OffsetDateTime"),
+                "JSON" to MAP.parameterize(STRING, ANY.nullable())
             )
         )
-        val files = generate(layout, InputStreamReader(this.javaClass.getResourceAsStream("kobby.graphqls")))
+        val files = generateKotlin(layout, InputStreamReader(this.javaClass.getResourceAsStream("kobby.graphqls")))
 
         println("************************************************************************************************")
         println("DTO:")

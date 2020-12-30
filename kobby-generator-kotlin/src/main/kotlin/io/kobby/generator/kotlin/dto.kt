@@ -11,10 +11,12 @@ import graphql.schema.idl.TypeDefinitionRegistry
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-internal fun generateDto(layout: GeneratorLayout, graphQLSchema: TypeDefinitionRegistry): Map<String, TypeSpec> {
+internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefinitionRegistry): Map<String, TypeSpec> {
     val dtoLayout = layout.dto
     val types = mutableMapOf<String, TypeName>().apply {
-        putAll(layout.scalars)
+        layout.scalars.forEach { (scalar, type) ->
+            put(scalar, type.toTypeName())
+        }
     }
     val interfaces = mutableMapOf<String, MutableSet<String>>()
     for (type in graphQLSchema.types().values) {
@@ -162,7 +164,7 @@ internal fun Type<*>.extractName(): String = when (this) {
     else -> error("Unexpected Type successor: ${this::javaClass.name}")
 }
 
-internal fun FunSpec.Builder.jacksonize(layout: DtoLayout): FunSpec.Builder {
+internal fun FunSpec.Builder.jacksonize(layout: KotlinDtoLayout): FunSpec.Builder {
     if (layout.jacksonized && parameters.size == 1) {
         addAnnotation(JacksonAnnotations.JSON_CREATOR)
     }
@@ -170,7 +172,11 @@ internal fun FunSpec.Builder.jacksonize(layout: DtoLayout): FunSpec.Builder {
     return this
 }
 
-internal fun TypeSpec.Builder.jacksonize(layout: DtoLayout, typeName: String, className: String): TypeSpec.Builder {
+internal fun TypeSpec.Builder.jacksonize(
+    layout: KotlinDtoLayout,
+    typeName: String,
+    className: String
+): TypeSpec.Builder {
     if (!layout.jacksonized) {
         return this
     }

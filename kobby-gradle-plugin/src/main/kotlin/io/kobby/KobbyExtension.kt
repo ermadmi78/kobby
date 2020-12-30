@@ -1,4 +1,4 @@
-package io.kobby.dsl
+package io.kobby
 
 import org.gradle.api.Action
 import org.gradle.api.Project
@@ -7,21 +7,21 @@ import java.io.File
 
 @DslMarker
 @MustBeDocumented
-annotation class KobbyDsl
+annotation class Kobby
 
 /**
  * Kobby Kotlin Gradle Plugin project extension
  */
-fun Project.kobbyDSL(configure: KobbyDslExtension.() -> Unit) =
-    extensions.configure(KobbyDslExtension::class.java, configure)
+fun Project.kobby(configure: KobbyExtension.() -> Unit) =
+    extensions.configure(KobbyExtension::class.java, configure)
 
 /**
  * Created on 20.12.2020
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-@KobbyDsl
-open class KobbyDslExtension {
+@Kobby
+open class KobbyExtension {
     // *****************************************************************************************************************
     //                                       Schema
     // *****************************************************************************************************************
@@ -60,7 +60,7 @@ open class KobbyDslExtension {
     }
 }
 
-@KobbyDsl
+@Kobby
 open class KobbySchemaExtension {
     var local: File? = null
 
@@ -68,31 +68,3 @@ open class KobbySchemaExtension {
         "KobbySchemaExtension(local=$local)"
 }
 
-data class KobbyTypeName(
-    /** A fully-qualified package name. For example: kotlin.collections */
-    val packageName: String,
-
-    /** A fully-qualified class name. For example: Map.Entry */
-    val className: String,
-
-    /** Is type nullable */
-    val allowNull: Boolean = false,
-
-    /** List of generics */
-    val generics: List<KobbyTypeName> = listOf()
-) {
-    fun nullable(): KobbyTypeName =
-        if (allowNull) this else KobbyTypeName(packageName, className, true, generics)
-
-    fun parameterize(vararg arguments: KobbyTypeName): KobbyTypeName =
-        if (arguments.isEmpty()) this else KobbyTypeName(packageName, className, allowNull, generics + arguments)
-
-    fun nested(nestedClassName: String): KobbyTypeName =
-        KobbyTypeName(packageName, "$className.$nestedClassName", allowNull, generics)
-
-    override fun toString(): String {
-        return "$packageName.$className" +
-                (if (generics.isNotEmpty()) "<${generics.joinToString { it.toString() }}>" else "") +
-                (if (allowNull) "?" else "")
-    }
-}

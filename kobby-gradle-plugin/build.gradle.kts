@@ -12,10 +12,11 @@ plugins {
 
 gradlePlugin {
     plugins {
-        create("kobbyDSLPlugin") {
+        create("KobbyPlugin") {
             id = "io.kobby"
-            implementationClass = "io.kobby.dsl.KobbyDslPlugin"
+            implementationClass = "io.kobby.KobbyPlugin"
             displayName = title
+            description = "Kobby is a generator of smart client API by GraphQL schema"
         }
     }
 }
