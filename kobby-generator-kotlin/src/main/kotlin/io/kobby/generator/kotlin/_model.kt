@@ -14,7 +14,7 @@ import java.nio.file.Path
  */
 
 internal fun KotlinType.toTypeName(): TypeName =
-    ClassName(packageName.toKotlinPath().fromKotlinPath(), className.toKotlinPath())
+    ClassName(packageName, className.toKotlinPath())
         .let { res ->
             if (generics.isEmpty()) {
                 res.let { if (allowNull) it.copy(true) else it }
@@ -33,7 +33,8 @@ internal fun String.toKotlinPath(): List<String> = splitToSequence('.')
         }
     }.toList()
 
-private fun List<String>.fromKotlinPath(): String = joinToString(".") { it }
+internal fun String.validateKotlinPath(): String =
+    toKotlinPath().joinToString(".") { it }
 
 private fun String.isKotlinIdentifier(): Boolean {
     if (isEmpty()) {
