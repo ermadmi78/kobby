@@ -15,6 +15,10 @@ class GeneratorTest : AnnotationSpec() {
     @Test
     fun temp() {
         val layout = KotlinGeneratorLayout(
+            KotlinTypes.PREDEFINED_SCALARS + mapOf(
+                "DateTime" to KotlinType("java.time", "OffsetDateTime"),
+                "JSON" to MAP.parameterize(STRING, ANY.nullable())
+            ),
             KotlinDtoLayout(
                 "api.dto",
                 null,
@@ -30,10 +34,6 @@ class GeneratorTest : AnnotationSpec() {
                 "api.impl",
                 null,
                 "Impl"
-            ),
-            KotlinTypes.PREDEFINED_SCALARS + mapOf(
-                "DateTime" to KotlinType("java.time", "OffsetDateTime"),
-                "JSON" to MAP.parameterize(STRING, ANY.nullable())
             )
         )
         val files = generateKotlin(layout, InputStreamReader(this.javaClass.getResourceAsStream("kobby.graphqls")))

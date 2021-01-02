@@ -2,6 +2,7 @@ package io.kobby.generator.kotlin
 
 import java.io.File
 import java.io.IOException
+import java.io.Serializable
 import java.nio.file.Path
 
 /**
@@ -10,10 +11,10 @@ import java.nio.file.Path
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 data class KotlinGeneratorLayout(
+    val scalars: Map<String, KotlinType>,
     val dto: KotlinDtoLayout,
     val api: KotlinApiLayout,
-    val impl: KotlinImplLayout,
-    val scalars: Map<String, KotlinType>
+    val impl: KotlinImplLayout
 )
 
 class KotlinDtoLayout(
@@ -69,7 +70,7 @@ class KotlinType(
 
     /** List of generics */
     val generics: List<KotlinType> = listOf()
-) {
+) : Serializable {
     val packageName: String = packageName.validateKotlinPath()
 
     val className: String = className.validateKotlinPath()
