@@ -2,7 +2,6 @@ package io.kobby
 
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.file.ConfigurableFileTree
 import java.io.File
 
 @DslMarker
@@ -25,40 +24,45 @@ open class KobbyExtension {
     // *****************************************************************************************************************
     //                                       Schema
     // *****************************************************************************************************************
-    private var schemaConfigured: Boolean = false
 
-    internal val schemaExtension: KobbySchemaExtension by lazy {
+    @Volatile
+    private var schemaConfigured: Boolean = false
+    private val schemaExtensionLazy: KobbySchemaExtension by lazy {
         schemaConfigured = true
         KobbySchemaExtension()
     }
 
-    internal fun isSchemaConfigured(): Boolean = schemaConfigured
+    internal val schemaExtension: KobbySchemaExtension?
+        get() = if (schemaConfigured) schemaExtensionLazy else null
 
     /** Kotlin DSL schema configuration */
     fun schema(action: Action<KobbySchemaExtension>) {
-        action.execute(schemaExtension)
+        action.execute(schemaExtensionLazy)
     }
-
-
-    var schemaSearchTree: ConfigurableFileTree? = null
 
     // *****************************************************************************************************************
     //                                       Kotlin
     // *****************************************************************************************************************
 
+    @Volatile
     private var kotlinConfigured: Boolean = false
-    internal val kotlinExtension: KobbyKotlinExtension by lazy {
+    private val kotlinExtensionLazy: KobbyKotlinExtension by lazy {
         kotlinConfigured = true
         KobbyKotlinExtension()
     }
 
-    internal fun isKotlinConfigured(): Boolean = kotlinConfigured
+    internal val kotlinExtension: KobbyKotlinExtension?
+        get() = if (kotlinConfigured) kotlinExtensionLazy else null
 
     /** Kotlin DSL generator configuration */
     fun kotlin(action: Action<KobbyKotlinExtension>) {
-        action.execute(kotlinExtension)
+        action.execute(kotlinExtensionLazy)
     }
 }
+
+// *********************************************************************************************************************
+//                                           Extensions
+// *********************************************************************************************************************
 
 @Kobby
 open class KobbySchemaExtension {

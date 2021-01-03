@@ -9,66 +9,82 @@ import org.gradle.api.file.Directory
 open class KobbyKotlinExtension {
     var enabled: Boolean = true
 
-    var outputDirectory: Directory? = null
+    var scalars: Map<String, KotlinType>? = null
+
+    var relativePackage: Boolean? = null
 
     var packageName: String? = null
+
+    var outputDirectory: Directory? = null
 
     // *****************************************************************************************************************
     //                                       DTO
     // *****************************************************************************************************************
-    private var dtoConfigured: Boolean = false
 
-    internal val dtoExtension: KobbyKotlinDtoExtension by lazy {
+    @Volatile
+    private var dtoConfigured: Boolean = false
+    private val dtoExtensionLazy: KobbyKotlinDtoExtension by lazy {
         dtoConfigured = true
         KobbyKotlinDtoExtension()
     }
 
-    internal fun isDtoConfigured(): Boolean = dtoConfigured
+    internal val dtoExtension: KobbyKotlinDtoExtension?
+        get() = if (dtoConfigured) dtoExtensionLazy else null
 
     /** Kotlin DSL DTO generator configuration */
     fun dto(action: Action<KobbyKotlinDtoExtension>) {
-        action.execute(dtoExtension)
+        action.execute(dtoExtensionLazy)
     }
 
     // *****************************************************************************************************************
     //                                       API
     // *****************************************************************************************************************
 
+    @Volatile
     private var apiConfigured: Boolean = false
-    internal val apiExtension: KobbyKotlinApiExtension by lazy {
+    private val apiExtensionLazy: KobbyKotlinApiExtension by lazy {
         apiConfigured = true
         KobbyKotlinApiExtension()
     }
 
-    internal fun isApiConfigured(): Boolean = apiConfigured
+    internal val apiExtension: KobbyKotlinApiExtension?
+        get() = if (apiConfigured) apiExtensionLazy else null
 
     /** Kotlin DSL API generator configuration */
     fun api(action: Action<KobbyKotlinApiExtension>) {
-        action.execute(apiExtension)
+        action.execute(apiExtensionLazy)
     }
 
     // *****************************************************************************************************************
     //                                         Implementation
     // *****************************************************************************************************************
 
+    @Volatile
     private var implConfigured: Boolean = false
-    internal val implExtension: KobbyKotlinImplExtension by lazy {
+    private val implExtensionLazy: KobbyKotlinImplExtension by lazy {
         implConfigured = true
         KobbyKotlinImplExtension()
     }
 
-    internal fun isImplConfigured(): Boolean = implConfigured
+    internal val implExtension: KobbyKotlinImplExtension?
+        get() = if (implConfigured) implExtensionLazy else null
 
     /** Kotlin DSL implementation generator configuration */
     fun impl(action: Action<KobbyKotlinImplExtension>) {
-        action.execute(implExtension)
+        action.execute(implExtensionLazy)
+    }
+
+    override fun toString(): String {
+        return "KobbyKotlinExtension(" +
+                "enabled=$enabled, " +
+                "scalars=$scalars, " +
+                "relativePackage=$relativePackage, " +
+                "packageName=$packageName, " +
+                "outputDirectory=$outputDirectory)"
+
     }
 
     // *****************************************************************************************************************
-    //                                       Scalars
-    // *****************************************************************************************************************
-
-    var scalars: Map<String, KotlinType> = mapOf()
 
     fun typeOf(packageName: String, className: String, vararg arguments: KotlinType) =
         KotlinType(packageName, className, false, arguments.toList())
@@ -114,20 +130,19 @@ open class KobbyKotlinExtension {
     val typeLongArray get() = KotlinTypes.LONG_ARRAY
     val typeFloatArray get() = KotlinTypes.FLOAT_ARRAY
     val typeDoubleArray get() = KotlinTypes.DOUBLE_ARRAY
-
-    //******************************************************************************************************************
-
-    override fun toString(): String =
-        "KobbyKotlinExtension(packageName=$packageName, scalars=$scalars)"
 }
+
+// *********************************************************************************************************************
+//                                           Extensions
+// *********************************************************************************************************************
 
 @Kobby
 open class KobbyKotlinDtoExtension {
     var packageName: String? = null
     var prefix: String? = null
-    var postfix: String? = "Dto"
-    var jacksonized: Boolean = true
-    var builders: Boolean = true
+    var postfix: String? = null
+    var jacksonized: Boolean? = null
+    var builders: Boolean? = null
 
     override fun toString(): String = "KobbyKotlinDtoExtension(" +
             "packageName=$packageName, " +
@@ -139,8 +154,8 @@ open class KobbyKotlinDtoExtension {
 
 @Kobby
 open class KobbyKotlinApiExtension {
-    var enabled: Boolean = true
-    var packageName: String? = "api"
+    var enabled: Boolean? = null
+    var packageName: String? = null
 
     override fun toString(): String =
         "KobbyKotlinApiExtension(enabled=$enabled, packageName=$packageName)"
@@ -148,9 +163,9 @@ open class KobbyKotlinApiExtension {
 
 @Kobby
 open class KobbyKotlinImplExtension {
-    var packageName: String? = "impl"
+    var packageName: String? = null
     var prefix: String? = null
-    var postfix: String? = "Impl"
+    var postfix: String? = null
 
     override fun toString(): String =
         "KobbyKotlinImplExtension(packageName=$packageName, prefix=$prefix, postfix=$postfix)"

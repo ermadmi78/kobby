@@ -12,8 +12,6 @@ import org.gradle.api.tasks.options.Option
 import java.io.File
 import java.io.FileReader
 
-const val KOBBY_KOTLIN_TASK_NAME = "kobbyKotlin"
-
 /**
  * Created on 02.01.2021
  *
@@ -21,19 +19,9 @@ const val KOBBY_KOTLIN_TASK_NAME = "kobbyKotlin"
  */
 @Suppress("UnstableApiUsage")
 open class KobbyKotlin : DefaultTask() {
-    /**
-     * Path to GraphQL schema file that will be used to generate client code.
-     *
-     * **Required Property**: [schemaFileName] or [schemaFile] has to be provided.
-     * **Command line property is**: `schemaFileName`.
-     */
-    @Input
-    @Optional
-    @Option(
-        option = "schemaFileName",
-        description = "path to GraphQL schema file that will be used to generate the client code"
-    )
-    val schemaFileName: Property<String> = project.objects.property(String::class.java)
+    companion object {
+        const val TASK_NAME = "kobbyKotlin"
+    }
 
     /**
      * GraphQL schema file that will be used to generate client code.
@@ -41,7 +29,6 @@ open class KobbyKotlin : DefaultTask() {
      * **Required Property**: [schemaFileName] or [schemaFile] has to be provided.
      */
     @InputFile
-    @Optional
     val schemaFile: RegularFileProperty = project.objects.fileProperty()
 
     @Input
@@ -49,10 +36,29 @@ open class KobbyKotlin : DefaultTask() {
     val scalars: MapProperty<String, KotlinType> =
         project.objects.mapProperty(String::class.java, KotlinType::class.java)
 
+
     @Input
+    @Optional
+    @Option(
+        option = "relativePackage",
+        description = "generate root package name relative to schema package name (default true)"
+    )
+    val relativePackage: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "rootPackageName",
+        description = "root package name relative to schema package name (if relativePackage option is true) " +
+                "for generated classes (default \"kobby.kotlin\")"
+    )
+    val rootPackageName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
     @Option(
         option = "dtoPackageName",
-        description = "target package name to use for generated DTO classes"
+        description = "package name relative to root package name for generated DTO classes (default \"dto\")"
     )
     val dtoPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -100,7 +106,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "apiPackageName",
-        description = "target package name to use for generated API classes"
+        description = "package name relative to root package name for generated API classes (default null)"
     )
     val apiPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -108,7 +114,8 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "implPackageName",
-        description = "target package name to use for generated implementation classes"
+        description = "package name relative to root package name " +
+                "for generated implementation classes (default \"impl\")"
     )
     val implPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -135,41 +142,75 @@ open class KobbyKotlin : DefaultTask() {
         group = "kobby"
         description = "Generate Kotlin DSL client by GraphQL schema"
 
+        schemaFile.convention(project.layout.file(project.provider {
+            project.fileTree("src/main/resources") {
+                it.include("**/*.graphqls")
+            }.filter { it.isFile }.singleFile
+        }))
         scalars.convention(PREDEFINED_SCALARS)
+
+        relativePackage.convention(true)
+        rootPackageName.convention("kobby.kotlin")
+
+        dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
         dtoJacksonized.convention(true)
         dtoBuilders.convention(true)
+
         apiEnabled.convention(true)
+
+        implPackageName.convention("impl")
         implPostfix.convention("Impl")
     }
 
     @TaskAction
     fun generateKotlinDslClientAction() {
-        val graphQLSchema = when {
-            schemaFileName.isPresent -> File(schemaFileName.get())
-            schemaFile.isPresent -> schemaFile.get().asFile
-            else -> throw RuntimeException("schema not available")
-        }
+        val graphQLSchema = schemaFile.get().asFile.absoluteFile
         if (!graphQLSchema.isFile) {
             throw RuntimeException("specified schema file does not exist")
         }
 
-        val dslApiEnabled = apiEnabled.get()
+        val rootPackage: List<String> = mutableListOf<String>().also { list ->
+            if (relativePackage.get()) {
+                val resourcesDir = project.file("src/main/resources").absoluteFile.path
+                val schemaDir = graphQLSchema.parent
+                if (schemaDir.startsWith(resourcesDir)) {
+                    schemaDir.removePrefix(resourcesDir).forEachPath { list += it }
+                }
+            }
+            rootPackageName.orNull?.forEachPackage { list += it }
+        }
+
+        val dtoPackage: List<String> = mutableListOf<String>().also { list ->
+            list += rootPackage
+            dtoPackageName.orNull?.forEachPackage { list += it }
+        }
+
+        val apiPackage: List<String> = mutableListOf<String>().also { list ->
+            list += rootPackage
+            apiPackageName.orNull?.forEachPackage { list += it }
+        }
+
+        val implPackage: List<String> = mutableListOf<String>().also { list ->
+            list += rootPackage
+            implPackageName.orNull?.forEachPackage { list += it }
+        }
+
         val layout = KotlinGeneratorLayout(
             scalars.get(),
             KotlinDtoLayout(
-                dtoPackageName.get(),
+                dtoPackage.toPackageName(),
                 dtoPrefix.orNull,
                 dtoPostfix.orNull,
                 jacksonized = dtoJacksonized.get(),
                 builders = dtoBuilders.get()
             ),
             KotlinApiLayout(
-                dslApiEnabled,
-                if (dslApiEnabled) apiPackageName.get() else ""
+                apiEnabled.get(),
+                apiPackage.toPackageName()
             ),
             KotlinImplLayout(
-                if (dslApiEnabled) implPackageName.get() else "",
+                implPackage.toPackageName(),
                 implPrefix.orNull,
                 implPostfix.orNull
             )
@@ -191,4 +232,18 @@ open class KobbyKotlin : DefaultTask() {
             it.writeTo(targetDirectory)
         }
     }
+
+    private fun String.forEachPath(action: (String) -> Unit) =
+        this.splitToSequence(File.pathSeparatorChar)
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .forEach(action)
+
+    private fun String.forEachPackage(action: (String) -> Unit) =
+        this.splitToSequence('.')
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .forEach(action)
+
+    private fun List<String>.toPackageName(): String = joinToString(".") { it }
 }
