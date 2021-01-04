@@ -161,6 +161,8 @@ open class KobbyKotlin : DefaultTask() {
 
         implPackageName.convention("impl")
         implPostfix.convention("Impl")
+
+        outputDirectory.convention(project.layout.buildDirectory.dir("generated/source/kobby/main/kotlin"))
     }
 
     @TaskAction

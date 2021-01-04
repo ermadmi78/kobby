@@ -122,6 +122,8 @@ subprojects {
             force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72")
             force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
             force("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
+            //force("org.antlr:antlr4:4.7.2")
+            //force("org.antlr:antlr4-runtime:4.7.2")
         }
     }
 }
