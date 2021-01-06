@@ -9,7 +9,6 @@ import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import org.gradle.api.tasks.options.Option
-import java.io.File
 import java.io.FileReader
 
 /**
@@ -236,7 +235,7 @@ open class KobbyKotlin : DefaultTask() {
     }
 
     private fun String.forEachPath(action: (String) -> Unit) =
-        this.splitToSequence(File.pathSeparatorChar)
+        this.splitToSequence('/', '\\')
             .map { it.trim() }
             .filter { it.isNotEmpty() }
             .forEach(action)
