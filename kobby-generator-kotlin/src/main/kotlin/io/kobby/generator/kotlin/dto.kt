@@ -192,7 +192,7 @@ internal fun TypeSpec.Builder.jacksonize(
             .addMember("use = %T.Id.NAME", JacksonAnnotations.JSON_TYPE_INFO)
             .addMember("include = %T.As.PROPERTY", JacksonAnnotations.JSON_TYPE_INFO)
             .addMember("property = %S", "__typename")
-            .addMember("defaultImpl = $className::javaClass")
+            .addMember("defaultImpl = $className::class")
             .build()
     )
 
