@@ -80,10 +80,10 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
-        option = "dtoJacksonized",
+        option = "dtoJacksonEnabled",
         description = "add Jackson annotations for generated DTO classes (default true)"
     )
-    val dtoJacksonized: Property<Boolean> = project.objects.property(Boolean::class.java)
+    val dtoJacksonEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
     @Input
     @Optional
@@ -169,7 +169,7 @@ open class KobbyKotlin : DefaultTask() {
 
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
-        dtoJacksonized.convention(true)
+        dtoJacksonEnabled.convention(true)
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
 
@@ -220,7 +220,7 @@ open class KobbyKotlin : DefaultTask() {
                 dtoPackage.toPackageName(),
                 dtoPrefix.orNull,
                 dtoPostfix.orNull,
-                dtoJacksonized.get(),
+                KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),
                     dtoBuilderPrefix.get(),

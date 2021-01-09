@@ -165,7 +165,7 @@ internal fun Type<*>.extractName(): String = when (this) {
 }
 
 internal fun FunSpec.Builder.jacksonize(layout: KotlinDtoLayout): FunSpec.Builder {
-    if (layout.jacksonized && parameters.size == 1) {
+    if (layout.jackson.enabled && parameters.size == 1) {
         addAnnotation(JacksonAnnotations.JSON_CREATOR)
     }
 
@@ -177,7 +177,7 @@ internal fun TypeSpec.Builder.jacksonize(
     typeName: String,
     className: String
 ): TypeSpec.Builder {
-    if (!layout.jacksonized) {
+    if (!layout.jackson.enabled) {
         return this
     }
 

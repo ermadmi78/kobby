@@ -141,7 +141,22 @@ open class KobbyKotlinDtoExtension {
     var packageName: String? = null
     var prefix: String? = null
     var postfix: String? = null
-    var jacksonized: Boolean? = null
+
+    // ******************************* Jackson *************************************************************************
+    @Volatile
+    private var jacksonConfigured: Boolean = false
+    private val jacksonExtensionLazy: KobbyKotlinDtoJacksonExtension by lazy {
+        jacksonConfigured = true
+        KobbyKotlinDtoJacksonExtension()
+    }
+
+    internal val jacksonExtension: KobbyKotlinDtoJacksonExtension?
+        get() = if (jacksonConfigured) jacksonExtensionLazy else null
+
+    /** Kotlin DSL Jackson support generator configuration */
+    fun jackson(action: Action<KobbyKotlinDtoJacksonExtension>) {
+        action.execute(jacksonExtensionLazy)
+    }
 
     // ******************************* Builder *************************************************************************
     @Volatile
@@ -164,8 +179,17 @@ open class KobbyKotlinDtoExtension {
             "packageName=$packageName, " +
             "prefix=$prefix, " +
             "postfix=$postfix, " +
-            "jacksonized=$jacksonized, " +
+            "jacksonized=$jacksonExtension, " +
             "builder=$builderExtension)"
+}
+
+@Kobby
+open class KobbyKotlinDtoJacksonExtension {
+    var enabled: Boolean? = null
+
+    override fun toString(): String {
+        return "KobbyKotlinDtoJacksonExtension(enabled=$enabled)"
+    }
 }
 
 @Kobby
