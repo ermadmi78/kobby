@@ -6,13 +6,20 @@ import com.squareup.kotlinpoet.TypeName
 import graphql.language.*
 import graphql.schema.idl.TypeDefinitionRegistry
 
+internal data class GenerateDtoResult(
+    val dtoClass: Map<String, TypeSpec>,
+    val builderClass: Map<String, TypeSpec>,
+    val builderFunction: Map<String, FunSpec>
+)
+
 /**
  * Created on 19.11.2020
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefinitionRegistry): Map<String, TypeSpec> {
+internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefinitionRegistry): GenerateDtoResult {
     val dtoLayout = layout.dto
+    val builderLayout = layout.dto.builder
     val types = mutableMapOf<String, TypeName>().apply {
         layout.scalars.forEach { (scalar, type) ->
             put(scalar, type.toTypeName())
@@ -48,7 +55,7 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
         }
     }
 
-    return graphQLSchema.types().values.asSequence().map { type ->
+    val dtoClass: Map<String, TypeSpec> = graphQLSchema.types().values.asSequence().map { type ->
         when (type) {
             is ObjectTypeDefinition -> {
                 val className = type.name.decorate(dtoLayout.prefix, dtoLayout.postfix)
@@ -132,6 +139,31 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
             type.name to it
         }
     }.filterNotNull().toMap()
+
+    val builderClass: Map<String, TypeSpec> = if (!layout.dto.builder.enabled) emptyMap() else
+        graphQLSchema.types().values.asSequence().map { type ->
+            when (type) {
+                is ObjectTypeDefinition -> {
+                    val builderTypeName = type.name
+                        .decorate(dtoLayout.prefix, dtoLayout.postfix)
+                        .decorate(builderLayout.prefix, builderLayout.postfix)
+                    type.name to TypeSpec.classBuilder(builderTypeName).also { classBuilder ->
+                        for (field in type.fieldDefinitions) {
+                            classBuilder.addProperty(
+                                PropertySpec.builder(field.name, field.type.resolve(types).copy(true))
+                                    .mutable()
+                                    .initializer("null")
+                                    .build()
+                            )
+                        }
+                    }.build()
+                }
+                is UnionTypeDefinition -> TODO("Union support is not implemented yet")
+                else -> null
+            }
+        }.filterNotNull().toMap()
+
+    return GenerateDtoResult(dtoClass, builderClass, emptyMap())
 }
 
 internal fun String.decorate(prefix: String?, postfix: String?): String {

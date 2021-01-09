@@ -21,6 +21,16 @@ fun generateKotlin(layout: KotlinGeneratorLayout, vararg schemas: Reader): Kotli
 
 
     return KotlinFilesLayout(
-        dtoFiles = dto.values.map { FileSpec.get(layout.dto.packageName, it).toKotlinFile() }
+        dtoFiles = dto.dtoClass.map { (typeName, dtoType) ->
+            FileSpec.builder(layout.dto.packageName, dtoType.name!!).apply {
+                addType(dtoType)
+                dto.builderFunction[typeName]?.also {
+                    addFunction(it)
+                }
+                dto.builderClass[typeName]?.also {
+                    addType(it)
+                }
+            }.build().toKotlinFile()
+        }
     )
 }

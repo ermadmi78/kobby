@@ -223,8 +223,8 @@ open class KobbyKotlin : DefaultTask() {
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),
-                    dtoBuilderPrefix.get(),
-                    dtoBuilderPostfix.get()
+                    dtoBuilderPrefix.orNull,
+                    dtoBuilderPostfix.orNull
                 )
             ),
             KotlinApiLayout(
