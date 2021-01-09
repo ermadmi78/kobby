@@ -114,16 +114,4 @@ subprojects {
         testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
         testImplementation("io.kotest:kotest-property:$kotestVersion")
     }
-
-    configurations.all {
-        resolutionStrategy {
-            force("org.jetbrains.kotlin:kotlin-stdlib:1.3.72")
-            force("org.jetbrains.kotlin:kotlin-stdlib-common:1.3.72")
-            force("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72")
-            force("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
-            force("org.jetbrains.kotlin:kotlin-reflect:1.3.72")
-            //force("org.antlr:antlr4:4.7.2")
-            //force("org.antlr:antlr4-runtime:4.7.2")
-        }
-    }
 }
