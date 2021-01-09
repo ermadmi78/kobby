@@ -142,14 +142,41 @@ open class KobbyKotlinDtoExtension {
     var prefix: String? = null
     var postfix: String? = null
     var jacksonized: Boolean? = null
-    var builders: Boolean? = null
+
+    // ******************************* Builder *************************************************************************
+    @Volatile
+    private var builderConfigured: Boolean = false
+    private val builderExtensionLazy: KobbyKotlinDtoBuilderExtension by lazy {
+        builderConfigured = true
+        KobbyKotlinDtoBuilderExtension()
+    }
+
+    internal val builderExtension: KobbyKotlinDtoBuilderExtension?
+        get() = if (builderConfigured) builderExtensionLazy else null
+
+    /** Kotlin DSL Builder generator configuration */
+    fun builder(action: Action<KobbyKotlinDtoBuilderExtension>) {
+        action.execute(builderExtensionLazy)
+    }
+    // *****************************************************************************************************************
 
     override fun toString(): String = "KobbyKotlinDtoExtension(" +
             "packageName=$packageName, " +
             "prefix=$prefix, " +
             "postfix=$postfix, " +
             "jacksonized=$jacksonized, " +
-            "builders=$builders)"
+            "builder=$builderExtension)"
+}
+
+@Kobby
+open class KobbyKotlinDtoBuilderExtension {
+    var enabled: Boolean? = null
+    var prefix: String? = null
+    var postfix: String? = null
+
+    override fun toString(): String {
+        return "KobbyKotlinDtoBuilderExtension(enabled=$enabled, prefix=$prefix, postfix=$postfix)"
+    }
 }
 
 @Kobby

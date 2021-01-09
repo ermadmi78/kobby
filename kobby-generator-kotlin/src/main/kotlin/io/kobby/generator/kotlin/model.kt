@@ -22,10 +22,16 @@ class KotlinDtoLayout(
     val prefix: String?,
     val postfix: String?,
     val jacksonized: Boolean,
-    val builders: Boolean
+    val builder: KotlinDtoBuilderLayout
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
+
+data class KotlinDtoBuilderLayout(
+    val enabled: Boolean,
+    val prefix: String?,
+    val postfix: String?
+)
 
 class KotlinApiLayout(
     val enabled: Boolean,

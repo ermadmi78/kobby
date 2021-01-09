@@ -88,10 +88,26 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
-        option = "dtoBuilders",
-        description = "generate builders for generated DTO classes (default true)"
+        option = "dtoBuilderEnabled",
+        description = "generate DTO builders is enabled (default true)"
     )
-    val dtoBuilders: Property<Boolean> = project.objects.property(Boolean::class.java)
+    val dtoBuilderEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoBuilderPrefix",
+        description = "prefix for generated DTO Builder classes (default null)"
+    )
+    val dtoBuilderPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoBuilderPostfix",
+        description = "postfix for generated DTO Builder classes (default \"Dto\")"
+    )
+    val dtoBuilderPostfix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
@@ -154,7 +170,8 @@ open class KobbyKotlin : DefaultTask() {
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
         dtoJacksonized.convention(true)
-        dtoBuilders.convention(true)
+        dtoBuilderEnabled.convention(true)
+        dtoBuilderPostfix.convention("Builder")
 
         apiEnabled.convention(true)
 
@@ -203,8 +220,12 @@ open class KobbyKotlin : DefaultTask() {
                 dtoPackage.toPackageName(),
                 dtoPrefix.orNull,
                 dtoPostfix.orNull,
-                jacksonized = dtoJacksonized.get(),
-                builders = dtoBuilders.get()
+                dtoJacksonized.get(),
+                KotlinDtoBuilderLayout(
+                    dtoBuilderEnabled.get(),
+                    dtoBuilderPrefix.get(),
+                    dtoBuilderPostfix.get()
+                )
             ),
             KotlinApiLayout(
                 apiEnabled.get(),

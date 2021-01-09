@@ -63,8 +63,16 @@ class KobbyPlugin : Plugin<Project> {
                             jacksonized?.also {
                                 kobbyKotlinTask.dtoJacksonized.convention(it)
                             }
-                            builders?.also {
-                                kobbyKotlinTask.dtoBuilders.convention(it)
+                            builderExtension?.apply {
+                                enabled?.also {
+                                    kobbyKotlinTask.dtoBuilderEnabled.convention(it)
+                                }
+                                prefix?.also {
+                                    kobbyKotlinTask.dtoBuilderPrefix.convention(it)
+                                }
+                                postfix?.also {
+                                    kobbyKotlinTask.dtoBuilderPostfix.convention(it)
+                                }
                             }
                         }
                         kotlinExtension.apiExtension?.apply {

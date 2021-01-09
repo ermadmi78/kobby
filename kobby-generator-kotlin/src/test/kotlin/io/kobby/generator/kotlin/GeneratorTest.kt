@@ -23,8 +23,12 @@ class GeneratorTest : AnnotationSpec() {
                 "api.dto",
                 null,
                 "Dto",
-                jacksonized = true,
-                builders = true
+                true,
+                KotlinDtoBuilderLayout(
+                    true,
+                    null,
+                    "Builder"
+                )
             ),
             KotlinApiLayout(
                 true,
