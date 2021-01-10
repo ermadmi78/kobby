@@ -80,6 +80,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoDslAnnotation",
+        description = "name of DSL annotation (default \"KobbyDSL\")"
+    )
+    val dtoDslAnnotation: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoJacksonEnabled",
         description = "add Jackson annotations for generated DTO classes (default true)"
     )
@@ -169,6 +177,7 @@ open class KobbyKotlin : DefaultTask() {
 
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
+        dtoDslAnnotation.convention("KobbyDSL")
         dtoJacksonEnabled.convention(true)
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
@@ -220,6 +229,7 @@ open class KobbyKotlin : DefaultTask() {
                 dtoPackage.toPackageName(),
                 dtoPrefix.orNull,
                 dtoPostfix.orNull,
+                dtoDslAnnotation.get(),
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),

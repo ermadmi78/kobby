@@ -23,6 +23,7 @@ class GeneratorTest : AnnotationSpec() {
                 "api.dto",
                 null,
                 "Dto",
+                "KobbyDSL",
                 KotlinDtoJacksonLayout(true),
                 KotlinDtoBuilderLayout(
                     true,

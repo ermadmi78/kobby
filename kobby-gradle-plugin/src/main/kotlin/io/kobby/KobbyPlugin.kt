@@ -60,6 +60,9 @@ class KobbyPlugin : Plugin<Project> {
                             postfix?.also {
                                 kobbyKotlinTask.dtoPostfix.convention(it)
                             }
+                            dslAnnotation?.also {
+                                kobbyKotlinTask.dtoDslAnnotation.convention(it)
+                            }
                             jacksonExtension?.apply {
                                 enabled?.also {
                                     kobbyKotlinTask.dtoJacksonEnabled.convention(it)

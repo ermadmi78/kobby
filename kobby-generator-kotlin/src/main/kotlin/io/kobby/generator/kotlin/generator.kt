@@ -1,6 +1,5 @@
 package io.kobby.generator.kotlin
 
-import com.squareup.kotlinpoet.FileSpec
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import java.io.Reader
@@ -21,16 +20,6 @@ fun generateKotlin(layout: KotlinGeneratorLayout, vararg schemas: Reader): Kotli
 
 
     return KotlinFilesLayout(
-        dtoFiles = dto.dtoClass.map { (typeName, dtoType) ->
-            FileSpec.builder(layout.dto.packageName, dtoType.name!!).apply {
-                addType(dtoType)
-                dto.builderFunction[typeName]?.also {
-                    addFunction(it)
-                }
-                dto.builderClass[typeName]?.also {
-                    addType(it)
-                }
-            }.build().toKotlinFile()
-        }
+        dtoFiles = dto.files.map { it.toKotlinFile() }
     )
 }

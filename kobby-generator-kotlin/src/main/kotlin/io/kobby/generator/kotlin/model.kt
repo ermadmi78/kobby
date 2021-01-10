@@ -21,6 +21,7 @@ class KotlinDtoLayout(
     packageName: String,
     val prefix: String?,
     val postfix: String?,
+    val dslAnnotation: String,
     val jackson: KotlinDtoJacksonLayout,
     val builder: KotlinDtoBuilderLayout
 ) {

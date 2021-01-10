@@ -7,9 +7,9 @@ import graphql.language.*
 import graphql.schema.idl.TypeDefinitionRegistry
 
 internal data class GenerateDtoResult(
-    val dtoClass: Map<String, TypeSpec>,
-    val builderClass: Map<String, TypeSpec>,
-    val builderFunction: Map<String, FunSpec>
+    val dslAnnotation: ClassName,
+    val types: Map<String, TypeName>,
+    val files: List<FileSpec>
 )
 
 /**
@@ -54,8 +54,17 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
             is UnionTypeDefinition -> TODO()
         }
     }
+    val files = mutableMapOf<String, FileSpec.Builder>()
 
-    val dtoClass: Map<String, TypeSpec> = graphQLSchema.types().values.asSequence().map { type ->
+    files[dtoLayout.dslAnnotation] = FileSpec.builder(dtoLayout.packageName, dtoLayout.dslAnnotation).addType(
+        TypeSpec.classBuilder(dtoLayout.dslAnnotation)
+            .addModifiers(KModifier.ANNOTATION)
+            .addAnnotation(DslMarker::class)
+            .build()
+    )
+    val dslAnnotation = ClassName(dtoLayout.packageName, dtoLayout.dslAnnotation)
+
+    for (type in graphQLSchema.types().values) {
         when (type) {
             is ObjectTypeDefinition -> {
                 val className = type.name.decorate(dtoLayout.prefix, dtoLayout.postfix)
@@ -135,35 +144,67 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
             }.build()
             is UnionTypeDefinition -> TODO("Union support is not implemented yet")
             else -> null
-        }?.let {
-            type.name to it
-        }
-    }.filterNotNull().toMap()
-
-    val builderClass: Map<String, TypeSpec> = if (!layout.dto.builder.enabled) emptyMap() else
-        graphQLSchema.types().values.asSequence().map { type ->
-            when (type) {
-                is ObjectTypeDefinition -> {
-                    val builderTypeName = type.name
-                        .decorate(dtoLayout.prefix, dtoLayout.postfix)
-                        .decorate(builderLayout.prefix, builderLayout.postfix)
-                    type.name to TypeSpec.classBuilder(builderTypeName).also { classBuilder ->
-                        for (field in type.fieldDefinitions) {
-                            classBuilder.addProperty(
-                                PropertySpec.builder(field.name, field.type.resolve(types).copy(true))
-                                    .mutable()
-                                    .initializer("null")
-                                    .build()
-                            )
-                        }
-                    }.build()
-                }
-                is UnionTypeDefinition -> TODO("Union support is not implemented yet")
-                else -> null
+        }?.also {
+            require(files[type.name] == null) {
+                "DTO type name conflict - there are several types with name: ${type.name}"
             }
-        }.filterNotNull().toMap()
+            files[type.name] = FileSpec.builder(dtoLayout.packageName, it.name!!).addType(it)
+        }
+    }
 
-    return GenerateDtoResult(dtoClass, builderClass, emptyMap())
+    if (layout.dto.builder.enabled) {
+        for (type in graphQLSchema.types().values) {
+            // Create builder functions
+            when (type) {
+                is ObjectTypeDefinition -> type.fieldDefinitions.map { it.name }.joinToString { it }
+                is InputObjectTypeDefinition -> type.inputValueDefinitions.map { it.name }.joinToString { it }
+                else -> null
+            }?.let { arguments ->
+                val dtoType: TypeName = types[type.name]!!
+                val dtoName: String = (dtoType as ClassName).simpleName
+                val builderType: TypeName = ClassName(
+                    dtoLayout.packageName,
+                    dtoName.decorate(builderLayout.prefix, builderLayout.postfix)
+                )
+                FunSpec.builder(dtoName)
+                    .addParameter("block", LambdaTypeName.get(builderType, emptyList(), UNIT))
+                    .returns(dtoType)
+                    .addStatement("return %T().apply(block).run·{ %T($arguments) }", builderType, dtoType)
+                    .build()
+            }?.also {
+                files[type.name]!!.addFunction(it)
+            }
+
+            // Create builders
+            when (type) {
+                is ObjectTypeDefinition -> type.fieldDefinitions.map {
+                    PropertySpec.builder(it.name, it.type.resolve(types).copy(true))
+                        .mutable()
+                        .initializer("null")
+                        .build()
+                }
+                is InputObjectTypeDefinition -> type.inputValueDefinitions.map {
+                    PropertySpec.builder(it.name, it.type.resolve(types).copy(true))
+                        .mutable()
+                        .initializer("null")
+                        .build()
+                }
+                else -> null
+            }?.let { properties ->
+                val dtoName: String = (types[type.name] as ClassName).simpleName
+                TypeSpec.classBuilder(dtoName.decorate(builderLayout.prefix, builderLayout.postfix)).apply {
+                    addAnnotation(dslAnnotation)
+                    properties.forEach {
+                        addProperty(it)
+                    }
+                }.build()
+            }?.also {
+                files[type.name]!!.addType(it)
+            }
+        }
+    }
+
+    return GenerateDtoResult(dslAnnotation, types, files.values.asSequence().map { it.build() }.toList())
 }
 
 internal fun String.decorate(prefix: String?, postfix: String?): String {

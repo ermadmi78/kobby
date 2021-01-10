@@ -141,6 +141,7 @@ open class KobbyKotlinDtoExtension {
     var packageName: String? = null
     var prefix: String? = null
     var postfix: String? = null
+    var dslAnnotation: String? = null
 
     // ******************************* Jackson *************************************************************************
     @Volatile
