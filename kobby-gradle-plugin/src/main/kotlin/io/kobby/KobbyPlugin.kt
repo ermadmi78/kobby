@@ -79,6 +79,20 @@ class KobbyPlugin : Plugin<Project> {
                                     kobbyKotlinTask.dtoBuilderPostfix.convention(it)
                                 }
                             }
+                            graphQLExtension?.apply {
+                                enabled?.also {
+                                    kobbyKotlinTask.dtoGraphQLEnabled.convention(it)
+                                }
+                                packageName?.also {
+                                    kobbyKotlinTask.dtoGraphQLPackageName.convention(it)
+                                }
+                                prefix?.also {
+                                    kobbyKotlinTask.dtoGraphQLPrefix.convention(it)
+                                }
+                                postfix?.also {
+                                    kobbyKotlinTask.dtoGraphQLPostfix.convention(it)
+                                }
+                            }
                         }
                         kotlinExtension.apiExtension?.apply {
                             enabled?.also {

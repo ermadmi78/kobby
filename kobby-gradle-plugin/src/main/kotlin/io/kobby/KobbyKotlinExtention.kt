@@ -174,6 +174,23 @@ open class KobbyKotlinDtoExtension {
     fun builder(action: Action<KobbyKotlinDtoBuilderExtension>) {
         action.execute(builderExtensionLazy)
     }
+
+    // ******************************* GraphQL *************************************************************************
+    @Volatile
+    private var graphQLConfigured: Boolean = false
+    private val graphQLExtensionLazy: KobbyKotlinDtoGraphQLExtension by lazy {
+        graphQLConfigured = true
+        KobbyKotlinDtoGraphQLExtension()
+    }
+
+    internal val graphQLExtension: KobbyKotlinDtoGraphQLExtension?
+        get() = if (graphQLConfigured) graphQLExtensionLazy else null
+
+    /** Kotlin DSL GraphQL DTO generation configuration */
+    fun graphQL(action: Action<KobbyKotlinDtoGraphQLExtension>) {
+        action.execute(graphQLExtensionLazy)
+    }
+
     // *****************************************************************************************************************
 
     override fun toString(): String = "KobbyKotlinDtoExtension(" +
@@ -201,6 +218,19 @@ open class KobbyKotlinDtoBuilderExtension {
 
     override fun toString(): String {
         return "KobbyKotlinDtoBuilderExtension(enabled=$enabled, prefix=$prefix, postfix=$postfix)"
+    }
+}
+
+@Kobby
+open class KobbyKotlinDtoGraphQLExtension {
+    var enabled: Boolean? = null
+    var packageName: String? = null
+    var prefix: String? = null
+    var postfix: String? = null
+
+    override fun toString(): String {
+        return "KobbyKotlinDtoGraphQLExtension(enabled=$enabled, packageName=$packageName, " +
+                "prefix=$prefix, postfix=$postfix)"
     }
 }
 

@@ -23,7 +23,8 @@ class KotlinDtoLayout(
     val postfix: String?,
     val dslAnnotation: String,
     val jackson: KotlinDtoJacksonLayout,
-    val builder: KotlinDtoBuilderLayout
+    val builder: KotlinDtoBuilderLayout,
+    val graphql: KotlinDtoGraphQLLayout
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
@@ -37,6 +38,15 @@ data class KotlinDtoBuilderLayout(
     val prefix: String?,
     val postfix: String?
 )
+
+class KotlinDtoGraphQLLayout(
+    val enabled: Boolean,
+    packageName: String,
+    val prefix: String?,
+    val postfix: String?
+) {
+    val packageName: String = packageName.validateKotlinPath()
+}
 
 class KotlinApiLayout(
     val enabled: Boolean,

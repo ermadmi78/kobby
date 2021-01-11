@@ -29,6 +29,12 @@ class GeneratorTest : AnnotationSpec() {
                     true,
                     null,
                     "Builder"
+                ),
+                KotlinDtoGraphQLLayout(
+                    true,
+                    "api.dto.graphql",
+                    "GraphQL",
+                    null
                 )
             ),
             KotlinApiLayout(

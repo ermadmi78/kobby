@@ -120,6 +120,38 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoGraphQLEnabled",
+        description = "generate GraphQL DTO classes (default true)"
+    )
+    val dtoGraphQLEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoGraphQLPackageName",
+        description = "package name for GraphQL DTO classes relative to DTO package name (default \"graphql\")"
+    )
+    val dtoGraphQLPackageName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoGraphQLPrefix",
+        description = "prefix for generated GraphQL DTO classes (default \"GraphQL\")"
+    )
+    val dtoGraphQLPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoGraphQLPostfix",
+        description = "postfix for generated GraphQL DTO classes (default null)"
+    )
+    val dtoGraphQLPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "apiEnabled",
         description = "generate API classes (default true)"
     )
@@ -180,6 +212,8 @@ open class KobbyKotlin : DefaultTask() {
         dtoJacksonEnabled.convention(true)
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
+        dtoGraphQLEnabled.convention(true)
+        dtoGraphQLPackageName.convention("graphql")
 
         apiEnabled.convention(true)
 
@@ -220,6 +254,11 @@ open class KobbyKotlin : DefaultTask() {
             dtoPackageName.orNull?.forEachPackage { list += it }
         }
 
+        val dtoGraphQLPackage: List<String> = mutableListOf<String>().also { list ->
+            list += dtoPackage
+            dtoGraphQLPackageName.orNull?.forEachPackage { list += it }
+        }
+
         val apiPackage: List<String> = mutableListOf<String>().also { list ->
             list += rootPackage
             apiPackageName.orNull?.forEachPackage { list += it }
@@ -242,6 +281,12 @@ open class KobbyKotlin : DefaultTask() {
                     dtoBuilderEnabled.get(),
                     dtoBuilderPrefix.orNull,
                     dtoBuilderPostfix.orNull
+                ),
+                KotlinDtoGraphQLLayout(
+                    dtoGraphQLEnabled.get(),
+                    dtoGraphQLPackage.toPackageName(),
+                    dtoGraphQLPrefix.orNull?.trim() ?: schemaName,
+                    dtoGraphQLPostfix.orNull
                 )
             ),
             KotlinApiLayout(

@@ -20,6 +20,8 @@ internal data class GenerateDtoResult(
 internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefinitionRegistry): GenerateDtoResult {
     val dtoLayout = layout.dto
     val builderLayout = layout.dto.builder
+    val graphqlLayout = layout.dto.graphql
+
     val types = mutableMapOf<String, TypeName>().apply {
         layout.scalars.forEach { (scalar, type) ->
             put(scalar, type.toTypeName())
@@ -77,20 +79,14 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
                 val constructorBuilder = FunSpec.constructorBuilder()
                 for (field in type.fieldDefinitions) {
                     val fieldType = field.type.resolve(types).copy(true)
-                    constructorBuilder.addParameter(
-                        ParameterSpec.builder(field.name, fieldType)
-                            .defaultValue("null")
-                            .build()
-                    )
-                    classBuilder.addProperty(PropertySpec.builder(field.name, fieldType).apply {
-                        initializer(field.name)
+                    classBuilder.addProperty(constructorBuilder, field.name, fieldType) {
                         for (ancestorType in type.implements) {
                             if (field.name in interfaces[ancestorType.extractName()]!!) {
                                 addModifiers(KModifier.OVERRIDE)
                                 break
                             }
                         }
-                    }.build())
+                    }
                 }
 
                 classBuilder
@@ -102,16 +98,10 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
                 val classBuilder = TypeSpec.classBuilder(type.name).addModifiers(KModifier.DATA)
                 val constructorBuilder = FunSpec.constructorBuilder()
                 for (field in type.inputValueDefinitions) {
-                    val fieldType = field.type.resolve(types).copy(true)
-                    constructorBuilder.addParameter(
-                        ParameterSpec.builder(field.name, fieldType)
-                            .defaultValue("null")
-                            .build()
-                    )
                     classBuilder.addProperty(
-                        PropertySpec.builder(field.name, fieldType)
-                            .initializer(field.name)
-                            .build()
+                        constructorBuilder,
+                        field.name,
+                        field.type.resolve(types).copy(true)
                     )
                 }
 
@@ -204,6 +194,173 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
         }
     }
 
+    if (graphqlLayout.enabled) {
+        // GraphQL Request
+        val requestName = "Request".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val requestConstructorBuilder = FunSpec.constructorBuilder()
+        val requestType = TypeSpec.classBuilder(requestName)
+            .addModifiers(KModifier.DATA)
+            .addProperty(
+                requestConstructorBuilder,
+                "query",
+                STRING
+            )
+            .addProperty(
+                requestConstructorBuilder,
+                "variables",
+                MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+            ) { jacksonInclude(dtoLayout, JacksonInclude.NON_EMPTY) }
+            .addProperty(
+                requestConstructorBuilder,
+                "operationName",
+                STRING.nullable()
+            ) { jacksonInclude(dtoLayout, JacksonInclude.NON_ABSENT) }
+            .primaryConstructor(requestConstructorBuilder.build())
+            .build()
+        files["graphql.$requestName"] =
+            FileSpec.builder(graphqlLayout.packageName, requestName).addType(requestType)
+
+        // GraphQL ErrorType
+        val errorTypeName = "ErrorType".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val errorTypeType = TypeSpec.enumBuilder(errorTypeName)
+            .addEnumConstant("InvalidSyntax")
+            .addEnumConstant("ValidationError")
+            .addEnumConstant("DataFetchingException")
+            .addEnumConstant("OperationNotSupported")
+            .addEnumConstant("ExecutionAborted")
+            .build()
+        files["graphql.$errorTypeName"] =
+            FileSpec.builder(graphqlLayout.packageName, errorTypeName).addType(errorTypeType)
+
+        // GraphQLErrorSourceLocation
+        val errorSourceLocationName = "ErrorSourceLocation".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val errorSourceLocationConstructorBuilder = FunSpec.constructorBuilder()
+        val errorSourceLocationType = TypeSpec.classBuilder(errorSourceLocationName)
+            .addModifiers(KModifier.DATA)
+            .addProperty(
+                errorSourceLocationConstructorBuilder,
+                "line",
+                INT
+            )
+            .addProperty(
+                errorSourceLocationConstructorBuilder,
+                "column",
+                INT
+            )
+            .addProperty(
+                errorSourceLocationConstructorBuilder,
+                "sourceName",
+                STRING.nullable()
+            ) { jacksonInclude(dtoLayout, JacksonInclude.NON_ABSENT) }
+            .primaryConstructor(errorSourceLocationConstructorBuilder.build())
+            .build()
+        files["graphql.$errorSourceLocationName"] =
+            FileSpec.builder(graphqlLayout.packageName, errorSourceLocationName).addType(errorSourceLocationType)
+
+        // GraphQLError
+        val errorName = "Error".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val errorConstructorBuilder = FunSpec.constructorBuilder()
+        val errorType = TypeSpec.classBuilder(errorName)
+            .addModifiers(KModifier.DATA)
+            .addProperty(
+                errorConstructorBuilder,
+                "message",
+                STRING
+            )
+            .addProperty(
+                errorConstructorBuilder,
+                "locations",
+                LIST.parameterizedBy(ClassName(graphqlLayout.packageName, errorSourceLocationName)).nullable()
+            ) { jacksonInclude(dtoLayout, JacksonInclude.NON_EMPTY) }
+            .addProperty(
+                errorConstructorBuilder,
+                "errorType",
+                ClassName(graphqlLayout.packageName, errorTypeName).nullable()
+            ) { jacksonInclude(dtoLayout, JacksonInclude.NON_ABSENT) }
+            .addProperty(
+                errorConstructorBuilder,
+                "path",
+                LIST.parameterizedBy(ANY).nullable()
+            ) { jacksonInclude(dtoLayout, JacksonInclude.NON_EMPTY) }
+            .addProperty(
+                errorConstructorBuilder,
+                "extensions",
+                MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+            ) { jacksonInclude(dtoLayout, JacksonInclude.NON_EMPTY) }
+            .primaryConstructor(errorConstructorBuilder.build())
+            .build()
+        files["graphql.$errorName"] =
+            FileSpec.builder(graphqlLayout.packageName, errorName).addType(errorType)
+
+        // GraphQLException
+        val exceptionName = "Exception".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val exceptionConstructorBuilder = FunSpec.constructorBuilder()
+            .addParameter("message", STRING)
+        val exceptionType = TypeSpec.classBuilder(exceptionName)
+            .addProperty(
+                exceptionConstructorBuilder,
+                "request",
+                ClassName(graphqlLayout.packageName, requestName)
+            )
+            .addProperty(
+                exceptionConstructorBuilder,
+                "errors",
+                LIST.parameterizedBy(ClassName(graphqlLayout.packageName, errorName)).nullable()
+            )
+            .primaryConstructor(exceptionConstructorBuilder.build())
+            .superclass(ClassName("kotlin", "RuntimeException"))
+            .addSuperclassConstructorParameter(
+                "message + (errors?.joinToString(\",\\n  \", \"\\n  \", \"\\n\")·{ it.toString() } ?: \"\")"
+            )
+            .build()
+        files["graphql.$exceptionName"] =
+            FileSpec.builder(graphqlLayout.packageName, exceptionName).addType(exceptionType)
+
+        // GraphQLQueryResult
+        types["Query"]?.also {
+            val queryName = "QueryResult".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+            val queryConstructorBuilder = FunSpec.constructorBuilder()
+            val queryType = TypeSpec.classBuilder(queryName)
+                .addModifiers(KModifier.DATA)
+                .addProperty(
+                    queryConstructorBuilder,
+                    "data",
+                    it.nullable()
+                ) { jacksonInclude(dtoLayout, JacksonInclude.NON_ABSENT) }
+                .addProperty(
+                    queryConstructorBuilder,
+                    "errors",
+                    LIST.parameterizedBy(ClassName(graphqlLayout.packageName, errorName)).nullable()
+                ) { jacksonInclude(dtoLayout, JacksonInclude.NON_EMPTY) }
+                .primaryConstructor(queryConstructorBuilder.build())
+                .build()
+            files["graphql.$queryName"] =
+                FileSpec.builder(graphqlLayout.packageName, queryName).addType(queryType)
+        }
+
+        // GraphQLMutationResult
+        types["Mutation"]?.also {
+            val mutationName = "MutationResult".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+            val mutationConstructorBuilder = FunSpec.constructorBuilder()
+            val mutationType = TypeSpec.classBuilder(mutationName)
+                .addModifiers(KModifier.DATA)
+                .addProperty(
+                    mutationConstructorBuilder,
+                    "data",
+                    it.nullable()
+                ) { jacksonInclude(dtoLayout, JacksonInclude.NON_ABSENT) }
+                .addProperty(
+                    mutationConstructorBuilder,
+                    "errors",
+                    LIST.parameterizedBy(ClassName(graphqlLayout.packageName, errorName)).nullable()
+                ) { jacksonInclude(dtoLayout, JacksonInclude.NON_EMPTY) }
+                .primaryConstructor(mutationConstructorBuilder.build())
+                .build()
+            files["graphql.$mutationName"] =
+                FileSpec.builder(graphqlLayout.packageName, mutationName).addType(mutationType)
+        }
+    }
+
     return GenerateDtoResult(dslAnnotation, types, files.values.asSequence().map { it.build() }.toList())
 }
 
@@ -236,6 +393,8 @@ internal fun Type<*>.extractName(): String = when (this) {
     is graphql.language.TypeName -> name
     else -> error("Unexpected Type successor: ${this::javaClass.name}")
 }
+
+internal fun TypeName.nullable(): TypeName = copy(true)
 
 internal fun FunSpec.Builder.jacksonize(layout: KotlinDtoLayout): FunSpec.Builder {
     if (layout.jackson.enabled && parameters.size == 1) {
@@ -278,6 +437,36 @@ internal fun TypeSpec.Builder.jacksonize(
     return this
 }
 
+internal fun TypeSpec.Builder.addProperty(
+    constructorBuilder: FunSpec.Builder,
+    name: String,
+    type: TypeName,
+    block: PropertySpec.Builder.() -> Unit = {}
+): TypeSpec.Builder = addProperty(PropertySpec.builder(name, type).also {
+    constructorBuilder.addParameter(
+        ParameterSpec.builder(name, type).apply {
+            if (type.isNullable) {
+                defaultValue("null")
+            }
+        }.build()
+    )
+    it.initializer(name)
+}.apply(block).build())
+
+internal fun PropertySpec.Builder.jacksonInclude(
+    layout: KotlinDtoLayout,
+    include: JacksonInclude
+): PropertySpec.Builder {
+    if (layout.jackson.enabled) {
+        addAnnotation(
+            AnnotationSpec.builder(JacksonAnnotations.JSON_INCLUDE)
+                .addMember("value = %T.Include.${include.name}", JacksonAnnotations.JSON_INCLUDE)
+                .build()
+        )
+    }
+    return this
+}
+
 internal object JacksonAnnotations {
     val JSON_CREATOR = ClassName(
         "com.fasterxml.jackson.annotation",
@@ -298,4 +487,14 @@ internal object JacksonAnnotations {
         "com.fasterxml.jackson.annotation",
         "JsonInclude"
     )
+}
+
+internal enum class JacksonInclude {
+    ALWAYS,
+    NON_NULL,
+    NON_ABSENT,
+    NON_EMPTY,
+    NON_DEFAULT,
+    CUSTOM,
+    USE_DEFAULTS
 }
