@@ -81,7 +81,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoDslAnnotation",
-        description = "name of DSL annotation (default \"KobbyDSL\")"
+        description = "name of DSL annotation (default \"<GraphQL schema name>DSL\")"
     )
     val dtoDslAnnotation: Property<String> = project.objects.property(String::class.java)
 
@@ -177,7 +177,6 @@ open class KobbyKotlin : DefaultTask() {
 
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
-        dtoDslAnnotation.convention("KobbyDSL")
         dtoJacksonEnabled.convention(true)
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
@@ -196,6 +195,14 @@ open class KobbyKotlin : DefaultTask() {
         if (!graphQLSchema.isFile) {
             throw RuntimeException("specified schema file does not exist")
         }
+
+        val schemaName = graphQLSchema.name
+            .splitToSequence('.')
+            .filter { it.isNotBlank() }
+            .firstOrNull()
+            ?.filter { it.isJavaIdentifierPart() }
+            ?.takeIf { it.firstOrNull()?.isJavaIdentifierStart() ?: false }
+            ?.capitalize() ?: "Kobby"
 
         val rootPackage: List<String> = mutableListOf<String>().also { list ->
             if (relativePackage.get()) {
@@ -229,7 +236,7 @@ open class KobbyKotlin : DefaultTask() {
                 dtoPackage.toPackageName(),
                 dtoPrefix.orNull,
                 dtoPostfix.orNull,
-                dtoDslAnnotation.get(),
+                dtoDslAnnotation.orNull?.trim()?.takeIf { it.isNotEmpty() } ?: "${schemaName}DSL",
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),
