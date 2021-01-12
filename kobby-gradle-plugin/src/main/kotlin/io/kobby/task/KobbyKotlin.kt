@@ -152,18 +152,18 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
-        option = "apiEnabled",
-        description = "generate API classes (default true)"
+        option = "entityEnabled",
+        description = "generate Entity classes (default true)"
     )
-    val apiEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+    val entityEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "apiPackageName",
-        description = "package name relative to root package name for generated API classes (default null)"
+        option = "entityPackageName",
+        description = "package name relative to root package name for generated Entity classes (default \"entity\")"
     )
-    val apiPackageName: Property<String> = project.objects.property(String::class.java)
+    val entityPackageName: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
@@ -215,7 +215,8 @@ open class KobbyKotlin : DefaultTask() {
         dtoGraphQLEnabled.convention(true)
         dtoGraphQLPackageName.convention("graphql")
 
-        apiEnabled.convention(true)
+        entityEnabled.convention(true)
+        entityPackageName.convention("entity")
 
         implPackageName.convention("impl")
         implPostfix.convention("Impl")
@@ -259,9 +260,9 @@ open class KobbyKotlin : DefaultTask() {
             dtoGraphQLPackageName.orNull?.forEachPackage { list += it }
         }
 
-        val apiPackage: List<String> = mutableListOf<String>().also { list ->
+        val entityPackage: List<String> = mutableListOf<String>().also { list ->
             list += rootPackage
-            apiPackageName.orNull?.forEachPackage { list += it }
+            entityPackageName.orNull?.forEachPackage { list += it }
         }
 
         val implPackage: List<String> = mutableListOf<String>().also { list ->
@@ -289,9 +290,9 @@ open class KobbyKotlin : DefaultTask() {
                     dtoGraphQLPostfix.orNull
                 )
             ),
-            KotlinApiLayout(
-                apiEnabled.get(),
-                apiPackage.toPackageName()
+            KotlinEntityLayout(
+                entityEnabled.get(),
+                entityPackage.toPackageName()
             ),
             KotlinImplLayout(
                 implPackage.toPackageName(),
@@ -309,7 +310,7 @@ open class KobbyKotlin : DefaultTask() {
         output.dtoFiles.forEach {
             it.writeTo(targetDirectory)
         }
-        output.apiFiles.forEach {
+        output.entityFiles.forEach {
             it.writeTo(targetDirectory)
         }
         output.implFiles.forEach {

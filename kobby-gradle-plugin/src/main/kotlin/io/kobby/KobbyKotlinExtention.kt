@@ -37,22 +37,22 @@ open class KobbyKotlinExtension {
     }
 
     // *****************************************************************************************************************
-    //                                       API
+    //                                       Entity
     // *****************************************************************************************************************
 
     @Volatile
-    private var apiConfigured: Boolean = false
-    private val apiExtensionLazy: KobbyKotlinApiExtension by lazy {
-        apiConfigured = true
-        KobbyKotlinApiExtension()
+    private var entityConfigured: Boolean = false
+    private val entityExtensionLazy: KobbyKotlinEntityExtension by lazy {
+        entityConfigured = true
+        KobbyKotlinEntityExtension()
     }
 
-    internal val apiExtension: KobbyKotlinApiExtension?
-        get() = if (apiConfigured) apiExtensionLazy else null
+    internal val entityExtension: KobbyKotlinEntityExtension?
+        get() = if (entityConfigured) entityExtensionLazy else null
 
-    /** Kotlin DSL API generator configuration */
-    fun api(action: Action<KobbyKotlinApiExtension>) {
-        action.execute(apiExtensionLazy)
+    /** Kotlin DSL Entity generator configuration */
+    fun entity(action: Action<KobbyKotlinEntityExtension>) {
+        action.execute(entityExtensionLazy)
     }
 
     // *****************************************************************************************************************
@@ -235,12 +235,12 @@ open class KobbyKotlinDtoGraphQLExtension {
 }
 
 @Kobby
-open class KobbyKotlinApiExtension {
+open class KobbyKotlinEntityExtension {
     var enabled: Boolean? = null
     var packageName: String? = null
 
     override fun toString(): String =
-        "KobbyKotlinApiExtension(enabled=$enabled, packageName=$packageName)"
+        "KobbyKotlinEntityExtension(enabled=$enabled, packageName=$packageName)"
 }
 
 @Kobby

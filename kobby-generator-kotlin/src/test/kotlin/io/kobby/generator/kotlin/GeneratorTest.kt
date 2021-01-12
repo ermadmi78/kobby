@@ -20,7 +20,7 @@ class GeneratorTest : AnnotationSpec() {
                 "JSON" to MAP.parameterize(STRING, ANY.nullable())
             ),
             KotlinDtoLayout(
-                "api.dto",
+                "dto",
                 null,
                 "Dto",
                 "KobbyDSL",
@@ -32,17 +32,17 @@ class GeneratorTest : AnnotationSpec() {
                 ),
                 KotlinDtoGraphQLLayout(
                     true,
-                    "api.dto.graphql",
+                    "dto.graphql",
                     "GraphQL",
                     null
                 )
             ),
-            KotlinApiLayout(
+            KotlinEntityLayout(
                 true,
-                "api"
+                "entity"
             ),
             KotlinImplLayout(
-                "api.impl",
+                "impl",
                 null,
                 "Impl"
             )

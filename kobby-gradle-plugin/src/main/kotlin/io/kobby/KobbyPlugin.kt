@@ -94,12 +94,12 @@ class KobbyPlugin : Plugin<Project> {
                                 }
                             }
                         }
-                        kotlinExtension.apiExtension?.apply {
+                        kotlinExtension.entityExtension?.apply {
                             enabled?.also {
-                                kobbyKotlinTask.apiEnabled.convention(it)
+                                kobbyKotlinTask.entityEnabled.convention(it)
                             }
                             packageName?.also {
-                                kobbyKotlinTask.apiPackageName.convention(it)
+                                kobbyKotlinTask.entityPackageName.convention(it)
                             }
                         }
                         kotlinExtension.implExtension?.apply {

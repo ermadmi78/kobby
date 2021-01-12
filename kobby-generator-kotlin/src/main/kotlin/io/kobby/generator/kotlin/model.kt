@@ -13,7 +13,7 @@ import java.nio.file.Path
 data class KotlinGeneratorLayout(
     val scalars: Map<String, KotlinType>,
     val dto: KotlinDtoLayout,
-    val api: KotlinApiLayout,
+    val entity: KotlinEntityLayout,
     val impl: KotlinImplLayout
 )
 
@@ -48,7 +48,7 @@ class KotlinDtoGraphQLLayout(
     val packageName: String = packageName.validateKotlinPath()
 }
 
-class KotlinApiLayout(
+class KotlinEntityLayout(
     val enabled: Boolean,
     packageName: String
 ) {
@@ -65,7 +65,7 @@ class KotlinImplLayout(
 
 class KotlinFilesLayout(
     val dtoFiles: List<KotlinFile> = listOf(),
-    val apiFiles: List<KotlinFile> = listOf(),
+    val entityFiles: List<KotlinFile> = listOf(),
     val implFiles: List<KotlinFile> = listOf()
 )
 
