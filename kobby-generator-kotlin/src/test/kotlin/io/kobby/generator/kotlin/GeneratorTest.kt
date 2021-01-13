@@ -52,7 +52,7 @@ class GeneratorTest : AnnotationSpec() {
         println("************************************************************************************************")
         println("DTO:")
         println("************************************************************************************************")
-        files.dtoFiles.forEach {
+        files.forEach {
             println()
             it.writeTo(System.out)
             println("---------")

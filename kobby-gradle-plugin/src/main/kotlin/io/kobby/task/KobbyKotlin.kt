@@ -307,13 +307,7 @@ open class KobbyKotlin : DefaultTask() {
         }
 
         val output = generateKotlin(layout, FileReader(graphQLSchema))
-        output.dtoFiles.forEach {
-            it.writeTo(targetDirectory)
-        }
-        output.entityFiles.forEach {
-            it.writeTo(targetDirectory)
-        }
-        output.implFiles.forEach {
+        output.forEach {
             it.writeTo(targetDirectory)
         }
     }

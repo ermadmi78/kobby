@@ -63,12 +63,6 @@ class KotlinImplLayout(
     val packageName: String = packageName.validateKotlinPath()
 }
 
-class KotlinFilesLayout(
-    val dtoFiles: List<KotlinFile> = listOf(),
-    val entityFiles: List<KotlinFile> = listOf(),
-    val implFiles: List<KotlinFile> = listOf()
-)
-
 interface KotlinFile {
     @Throws(IOException::class)
     fun writeTo(out: Appendable)

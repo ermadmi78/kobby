@@ -10,7 +10,7 @@ import java.io.Reader
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 
-fun generateKotlin(layout: KotlinGeneratorLayout, vararg schemas: Reader): KotlinFilesLayout {
+fun generateKotlin(layout: KotlinGeneratorLayout, vararg schemas: Reader): List<KotlinFile> {
     val graphQLSchema = TypeDefinitionRegistry()
     for (schema in schemas) {
         graphQLSchema.merge(SchemaParser().parse(schema))
@@ -19,7 +19,5 @@ fun generateKotlin(layout: KotlinGeneratorLayout, vararg schemas: Reader): Kotli
     val dto = generateDto(layout, graphQLSchema)
 
 
-    return KotlinFilesLayout(
-        dtoFiles = dto.files.map { it.toKotlinFile() }
-    )
+    return dto.files.map { it.toKotlinFile() }
 }
