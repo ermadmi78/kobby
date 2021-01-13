@@ -24,8 +24,6 @@ open class KobbyKotlin : DefaultTask() {
 
     /**
      * GraphQL schema file that will be used to generate client code.
-     *
-     * **Required Property**: [schemaFileName] or [schemaFile] has to be provided.
      */
     @InputFile
     val schemaFile: RegularFileProperty = project.objects.fileProperty()
@@ -56,6 +54,38 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "contextPackageName",
+        description = "package name relative to root package name for generated context classes (default null)"
+    )
+    val contextPackageName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "contextName",
+        description = "name of context (default \"<GraphQL schema name>\")"
+    )
+    val contextName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "contextPrefix",
+        description = "prefix for generated context classes (default \"<Context name>\")"
+    )
+    val contextPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "contextPostfix",
+        description = "postfix for generated context classes (default null)"
+    )
+    val contextPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoPackageName",
         description = "package name relative to root package name for generated DTO classes (default \"dto\")"
     )
@@ -76,14 +106,6 @@ open class KobbyKotlin : DefaultTask() {
         description = "postfix for generated DTO classes (default \"Dto\")"
     )
     val dtoPostfix: Property<String> = project.objects.property(String::class.java)
-
-    @Input
-    @Optional
-    @Option(
-        option = "dtoDslAnnotation",
-        description = "name of DSL annotation (default \"<GraphQL schema name>DSL\")"
-    )
-    val dtoDslAnnotation: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
@@ -137,7 +159,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoGraphQLPrefix",
-        description = "prefix for generated GraphQL DTO classes (default \"GraphQL\")"
+        description = "prefix for generated GraphQL DTO classes (default \"<Context name>\")"
     )
     val dtoGraphQLPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -231,13 +253,16 @@ open class KobbyKotlin : DefaultTask() {
             throw RuntimeException("specified schema file does not exist")
         }
 
-        val schemaName = graphQLSchema.name
-            .splitToSequence('.')
-            .filter { it.isNotBlank() }
-            .firstOrNull()
+        val context = (contextName.orNull
+            ?: graphQLSchema.name
+                .splitToSequence('.')
+                .filter { it.isNotBlank() }
+                .firstOrNull()
+                ?.decapitalize())
             ?.filter { it.isJavaIdentifierPart() }
             ?.takeIf { it.firstOrNull()?.isJavaIdentifierStart() ?: false }
-            ?.capitalize() ?: "Kobby"
+            ?: "graphql"
+        val capitalizedContext = context.capitalize()
 
         val rootPackage: List<String> = mutableListOf<String>().also { list ->
             if (relativePackage.get()) {
@@ -248,6 +273,11 @@ open class KobbyKotlin : DefaultTask() {
                 }
             }
             rootPackageName.orNull?.forEachPackage { list += it }
+        }
+
+        val contextPackage: List<String> = mutableListOf<String>().also { list ->
+            list += rootPackage
+            contextPackageName.orNull?.forEachPackage { list += it }
         }
 
         val dtoPackage: List<String> = mutableListOf<String>().also { list ->
@@ -272,11 +302,16 @@ open class KobbyKotlin : DefaultTask() {
 
         val layout = KotlinGeneratorLayout(
             scalars.get(),
+            KotlinContextLayout(
+                contextPackage.toPackageName(),
+                context,
+                capitalizedContext,
+                null
+            ),
             KotlinDtoLayout(
                 dtoPackage.toPackageName(),
                 dtoPrefix.orNull,
                 dtoPostfix.orNull,
-                dtoDslAnnotation.orNull?.trim()?.takeIf { it.isNotEmpty() } ?: "${schemaName}DSL",
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),
@@ -286,7 +321,7 @@ open class KobbyKotlin : DefaultTask() {
                 KotlinDtoGraphQLLayout(
                     dtoGraphQLEnabled.get(),
                     dtoGraphQLPackage.toPackageName(),
-                    dtoGraphQLPrefix.orNull?.trim() ?: schemaName,
+                    dtoGraphQLPrefix.orNull?.trim() ?: capitalizedContext,
                     dtoGraphQLPostfix.orNull
                 )
             ),

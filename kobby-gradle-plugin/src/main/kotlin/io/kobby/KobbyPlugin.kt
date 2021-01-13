@@ -48,6 +48,20 @@ class KobbyPlugin : Plugin<Project> {
                         kotlinExtension.outputDirectory?.also {
                             kotlinTask.outputDirectory.convention(it)
                         }
+                        kotlinExtension.contextExtension.valueOrNull?.apply {
+                            packageName?.also {
+                                kotlinTask.contextPackageName.convention(it)
+                            }
+                            name?.also {
+                                kotlinTask.contextName.convention(it)
+                            }
+                            prefix?.also {
+                                kotlinTask.contextPrefix.convention(it)
+                            }
+                            postfix?.also {
+                                kotlinTask.contextPostfix.convention(it)
+                            }
+                        }
                         kotlinExtension.dtoExtension.valueOrNull?.apply {
                             packageName?.also {
                                 kotlinTask.dtoPackageName.convention(it)
@@ -57,9 +71,6 @@ class KobbyPlugin : Plugin<Project> {
                             }
                             postfix?.also {
                                 kotlinTask.dtoPostfix.convention(it)
-                            }
-                            dslAnnotation?.also {
-                                kotlinTask.dtoDslAnnotation.convention(it)
                             }
                             jacksonExtension.valueOrNull?.apply {
                                 enabled?.also {

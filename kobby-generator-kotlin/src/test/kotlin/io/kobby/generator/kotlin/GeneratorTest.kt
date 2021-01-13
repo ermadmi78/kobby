@@ -19,11 +19,16 @@ class GeneratorTest : AnnotationSpec() {
                 "DateTime" to KotlinType("java.time", "OffsetDateTime"),
                 "JSON" to MAP.parameterize(STRING, ANY.nullable())
             ),
+            KotlinContextLayout(
+                "kobby",
+                "kobby",
+                "Kobby",
+                null
+            ),
             KotlinDtoLayout(
-                "dto",
+                "kobby.dto",
                 null,
                 "Dto",
-                "KobbyDSL",
                 KotlinDtoJacksonLayout(true),
                 KotlinDtoBuilderLayout(
                     true,
@@ -32,17 +37,17 @@ class GeneratorTest : AnnotationSpec() {
                 ),
                 KotlinDtoGraphQLLayout(
                     true,
-                    "dto.graphql",
+                    "kobby.dto.graphql",
                     "GraphQL",
                     null
                 )
             ),
             KotlinEntityLayout(
                 true,
-                "entity"
+                "kobby.entity"
             ),
             KotlinImplLayout(
-                "impl",
+                "kobby.impl",
                 null,
                 "Impl"
             )

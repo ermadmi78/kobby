@@ -17,7 +17,11 @@ internal data class GenerateDtoResult(
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefinitionRegistry): GenerateDtoResult {
+internal fun generateDto(
+    layout: KotlinGeneratorLayout,
+    graphQLSchema: TypeDefinitionRegistry,
+    dslAnnotation: ClassName
+): GenerateDtoResult {
     val dtoLayout = layout.dto
     val builderLayout = layout.dto.builder
     val graphqlLayout = layout.dto.graphql
@@ -57,14 +61,6 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
         }
     }
     val files = mutableMapOf<String, FileSpec.Builder>()
-
-    files[dtoLayout.dslAnnotation] = FileSpec.builder(dtoLayout.packageName, dtoLayout.dslAnnotation).addType(
-        TypeSpec.classBuilder(dtoLayout.dslAnnotation)
-            .addModifiers(KModifier.ANNOTATION)
-            .addAnnotation(DslMarker::class)
-            .build()
-    )
-    val dslAnnotation = ClassName(dtoLayout.packageName, dtoLayout.dslAnnotation)
 
     for (type in graphQLSchema.types().values) {
         when (type) {
@@ -364,39 +360,7 @@ internal fun generateDto(layout: KotlinGeneratorLayout, graphQLSchema: TypeDefin
     return GenerateDtoResult(dslAnnotation, types, files.values.asSequence().map { it.build() }.toList())
 }
 
-internal fun String.decorate(prefix: String?, postfix: String?): String {
-    return if (prefix.isNullOrBlank() && postfix.isNullOrBlank()) {
-        this
-    } else if (prefix.isNullOrBlank()) {
-        this + postfix
-    } else if (postfix.isNullOrBlank()) {
-        prefix + this
-    } else {
-        prefix + this + postfix
-    }
-}
-
-internal fun Type<*>.resolve(types: Map<String, TypeName>, nonNull: Boolean = false): TypeName = when (this) {
-    is NonNullType -> type.resolve(types, true)
-    is ListType -> LIST.parameterizedBy(type.resolve(types)).run {
-        if (nonNull) this else copy(true)
-    }
-    is graphql.language.TypeName -> types[name]?.run {
-        if (nonNull) this else copy(true)
-    } ?: error("Scalar type is not configured: $name")
-    else -> error("Unexpected Type successor: ${this::javaClass.name}")
-}
-
-internal fun Type<*>.extractName(): String = when (this) {
-    is NonNullType -> type.extractName()
-    is ListType -> type.extractName()
-    is graphql.language.TypeName -> name
-    else -> error("Unexpected Type successor: ${this::javaClass.name}")
-}
-
-internal fun TypeName.nullable(): TypeName = copy(true)
-
-internal fun FunSpec.Builder.jacksonize(layout: KotlinDtoLayout): FunSpec.Builder {
+private fun FunSpec.Builder.jacksonize(layout: KotlinDtoLayout): FunSpec.Builder {
     if (layout.jackson.enabled && parameters.size == 1) {
         addAnnotation(JacksonAnnotations.JSON_CREATOR)
     }
@@ -404,7 +368,7 @@ internal fun FunSpec.Builder.jacksonize(layout: KotlinDtoLayout): FunSpec.Builde
     return this
 }
 
-internal fun TypeSpec.Builder.jacksonize(
+private fun TypeSpec.Builder.jacksonize(
     layout: KotlinDtoLayout,
     typeName: String,
     className: String
@@ -437,7 +401,7 @@ internal fun TypeSpec.Builder.jacksonize(
     return this
 }
 
-internal fun TypeSpec.Builder.addProperty(
+private fun TypeSpec.Builder.addProperty(
     constructorBuilder: FunSpec.Builder,
     name: String,
     type: TypeName,
@@ -453,7 +417,7 @@ internal fun TypeSpec.Builder.addProperty(
     it.initializer(name)
 }.apply(block).build())
 
-internal fun PropertySpec.Builder.jacksonInclude(
+private fun PropertySpec.Builder.jacksonInclude(
     layout: KotlinDtoLayout,
     include: JacksonInclude
 ): PropertySpec.Builder {
@@ -467,7 +431,7 @@ internal fun PropertySpec.Builder.jacksonInclude(
     return this
 }
 
-internal object JacksonAnnotations {
+private object JacksonAnnotations {
     val JSON_CREATOR = ClassName(
         "com.fasterxml.jackson.annotation",
         "JsonCreator"
@@ -489,7 +453,7 @@ internal object JacksonAnnotations {
     )
 }
 
-internal enum class JacksonInclude {
+private enum class JacksonInclude {
     ALWAYS,
     NON_NULL,
     NON_ABSENT,

@@ -17,9 +17,15 @@ open class KobbyKotlinExtension {
 
     var outputDirectory: Directory? = null
 
+    internal val contextExtension = lazy { KobbyKotlinContextExtension() }
     internal val dtoExtension = lazy { KobbyKotlinDtoExtension() }
     internal val entityExtension = lazy { KobbyKotlinEntityExtension() }
     internal val implExtension = lazy { KobbyKotlinImplExtension() }
+
+    /** Kotlin DSL Context generator configuration */
+    fun context(action: Action<KobbyKotlinContextExtension>) {
+        action.execute(contextExtension.value)
+    }
 
     /** Kotlin DSL DTO generator configuration */
     fun dto(action: Action<KobbyKotlinDtoExtension>) {
@@ -43,6 +49,7 @@ open class KobbyKotlinExtension {
                 "relativePackage=$relativePackage, " +
                 "packageName=$packageName, " +
                 "outputDirectory=$outputDirectory, " +
+                "contextExtension=$contextExtension, " +
                 "dtoExtension=$dtoExtension, " +
                 "entityExtension=$entityExtension, " +
                 "implExtension=$implExtension)"
@@ -101,11 +108,22 @@ open class KobbyKotlinExtension {
 // *********************************************************************************************************************
 
 @Kobby
+open class KobbyKotlinContextExtension {
+    var packageName: String? = null
+    var name: String? = null
+    var prefix: String? = null
+    var postfix: String? = null
+
+    override fun toString(): String {
+        return "KobbyKotlinContextExtension(packageName=$packageName, prefix=$prefix, postfix=$postfix)"
+    }
+}
+
+@Kobby
 open class KobbyKotlinDtoExtension {
     var packageName: String? = null
     var prefix: String? = null
     var postfix: String? = null
-    var dslAnnotation: String? = null
 
     internal val jacksonExtension = lazy { KobbyKotlinDtoJacksonExtension() }
     internal val builderExtension = lazy { KobbyKotlinDtoBuilderExtension() }
@@ -131,7 +149,6 @@ open class KobbyKotlinDtoExtension {
                 "packageName=$packageName, " +
                 "prefix=$prefix, " +
                 "postfix=$postfix, " +
-                "dslAnnotation=$dslAnnotation, " +
                 "jacksonExtension=$jacksonExtension, " +
                 "builderExtension=$builderExtension, " +
                 "graphQLExtension=$graphQLExtension)"

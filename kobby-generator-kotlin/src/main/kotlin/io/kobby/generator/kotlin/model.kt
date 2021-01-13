@@ -12,16 +12,25 @@ import java.nio.file.Path
  */
 data class KotlinGeneratorLayout(
     val scalars: Map<String, KotlinType>,
+    val context: KotlinContextLayout,
     val dto: KotlinDtoLayout,
     val entity: KotlinEntityLayout,
     val impl: KotlinImplLayout
 )
 
+class KotlinContextLayout(
+    packageName: String,
+    val name: String,
+    val prefix: String?,
+    val postfix: String?
+) {
+    val packageName: String = packageName.validateKotlinPath()
+}
+
 class KotlinDtoLayout(
     packageName: String,
     val prefix: String?,
     val postfix: String?,
-    val dslAnnotation: String,
     val jackson: KotlinDtoJacksonLayout,
     val builder: KotlinDtoBuilderLayout,
     val graphql: KotlinDtoGraphQLLayout
