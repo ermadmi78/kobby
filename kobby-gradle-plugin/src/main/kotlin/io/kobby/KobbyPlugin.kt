@@ -20,6 +20,8 @@ class KobbyPlugin : Plugin<Project> {
         const val COMPILE_KOTLIN_TASK_NAME = "compileKotlin"
     }
 
+    private val <T> Lazy<T>.valueOrNull: T? get() = if (isInitialized()) value else null
+
     override fun apply(project: Project) {
         val extension = project.extensions.create(KOBBY, KobbyExtension::class.java)
         project.tasks.register(KOBBY)
@@ -27,107 +29,108 @@ class KobbyPlugin : Plugin<Project> {
 
         project.afterEvaluate { p ->
             p.tasks.findByPath(COMPILE_KOTLIN_TASK_NAME)?.also { compileKotlinTask ->
-                extension.kotlinExtension?.also { kotlinExtension ->
-                    val kobbyTask = p.tasks.getByName(KOBBY)
-                    val kobbyKotlinTask = p.tasks.named(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java).get()
+                extension.kotlinExtension.valueOrNull?.also { kotlinExtension ->
+                    val kotlinTask = p.tasks.named(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java).get()
                     if (kotlinExtension.enabled) {
-                        kobbyTask.dependsOn(kobbyKotlinTask.path)
-                        compileKotlinTask.dependsOn(kobbyKotlinTask.path)
-
-                        extension.schemaExtension?.local?.also {
-                            kobbyKotlinTask.schemaFile.convention(p.layout.file(p.provider { it }))
+                        extension.schemaExtension.valueOrNull?.local?.also {
+                            kotlinTask.schemaFile.convention(p.layout.file(p.provider { it }))
                         }
 
                         kotlinExtension.scalars?.also {
-                            kobbyKotlinTask.scalars.convention(PREDEFINED_SCALARS + it)
+                            kotlinTask.scalars.convention(PREDEFINED_SCALARS + it)
                         }
                         kotlinExtension.relativePackage?.also {
-                            kobbyKotlinTask.relativePackage.convention(it)
+                            kotlinTask.relativePackage.convention(it)
                         }
                         kotlinExtension.packageName?.also {
-                            kobbyKotlinTask.rootPackageName.convention(it)
+                            kotlinTask.rootPackageName.convention(it)
                         }
                         kotlinExtension.outputDirectory?.also {
-                            kobbyKotlinTask.outputDirectory.convention(it)
+                            kotlinTask.outputDirectory.convention(it)
                         }
-                        kotlinExtension.dtoExtension?.apply {
+                        kotlinExtension.dtoExtension.valueOrNull?.apply {
                             packageName?.also {
-                                kobbyKotlinTask.dtoPackageName.convention(it)
+                                kotlinTask.dtoPackageName.convention(it)
                             }
                             prefix?.also {
-                                kobbyKotlinTask.dtoPrefix.convention(it)
+                                kotlinTask.dtoPrefix.convention(it)
                             }
                             postfix?.also {
-                                kobbyKotlinTask.dtoPostfix.convention(it)
+                                kotlinTask.dtoPostfix.convention(it)
                             }
                             dslAnnotation?.also {
-                                kobbyKotlinTask.dtoDslAnnotation.convention(it)
+                                kotlinTask.dtoDslAnnotation.convention(it)
                             }
-                            jacksonExtension?.apply {
+                            jacksonExtension.valueOrNull?.apply {
                                 enabled?.also {
-                                    kobbyKotlinTask.dtoJacksonEnabled.convention(it)
+                                    kotlinTask.dtoJacksonEnabled.convention(it)
                                 }
                             }
-                            builderExtension?.apply {
+                            builderExtension.valueOrNull?.apply {
                                 enabled?.also {
-                                    kobbyKotlinTask.dtoBuilderEnabled.convention(it)
+                                    kotlinTask.dtoBuilderEnabled.convention(it)
                                 }
                                 prefix?.also {
-                                    kobbyKotlinTask.dtoBuilderPrefix.convention(it)
+                                    kotlinTask.dtoBuilderPrefix.convention(it)
                                 }
                                 postfix?.also {
-                                    kobbyKotlinTask.dtoBuilderPostfix.convention(it)
+                                    kotlinTask.dtoBuilderPostfix.convention(it)
                                 }
                             }
-                            graphQLExtension?.apply {
+                            graphQLExtension.valueOrNull?.apply {
                                 enabled?.also {
-                                    kobbyKotlinTask.dtoGraphQLEnabled.convention(it)
+                                    kotlinTask.dtoGraphQLEnabled.convention(it)
                                 }
                                 packageName?.also {
-                                    kobbyKotlinTask.dtoGraphQLPackageName.convention(it)
+                                    kotlinTask.dtoGraphQLPackageName.convention(it)
                                 }
                                 prefix?.also {
-                                    kobbyKotlinTask.dtoGraphQLPrefix.convention(it)
+                                    kotlinTask.dtoGraphQLPrefix.convention(it)
                                 }
                                 postfix?.also {
-                                    kobbyKotlinTask.dtoGraphQLPostfix.convention(it)
+                                    kotlinTask.dtoGraphQLPostfix.convention(it)
                                 }
                             }
                         }
-                        kotlinExtension.entityExtension?.apply {
+                        kotlinExtension.entityExtension.valueOrNull?.apply {
                             enabled?.also {
-                                kobbyKotlinTask.entityEnabled.convention(it)
+                                kotlinTask.entityEnabled.convention(it)
                             }
                             packageName?.also {
-                                kobbyKotlinTask.entityPackageName.convention(it)
+                                kotlinTask.entityPackageName.convention(it)
                             }
                         }
-                        kotlinExtension.implExtension?.apply {
+                        kotlinExtension.implExtension.valueOrNull?.apply {
                             packageName?.also {
-                                kobbyKotlinTask.implPackageName.convention(it)
+                                kotlinTask.implPackageName.convention(it)
                             }
                             prefix?.also {
-                                kobbyKotlinTask.implPrefix.convention(it)
+                                kotlinTask.implPrefix.convention(it)
                             }
                             postfix?.also {
-                                kobbyKotlinTask.implPostfix.convention(it)
+                                kotlinTask.implPostfix.convention(it)
                             }
                         }
                     } else {
-                        kobbyKotlinTask.enabled = false
+                        kotlinTask.enabled = false
                         p.logger.warn("$KOBBY: [${KobbyKotlin.TASK_NAME}] task disabled")
                     }
                 }
 
-                if (extension.kotlinExtension?.enabled != false) {
+                if (extension.kotlinExtension.valueOrNull?.enabled != false) {
+                    val kobbyTask = p.tasks.getByName(KOBBY)
                     val kobbyKotlinTask = p.tasks.named(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java).get()
+
+                    kobbyTask.dependsOn(kobbyKotlinTask.path)
+                    compileKotlinTask.dependsOn(kobbyKotlinTask.path)
+
                     val outputDirectory = kobbyKotlinTask.outputDirectory.get().asFile
                     (p.findProperty("sourceSets") as? SourceSetContainer)?.apply {
                         outputDirectory.mkdirs()
                         findByName("main")?.java?.srcDir(outputDirectory.path)
                     }
                 }
-            } ?: extension.kotlinExtension?.also { kotlinExtension ->
+            } ?: extension.kotlinExtension.valueOrNull?.also { kotlinExtension ->
                 if (kotlinExtension.enabled) {
                     throw TaskInstantiationException(
                         "$KOBBY: [${KobbyKotlin.TASK_NAME}] task cannot be created " +

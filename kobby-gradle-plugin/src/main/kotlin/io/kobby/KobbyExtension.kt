@@ -20,48 +20,19 @@ fun Project.kobby(configure: KobbyExtension.() -> Unit) =
  */
 @Kobby
 open class KobbyExtension {
-    // *****************************************************************************************************************
-    //                                       Schema
-    // *****************************************************************************************************************
-
-    @Volatile
-    private var schemaConfigured: Boolean = false
-    private val schemaExtensionLazy: KobbySchemaExtension by lazy {
-        schemaConfigured = true
-        KobbySchemaExtension()
-    }
-
-    internal val schemaExtension: KobbySchemaExtension?
-        get() = if (schemaConfigured) schemaExtensionLazy else null
+    internal val schemaExtension = lazy { KobbySchemaExtension() }
+    internal val kotlinExtension = lazy { KobbyKotlinExtension() }
 
     /** Kotlin DSL schema configuration */
     fun schema(action: Action<KobbySchemaExtension>) {
-        action.execute(schemaExtensionLazy)
+        action.execute(schemaExtension.value)
     }
-
-    // *****************************************************************************************************************
-    //                                       Kotlin
-    // *****************************************************************************************************************
-
-    @Volatile
-    private var kotlinConfigured: Boolean = false
-    private val kotlinExtensionLazy: KobbyKotlinExtension by lazy {
-        kotlinConfigured = true
-        KobbyKotlinExtension()
-    }
-
-    internal val kotlinExtension: KobbyKotlinExtension?
-        get() = if (kotlinConfigured) kotlinExtensionLazy else null
 
     /** Kotlin DSL generator configuration */
     fun kotlin(action: Action<KobbyKotlinExtension>) {
-        action.execute(kotlinExtensionLazy)
+        action.execute(kotlinExtension.value)
     }
 }
-
-// *********************************************************************************************************************
-//                                           Extensions
-// *********************************************************************************************************************
 
 @Kobby
 open class KobbySchemaExtension {

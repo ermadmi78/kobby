@@ -17,61 +17,23 @@ open class KobbyKotlinExtension {
 
     var outputDirectory: Directory? = null
 
-    // *****************************************************************************************************************
-    //                                       DTO
-    // *****************************************************************************************************************
-
-    @Volatile
-    private var dtoConfigured: Boolean = false
-    private val dtoExtensionLazy: KobbyKotlinDtoExtension by lazy {
-        dtoConfigured = true
-        KobbyKotlinDtoExtension()
-    }
-
-    internal val dtoExtension: KobbyKotlinDtoExtension?
-        get() = if (dtoConfigured) dtoExtensionLazy else null
+    internal val dtoExtension = lazy { KobbyKotlinDtoExtension() }
+    internal val entityExtension = lazy { KobbyKotlinEntityExtension() }
+    internal val implExtension = lazy { KobbyKotlinImplExtension() }
 
     /** Kotlin DSL DTO generator configuration */
     fun dto(action: Action<KobbyKotlinDtoExtension>) {
-        action.execute(dtoExtensionLazy)
+        action.execute(dtoExtension.value)
     }
-
-    // *****************************************************************************************************************
-    //                                       Entity
-    // *****************************************************************************************************************
-
-    @Volatile
-    private var entityConfigured: Boolean = false
-    private val entityExtensionLazy: KobbyKotlinEntityExtension by lazy {
-        entityConfigured = true
-        KobbyKotlinEntityExtension()
-    }
-
-    internal val entityExtension: KobbyKotlinEntityExtension?
-        get() = if (entityConfigured) entityExtensionLazy else null
 
     /** Kotlin DSL Entity generator configuration */
     fun entity(action: Action<KobbyKotlinEntityExtension>) {
-        action.execute(entityExtensionLazy)
+        action.execute(entityExtension.value)
     }
-
-    // *****************************************************************************************************************
-    //                                         Implementation
-    // *****************************************************************************************************************
-
-    @Volatile
-    private var implConfigured: Boolean = false
-    private val implExtensionLazy: KobbyKotlinImplExtension by lazy {
-        implConfigured = true
-        KobbyKotlinImplExtension()
-    }
-
-    internal val implExtension: KobbyKotlinImplExtension?
-        get() = if (implConfigured) implExtensionLazy else null
 
     /** Kotlin DSL implementation generator configuration */
     fun impl(action: Action<KobbyKotlinImplExtension>) {
-        action.execute(implExtensionLazy)
+        action.execute(implExtension.value)
     }
 
     override fun toString(): String {
@@ -80,8 +42,10 @@ open class KobbyKotlinExtension {
                 "scalars=$scalars, " +
                 "relativePackage=$relativePackage, " +
                 "packageName=$packageName, " +
-                "outputDirectory=$outputDirectory)"
-
+                "outputDirectory=$outputDirectory, " +
+                "dtoExtension=$dtoExtension, " +
+                "entityExtension=$entityExtension, " +
+                "implExtension=$implExtension)"
     }
 
     // *****************************************************************************************************************
@@ -143,63 +107,38 @@ open class KobbyKotlinDtoExtension {
     var postfix: String? = null
     var dslAnnotation: String? = null
 
-    // ******************************* Jackson *************************************************************************
-    @Volatile
-    private var jacksonConfigured: Boolean = false
-    private val jacksonExtensionLazy: KobbyKotlinDtoJacksonExtension by lazy {
-        jacksonConfigured = true
-        KobbyKotlinDtoJacksonExtension()
-    }
-
-    internal val jacksonExtension: KobbyKotlinDtoJacksonExtension?
-        get() = if (jacksonConfigured) jacksonExtensionLazy else null
+    internal val jacksonExtension = lazy { KobbyKotlinDtoJacksonExtension() }
+    internal val builderExtension = lazy { KobbyKotlinDtoBuilderExtension() }
+    internal val graphQLExtension = lazy { KobbyKotlinDtoGraphQLExtension() }
 
     /** Kotlin DSL Jackson support generator configuration */
     fun jackson(action: Action<KobbyKotlinDtoJacksonExtension>) {
-        action.execute(jacksonExtensionLazy)
+        action.execute(jacksonExtension.value)
     }
-
-    // ******************************* Builder *************************************************************************
-    @Volatile
-    private var builderConfigured: Boolean = false
-    private val builderExtensionLazy: KobbyKotlinDtoBuilderExtension by lazy {
-        builderConfigured = true
-        KobbyKotlinDtoBuilderExtension()
-    }
-
-    internal val builderExtension: KobbyKotlinDtoBuilderExtension?
-        get() = if (builderConfigured) builderExtensionLazy else null
 
     /** Kotlin DSL Builder generator configuration */
     fun builder(action: Action<KobbyKotlinDtoBuilderExtension>) {
-        action.execute(builderExtensionLazy)
+        action.execute(builderExtension.value)
     }
-
-    // ******************************* GraphQL *************************************************************************
-    @Volatile
-    private var graphQLConfigured: Boolean = false
-    private val graphQLExtensionLazy: KobbyKotlinDtoGraphQLExtension by lazy {
-        graphQLConfigured = true
-        KobbyKotlinDtoGraphQLExtension()
-    }
-
-    internal val graphQLExtension: KobbyKotlinDtoGraphQLExtension?
-        get() = if (graphQLConfigured) graphQLExtensionLazy else null
 
     /** Kotlin DSL GraphQL DTO generation configuration */
     fun graphQL(action: Action<KobbyKotlinDtoGraphQLExtension>) {
-        action.execute(graphQLExtensionLazy)
+        action.execute(graphQLExtension.value)
     }
 
-    // *****************************************************************************************************************
-
-    override fun toString(): String = "KobbyKotlinDtoExtension(" +
-            "packageName=$packageName, " +
-            "prefix=$prefix, " +
-            "postfix=$postfix, " +
-            "jacksonized=$jacksonExtension, " +
-            "builder=$builderExtension)"
+    override fun toString(): String {
+        return "KobbyKotlinDtoExtension(" +
+                "packageName=$packageName, " +
+                "prefix=$prefix, " +
+                "postfix=$postfix, " +
+                "dslAnnotation=$dslAnnotation, " +
+                "jacksonExtension=$jacksonExtension, " +
+                "builderExtension=$builderExtension, " +
+                "graphQLExtension=$graphQLExtension)"
+    }
 }
+
+// *********************************************************************************************************************
 
 @Kobby
 open class KobbyKotlinDtoJacksonExtension {
