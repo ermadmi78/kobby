@@ -195,8 +195,29 @@ open class KobbyKotlinEntityExtension {
     var enabled: Boolean? = null
     var packageName: String? = null
 
-    override fun toString(): String =
-        "KobbyKotlinEntityExtension(enabled=$enabled, packageName=$packageName)"
+    internal val projectionExtension = lazy { KobbyKotlinEntityProjectionExtension() }
+
+    /** Kotlin DSL Projection generator configuration */
+    fun projection(action: Action<KobbyKotlinEntityProjectionExtension>) {
+        action.execute(projectionExtension.value)
+    }
+
+    override fun toString(): String {
+        return "KobbyKotlinEntityExtension(" +
+                "enabled=$enabled, " +
+                "packageName=$packageName, " +
+                "projectionExtension=$projectionExtension)"
+    }
+}
+
+@Kobby
+open class KobbyKotlinEntityProjectionExtension {
+    var prefix: String? = null
+    var postfix: String? = null
+
+    override fun toString(): String {
+        return "KobbyKotlinEntityProjectionExtension(prefix=$prefix, postfix=$postfix)"
+    }
 }
 
 @Kobby

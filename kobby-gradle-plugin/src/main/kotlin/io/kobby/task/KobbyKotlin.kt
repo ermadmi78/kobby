@@ -190,6 +190,22 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "entityProjectionPrefix",
+        description = "prefix for generated projection classes (default null)"
+    )
+    val entityProjectionPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionPostfix",
+        description = "postfix for generated projection classes (default \"Projection\")"
+    )
+    val entityProjectionPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "implPackageName",
         description = "package name relative to root package name " +
                 "for generated implementation classes (default \"impl\")"
@@ -239,6 +255,7 @@ open class KobbyKotlin : DefaultTask() {
 
         entityEnabled.convention(true)
         entityPackageName.convention("entity")
+        entityProjectionPostfix.convention("Projection")
 
         implPackageName.convention("impl")
         implPostfix.convention("Impl")
@@ -305,34 +322,33 @@ open class KobbyKotlin : DefaultTask() {
             KotlinContextLayout(
                 contextPackage.toPackageName(),
                 context,
-                capitalizedContext,
-                null
+                Decoration(capitalizedContext, null)
             ),
             KotlinDtoLayout(
                 dtoPackage.toPackageName(),
-                dtoPrefix.orNull,
-                dtoPostfix.orNull,
+                Decoration(dtoPrefix.orNull, dtoPostfix.orNull),
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),
-                    dtoBuilderPrefix.orNull,
-                    dtoBuilderPostfix.orNull
+                    Decoration(dtoBuilderPrefix.orNull, dtoBuilderPostfix.orNull)
                 ),
                 KotlinDtoGraphQLLayout(
                     dtoGraphQLEnabled.get(),
                     dtoGraphQLPackage.toPackageName(),
-                    dtoGraphQLPrefix.orNull?.trim() ?: capitalizedContext,
-                    dtoGraphQLPostfix.orNull
+                    Decoration(
+                        dtoGraphQLPrefix.orNull?.trim() ?: capitalizedContext,
+                        dtoGraphQLPostfix.orNull
+                    )
                 )
             ),
             KotlinEntityLayout(
                 entityEnabled.get(),
-                entityPackage.toPackageName()
+                entityPackage.toPackageName(),
+                Decoration(entityProjectionPrefix.orNull, entityProjectionPostfix.orNull)
             ),
             KotlinImplLayout(
                 implPackage.toPackageName(),
-                implPrefix.orNull,
-                implPostfix.orNull
+                Decoration(implPrefix.orNull, implPostfix.orNull)
             )
         )
 

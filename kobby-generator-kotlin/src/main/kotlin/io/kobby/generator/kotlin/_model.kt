@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.LIST
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
+import graphql.language.FieldDefinition
 import graphql.language.ListType
 import graphql.language.NonNullType
 import graphql.language.Type
@@ -76,6 +77,9 @@ internal fun FileSpec.toKotlinFile(): KotlinFile {
     }
 }
 
+internal fun String.decorate(decoration: Decoration): String =
+    decorate(decoration.prefix, decoration.postfix)
+
 internal fun String.decorate(prefix: String?, postfix: String?): String {
     return if (prefix.isNullOrBlank() && postfix.isNullOrBlank()) {
         this
@@ -87,6 +91,12 @@ internal fun String.decorate(prefix: String?, postfix: String?): String {
         prefix + this + postfix
     }
 }
+
+//**********************************************************************************************************************
+
+internal fun TypeName.nullable(): TypeName = copy(true)
+
+//**********************************************************************************************************************
 
 internal fun Type<*>.resolve(types: Map<String, TypeName>, nonNull: Boolean = false): TypeName = when (this) {
     is NonNullType -> type.resolve(types, true)
@@ -106,4 +116,19 @@ internal fun Type<*>.extractName(): String = when (this) {
     else -> error("Unexpected Type successor: ${this::javaClass.name}")
 }
 
-internal fun TypeName.nullable(): TypeName = copy(true)
+internal fun Type<*>.isId(): Boolean = when (this) {
+    is NonNullType -> type.isId()
+    is ListType -> false
+    is graphql.language.TypeName -> "ID" == name
+    else -> error("Unexpected Type successor: ${this::javaClass.name}")
+}
+
+//**********************************************************************************************************************
+
+internal fun FieldDefinition.isRequired(): Boolean =
+    type.isId() && inputValueDefinitions.isEmpty()
+
+internal fun FieldDefinition.isDefault(): Boolean = false //todo
+
+internal fun FieldDefinition.projectionName(): String =
+    (if (isDefault()) "without" else "with") + name.capitalize()

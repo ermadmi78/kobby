@@ -30,7 +30,7 @@ fun generateKotlin(layout: KotlinGeneratorLayout, vararg schemas: Reader): List<
     val contextFile = FileSpec.builder(contextLayout.packageName, contextLayout.name)
     val dslAnnotation = ClassName(
         contextLayout.packageName,
-        "DSL".decorate(contextLayout.prefix, contextLayout.postfix)
+        "DSL".decorate(contextLayout.decoration)
     )
     contextFile.addType(
         TypeSpec.classBuilder(dslAnnotation)
@@ -46,6 +46,13 @@ fun generateKotlin(layout: KotlinGeneratorLayout, vararg schemas: Reader): List<
     val dto = generateDto(layout, graphQLSchema, dslAnnotation)
     result += dto.files
 
+    //******************************************************************************************************************
+    //                                   Entity
+    //******************************************************************************************************************
+    if (layout.entity.enabled) {
+        val entity = generateEntity(layout, graphQLSchema, dslAnnotation, dto.types, dto.interfaces)
+        result += entity.files
+    }
 
     result += contextFile.build()
     return result.map { it.toKotlinFile() }

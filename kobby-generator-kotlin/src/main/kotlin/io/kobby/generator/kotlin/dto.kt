@@ -7,8 +7,8 @@ import graphql.language.*
 import graphql.schema.idl.TypeDefinitionRegistry
 
 internal data class GenerateDtoResult(
-    val dslAnnotation: ClassName,
     val types: Map<String, TypeName>,
+    val interfaces: Map<String, Set<String>>,
     val files: List<FileSpec>
 )
 
@@ -36,7 +36,7 @@ internal fun generateDto(
         when (type) {
             is ObjectTypeDefinition -> types[type.name] = ClassName(
                 dtoLayout.packageName,
-                type.name.decorate(dtoLayout.prefix, dtoLayout.postfix)
+                type.name.decorate(dtoLayout.decoration)
             )
             is InputObjectTypeDefinition -> types[type.name] = ClassName(
                 dtoLayout.packageName,
@@ -45,7 +45,7 @@ internal fun generateDto(
             is InterfaceTypeDefinition -> {
                 types[type.name] = ClassName(
                     dtoLayout.packageName,
-                    type.name.decorate(dtoLayout.prefix, dtoLayout.postfix)
+                    type.name.decorate(dtoLayout.decoration)
                 )
                 interfaces.computeIfAbsent(type.name) { mutableSetOf() }.also {
                     for (field in type.fieldDefinitions) {
@@ -65,7 +65,7 @@ internal fun generateDto(
     for (type in graphQLSchema.types().values) {
         when (type) {
             is ObjectTypeDefinition -> {
-                val className = type.name.decorate(dtoLayout.prefix, dtoLayout.postfix)
+                val className = type.name.decorate(dtoLayout.decoration)
                 val classBuilder = TypeSpec.classBuilder(className).apply {
                     addModifiers(KModifier.DATA)
                     type.implements.asSequence().map { it.resolve(types, true) }.forEach {
@@ -107,7 +107,7 @@ internal fun generateDto(
                     .build()
             }
             is InterfaceTypeDefinition ->
-                TypeSpec.interfaceBuilder(type.name.decorate(dtoLayout.prefix, dtoLayout.postfix)).apply {
+                TypeSpec.interfaceBuilder(type.name.decorate(dtoLayout.decoration)).apply {
                     type.implements.asSequence().map { it.resolve(types, true) }.forEach {
                         addSuperinterface(it)
                     }
@@ -156,7 +156,7 @@ internal fun generateDto(
                 val dtoName: String = (dtoType as ClassName).simpleName
                 val builderType: TypeName = ClassName(
                     dtoLayout.packageName,
-                    dtoName.decorate(builderLayout.prefix, builderLayout.postfix)
+                    dtoName.decorate(builderLayout.decoration)
                 )
                 FunSpec.builder(dtoName)
                     .addParameter("block", LambdaTypeName.get(builderType, emptyList(), UNIT))
@@ -184,7 +184,7 @@ internal fun generateDto(
                 else -> null
             }?.let { properties ->
                 val dtoName: String = (types[type.name] as ClassName).simpleName
-                TypeSpec.classBuilder(dtoName.decorate(builderLayout.prefix, builderLayout.postfix)).apply {
+                TypeSpec.classBuilder(dtoName.decorate(builderLayout.decoration)).apply {
                     addAnnotation(dslAnnotation)
                     properties.forEach {
                         addProperty(it)
@@ -198,7 +198,7 @@ internal fun generateDto(
 
     if (graphqlLayout.enabled) {
         // GraphQL Request
-        val requestName = "Request".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val requestName = "Request".decorate(graphqlLayout.decoration)
         val requestConstructorBuilder = FunSpec.constructorBuilder()
         val requestType = TypeSpec.classBuilder(requestName)
             .addModifiers(KModifier.DATA)
@@ -223,7 +223,7 @@ internal fun generateDto(
             FileSpec.builder(graphqlLayout.packageName, requestName).addType(requestType)
 
         // GraphQL ErrorType
-        val errorTypeName = "ErrorType".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val errorTypeName = "ErrorType".decorate(graphqlLayout.decoration)
         val errorTypeType = TypeSpec.enumBuilder(errorTypeName)
             .addEnumConstant("InvalidSyntax")
             .addEnumConstant("ValidationError")
@@ -235,7 +235,7 @@ internal fun generateDto(
             FileSpec.builder(graphqlLayout.packageName, errorTypeName).addType(errorTypeType)
 
         // GraphQLErrorSourceLocation
-        val errorSourceLocationName = "ErrorSourceLocation".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val errorSourceLocationName = "ErrorSourceLocation".decorate(graphqlLayout.decoration)
         val errorSourceLocationConstructorBuilder = FunSpec.constructorBuilder()
         val errorSourceLocationType = TypeSpec.classBuilder(errorSourceLocationName)
             .addModifiers(KModifier.DATA)
@@ -260,7 +260,7 @@ internal fun generateDto(
             FileSpec.builder(graphqlLayout.packageName, errorSourceLocationName).addType(errorSourceLocationType)
 
         // GraphQLError
-        val errorName = "Error".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val errorName = "Error".decorate(graphqlLayout.decoration)
         val errorConstructorBuilder = FunSpec.constructorBuilder()
         val errorType = TypeSpec.classBuilder(errorName)
             .addModifiers(KModifier.DATA)
@@ -295,7 +295,7 @@ internal fun generateDto(
             FileSpec.builder(graphqlLayout.packageName, errorName).addType(errorType)
 
         // GraphQLException
-        val exceptionName = "Exception".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+        val exceptionName = "Exception".decorate(graphqlLayout.decoration)
         val exceptionConstructorBuilder = FunSpec.constructorBuilder()
             .addParameter("message", STRING)
         val exceptionType = TypeSpec.classBuilder(exceptionName)
@@ -320,7 +320,7 @@ internal fun generateDto(
 
         // GraphQLQueryResult
         types["Query"]?.also {
-            val queryName = "QueryResult".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+            val queryName = "QueryResult".decorate(graphqlLayout.decoration)
             val queryConstructorBuilder = FunSpec.constructorBuilder()
             val queryType = TypeSpec.classBuilder(queryName)
                 .addModifiers(KModifier.DATA)
@@ -342,7 +342,7 @@ internal fun generateDto(
 
         // GraphQLMutationResult
         types["Mutation"]?.also {
-            val mutationName = "MutationResult".decorate(graphqlLayout.prefix, graphqlLayout.postfix)
+            val mutationName = "MutationResult".decorate(graphqlLayout.decoration)
             val mutationConstructorBuilder = FunSpec.constructorBuilder()
             val mutationType = TypeSpec.classBuilder(mutationName)
                 .addModifiers(KModifier.DATA)
@@ -363,7 +363,7 @@ internal fun generateDto(
         }
     }
 
-    return GenerateDtoResult(dslAnnotation, types, files.values.asSequence().map { it.build() }.toList())
+    return GenerateDtoResult(types, interfaces, files.values.asSequence().map { it.build() }.toList())
 }
 
 private fun FunSpec.Builder.jacksonize(layout: KotlinDtoLayout): FunSpec.Builder {

@@ -10,6 +10,8 @@ import java.nio.file.Path
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
+data class Decoration(val prefix: String?, val postfix: String?)
+
 data class KotlinGeneratorLayout(
     val scalars: Map<String, KotlinType>,
     val context: KotlinContextLayout,
@@ -21,16 +23,14 @@ data class KotlinGeneratorLayout(
 class KotlinContextLayout(
     packageName: String,
     val name: String,
-    val prefix: String?,
-    val postfix: String?
+    val decoration: Decoration
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
 
 class KotlinDtoLayout(
     packageName: String,
-    val prefix: String?,
-    val postfix: String?,
+    val decoration: Decoration,
     val jackson: KotlinDtoJacksonLayout,
     val builder: KotlinDtoBuilderLayout,
     val graphql: KotlinDtoGraphQLLayout
@@ -44,30 +44,28 @@ data class KotlinDtoJacksonLayout(
 
 data class KotlinDtoBuilderLayout(
     val enabled: Boolean,
-    val prefix: String?,
-    val postfix: String?
+    val decoration: Decoration
 )
 
 class KotlinDtoGraphQLLayout(
     val enabled: Boolean,
     packageName: String,
-    val prefix: String?,
-    val postfix: String?
+    val decoration: Decoration
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
 
 class KotlinEntityLayout(
     val enabled: Boolean,
-    packageName: String
+    packageName: String,
+    val projectionDecoration: Decoration
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
 
 class KotlinImplLayout(
     packageName: String,
-    val prefix: String?,
-    val postfix: String?
+    val decoration: Decoration
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }

@@ -22,34 +22,30 @@ class GeneratorTest : AnnotationSpec() {
             KotlinContextLayout(
                 "kobby",
                 "kobby",
-                "Kobby",
-                null
+                Decoration("Kobby", null)
             ),
             KotlinDtoLayout(
                 "kobby.dto",
-                null,
-                "Dto",
+                Decoration(null, "Dto"),
                 KotlinDtoJacksonLayout(true),
                 KotlinDtoBuilderLayout(
                     true,
-                    null,
-                    "Builder"
+                    Decoration(null, "Builder"),
                 ),
                 KotlinDtoGraphQLLayout(
                     true,
                     "kobby.dto.graphql",
-                    "GraphQL",
-                    null
+                    Decoration("GraphQL", null)
                 )
             ),
             KotlinEntityLayout(
                 true,
-                "kobby.entity"
+                "kobby.entity",
+                Decoration(null, "Projection")
             ),
             KotlinImplLayout(
                 "kobby.impl",
-                null,
-                "Impl"
+                Decoration(null, "Impl")
             )
         )
         val files = generateKotlin(layout, InputStreamReader(this.javaClass.getResourceAsStream("kobby.graphqls")))

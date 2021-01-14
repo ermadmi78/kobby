@@ -110,6 +110,14 @@ class KobbyPlugin : Plugin<Project> {
                             packageName?.also {
                                 kotlinTask.entityPackageName.convention(it)
                             }
+                            projectionExtension.valueOrNull?.apply {
+                                prefix?.also {
+                                    kotlinTask.entityProjectionPrefix.convention(it)
+                                }
+                                postfix?.also {
+                                    kotlinTask.entityProjectionPostfix.convention(it)
+                                }
+                            }
                         }
                         kotlinExtension.implExtension.valueOrNull?.apply {
                             packageName?.also {
