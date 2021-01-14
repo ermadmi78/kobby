@@ -74,7 +74,7 @@ internal fun generateDto(
                 }
                 val constructorBuilder = FunSpec.constructorBuilder()
                 for (field in type.fieldDefinitions) {
-                    val fieldType = field.type.resolve(types).copy(true)
+                    val fieldType = field.type.resolve(types).nullable()
                     classBuilder.addProperty(constructorBuilder, field.name, fieldType) {
                         for (ancestorType in type.implements) {
                             if (field.name in interfaces[ancestorType.extractName()]!!) {
@@ -97,7 +97,7 @@ internal fun generateDto(
                     classBuilder.addProperty(
                         constructorBuilder,
                         field.name,
-                        field.type.resolve(types).copy(true)
+                        field.type.resolve(types)
                     )
                 }
 
@@ -112,7 +112,7 @@ internal fun generateDto(
                         addSuperinterface(it)
                     }
                     for (field in type.fieldDefinitions) {
-                        val fieldType = field.type.resolve(types).copy(true)
+                        val fieldType = field.type.resolve(types).nullable()
                         addProperty(PropertySpec.builder(field.name, fieldType).apply {
                             for (ancestorType in type.implements) {
                                 if (field.name in interfaces[ancestorType.extractName()]!!) {
@@ -142,8 +142,14 @@ internal fun generateDto(
         for (type in graphQLSchema.types().values) {
             // Create builder functions
             when (type) {
-                is ObjectTypeDefinition -> type.fieldDefinitions.map { it.name }.joinToString { it }
-                is InputObjectTypeDefinition -> type.inputValueDefinitions.map { it.name }.joinToString { it }
+                is ObjectTypeDefinition -> type.fieldDefinitions.joinToString { it.name }
+                is InputObjectTypeDefinition -> type.inputValueDefinitions.joinToString {
+                    if (it.type is NonNullType) {
+                        "${it.name}·?:·error(\"${type.name}:·'${it.name}'·must·not·be·null\")"
+                    } else {
+                        it.name
+                    }
+                }
                 else -> null
             }?.let { arguments ->
                 val dtoType: TypeName = types[type.name]!!
@@ -164,13 +170,13 @@ internal fun generateDto(
             // Create builders
             when (type) {
                 is ObjectTypeDefinition -> type.fieldDefinitions.map {
-                    PropertySpec.builder(it.name, it.type.resolve(types).copy(true))
+                    PropertySpec.builder(it.name, it.type.resolve(types).nullable())
                         .mutable()
                         .initializer("null")
                         .build()
                 }
                 is InputObjectTypeDefinition -> type.inputValueDefinitions.map {
-                    PropertySpec.builder(it.name, it.type.resolve(types).copy(true))
+                    PropertySpec.builder(it.name, it.type.resolve(types).nullable())
                         .mutable()
                         .initializer("null")
                         .build()
