@@ -1,6 +1,7 @@
 package io.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
+import graphql.language.InterfaceTypeDefinition
 import graphql.language.ObjectTypeDefinition
 import graphql.schema.idl.TypeDefinitionRegistry
 
@@ -30,14 +31,22 @@ internal fun generateEntity(
         when (type) {
             is ObjectTypeDefinition -> {
                 if (type.name != "Query" && type.name != "Mutation") {
-                    val name = type.name.decorate(entityLayout.projectionDecoration)
-                    projectionTypes[type.name] = ClassName(entityLayout.packageName, name)
-                    projectionSpecs[type.name] = TypeSpec.interfaceBuilder(name).apply {
+                    val projectionType = type.name.projection(entityLayout)
+                    projectionTypes[type.name] = projectionType
+                    projectionSpecs[type.name] = TypeSpec.interfaceBuilder(projectionType).apply {
                         addAnnotation(dslAnnotation)
                         for (field in type.fieldDefinitions) {
                             if (!field.isRequired()) {
-                                addFunction(FunSpec.builder(field.projectionName()).apply {
+                                addFunction(FunSpec.builder(field.projectionName(entityLayout)).apply {
                                     addModifiers(KModifier.ABSTRACT)
+                                    for (arg in field.inputValueDefinitions) {
+                                        addParameter(arg.name, arg.type.resolve(dtoTypes))
+                                    }
+                                    graphQLSchema.types()[field.type.extractName()]?.takeIf {
+                                        it is ObjectTypeDefinition || it is InterfaceTypeDefinition //todo union
+                                    }?.also {
+                                        addProjectionParameter(entityLayout, it.name)
+                                    }
                                 }.build())
                             }
                         }

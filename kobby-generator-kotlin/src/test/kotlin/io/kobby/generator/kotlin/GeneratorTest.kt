@@ -41,7 +41,12 @@ class GeneratorTest : AnnotationSpec() {
             KotlinEntityLayout(
                 true,
                 "kobby.entity",
-                Decoration(null, "Projection")
+                KotlinEntityProjectionLayout(
+                    Decoration(null, "Projection"),
+                    "__projection",
+                    Decoration("with", null),
+                    Decoration("without", null)
+                )
             ),
             KotlinImplLayout(
                 "kobby.impl",

@@ -1,10 +1,7 @@
 package io.kobby.generator.kotlin
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.LIST
+import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.TypeName
 import graphql.language.FieldDefinition
 import graphql.language.ListType
 import graphql.language.NonNullType
@@ -84,11 +81,11 @@ internal fun String.decorate(prefix: String?, postfix: String?): String {
     return if (prefix.isNullOrBlank() && postfix.isNullOrBlank()) {
         this
     } else if (prefix.isNullOrBlank()) {
-        this + postfix
+        this + postfix!!.trim()
     } else if (postfix.isNullOrBlank()) {
-        prefix + this
+        prefix.trim() + this.capitalize()
     } else {
-        prefix + this + postfix
+        prefix.trim() + this.capitalize() + postfix.trim()
     }
 }
 
@@ -130,5 +127,20 @@ internal fun FieldDefinition.isRequired(): Boolean =
 
 internal fun FieldDefinition.isDefault(): Boolean = false //todo
 
-internal fun FieldDefinition.projectionName(): String =
-    (if (isDefault()) "without" else "with") + name.capitalize()
+internal fun String.projection(layout: KotlinEntityLayout): ClassName =
+    ClassName(layout.packageName, this.decorate(layout.projection.decoration))
+
+internal fun FieldDefinition.projectionName(withDecoration: Decoration, withoutDecoration: Decoration): String =
+    isDefault().let { if (it) withoutDecoration else withDecoration }.let { name.decorate(it) }
+
+internal fun FieldDefinition.projectionName(layout: KotlinEntityLayout): String = layout.projection.run {
+    projectionName(withDecoration, withoutDecoration)
+}
+
+internal fun FunSpec.Builder.addProjectionParameter(layout: KotlinEntityLayout, typeName: String): FunSpec.Builder =
+    addParameter(
+        ParameterSpec.builder(
+            layout.projection.argument,
+            LambdaTypeName.get(typeName.projection(layout), emptyList(), UNIT)
+        ).defaultValue("{}").build()
+    )

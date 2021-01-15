@@ -58,10 +58,17 @@ class KotlinDtoGraphQLLayout(
 class KotlinEntityLayout(
     val enabled: Boolean,
     packageName: String,
-    val projectionDecoration: Decoration
+    val projection: KotlinEntityProjectionLayout
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
+
+class KotlinEntityProjectionLayout(
+    val decoration: Decoration,
+    val argument: String,
+    val withDecoration: Decoration,
+    val withoutDecoration: Decoration
+)
 
 class KotlinImplLayout(
     packageName: String,

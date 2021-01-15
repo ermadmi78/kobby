@@ -215,8 +215,23 @@ open class KobbyKotlinEntityProjectionExtension {
     var prefix: String? = null
     var postfix: String? = null
 
+    var argument: String? = null
+
+    var withPrefix: String? = null
+    var withPostfix: String? = null
+
+    var withoutPrefix: String? = null
+    var withoutPostfix: String? = null
+
     override fun toString(): String {
-        return "KobbyKotlinEntityProjectionExtension(prefix=$prefix, postfix=$postfix)"
+        return "KobbyKotlinEntityProjectionExtension(" +
+                "prefix=$prefix, " +
+                "postfix=$postfix, " +
+                "argument=$argument, " +
+                "withPrefix=$withPrefix, " +
+                "withPostfix=$withPostfix, " +
+                "withoutPrefix=$withoutPrefix, " +
+                "withoutPostfix=$withoutPostfix)"
     }
 }
 

@@ -206,6 +206,46 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "entityProjectionArgument",
+        description = "name of projection lambda argument (default \"__projection\")"
+    )
+    val entityProjectionArgument: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionWithPrefix",
+        description = "prefix of projection 'with' method (default \"with\")"
+    )
+    val entityProjectionWithPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionWithPostfix",
+        description = "postfix of projection 'with' method (default null)"
+    )
+    val entityProjectionWithPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionWithoutPrefix",
+        description = "prefix of projection 'with' method (default \"without\")"
+    )
+    val entityProjectionWithoutPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionWithoutPostfix",
+        description = "postfix of projection 'with' method (default null)"
+    )
+    val entityProjectionWithoutPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "implPackageName",
         description = "package name relative to root package name " +
                 "for generated implementation classes (default \"impl\")"
@@ -256,6 +296,9 @@ open class KobbyKotlin : DefaultTask() {
         entityEnabled.convention(true)
         entityPackageName.convention("entity")
         entityProjectionPostfix.convention("Projection")
+        entityProjectionArgument.convention("__projection")
+        entityProjectionWithPrefix.convention("with")
+        entityProjectionWithoutPrefix.convention("without")
 
         implPackageName.convention("impl")
         implPostfix.convention("Impl")
@@ -344,7 +387,12 @@ open class KobbyKotlin : DefaultTask() {
             KotlinEntityLayout(
                 entityEnabled.get(),
                 entityPackage.toPackageName(),
-                Decoration(entityProjectionPrefix.orNull, entityProjectionPostfix.orNull)
+                KotlinEntityProjectionLayout(
+                    Decoration(entityProjectionPrefix.orNull, entityProjectionPostfix.orNull),
+                    entityProjectionArgument.get(),
+                    Decoration(entityProjectionWithPrefix.orNull, entityProjectionWithPostfix.orNull),
+                    Decoration(entityProjectionWithoutPrefix.orNull, entityProjectionWithoutPostfix.orNull)
+                )
             ),
             KotlinImplLayout(
                 implPackage.toPackageName(),
