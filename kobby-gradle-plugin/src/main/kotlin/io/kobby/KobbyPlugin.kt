@@ -32,8 +32,18 @@ class KobbyPlugin : Plugin<Project> {
                 extension.kotlinExtension.valueOrNull?.also { kotlinExtension ->
                     val kotlinTask = p.tasks.named(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java).get()
                     if (kotlinExtension.enabled) {
-                        extension.schemaExtension.valueOrNull?.local?.also {
-                            kotlinTask.schemaFile.convention(p.layout.file(p.provider { it }))
+                        extension.schemaExtension.valueOrNull?.apply {
+                            local?.also {
+                                kotlinTask.schemaFile.convention(p.layout.file(p.provider { it }))
+                            }
+                            directiveExtension.valueOrNull?.apply {
+                                default?.also {
+                                    kotlinTask.schemaDirectiveDefault.convention(it)
+                                }
+                                required?.also {
+                                    kotlinTask.schemaDirectiveRequired.convention(it)
+                                }
+                            }
                         }
 
                         kotlinExtension.scalars?.also {

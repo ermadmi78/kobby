@@ -15,6 +15,10 @@ class GeneratorTest : AnnotationSpec() {
     @Test
     fun temp() {
         val layout = KotlinGeneratorLayout(
+            KotlinDirectiveLayout(
+                "default",
+                "required"
+            ),
             KotlinTypes.PREDEFINED_SCALARS + mapOf(
                 "DateTime" to KotlinType("java.time", "OffsetDateTime"),
                 "JSON" to MAP.parameterize(STRING, ANY.nullable())

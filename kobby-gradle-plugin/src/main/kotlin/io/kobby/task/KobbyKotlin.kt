@@ -30,6 +30,22 @@ open class KobbyKotlin : DefaultTask() {
 
     @Input
     @Optional
+    @Option(
+        option = "schemaDirectiveDefault",
+        description = "name of directive \"default\" (default \"default\")"
+    )
+    val schemaDirectiveDefault: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "schemaDirectiveRequired",
+        description = "name of directive \"required\" (default \"required\")"
+    )
+    val schemaDirectiveRequired: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
     val scalars: MapProperty<String, KotlinType> =
         project.objects.mapProperty(String::class.java, KotlinType::class.java)
 
@@ -280,6 +296,9 @@ open class KobbyKotlin : DefaultTask() {
                 it.include("**/*.graphqls")
             }.filter { it.isFile }.singleFile
         }))
+        schemaDirectiveDefault.convention("default")
+        schemaDirectiveRequired.convention("required")
+
         scalars.convention(PREDEFINED_SCALARS)
 
         relativePackage.convention(true)
@@ -361,6 +380,10 @@ open class KobbyKotlin : DefaultTask() {
         }
 
         val layout = KotlinGeneratorLayout(
+            KotlinDirectiveLayout(
+                schemaDirectiveDefault.get(),
+                schemaDirectiveRequired.get()
+            ),
             scalars.get(),
             KotlinContextLayout(
                 contextPackage.toPackageName(),

@@ -23,7 +23,7 @@ open class KobbyExtension {
     internal val schemaExtension = lazy { KobbySchemaExtension() }
     internal val kotlinExtension = lazy { KobbyKotlinExtension() }
 
-    /** Kotlin DSL schema configuration */
+    /** DSL schema configuration */
     fun schema(action: Action<KobbySchemaExtension>) {
         action.execute(schemaExtension.value)
     }
@@ -37,8 +37,24 @@ open class KobbyExtension {
 @Kobby
 open class KobbySchemaExtension {
     var local: File? = null
+    internal var directiveExtension = lazy { KobbySchemaDirectiveExtension() }
 
-    override fun toString(): String =
-        "KobbySchemaExtension(local=$local)"
+    fun directive(action: Action<KobbySchemaDirectiveExtension>) {
+        action.execute(directiveExtension.value)
+    }
+
+    override fun toString(): String {
+        return "KobbySchemaExtension(local=$local, directiveExtension=$directiveExtension)"
+    }
+}
+
+@Kobby
+open class KobbySchemaDirectiveExtension {
+    var default: String? = null
+    var required: String? = null
+
+    override fun toString(): String {
+        return "KobbySchemaDirectiveExtension(default=$default, required=$required)"
+    }
 }
 

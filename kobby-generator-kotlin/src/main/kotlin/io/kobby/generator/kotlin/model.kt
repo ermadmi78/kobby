@@ -13,11 +13,17 @@ import java.nio.file.Path
 data class Decoration(val prefix: String?, val postfix: String?)
 
 data class KotlinGeneratorLayout(
+    val directive: KotlinDirectiveLayout,
     val scalars: Map<String, KotlinType>,
     val context: KotlinContextLayout,
     val dto: KotlinDtoLayout,
     val entity: KotlinEntityLayout,
     val impl: KotlinImplLayout
+)
+
+data class KotlinDirectiveLayout(
+    val default: String,
+    val required: String
 )
 
 class KotlinContextLayout(
