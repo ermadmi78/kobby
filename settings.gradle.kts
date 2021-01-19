@@ -10,6 +10,7 @@ pluginManagement {
     }
 }
 
+include(":kobby-model")
 include(":kobby-generator-kotlin")
 include(":kobby-gradle-plugin")
 include(":kobby-maven-plugin")
