@@ -45,8 +45,8 @@ class KobbyField internal constructor(
 
 @KobbyScope
 class KobbyFieldScope internal constructor(
-    private val schema: KobbySchema,
-    private val node: KobbyNode,
+    val schema: KobbySchema,
+    val node: KobbyNode,
     name: String,
     nativeName: String,
     type: KobbyType,

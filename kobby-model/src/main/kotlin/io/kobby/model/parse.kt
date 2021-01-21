@@ -5,6 +5,7 @@ import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
 import io.kobby.model.KobbyDirective.Companion.RENAME_ARGUMENT
 import java.io.Reader
+import kotlin.LazyThreadSafetyMode.PUBLICATION
 
 /**
  * Created on 19.01.2021
@@ -18,19 +19,36 @@ fun parseSchema(directive: KobbyDirective, vararg schemas: Reader): KobbySchema 
 }.toRegistryScope(directive).parseSchemaImpl()
 
 private fun RegistryScope.parseSchemaImpl() = KobbySchema {
-    val nodeRenameConflicts = findNodeRenameConflicts()
+    val applyComments: KobbyNodeScope.(TypeDefinition<*>) -> Unit = { type ->
+        type.comments.forEach {
+            addComment(it.content)
+        }
+        nodeRenameConflicts[type.name]?.also { conflicts ->
+            conflicts.asSequence().map { it.resolveType() }.filterNotNull().forEach {
+                val message = "${type.title} conflicts with ${it.title}" //todo warning
+                addComment("TODO $message")
+            }
+        }
+    }
 
     scalars.values.forEach { scalar ->
-        val name = if (nodeRenameConflicts.isEmpty()) scalar.renamed else scalar.name
-        addScalar(name, scalar.name) {
-            scalar.comments.forEach {
-                addComment(it.content)
-            }
-            nodeRenameConflicts[scalar.name]?.also { conflicts ->
-                conflicts.asSequence().map { types[it] ?: scalars[it] }.filterNotNull().forEach {
-                    val message = "${scalar.title} conflicts with ${it.title}" //todo warning
-                    addComment("TODO $message")
-                }
+        addScalar(scalar.effectiveName, scalar.name) {
+            applyComments(scalar)
+        }
+    }
+
+    types.values.forEach { type ->
+        when (type) {
+            is ObjectTypeDefinition -> addObject(type.effectiveName, type.name) {
+                applyComments(type)
+                type.implements.asSequence()
+                    .map { it.extractName() }
+                    .map { it.resolveType() }
+                    .filterNotNull()
+                    .filter { it is InterfaceTypeDefinition }
+                    .forEach {
+                        addImplements(it.effectiveName)
+                    }
             }
         }
     }
@@ -48,6 +66,21 @@ private class RegistryScope(
     val enumExtensions: Map<String, List<EnumTypeExtensionDefinition>>,
     val inputObjectExtensions: Map<String, List<InputObjectTypeExtensionDefinition>>,
 ) {
+    val nodeRenameConflicts: Map<String, Set<String>> by lazy(PUBLICATION) {
+        mutableMapOf<String, MutableSet<String>>().also { conflicts ->
+            val renamedTypes = mutableMapOf<String, TypeDefinition<*>>()
+            sequence { yieldAll(scalars.values); yieldAll(types.values) }.forEach { type ->
+                renamedTypes.put(type.renamed, type)?.also {
+                    conflicts.append(type.name, it.name)
+                    conflicts.append(it.name, type.name)
+                }
+            }
+        }
+    }
+
+    fun String.resolveType(): TypeDefinition<*>? =
+        types[this] ?: scalars[this]
+
     fun TypeDefinition<*>.allDirectives(): Sequence<Directive> = sequence {
         yieldAll(directives)
         when (this) {
@@ -99,6 +132,11 @@ private class RegistryScope(
     val FieldDefinition.renamed: String
         get() = directives.asSequence().renamed ?: name
 
+    val FieldDefinition.title: String
+        get() = renamed.let {
+            if (name == it) name else "$name renamed to $it"
+        }
+
     fun Sequence<FieldDefinition>.findRenameConflicts(): Map<String, Set<String>> {
         val conflicts = mutableMapOf<String, MutableSet<String>>()
         val renamedFields = mutableMapOf<String, FieldDefinition>()
@@ -134,17 +172,14 @@ private class RegistryScope(
             if (name == it) "$kind $name" else "$kind $name renamed to $it"
         }
 
-    fun findNodeRenameConflicts(): Map<String, Set<String>> {
-        val conflicts = mutableMapOf<String, MutableSet<String>>()
-        val renamedTypes = mutableMapOf<String, TypeDefinition<*>>()
-        sequence { yieldAll(scalars.values); yieldAll(types.values) }.forEach { type ->
-            renamedTypes.put(type.renamed, type)?.also {
-                conflicts.append(type.name, it.name)
-                conflicts.append(it.name, type.name)
-            }
-        }
+    val TypeDefinition<*>.effectiveName: String
+        get() = if (nodeRenameConflicts.isEmpty()) renamed else name
 
-        return conflicts
+    fun Type<*>.resolve(schema: KobbySchema, nullable: Boolean = true): KobbyType = when (this) {
+        is NonNullType -> type.resolve(schema, false)
+        is ListType -> KobbyListType(type.resolve(schema), nullable)
+        is TypeName -> KobbyNodeType(schema, name.resolveType()!!.effectiveName, nullable)
+        else -> error("Unexpected Type successor: ${this::javaClass.name}")
     }
 }
 
@@ -174,3 +209,10 @@ private val TypeDefinition<*>.kind: String
 
 private fun <K : Any, V : Any> MutableMap<K, MutableSet<V>>.append(key: K, value: V) =
     computeIfAbsent(key) { mutableSetOf() }.add(value)
+
+private fun Type<*>.extractName(): String = when (this) {
+    is NonNullType -> type.extractName()
+    is ListType -> type.extractName()
+    is TypeName -> name
+    else -> error("Unexpected Type successor: ${this::javaClass.name}")
+}

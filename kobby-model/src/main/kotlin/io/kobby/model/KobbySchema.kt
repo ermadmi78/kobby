@@ -52,7 +52,7 @@ class KobbySchemaScope internal constructor() {
     private val enums = mutableMapOf<String, KobbyNode>()
     private val inputs = mutableMapOf<String, KobbyNode>()
 
-    private val schema = KobbySchema(
+    val schema = KobbySchema(
         all,
         scalars,
         _query,

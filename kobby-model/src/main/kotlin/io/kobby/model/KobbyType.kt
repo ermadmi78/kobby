@@ -6,6 +6,8 @@ package io.kobby.model
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 sealed class KobbyType {
+    abstract val schema: KobbySchema
+
     abstract val node: KobbyNode
 
     abstract val nullable: Boolean
@@ -17,6 +19,7 @@ class KobbyListType(
     val nested: KobbyType,
     override val nullable: Boolean
 ) : KobbyType() {
+    override val schema: KobbySchema get() = nested.schema
     override val node: KobbyNode get() = nested.node
     override val list: Boolean get() = true
 
@@ -42,9 +45,13 @@ class KobbyListType(
 }
 
 class KobbyNodeType(
-    override val node: KobbyNode,
+    override val schema: KobbySchema,
+    nodeName: String,
     override val nullable: Boolean
 ) : KobbyType() {
+    override val node: KobbyNode by lazy {
+        schema.all[nodeName]!!
+    }
     override val list: Boolean get() = false
 
     override fun equals(other: Any?): Boolean {

@@ -42,9 +42,9 @@ class KobbyArgument internal constructor(
 
 @KobbyScope
 class KobbyArgumentScope internal constructor(
-    schema: KobbySchema,
-    node: KobbyNode,
-    field: KobbyField,
+    val schema: KobbySchema,
+    val node: KobbyNode,
+    val field: KobbyField,
     name: String,
     nativeName: String,
     type: KobbyType

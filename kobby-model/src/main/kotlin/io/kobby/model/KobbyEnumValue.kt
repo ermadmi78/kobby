@@ -40,8 +40,8 @@ class KobbyEnumValue internal constructor(
 
 @KobbyScope
 class KobbyEnumValueScope internal constructor(
-    schema: KobbySchema,
-    node: KobbyNode,
+    val schema: KobbySchema,
+    val node: KobbyNode,
     name: String,
     nativeName: String
 ) {

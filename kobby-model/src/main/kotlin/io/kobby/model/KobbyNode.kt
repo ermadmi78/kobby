@@ -65,7 +65,7 @@ enum class KobbyNodeKind {
 
 @KobbyScope
 class KobbyNodeScope internal constructor(
-    private val schema: KobbySchema,
+    val schema: KobbySchema,
     name: String,
     nativeName: String,
     kind: KobbyNodeKind
