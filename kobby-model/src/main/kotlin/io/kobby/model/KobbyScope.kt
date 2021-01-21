@@ -6,4 +6,4 @@ package io.kobby.model
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 @DslMarker
-annotation class KobbyBuilder
+annotation class KobbyScope

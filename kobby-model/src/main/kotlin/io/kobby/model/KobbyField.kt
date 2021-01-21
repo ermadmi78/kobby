@@ -5,7 +5,7 @@ package io.kobby.model
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-class KobbyField(
+class KobbyField internal constructor(
     val schema: KobbySchema,
     val node: KobbyNode,
 
@@ -17,6 +17,9 @@ class KobbyField(
     val comments: List<String>,
     val arguments: Map<String, KobbyArgument>
 ) {
+    fun comments(action: (String) -> Unit) = comments.forEach(action)
+    fun arguments(action: (KobbyArgument) -> Unit) = arguments.values.forEach(action)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -40,8 +43,8 @@ class KobbyField(
     }
 }
 
-@KobbyBuilder
-class KobbyFieldBuilder(
+@KobbyScope
+class KobbyFieldScope internal constructor(
     private val schema: KobbySchema,
     private val node: KobbyNode,
     name: String,
@@ -52,7 +55,7 @@ class KobbyFieldBuilder(
 ) {
     private val comments = mutableListOf<String>()
     private val arguments = mutableMapOf<String, KobbyArgument>()
-    private val result = KobbyField(schema, node, name, nativeName, type, required, default, comments, arguments)
+    private val field = KobbyField(schema, node, name, nativeName, type, required, default, comments, arguments)
 
     fun addComment(comment: String) {
         comments += comment
@@ -62,10 +65,10 @@ class KobbyFieldBuilder(
         name: String,
         nativeName: String,
         type: KobbyType,
-        block: KobbyArgumentBuilder.() -> Unit
-    ) = KobbyArgumentBuilder(schema, node, result, name, nativeName, type).apply(block).build().also {
+        block: KobbyArgumentScope.() -> Unit
+    ) = KobbyArgumentScope(schema, node, field, name, nativeName, type).apply(block).build().also {
         arguments[it.name] = it
     }
 
-    fun build(): KobbyField = result
+    fun build(): KobbyField = field
 }

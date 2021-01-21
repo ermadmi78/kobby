@@ -1,18 +1,16 @@
 package io.kobby.model
 
 /**
- * Created on 18.01.2021
+ * Created on 21.01.2021
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-class KobbyArgument internal constructor(
+class KobbyEnumValue internal constructor(
     val schema: KobbySchema,
     val node: KobbyNode,
-    val field: KobbyField,
 
     val name: String,
     val nativeName: String,
-    val type: KobbyType,
     val comments: List<String>
 ) {
     fun comments(action: (String) -> Unit) = comments.forEach(action)
@@ -25,36 +23,34 @@ class KobbyArgument internal constructor(
             return false
         }
 
-        other as KobbyArgument
-        return field == other.field && name == other.name
+        other as KobbyEnumValue
+        return node == other.node && name == other.name
     }
 
     override fun hashCode(): Int {
-        var result = field.hashCode()
+        var result = node.hashCode()
         result = 31 * result + name.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "$nativeName: $type"
+        return nativeName
     }
 }
 
 @KobbyScope
-class KobbyArgumentScope internal constructor(
+class KobbyEnumValueScope internal constructor(
     schema: KobbySchema,
     node: KobbyNode,
-    field: KobbyField,
     name: String,
-    nativeName: String,
-    type: KobbyType
+    nativeName: String
 ) {
     private val comments = mutableListOf<String>()
-    private val argument = KobbyArgument(schema, node, field, name, nativeName, type, comments)
+    private val enumValue = KobbyEnumValue(schema, node, name, nativeName, comments)
 
     fun addComment(comment: String) {
         comments += comment
     }
 
-    fun build(): KobbyArgument = argument
+    fun build(): KobbyEnumValue = enumValue
 }

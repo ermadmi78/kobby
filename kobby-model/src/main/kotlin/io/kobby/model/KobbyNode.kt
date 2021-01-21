@@ -5,7 +5,7 @@ package io.kobby.model
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-class KobbyNode(
+class KobbyNode internal constructor(
     val schema: KobbySchema,
 
     val name: String,
@@ -13,7 +13,7 @@ class KobbyNode(
     val kind: KobbyNodeKind,
     private val _implements: List<String>,
     val comments: List<String>,
-    val enumValues: List<String>,
+    val enumValues: Map<String, KobbyEnumValue>,
     val fields: Map<String, KobbyField>
 ) {
     val implements: Map<String, KobbyNode> by lazy {
@@ -23,6 +23,11 @@ class KobbyNode(
             .map { it.name to it }
             .toMap()
     }
+
+    fun implements(action: (KobbyNode) -> Unit) = implements.values.forEach(action)
+    fun comments(action: (String) -> Unit) = comments.forEach(action)
+    fun enumValues(action: (KobbyEnumValue) -> Unit) = enumValues.values.forEach(action)
+    fun fields(action: (KobbyField) -> Unit) = fields.values.forEach(action)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -58,8 +63,8 @@ enum class KobbyNodeKind {
     INPUT
 }
 
-@KobbyBuilder
-class KobbyNodeBuilder(
+@KobbyScope
+class KobbyNodeScope internal constructor(
     private val schema: KobbySchema,
     name: String,
     nativeName: String,
@@ -67,9 +72,9 @@ class KobbyNodeBuilder(
 ) {
     private val _implements = mutableListOf<String>()
     private val comments = mutableListOf<String>()
-    private val enumValues = mutableListOf<String>()
+    private val enumValues = mutableMapOf<String, KobbyEnumValue>()
     private val fields = mutableMapOf<String, KobbyField>()
-    private val result = KobbyNode(schema, name, nativeName, kind, _implements, comments, enumValues, fields)
+    private val node = KobbyNode(schema, name, nativeName, kind, _implements, comments, enumValues, fields)
 
     fun addImplements(interfaceName: String) {
         _implements += interfaceName
@@ -79,8 +84,12 @@ class KobbyNodeBuilder(
         comments += comment
     }
 
-    fun addEnumValue(name: String) {
-        enumValues += name
+    fun addEnumValue(
+        name: String,
+        nativeName: String,
+        block: KobbyEnumValueScope.() -> Unit
+    ) = KobbyEnumValueScope(schema, node, name, nativeName).apply(block).build().also {
+        enumValues[it.name] = it
     }
 
     fun addField(
@@ -88,10 +97,10 @@ class KobbyNodeBuilder(
         type: KobbyType,
         required: Boolean,
         default: Boolean,
-        block: KobbyFieldBuilder.() -> Unit
-    ) = KobbyFieldBuilder(schema, result, name, nativeName, type, required, default).apply(block).build().also {
+        block: KobbyFieldScope.() -> Unit
+    ) = KobbyFieldScope(schema, node, name, nativeName, type, required, default).apply(block).build().also {
         fields[it.name] = it
     }
 
-    fun build(): KobbyNode = result
+    fun build(): KobbyNode = node
 }
