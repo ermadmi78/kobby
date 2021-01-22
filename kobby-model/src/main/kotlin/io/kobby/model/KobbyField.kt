@@ -1,5 +1,8 @@
 package io.kobby.model
 
+import io.kobby.model.KobbyNodeKind.INTERFACE
+import io.kobby.model.KobbyNodeKind.OBJECT
+
 /**
  * Created on 18.01.2021
  *
@@ -10,15 +13,26 @@ class KobbyField internal constructor(
     val node: KobbyNode,
 
     val name: String,
-    val nativeName: String,
     val type: KobbyType,
-    val required: Boolean,
-    val default: Boolean,
+    private val required: Boolean,
+    private val default: Boolean,
     val comments: List<String>,
     val arguments: Map<String, KobbyArgument>
 ) {
     fun comments(action: (String) -> Unit) = comments.forEach(action)
     fun arguments(action: (KobbyArgument) -> Unit) = arguments.values.forEach(action)
+
+    fun findOverriddenField(): KobbyField? = if (node.kind == OBJECT || node.kind == INTERFACE) {
+        node.implements.values.asSequence().map { it.fields[name] }.filterNotNull().firstOrNull()
+    } else {
+        null
+    }
+
+    fun isOverride(): Boolean = findOverriddenField() != null
+
+    fun isRequired(): Boolean = findOverriddenField()?.isRequired() ?: (type.isId() || required)
+
+    fun isDefault(): Boolean = findOverriddenField()?.isDefault() ?: default
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -39,7 +53,7 @@ class KobbyField internal constructor(
     }
 
     override fun toString(): String {
-        return "$nativeName: $type"
+        return "$name: $type"
     }
 }
 
@@ -48,14 +62,22 @@ class KobbyFieldScope internal constructor(
     val schema: KobbySchema,
     val node: KobbyNode,
     name: String,
-    nativeName: String,
     type: KobbyType,
     required: Boolean,
     default: Boolean
 ) {
     private val comments = mutableListOf<String>()
     private val arguments = mutableMapOf<String, KobbyArgument>()
-    private val field = KobbyField(schema, node, name, nativeName, type, required, default, comments, arguments)
+    private val field = KobbyField(
+        schema,
+        node,
+        name,
+        type,
+        required,
+        default,
+        comments,
+        arguments
+    )
 
     fun addComment(comment: String) {
         comments += comment
@@ -63,10 +85,9 @@ class KobbyFieldScope internal constructor(
 
     fun addArgument(
         name: String,
-        nativeName: String,
         type: KobbyType,
         block: KobbyArgumentScope.() -> Unit
-    ) = KobbyArgumentScope(schema, node, field, name, nativeName, type).apply(block).build().also {
+    ) = KobbyArgumentScope(schema, node, field, name, type).apply(block).build().also {
         arguments[it.name] = it
     }
 

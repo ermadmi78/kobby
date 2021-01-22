@@ -66,10 +66,9 @@ class KobbySchemaScope internal constructor() {
 
     fun addNode(
         name: String,
-        nativeName: String,
         kind: KobbyNodeKind,
         block: KobbyNodeScope.() -> Unit
-    ) = KobbyNodeScope(schema, name, nativeName, kind).apply(block).build().also {
+    ) = KobbyNodeScope(schema, name, kind).apply(block).build().also {
         all[it.name] = it
         when (it.kind) {
             SCALAR -> scalars[it.name] = it
@@ -83,14 +82,26 @@ class KobbySchemaScope internal constructor() {
         }
     }
 
-    fun addScalar(name: String, nativeName: String, block: KobbyNodeScope.() -> Unit) =
-        addNode(name, nativeName, SCALAR, block)
+    fun addScalar(name: String, block: KobbyNodeScope.() -> Unit) =
+        addNode(name, SCALAR, block)
 
-    fun addObject(name: String, nativeName: String, block: KobbyNodeScope.() -> Unit) = when (nativeName) {
-        "Query" -> addNode(name, nativeName, QUERY, block)
-        "Mutation" -> addNode(name, nativeName, MUTATION, block)
-        else -> addNode(name, nativeName, OBJECT, block)
+    fun addObject(name: String, block: KobbyNodeScope.() -> Unit) = when (name) {
+        "Query" -> addNode(name, QUERY, block)
+        "Mutation" -> addNode(name, MUTATION, block)
+        else -> addNode(name, OBJECT, block)
     }
+
+    fun addInterface(name: String, block: KobbyNodeScope.() -> Unit) =
+        addNode(name, INTERFACE, block)
+
+    fun addUnion(name: String, block: KobbyNodeScope.() -> Unit) =
+        addNode(name, UNION, block)
+
+    fun addEnum(name: String, block: KobbyNodeScope.() -> Unit) =
+        addNode(name, ENUM, block)
+
+    fun addInput(name: String, block: KobbyNodeScope.() -> Unit) =
+        addNode(name, INPUT, block)
 
     fun build(): KobbySchema = schema
 }

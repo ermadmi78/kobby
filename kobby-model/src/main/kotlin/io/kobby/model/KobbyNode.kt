@@ -9,7 +9,6 @@ class KobbyNode internal constructor(
     val schema: KobbySchema,
 
     val name: String,
-    val nativeName: String,
     val kind: KobbyNodeKind,
     private val _implements: List<String>,
     val comments: List<String>,
@@ -48,7 +47,7 @@ class KobbyNode internal constructor(
     }
 
     override fun toString(): String {
-        return "${kind.name.toLowerCase()} $nativeName"
+        return "${kind.name.toLowerCase()} $name"
     }
 }
 
@@ -67,14 +66,13 @@ enum class KobbyNodeKind {
 class KobbyNodeScope internal constructor(
     val schema: KobbySchema,
     name: String,
-    nativeName: String,
     kind: KobbyNodeKind
 ) {
     private val _implements = mutableListOf<String>()
     private val comments = mutableListOf<String>()
     private val enumValues = mutableMapOf<String, KobbyEnumValue>()
     private val fields = mutableMapOf<String, KobbyField>()
-    private val node = KobbyNode(schema, name, nativeName, kind, _implements, comments, enumValues, fields)
+    private val node = KobbyNode(schema, name, kind, _implements, comments, enumValues, fields)
 
     fun addImplements(interfaceName: String) {
         _implements += interfaceName
@@ -86,19 +84,18 @@ class KobbyNodeScope internal constructor(
 
     fun addEnumValue(
         name: String,
-        nativeName: String,
         block: KobbyEnumValueScope.() -> Unit
-    ) = KobbyEnumValueScope(schema, node, name, nativeName).apply(block).build().also {
+    ) = KobbyEnumValueScope(schema, node, name).apply(block).build().also {
         enumValues[it.name] = it
     }
 
     fun addField(
-        name: String, nativeName: String,
+        name: String,
         type: KobbyType,
         required: Boolean,
         default: Boolean,
         block: KobbyFieldScope.() -> Unit
-    ) = KobbyFieldScope(schema, node, name, nativeName, type, required, default).apply(block).build().also {
+    ) = KobbyFieldScope(schema, node, name, type, required, default).apply(block).build().also {
         fields[it.name] = it
     }
 

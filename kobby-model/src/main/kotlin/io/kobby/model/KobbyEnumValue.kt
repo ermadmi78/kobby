@@ -10,7 +10,6 @@ class KobbyEnumValue internal constructor(
     val node: KobbyNode,
 
     val name: String,
-    val nativeName: String,
     val comments: List<String>
 ) {
     fun comments(action: (String) -> Unit) = comments.forEach(action)
@@ -34,7 +33,7 @@ class KobbyEnumValue internal constructor(
     }
 
     override fun toString(): String {
-        return nativeName
+        return name
     }
 }
 
@@ -42,11 +41,10 @@ class KobbyEnumValue internal constructor(
 class KobbyEnumValueScope internal constructor(
     val schema: KobbySchema,
     val node: KobbyNode,
-    name: String,
-    nativeName: String
+    name: String
 ) {
     private val comments = mutableListOf<String>()
-    private val enumValue = KobbyEnumValue(schema, node, name, nativeName, comments)
+    private val enumValue = KobbyEnumValue(schema, node, name, comments)
 
     fun addComment(comment: String) {
         comments += comment

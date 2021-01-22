@@ -11,7 +11,6 @@ class KobbyArgument internal constructor(
     val field: KobbyField,
 
     val name: String,
-    val nativeName: String,
     val type: KobbyType,
     val comments: List<String>
 ) {
@@ -36,7 +35,7 @@ class KobbyArgument internal constructor(
     }
 
     override fun toString(): String {
-        return "$nativeName: $type"
+        return "$name: $type"
     }
 }
 
@@ -46,11 +45,10 @@ class KobbyArgumentScope internal constructor(
     val node: KobbyNode,
     val field: KobbyField,
     name: String,
-    nativeName: String,
     type: KobbyType
 ) {
     private val comments = mutableListOf<String>()
-    private val argument = KobbyArgument(schema, node, field, name, nativeName, type, comments)
+    private val argument = KobbyArgument(schema, node, field, name, type, comments)
 
     fun addComment(comment: String) {
         comments += comment
