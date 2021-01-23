@@ -1,30 +1,110 @@
 package io.kobby.generator.kotlin
 
+import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.LIST
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.TypeName
+import io.kobby.model.*
+import io.kobby.model.KobbyNodeKind.*
 import java.io.File
 import java.io.IOException
 import java.io.Serializable
 import java.nio.file.Path
+import kotlin.LazyThreadSafetyMode.PUBLICATION
 
 /**
  * Created on 18.11.2020
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-data class Decoration(val prefix: String?, val postfix: String?)
-
-data class KotlinGeneratorLayout(
-    val directive: KotlinDirectiveLayout,
+data class KotlinLayout(
     val scalars: Map<String, KotlinType>,
     val context: KotlinContextLayout,
     val dto: KotlinDtoLayout,
     val entity: KotlinEntityLayout,
     val impl: KotlinImplLayout
-)
+) {
+    internal val dslAnnotation by lazy(PUBLICATION) {
+        ClassName(context.packageName, "DSL".decorate(context.decoration))
+    }
 
-data class KotlinDirectiveLayout(
-    val default: String,
-    val required: String
-)
+    internal val KobbyNode.dtoName: String
+        get() = when (kind) {
+            ENUM, INPUT -> name
+            else -> name.decorate(dto.decoration)
+        }
+
+    internal val KobbyNode.dtoClass: ClassName
+        get() = ClassName(dto.packageName, dtoName)
+
+    internal val KobbyType.dtoType: TypeName
+        get() = when (this) {
+            is KobbyListType -> LIST.parameterizedBy(nested.dtoType)
+            is KobbyNodeType -> when (node.kind) {
+                SCALAR -> scalars[node.name]!!.toTypeName()
+                else -> node.dtoClass
+            }
+        }.let { if (nullable) it.nullable() else it }
+
+    internal val KobbyNode.builderName: String
+        get() = dtoName.decorate(dto.builder.decoration)
+
+    internal val KobbyNode.builderClass: ClassName
+        get() = ClassName(dto.packageName, builderName)
+
+    //******************************************************************************************************************
+    //                                          Jackson
+    //******************************************************************************************************************
+
+    internal fun TypeSpecBuilder.jacksonize(node: KobbyNode): TypeSpecBuilder {
+        if (!dto.jackson.enabled) {
+            return this
+        }
+
+        addAnnotation(
+            AnnotationSpec.builder(JacksonAnnotations1.JSON_TYPE_NAME)
+                .addMember("value = %S", node.name)
+                .build()
+        )
+
+        addAnnotation(
+            AnnotationSpec.builder(JacksonAnnotations1.JSON_TYPE_INFO)
+                .addMember("use = %T.Id.NAME", JacksonAnnotations1.JSON_TYPE_INFO)
+                .addMember("include = %T.As.PROPERTY", JacksonAnnotations1.JSON_TYPE_INFO)
+                .addMember("property = %S", "__typename")
+                .addMember("defaultImpl = ${node.dtoName}::class")
+                .build()
+        )
+
+        addAnnotation(
+            AnnotationSpec.builder(JacksonAnnotations1.JSON_INCLUDE)
+                .addMember("value = %T.Include.NON_ABSENT", JacksonAnnotations1.JSON_INCLUDE)
+                .build()
+        )
+
+        return this
+    }
+
+    internal fun FunSpecBuilder.jacksonize(): FunSpecBuilder {
+        if (dto.jackson.enabled && parameters.size == 1) {
+            addAnnotation(JacksonAnnotations1.JSON_CREATOR)
+        }
+
+        return this
+    }
+
+    internal fun PropertySpecBuilder.jacksonInclude(include: JacksonInclude1): PropertySpecBuilder {
+        if (dto.jackson.enabled) {
+            addAnnotation(
+                AnnotationSpec.builder(JacksonAnnotations1.JSON_INCLUDE)
+                    .addMember("value = %T.Include.${include.name}", JacksonAnnotations1.JSON_INCLUDE)
+                    .build()
+            )
+        }
+        return this
+    }
+}
 
 class KotlinContextLayout(
     packageName: String,

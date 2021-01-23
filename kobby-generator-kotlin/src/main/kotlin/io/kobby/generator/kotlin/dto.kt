@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
 import graphql.language.*
 import graphql.schema.idl.TypeDefinitionRegistry
+import io.kobby.model.decorate
 
 internal data class GenerateDtoResult(
     val types: Map<String, TypeName>,
@@ -18,7 +19,7 @@ internal data class GenerateDtoResult(
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 internal fun generateDto(
-    layout: KotlinGeneratorLayout,
+    layout: KotlinLayout,
     graphQLSchema: TypeDefinitionRegistry,
     dslAnnotation: ClassName
 ): GenerateDtoResult {

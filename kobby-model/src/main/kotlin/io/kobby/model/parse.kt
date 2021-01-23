@@ -180,11 +180,11 @@ private class RegistryScope(
     }
 
     fun FieldDefinition.isRequired(): Boolean = directives.firstOrNull {
-        it.name == directiveLayout.getOrDefault(KobbyDirective.REQUIRED, KobbyDirective.REQUIRED)
+        it.name == directiveLayout[KobbyDirective.REQUIRED] ?: KobbyDirective.REQUIRED
     } != null
 
     fun FieldDefinition.isDefault(): Boolean = directives.firstOrNull {
-        it.name == directiveLayout.getOrDefault(KobbyDirective.DEFAULT, KobbyDirective.DEFAULT)
+        it.name == directiveLayout[KobbyDirective.DEFAULT] ?: KobbyDirective.DEFAULT
     } != null
 }
 

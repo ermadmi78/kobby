@@ -6,6 +6,8 @@ import graphql.language.FieldDefinition
 import graphql.language.ListType
 import graphql.language.NonNullType
 import graphql.language.Type
+import io.kobby.model.Decoration
+import io.kobby.model.decorate
 import java.io.File
 import java.nio.file.Path
 
@@ -14,6 +16,11 @@ import java.nio.file.Path
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
+
+
+//**********************************************************************************************************************
+//**********************************************************************************************************************
+//**********************************************************************************************************************
 
 internal fun KotlinType.toTypeName(): TypeName =
     ClassName(packageName, className.toKotlinPath())
@@ -71,21 +78,6 @@ internal fun FileSpec.toKotlinFile(): KotlinFile {
         override fun writeTo(directory: File) {
             spec.writeTo(directory)
         }
-    }
-}
-
-internal fun String.decorate(decoration: Decoration): String =
-    decorate(decoration.prefix, decoration.postfix)
-
-internal fun String.decorate(prefix: String?, postfix: String?): String {
-    return if (prefix.isNullOrBlank() && postfix.isNullOrBlank()) {
-        this
-    } else if (prefix.isNullOrBlank()) {
-        this + postfix!!.trim()
-    } else if (postfix.isNullOrBlank()) {
-        prefix.trim() + this.capitalize()
-    } else {
-        prefix.trim() + this.capitalize() + postfix.trim()
     }
 }
 

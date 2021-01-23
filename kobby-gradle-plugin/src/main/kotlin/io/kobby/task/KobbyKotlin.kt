@@ -2,6 +2,7 @@ package io.kobby.task
 
 import io.kobby.generator.kotlin.*
 import io.kobby.generator.kotlin.KotlinTypes.PREDEFINED_SCALARS
+import io.kobby.model.Decoration
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -379,11 +380,7 @@ open class KobbyKotlin : DefaultTask() {
             implPackageName.orNull?.forEachPackage { list += it }
         }
 
-        val layout = KotlinGeneratorLayout(
-            KotlinDirectiveLayout(
-                schemaDirectiveDefault.get(),
-                schemaDirectiveRequired.get()
-            ),
+        val layout = KotlinLayout(
             scalars.get(),
             KotlinContextLayout(
                 contextPackage.toPackageName(),

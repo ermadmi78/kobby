@@ -3,6 +3,7 @@ package io.kobby.generator.kotlin
 import io.kobby.generator.kotlin.KotlinTypes.ANY
 import io.kobby.generator.kotlin.KotlinTypes.MAP
 import io.kobby.generator.kotlin.KotlinTypes.STRING
+import io.kobby.model.Decoration
 import io.kotest.core.spec.style.AnnotationSpec
 import java.io.InputStreamReader
 
@@ -14,11 +15,7 @@ import java.io.InputStreamReader
 class GeneratorTest : AnnotationSpec() {
     @Test
     fun temp() {
-        val layout = KotlinGeneratorLayout(
-            KotlinDirectiveLayout(
-                "default",
-                "required"
-            ),
+        val layout = KotlinLayout(
             KotlinTypes.PREDEFINED_SCALARS + mapOf(
                 "DateTime" to KotlinType("java.time", "OffsetDateTime"),
                 "JSON" to MAP.parameterize(STRING, ANY.nullable())

@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.TypeSpec
 import graphql.schema.idl.SchemaParser
 import graphql.schema.idl.TypeDefinitionRegistry
+import io.kobby.model.decorate
 import java.io.Reader
 
 /**
@@ -14,7 +15,7 @@ import java.io.Reader
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 
-fun generateKotlin(layout: KotlinGeneratorLayout, vararg schemas: Reader): List<KotlinFile> {
+fun generateKotlin(layout: KotlinLayout, vararg schemas: Reader): List<KotlinFile> {
     val graphQLSchema = TypeDefinitionRegistry()
     for (schema in schemas) {
         graphQLSchema.merge(SchemaParser().parse(schema))

@@ -16,7 +16,7 @@ internal data class GenerateEntityResult(
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 internal fun generateEntity(
-    layout: KotlinGeneratorLayout,
+    layout: KotlinLayout,
     graphQLSchema: TypeDefinitionRegistry,
     dslAnnotation: ClassName,
     dtoTypes: Map<String, TypeName>,

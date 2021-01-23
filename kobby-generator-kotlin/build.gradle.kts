@@ -15,6 +15,7 @@ configurations["compileOnly"].extendsFrom(shadowImplementation)
 configurations["testImplementation"].extendsFrom(shadowImplementation)
 
 dependencies {
+    api(project(":kobby-model"))
     shadowImplementation("com.graphql-java:graphql-java:$graphQLJavaVersion")
     implementation("com.squareup:kotlinpoet:$kotlinPoetVersion")
 }
