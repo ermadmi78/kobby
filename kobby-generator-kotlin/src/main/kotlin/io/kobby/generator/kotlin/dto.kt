@@ -33,6 +33,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             field.comments {
                                 addKdoc(it)
                             }
+                            if (field.isOverride()) {
+                                addModifiers(KModifier.OVERRIDE)
+                            }
                         }
                     }
                     customizeConstructor {
