@@ -23,16 +23,25 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
                 node.implements {
                     addSuperinterface(it.projectionClass)
                 }
+                node.comments {
+                    addKdoc(it)
+                }
                 node.fields.values.asSequence().filter { !it.isRequired() }.forEach { field ->
                     buildFunction(field.projectionName) {
                         addModifiers(KModifier.ABSTRACT)
                         if (field.isOverride()) {
                             addModifiers(KModifier.OVERRIDE)
                         }
+                        field.comments {
+                            addKdoc(it)
+                        }
                         field.arguments { arg ->
                             buildParameter(arg.name, arg.type.dtoType) {
                                 if (arg.type.nullable) {
                                     defaultValue("null")
+                                }
+                                arg.comments {
+                                    addKdoc(it)
                                 }
                             }
                         }
@@ -57,16 +66,25 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
                 node.implements {
                     addSuperinterface(it.projectionClass)
                 }
+                node.comments {
+                    addKdoc(it)
+                }
                 node.fields.values.asSequence().filter { !it.isRequired() }.forEach { field ->
                     buildFunction(field.projectionName) {
                         addModifiers(KModifier.ABSTRACT)
                         if (field.isOverride()) {
                             addModifiers(KModifier.OVERRIDE)
                         }
+                        field.comments {
+                            addKdoc(it)
+                        }
                         field.arguments { arg ->
                             buildParameter(arg.name, arg.type.dtoType) {
                                 if (arg.type.nullable) {
                                     defaultValue("null")
+                                }
+                                arg.comments {
+                                    addKdoc(it)
                                 }
                             }
                         }
@@ -90,6 +108,9 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
         files += buildFile(entity.packageName, node.entityName) {
             buildInterface(node.projectionName) {
                 addAnnotation(context.dslClass)
+                node.comments {
+                    addKdoc(it)
+                }
                 //todo add interface ON cases
             }
         }
