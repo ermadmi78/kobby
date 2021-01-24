@@ -36,11 +36,10 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
                                 }
                             }
                         }
-                        when (field.type.node.kind) {
-                            OBJECT, INTERFACE, UNION ->
-                                buildParameter(entity.projection.argument, field.type.node.projectionLambda) {
-                                    defaultValue("{}")
-                                }
+                        if (field.type.node.kind in setOf(OBJECT, INTERFACE, UNION)) {
+                            buildParameter(entity.projection.argument, field.type.node.projectionLambda) {
+                                defaultValue("{}")
+                            }
                         }
                     }
                 }
