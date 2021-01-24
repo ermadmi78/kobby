@@ -8,6 +8,9 @@ import io.kobby.model.KobbyScope
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
+
+internal fun TypeName.nullable(): TypeName = copy(true)
+
 @KobbyScope
 internal typealias FileSpecBuilder = FileSpec.Builder
 
@@ -57,6 +60,13 @@ internal fun FileSpecBuilder.buildFunction(
     addFunction(it)
 }
 
+internal fun TypeSpecBuilder.buildFunction(
+    name: String,
+    block: FunSpecBuilder.() -> Unit
+): FunSpec = FunSpec.builder(name).apply(block).build().also {
+    addFunction(it)
+}
+
 internal fun TypeSpecBuilder.buildPrimaryConstructor(
     block: FunSpecBuilder.() -> Unit
 ): FunSpec = FunSpec.constructorBuilder().apply(block).build().also {
@@ -64,9 +74,14 @@ internal fun TypeSpecBuilder.buildPrimaryConstructor(
 }
 
 internal fun TypeSpecBuilder.buildProperty(
+    arg: Pair<String, TypeName>,
+    block: PropertySpecBuilder.() -> Unit = {}
+): PropertySpec = buildProperty(arg.first, arg.second, block)
+
+internal fun TypeSpecBuilder.buildProperty(
     name: String,
     type: TypeName,
-    block: PropertySpecBuilder.() -> Unit
+    block: PropertySpecBuilder.() -> Unit = {}
 ): PropertySpec = PropertySpec.builder(name, type).apply(block).build().also {
     addProperty(it)
 }
@@ -79,18 +94,70 @@ internal fun TypeSpecBuilder.buildEnumConstant(
 }
 
 internal fun FunSpecBuilder.buildParameter(
+    arg: Pair<String, TypeName>,
+    block: ParameterSpecBuilder.() -> Unit = {}
+): ParameterSpec = buildParameter(arg.first, arg.second, block)
+
+internal fun FunSpecBuilder.buildParameter(
     name: String,
     type: TypeName,
-    block: ParameterSpecBuilder.() -> Unit
+    block: ParameterSpecBuilder.() -> Unit = {}
 ): ParameterSpec = ParameterSpec.builder(name, type).apply(block).build().also {
     addParameter(it)
+}
+
+// Primary constructor properties builder
+internal fun TypeSpecBuilder.buildPrimaryConstructorProperties(
+    block: PrimaryConstructorPropertiesBuilder.() -> Unit
+): FunSpec = FunSpec.constructorBuilder()
+    .also {
+        PrimaryConstructorPropertiesBuilder(this, it).apply(block)
+    }
+    .build()
+    .also {
+        primaryConstructor(it)
+    }
+
+@KobbyScope
+internal class PrimaryConstructorPropertiesBuilder(
+    private val classBuilder: TypeSpecBuilder,
+    private val primaryConstructorBuilder: FunSpecBuilder
+) {
+    internal fun buildProperty(
+        arg: Pair<String, TypeName>,
+        block: PropertySpecBuilder.() -> Unit = {}
+    ): PropertySpec = buildProperty(arg.first, arg.second, block)
+
+    internal fun buildProperty(
+        name: String,
+        type: TypeName,
+        block: PropertySpecBuilder.() -> Unit = {}
+    ): PropertySpec = PropertySpec.builder(name, type)
+        .also {
+            primaryConstructorBuilder.addParameter(
+                ParameterSpec.builder(name, type).apply {
+                    if (type.isNullable) {
+                        defaultValue("null")
+                    }
+                }.build()
+            )
+            it.initializer(name)
+        }
+        .apply(block)
+        .build()
+        .also {
+            classBuilder.addProperty(it)
+        }
+
+    internal fun customizeConstructor(block: FunSpecBuilder.() -> Unit): FunSpecBuilder =
+        primaryConstructorBuilder.apply(block)
 }
 
 //**********************************************************************************************************************
 //                                              Jackson
 //**********************************************************************************************************************
 
-internal object JacksonAnnotations1 {
+internal object JacksonAnnotations {
     val JSON_CREATOR = ClassName(
         "com.fasterxml.jackson.annotation",
         "JsonCreator"
@@ -112,7 +179,7 @@ internal object JacksonAnnotations1 {
     )
 }
 
-internal enum class JacksonInclude1 {
+internal enum class JacksonInclude {
     ALWAYS,
     NON_NULL,
     NON_ABSENT,

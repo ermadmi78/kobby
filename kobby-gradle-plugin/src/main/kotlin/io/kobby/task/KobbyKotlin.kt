@@ -3,6 +3,8 @@ package io.kobby.task
 import io.kobby.generator.kotlin.*
 import io.kobby.generator.kotlin.KotlinTypes.PREDEFINED_SCALARS
 import io.kobby.model.Decoration
+import io.kobby.model.KobbyDirective
+import io.kobby.model.parseSchema
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
@@ -32,18 +34,18 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
-        option = "schemaDirectiveDefault",
-        description = "name of directive \"default\" (default \"default\")"
-    )
-    val schemaDirectiveDefault: Property<String> = project.objects.property(String::class.java)
-
-    @Input
-    @Optional
-    @Option(
         option = "schemaDirectiveRequired",
         description = "name of directive \"required\" (default \"required\")"
     )
     val schemaDirectiveRequired: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "schemaDirectiveDefault",
+        description = "name of directive \"default\" (default \"default\")"
+    )
+    val schemaDirectiveDefault: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
@@ -297,8 +299,8 @@ open class KobbyKotlin : DefaultTask() {
                 it.include("**/*.graphqls")
             }.filter { it.isFile }.singleFile
         }))
-        schemaDirectiveDefault.convention("default")
-        schemaDirectiveRequired.convention("required")
+        schemaDirectiveRequired.convention(KobbyDirective.REQUIRED)
+        schemaDirectiveDefault.convention(KobbyDirective.DEFAULT)
 
         scalars.convention(PREDEFINED_SCALARS)
 
@@ -332,6 +334,11 @@ open class KobbyKotlin : DefaultTask() {
         if (!graphQLSchema.isFile) {
             throw RuntimeException("specified schema file does not exist")
         }
+
+        val directiveLayout = mapOf(
+            KobbyDirective.REQUIRED to schemaDirectiveRequired.get(),
+            KobbyDirective.DEFAULT to schemaDirectiveDefault.get()
+        )
 
         val context = (contextName.orNull
             ?: graphQLSchema.name
@@ -425,7 +432,8 @@ open class KobbyKotlin : DefaultTask() {
             throw RuntimeException("failed to generate generated source directory")
         }
 
-        val output = generateKotlin(layout, FileReader(graphQLSchema))
+        val schema = parseSchema(directiveLayout, FileReader(graphQLSchema))
+        val output = generateKotlin(schema, layout)
         output.forEach {
             it.writeTo(targetDirectory)
         }

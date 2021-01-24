@@ -1,17 +1,14 @@
 package io.kobby.generator.kotlin
 
-import com.squareup.kotlinpoet.AnnotationSpec
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.LIST
+import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.TypeName
 import io.kobby.model.*
 import io.kobby.model.KobbyNodeKind.*
+import io.kobby.model.KobbyNodeKind.ENUM
 import java.io.File
 import java.io.IOException
 import java.io.Serializable
 import java.nio.file.Path
-import kotlin.LazyThreadSafetyMode.PUBLICATION
 
 /**
  * Created on 18.11.2020
@@ -25,9 +22,18 @@ data class KotlinLayout(
     val entity: KotlinEntityLayout,
     val impl: KotlinImplLayout
 ) {
-    internal val dslAnnotation by lazy(PUBLICATION) {
-        ClassName(context.packageName, "DSL".decorate(context.decoration))
-    }
+    // *****************************************************************************************************************
+    //                                          DTO
+    // *****************************************************************************************************************
+
+    internal val KobbyType.dtoType: TypeName
+        get() = when (this) {
+            is KobbyListType -> LIST.parameterizedBy(nested.dtoType)
+            is KobbyNodeType -> when (node.kind) {
+                SCALAR -> scalars[node.name]!!.typeName
+                else -> node.dtoClass
+            }
+        }.let { if (nullable) it.nullable() else it }
 
     internal val KobbyNode.dtoName: String
         get() = when (kind) {
@@ -38,20 +44,42 @@ data class KotlinLayout(
     internal val KobbyNode.dtoClass: ClassName
         get() = ClassName(dto.packageName, dtoName)
 
-    internal val KobbyType.dtoType: TypeName
-        get() = when (this) {
-            is KobbyListType -> LIST.parameterizedBy(nested.dtoType)
-            is KobbyNodeType -> when (node.kind) {
-                SCALAR -> scalars[node.name]!!.toTypeName()
-                else -> node.dtoClass
-            }
-        }.let { if (nullable) it.nullable() else it }
-
     internal val KobbyNode.builderName: String
         get() = dtoName.decorate(dto.builder.decoration)
 
     internal val KobbyNode.builderClass: ClassName
         get() = ClassName(dto.packageName, builderName)
+
+    // *****************************************************************************************************************
+    //                                          Entity
+    // *****************************************************************************************************************
+
+    internal val KobbyNode.entityName: String
+        get() = when (kind) {
+            ENUM, INPUT -> error("Invalid algorithm - try to make entity of ${kind.name}")
+            else -> name
+        }
+
+    internal val KobbyNode.entityClass: ClassName
+        get() = ClassName(entity.packageName, entityName)
+
+    internal val KobbyNode.projectionName: String
+        get() = when (kind) {
+            OBJECT, INTERFACE, UNION -> name.decorate(entity.projection.decoration)
+            else -> error("Invalid algorithm - try to make projection of ${kind.name}")
+        }
+
+    internal val KobbyNode.projectionClass: ClassName
+        get() = ClassName(entity.packageName, projectionName)
+
+    internal val KobbyNode.projectionLambda: LambdaTypeName
+        get() = LambdaTypeName.get(projectionClass, emptyList(), UNIT)
+
+    internal val KobbyField.projectionName: String
+        get() = if (isDefault())
+            name.decorate(entity.projection.withoutDecoration)
+        else
+            name.decorate(entity.projection.withDecoration)
 
     //******************************************************************************************************************
     //                                          Jackson
@@ -63,23 +91,23 @@ data class KotlinLayout(
         }
 
         addAnnotation(
-            AnnotationSpec.builder(JacksonAnnotations1.JSON_TYPE_NAME)
+            AnnotationSpec.builder(JacksonAnnotations.JSON_TYPE_NAME)
                 .addMember("value = %S", node.name)
                 .build()
         )
 
         addAnnotation(
-            AnnotationSpec.builder(JacksonAnnotations1.JSON_TYPE_INFO)
-                .addMember("use = %T.Id.NAME", JacksonAnnotations1.JSON_TYPE_INFO)
-                .addMember("include = %T.As.PROPERTY", JacksonAnnotations1.JSON_TYPE_INFO)
+            AnnotationSpec.builder(JacksonAnnotations.JSON_TYPE_INFO)
+                .addMember("use = %T.Id.NAME", JacksonAnnotations.JSON_TYPE_INFO)
+                .addMember("include = %T.As.PROPERTY", JacksonAnnotations.JSON_TYPE_INFO)
                 .addMember("property = %S", "__typename")
                 .addMember("defaultImpl = ${node.dtoName}::class")
                 .build()
         )
 
         addAnnotation(
-            AnnotationSpec.builder(JacksonAnnotations1.JSON_INCLUDE)
-                .addMember("value = %T.Include.NON_ABSENT", JacksonAnnotations1.JSON_INCLUDE)
+            AnnotationSpec.builder(JacksonAnnotations.JSON_INCLUDE)
+                .addMember("value = %T.Include.NON_ABSENT", JacksonAnnotations.JSON_INCLUDE)
                 .build()
         )
 
@@ -88,17 +116,23 @@ data class KotlinLayout(
 
     internal fun FunSpecBuilder.jacksonize(): FunSpecBuilder {
         if (dto.jackson.enabled && parameters.size == 1) {
-            addAnnotation(JacksonAnnotations1.JSON_CREATOR)
+            addAnnotation(JacksonAnnotations.JSON_CREATOR)
         }
 
         return this
     }
 
-    internal fun PropertySpecBuilder.jacksonInclude(include: JacksonInclude1): PropertySpecBuilder {
+    internal fun PropertySpecBuilder.jacksonIncludeNonAbsent(): PropertySpecBuilder =
+        jacksonInclude(JacksonInclude.NON_ABSENT)
+
+    internal fun PropertySpecBuilder.jacksonIncludeNonEmpty(): PropertySpecBuilder =
+        jacksonInclude(JacksonInclude.NON_EMPTY)
+
+    internal fun PropertySpecBuilder.jacksonInclude(include: JacksonInclude): PropertySpecBuilder {
         if (dto.jackson.enabled) {
             addAnnotation(
-                AnnotationSpec.builder(JacksonAnnotations1.JSON_INCLUDE)
-                    .addMember("value = %T.Include.${include.name}", JacksonAnnotations1.JSON_INCLUDE)
+                AnnotationSpec.builder(JacksonAnnotations.JSON_INCLUDE)
+                    .addMember("value = %T.Include.${include.name}", JacksonAnnotations.JSON_INCLUDE)
                     .build()
             )
         }

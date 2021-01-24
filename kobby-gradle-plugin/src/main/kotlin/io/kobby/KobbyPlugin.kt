@@ -37,11 +37,11 @@ class KobbyPlugin : Plugin<Project> {
                                 kotlinTask.schemaFile.convention(p.layout.file(p.provider { it }))
                             }
                             directiveExtension.valueOrNull?.apply {
-                                default?.also {
-                                    kotlinTask.schemaDirectiveDefault.convention(it)
-                                }
                                 required?.also {
                                     kotlinTask.schemaDirectiveRequired.convention(it)
+                                }
+                                default?.also {
+                                    kotlinTask.schemaDirectiveDefault.convention(it)
                                 }
                             }
                         }

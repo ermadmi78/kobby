@@ -50,11 +50,11 @@ open class KobbySchemaExtension {
 
 @Kobby
 open class KobbySchemaDirectiveExtension {
-    var default: String? = null
     var required: String? = null
+    var default: String? = null
 
     override fun toString(): String {
-        return "KobbySchemaDirectiveExtension(default=$default, required=$required)"
+        return "KobbySchemaDirectiveExtension(required=$required, default=$default)"
     }
 }
 
