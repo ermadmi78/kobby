@@ -209,6 +209,22 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "entityPrefix",
+        description = "prefix for generated entity classes (default null)"
+    )
+    val entityPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityPostfix",
+        description = "postfix for generated entity classes (default null)"
+    )
+    val entityPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "entityProjectionPrefix",
         description = "prefix for generated projection classes (default null)"
     )
@@ -261,6 +277,54 @@ open class KobbyKotlin : DefaultTask() {
         description = "postfix of projection 'with' method (default null)"
     )
     val entityProjectionWithoutPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionQualificationPrefix",
+        description = "prefix for generated qualification classes (default null)"
+    )
+    val entityProjectionQualificationPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionQualificationPostfix",
+        description = "postfix for generated qualification classes (default \"Qualification\")"
+    )
+    val entityProjectionQualificationPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionQualifiedProjectionPrefix",
+        description = "prefix for generated qualification classes (default null)"
+    )
+    val entityProjectionQualifiedProjectionPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionQualifiedProjectionPostfix",
+        description = "postfix for generated qualification classes (default \"QualifiedProjection\")"
+    )
+    val entityProjectionQualifiedProjectionPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionOnPrefix",
+        description = "prefix of qualification 'on' method (default \"on\")"
+    )
+    val entityProjectionOnPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityProjectionOnPostfix",
+        description = "postfix of qualification 'on' method (default null)"
+    )
+    val entityProjectionOnPostfix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
@@ -321,6 +385,9 @@ open class KobbyKotlin : DefaultTask() {
         entityProjectionArgument.convention("__projection")
         entityProjectionWithPrefix.convention("with")
         entityProjectionWithoutPrefix.convention("without")
+        entityProjectionQualificationPostfix.convention("Qualification")
+        entityProjectionQualifiedProjectionPostfix.convention("QualifiedProjection")
+        entityProjectionOnPrefix.convention("on")
 
         implPackageName.convention("impl")
         implPostfix.convention("Impl")
@@ -414,11 +481,18 @@ open class KobbyKotlin : DefaultTask() {
             KotlinEntityLayout(
                 entityEnabled.get(),
                 entityPackage.toPackageName(),
+                Decoration(entityPrefix.orNull, entityPostfix.orNull),
                 KotlinEntityProjectionLayout(
                     Decoration(entityProjectionPrefix.orNull, entityProjectionPostfix.orNull),
                     entityProjectionArgument.get(),
                     Decoration(entityProjectionWithPrefix.orNull, entityProjectionWithPostfix.orNull),
-                    Decoration(entityProjectionWithoutPrefix.orNull, entityProjectionWithoutPostfix.orNull)
+                    Decoration(entityProjectionWithoutPrefix.orNull, entityProjectionWithoutPostfix.orNull),
+                    Decoration(entityProjectionQualificationPrefix.orNull, entityProjectionQualificationPostfix.orNull),
+                    Decoration(
+                        entityProjectionQualifiedProjectionPrefix.orNull,
+                        entityProjectionQualifiedProjectionPostfix.orNull
+                    ),
+                    Decoration(entityProjectionOnPrefix.orNull, entityProjectionOnPostfix.orNull)
                 )
             ),
             KotlinImplLayout(

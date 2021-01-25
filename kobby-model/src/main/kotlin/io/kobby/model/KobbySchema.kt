@@ -17,7 +17,13 @@ class KobbySchema internal constructor(
     val interfaces: Map<String, KobbyNode>,
     val unions: Map<String, KobbyNode>,
     val enums: Map<String, KobbyNode>,
-    val inputs: Map<String, KobbyNode>
+    val inputs: Map<String, KobbyNode>,
+
+    // name of interface or union -> set of names of object or interface
+    val subObjectsIndex: Map<String, Set<String>>,
+
+    // name of node -> set of fields from which node is returned
+    val typeOfFieldsIndex: Map<String, Set<KobbyField>>
 ) {
     val query: KobbyNode by lazy(NONE) { _query[0]!! }
     val mutation: KobbyNode by lazy(NONE) { _mutation[0]!! }
@@ -51,6 +57,8 @@ class KobbySchemaScope internal constructor() {
     private val unions = mutableMapOf<String, KobbyNode>()
     private val enums = mutableMapOf<String, KobbyNode>()
     private val inputs = mutableMapOf<String, KobbyNode>()
+    private val subObjectsIndex = mutableMapOf<String, MutableSet<String>>()
+    private val typeOfFieldsIndex = mutableMapOf<String, MutableSet<KobbyField>>()
 
     val schema = KobbySchema(
         all,
@@ -61,24 +69,40 @@ class KobbySchemaScope internal constructor() {
         interfaces,
         unions,
         enums,
-        inputs
+        inputs,
+        subObjectsIndex,
+        typeOfFieldsIndex
     )
 
     fun addNode(
         name: String,
         kind: KobbyNodeKind,
         block: KobbyNodeScope.() -> Unit
-    ) = KobbyNodeScope(schema, name, kind).apply(block).build().also {
-        all[it.name] = it
-        when (it.kind) {
-            SCALAR -> scalars[it.name] = it
-            QUERY -> _query[0] = it
-            MUTATION -> _mutation[0] = it
-            OBJECT -> objects[it.name] = it
-            INTERFACE -> interfaces[it.name] = it
-            UNION -> unions[it.name] = it
-            ENUM -> enums[it.name] = it
-            INPUT -> inputs[it.name] = it
+    ) = KobbyNodeScope(schema, name, kind).apply(block).build().also { node ->
+        all[node.name] = node
+        when (node.kind) {
+            SCALAR -> scalars[node.name] = node
+            QUERY -> _query[0] = node
+            MUTATION -> _mutation[0] = node
+            OBJECT -> {
+                objects[node.name] = node
+                node._implements.forEach {
+                    subObjectsIndex.append(it, node.name)
+                }
+            }
+            INTERFACE -> {
+                interfaces[node.name] = node
+                node._implements.forEach {
+                    subObjectsIndex.append(it, node.name)
+                }
+            }
+            UNION -> unions[node.name] = node
+            ENUM -> enums[node.name] = node
+            INPUT -> inputs[node.name] = node
+        }
+
+        node.fields { field ->
+            typeOfFieldsIndex.append(field.type.nodeName, field)
         }
     }
 

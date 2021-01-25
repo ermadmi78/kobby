@@ -1,5 +1,7 @@
 package io.kobby.model
 
+import io.kobby.model.KobbyNodeKind.*
+
 /**
  * Created on 18.01.2021
  *
@@ -10,7 +12,7 @@ class KobbyNode internal constructor(
 
     val name: String,
     val kind: KobbyNodeKind,
-    private val _implements: List<String>,
+    internal val _implements: List<String>,
     val comments: List<String>,
     val enumValues: Map<String, KobbyEnumValue>,
     val fields: Map<String, KobbyField>
@@ -23,10 +25,36 @@ class KobbyNode internal constructor(
             .toMap()
     }
 
+    val subObjects: Map<String, KobbyNode> by lazy {
+        when (kind) {
+            INTERFACE, UNION -> {
+                val res = mutableMapOf<String, KobbyNode>()
+                for (subName in (schema.subObjectsIndex[name] ?: emptySet())) {
+                    schema.all[subName]?.also { subNode ->
+                        if (subNode.kind == OBJECT) {
+                            res[subNode.name] = subNode
+                        } else {
+                            res += subNode.subObjects
+                        }
+                    }
+                }
+
+                res
+            }
+            else -> emptyMap()
+        }
+    }
+
+    val typeOfFields: Set<KobbyField> by lazy {
+        schema.typeOfFieldsIndex[name] ?: emptySet()
+    }
+
     fun implements(action: (KobbyNode) -> Unit) = implements.values.forEach(action)
+    fun subObjects(action: (KobbyNode) -> Unit) = subObjects.values.forEach(action)
     fun comments(action: (String) -> Unit) = comments.forEach(action)
     fun enumValues(action: (KobbyEnumValue) -> Unit) = enumValues.values.forEach(action)
     fun fields(action: (KobbyField) -> Unit) = fields.values.forEach(action)
+    fun typeOfFields(action: (KobbyField) -> Unit) = typeOfFields.forEach(action)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

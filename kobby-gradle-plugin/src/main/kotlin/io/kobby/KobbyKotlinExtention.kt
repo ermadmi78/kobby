@@ -194,6 +194,8 @@ open class KobbyKotlinDtoGraphQLExtension {
 open class KobbyKotlinEntityExtension {
     var enabled: Boolean? = null
     var packageName: String? = null
+    var prefix: String? = null
+    var postfix: String? = null
 
     internal val projectionExtension = lazy { KobbyKotlinEntityProjectionExtension() }
 
@@ -206,16 +208,18 @@ open class KobbyKotlinEntityExtension {
         return "KobbyKotlinEntityExtension(" +
                 "enabled=$enabled, " +
                 "packageName=$packageName, " +
+                "prefix=$prefix, " +
+                "postfix=$postfix, " +
                 "projectionExtension=$projectionExtension)"
     }
 }
 
 @Kobby
 open class KobbyKotlinEntityProjectionExtension {
-    var prefix: String? = null
-    var postfix: String? = null
+    var projectionPrefix: String? = null
+    var projectionPostfix: String? = null
 
-    var argument: String? = null
+    var projectionArgument: String? = null
 
     var withPrefix: String? = null
     var withPostfix: String? = null
@@ -223,15 +227,30 @@ open class KobbyKotlinEntityProjectionExtension {
     var withoutPrefix: String? = null
     var withoutPostfix: String? = null
 
+    var qualificationPrefix: String? = null
+    var qualificationPostfix: String? = null
+
+    var qualifiedProjectionPrefix: String? = null
+    var qualifiedProjectionPostfix: String? = null
+
+    var onPrefix: String? = null
+    var onPostfix: String? = null
+
     override fun toString(): String {
         return "KobbyKotlinEntityProjectionExtension(" +
-                "prefix=$prefix, " +
-                "postfix=$postfix, " +
-                "argument=$argument, " +
+                "projectionPrefix=$projectionPrefix, " +
+                "projectionPostfix=$projectionPostfix, " +
+                "projectionArgument=$projectionArgument, " +
                 "withPrefix=$withPrefix, " +
                 "withPostfix=$withPostfix, " +
                 "withoutPrefix=$withoutPrefix, " +
-                "withoutPostfix=$withoutPostfix)"
+                "withoutPostfix=$withoutPostfix, " +
+                "qualificationPrefix=$qualificationPrefix, " +
+                "qualificationPostfix=$qualificationPostfix, " +
+                "qualifiedProjectionPrefix=$qualifiedProjectionPrefix, " +
+                "qualifiedProjectionPostfix=$qualifiedProjectionPostfix, " +
+                "onPrefix=$onPrefix, " +
+                "onPostfix=$onPostfix)"
     }
 }
 

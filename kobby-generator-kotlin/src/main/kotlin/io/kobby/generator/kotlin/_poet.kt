@@ -149,6 +149,27 @@ internal class PrimaryConstructorPropertiesBuilder(
             classBuilder.addProperty(it)
         }
 
+    internal fun buildParameter(
+        arg: Pair<String, TypeName>,
+        block: ParameterSpecBuilder.() -> Unit = {}
+    ): ParameterSpec = buildParameter(arg.first, arg.second, block)
+
+    internal fun buildParameter(
+        name: String,
+        type: TypeName,
+        block: ParameterSpecBuilder.() -> Unit = {}
+    ): ParameterSpec = ParameterSpec.builder(name, type)
+        .apply {
+            if (type.isNullable) {
+                defaultValue("null")
+            }
+        }
+        .apply(block)
+        .build()
+        .also {
+            primaryConstructorBuilder.addParameter(it)
+        }
+
     internal fun customizeConstructor(block: FunSpecBuilder.() -> Unit): FunSpecBuilder =
         primaryConstructorBuilder.apply(block)
 }

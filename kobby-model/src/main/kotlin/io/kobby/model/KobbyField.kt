@@ -1,7 +1,6 @@
 package io.kobby.model
 
-import io.kobby.model.KobbyNodeKind.INTERFACE
-import io.kobby.model.KobbyNodeKind.OBJECT
+import io.kobby.model.KobbyNodeKind.*
 
 /**
  * Created on 18.01.2021
@@ -30,9 +29,11 @@ class KobbyField internal constructor(
 
     fun isOverride(): Boolean = findOverriddenField() != null
 
-    fun isRequired(): Boolean = findOverriddenField()?.isRequired() ?: (type.isId() || required)
+    fun isProperty(): Boolean = arguments.isEmpty() && (type.node.kind == SCALAR || type.node.kind == ENUM)
 
-    fun isDefault(): Boolean = findOverriddenField()?.isDefault() ?: default
+    fun isRequired(): Boolean = isProperty() && (findOverriddenField()?.isRequired() ?: (type.isId() || required))
+
+    fun isDefault(): Boolean = isProperty() && (findOverriddenField()?.isDefault() ?: default)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

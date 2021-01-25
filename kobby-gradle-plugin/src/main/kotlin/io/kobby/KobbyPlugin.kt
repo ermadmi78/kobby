@@ -120,14 +120,20 @@ class KobbyPlugin : Plugin<Project> {
                             packageName?.also {
                                 kotlinTask.entityPackageName.convention(it)
                             }
+                            prefix?.also {
+                                kotlinTask.entityPrefix.convention(it)
+                            }
+                            postfix?.also {
+                                kotlinTask.entityPostfix.convention(it)
+                            }
                             projectionExtension.valueOrNull?.apply {
-                                prefix?.also {
+                                projectionPrefix?.also {
                                     kotlinTask.entityProjectionPrefix.convention(it)
                                 }
-                                postfix?.also {
+                                projectionPostfix?.also {
                                     kotlinTask.entityProjectionPostfix.convention(it)
                                 }
-                                argument?.also {
+                                projectionArgument?.also {
                                     kotlinTask.entityProjectionArgument.convention(it)
                                 }
                                 withPrefix?.also {
@@ -141,6 +147,24 @@ class KobbyPlugin : Plugin<Project> {
                                 }
                                 withoutPostfix?.also {
                                     kotlinTask.entityProjectionWithoutPostfix.convention(it)
+                                }
+                                qualificationPrefix?.also {
+                                    kotlinTask.entityProjectionQualificationPrefix.convention(it)
+                                }
+                                qualificationPostfix?.also {
+                                    kotlinTask.entityProjectionQualificationPostfix.convention(it)
+                                }
+                                qualifiedProjectionPrefix?.also {
+                                    kotlinTask.entityProjectionQualifiedProjectionPrefix.convention(it)
+                                }
+                                qualifiedProjectionPostfix?.also {
+                                    kotlinTask.entityProjectionQualifiedProjectionPostfix.convention(it)
+                                }
+                                onPrefix?.also {
+                                    kotlinTask.entityProjectionOnPrefix.convention(it)
+                                }
+                                onPostfix?.also {
+                                    kotlinTask.entityProjectionOnPostfix.convention(it)
                                 }
                             }
                         }

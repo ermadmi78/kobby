@@ -57,8 +57,14 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 // Builder class
                 buildClass(node.builderName) {
                     addAnnotation(context.dslClass)
+                    node.comments {
+                        addKdoc(it)
+                    }
                     node.fields { field ->
                         buildProperty(field.name, field.type.dtoType.nullable()) {
+                            field.comments {
+                                addKdoc(it)
+                            }
                             mutable()
                             initializer("null")
                         }
@@ -172,8 +178,14 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 // Builder class
                 buildClass(node.builderName) {
                     addAnnotation(context.dslClass)
+                    node.comments {
+                        addKdoc(it)
+                    }
                     node.fields { field ->
                         buildProperty(field.name, field.type.dtoType.nullable()) {
+                            field.comments {
+                                addKdoc(it)
+                            }
                             mutable()
                             initializer("null")
                         }
@@ -257,19 +269,10 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         // GraphQL Exception
         files += buildFile(dto.graphql.packageName, dto.graphql.exceptionName) {
             buildClass(dto.graphql.exceptionName) {
-                val argRequest = "request" to dto.graphql.requestClass
-                buildPrimaryConstructor {
+                buildPrimaryConstructorProperties {
                     buildParameter("message", STRING)
-                    buildParameter(argRequest)
-                    buildParameter(argErrors) {
-                        defaultValue("null")
-                    }
-                }
-                buildProperty(argRequest) {
-                    initializer(argRequest.first)
-                }
-                buildProperty(argErrors) {
-                    initializer(argErrors.first)
+                    buildProperty("request", dto.graphql.requestClass)
+                    buildProperty(argErrors)
                 }
                 superclass(ClassName("kotlin", "RuntimeException"))
                 addSuperclassConstructorParameter(

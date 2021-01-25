@@ -42,3 +42,6 @@ fun String?.isIdentifier(): Boolean {
 
     return true
 }
+
+internal fun <K : Any, V : Any> MutableMap<K, MutableSet<V>>.append(key: K, value: V) =
+    computeIfAbsent(key) { mutableSetOf() }.add(value)

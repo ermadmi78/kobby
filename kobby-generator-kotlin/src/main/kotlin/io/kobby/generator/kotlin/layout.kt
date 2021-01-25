@@ -53,11 +53,20 @@ data class KotlinLayout(
     // *****************************************************************************************************************
     //                                          Entity
     // *****************************************************************************************************************
+    internal val KobbyType.entityType: TypeName
+        get() = when (this) {
+            is KobbyListType -> LIST.parameterizedBy(nested.entityType)
+            is KobbyNodeType -> when (node.kind) {
+                SCALAR -> scalars[node.name]!!.typeName
+                ENUM, INPUT -> node.dtoClass
+                else -> node.entityClass
+            }
+        }.let { if (nullable) it.nullable() else it }
 
     internal val KobbyNode.entityName: String
         get() = when (kind) {
             ENUM, INPUT -> error("Invalid algorithm - try to make entity of ${kind.name}")
-            else -> name
+            else -> name.decorate(entity.decoration)
         }
 
     internal val KobbyNode.entityClass: ClassName
@@ -65,7 +74,7 @@ data class KotlinLayout(
 
     internal val KobbyNode.projectionName: String
         get() = when (kind) {
-            OBJECT, INTERFACE, UNION -> name.decorate(entity.projection.decoration)
+            OBJECT, INTERFACE, UNION -> name.decorate(entity.projection.projectionDecoration)
             else -> error("Invalid algorithm - try to make projection of ${kind.name}")
         }
 
@@ -73,13 +82,34 @@ data class KotlinLayout(
         get() = ClassName(entity.packageName, projectionName)
 
     internal val KobbyNode.projectionLambda: LambdaTypeName
-        get() = LambdaTypeName.get(projectionClass, emptyList(), UNIT)
+        get() = LambdaTypeName.get(qualifiedProjectionClass, emptyList(), UNIT)
 
-    internal val KobbyField.projectionName: String
+    internal val KobbyField.projectionFieldName: String
         get() = if (isDefault())
             name.decorate(entity.projection.withoutDecoration)
         else
             name.decorate(entity.projection.withDecoration)
+
+    internal val KobbyNode.qualificationName: String
+        get() = when (kind) {
+            INTERFACE, UNION -> name.decorate(entity.projection.qualificationDecoration)
+            else -> error("Invalid algorithm - try to make qualification of ${kind.name}")
+        }
+
+    internal val KobbyNode.qualificationClass: ClassName
+        get() = ClassName(entity.packageName, qualificationName)
+
+    internal val KobbyNode.qualifiedProjectionName: String
+        get() = when (kind) {
+            INTERFACE, UNION -> name.decorate(entity.projection.qualifiedProjectionDecoration)
+            else -> projectionName
+        }
+
+    internal val KobbyNode.qualifiedProjectionClass: ClassName
+        get() = ClassName(entity.packageName, qualifiedProjectionName)
+
+    internal val KobbyNode.projectionOnName: String
+        get() = name.decorate(entity.projection.onDecoration)
 
     //******************************************************************************************************************
     //                                          Jackson
@@ -178,16 +208,20 @@ class KotlinDtoGraphQLLayout(
 class KotlinEntityLayout(
     val enabled: Boolean,
     packageName: String,
+    val decoration: Decoration,
     val projection: KotlinEntityProjectionLayout
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
 
 class KotlinEntityProjectionLayout(
-    val decoration: Decoration,
-    val argument: String,
+    val projectionDecoration: Decoration,
+    val projectionArgument: String,
     val withDecoration: Decoration,
-    val withoutDecoration: Decoration
+    val withoutDecoration: Decoration,
+    val qualificationDecoration: Decoration,
+    val qualifiedProjectionDecoration: Decoration,
+    val onDecoration: Decoration
 )
 
 class KotlinImplLayout(

@@ -225,6 +225,3 @@ private fun Type<*>.resolveNullable(schema: KobbySchema): KobbyType = when (this
 
 private fun InputValueDefinition.resolveType(schema: KobbySchema): KobbyType =
     if (defaultValue == null) type.resolve(schema) else type.resolveNullable(schema)
-
-private fun <K : Any, V : Any> MutableMap<K, MutableSet<V>>.append(key: K, value: V) =
-    computeIfAbsent(key) { mutableSetOf() }.add(value)
