@@ -57,6 +57,12 @@ class GeneratorTest : AnnotationSpec() {
                     Decoration(null, "Qualification"),
                     Decoration(null, "QualifiedProjection"),
                     Decoration("on", null)
+                ),
+                KotlinEntitySelectionLayout(
+                    Decoration(null, "Selection"),
+                    "__selection",
+                    Decoration(null, "Query"),
+                    "__query"
                 )
             ),
             KotlinImplLayout(

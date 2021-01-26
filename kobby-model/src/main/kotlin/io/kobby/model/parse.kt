@@ -13,6 +13,7 @@ import java.io.Reader
 object KobbyDirective {
     const val REQUIRED: String = "required"
     const val DEFAULT: String = "default"
+    const val SELECTION: String = "selection"
 }
 
 fun parseSchema(
@@ -59,7 +60,8 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.name,
                         field.type.resolve(schema),
                         field.isRequired(),
-                        field.isDefault()
+                        field.isDefault(),
+                        field.isSelection()
                     ) {
                         field.comments.forEach {
                             addComment(it.content)
@@ -86,7 +88,8 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.name,
                         field.type.resolve(schema),
                         field.isRequired(),
-                        field.isDefault()
+                        field.isDefault(),
+                        field.isSelection()
                     ) {
                         field.comments.forEach {
                             addComment(it.content)
@@ -126,6 +129,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                     addField(
                         input.name,
                         input.resolveType(schema),
+                        false,
                         false,
                         false
                     ) {
@@ -185,6 +189,10 @@ private class RegistryScope(
 
     fun FieldDefinition.isDefault(): Boolean = directives.firstOrNull {
         it.name == directiveLayout[KobbyDirective.DEFAULT] ?: KobbyDirective.DEFAULT
+    } != null
+
+    fun FieldDefinition.isSelection(): Boolean = directives.firstOrNull {
+        it.name == directiveLayout[KobbyDirective.SELECTION] ?: KobbyDirective.SELECTION
     } != null
 }
 

@@ -45,16 +45,11 @@ class KobbyNode internal constructor(
         }
     }
 
-    val typeOfFields: Set<KobbyField> by lazy {
-        schema.typeOfFieldsIndex[name] ?: emptySet()
-    }
-
     fun implements(action: (KobbyNode) -> Unit) = implements.values.forEach(action)
     fun subObjects(action: (KobbyNode) -> Unit) = subObjects.values.forEach(action)
     fun comments(action: (String) -> Unit) = comments.forEach(action)
     fun enumValues(action: (KobbyEnumValue) -> Unit) = enumValues.values.forEach(action)
     fun fields(action: (KobbyField) -> Unit) = fields.values.forEach(action)
-    fun typeOfFields(action: (KobbyField) -> Unit) = typeOfFields.forEach(action)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -122,10 +117,12 @@ class KobbyNodeScope internal constructor(
         type: KobbyType,
         required: Boolean,
         default: Boolean,
+        selection: Boolean,
         block: KobbyFieldScope.() -> Unit
-    ) = KobbyFieldScope(schema, node, name, type, required, default).apply(block).build().also {
-        fields[it.name] = it
-    }
+    ) = KobbyFieldScope(schema, node, name, type, required, default, selection)
+        .apply(block).build().also {
+            fields[it.name] = it
+        }
 
     fun build(): KobbyNode = node
 }

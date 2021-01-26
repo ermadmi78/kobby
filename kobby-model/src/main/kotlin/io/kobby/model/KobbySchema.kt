@@ -20,10 +20,7 @@ class KobbySchema internal constructor(
     val inputs: Map<String, KobbyNode>,
 
     // name of interface or union -> set of names of object or interface
-    val subObjectsIndex: Map<String, Set<String>>,
-
-    // name of node -> set of fields from which node is returned
-    val typeOfFieldsIndex: Map<String, Set<KobbyField>>
+    val subObjectsIndex: Map<String, Set<String>>
 ) {
     val query: KobbyNode by lazy(NONE) { _query[0]!! }
     val mutation: KobbyNode by lazy(NONE) { _mutation[0]!! }
@@ -58,7 +55,6 @@ class KobbySchemaScope internal constructor() {
     private val enums = mutableMapOf<String, KobbyNode>()
     private val inputs = mutableMapOf<String, KobbyNode>()
     private val subObjectsIndex = mutableMapOf<String, MutableSet<String>>()
-    private val typeOfFieldsIndex = mutableMapOf<String, MutableSet<KobbyField>>()
 
     val schema = KobbySchema(
         all,
@@ -70,8 +66,7 @@ class KobbySchemaScope internal constructor() {
         unions,
         enums,
         inputs,
-        subObjectsIndex,
-        typeOfFieldsIndex
+        subObjectsIndex
     )
 
     fun addNode(
@@ -99,10 +94,6 @@ class KobbySchemaScope internal constructor() {
             UNION -> unions[node.name] = node
             ENUM -> enums[node.name] = node
             INPUT -> inputs[node.name] = node
-        }
-
-        node.fields { field ->
-            typeOfFieldsIndex.append(field.type.nodeName, field)
         }
     }
 

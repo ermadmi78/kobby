@@ -15,6 +15,7 @@ class KobbyField internal constructor(
     val type: KobbyType,
     private val required: Boolean,
     private val default: Boolean,
+    private val selection: Boolean,
     val comments: List<String>,
     val arguments: Map<String, KobbyArgument>
 ) {
@@ -34,6 +35,8 @@ class KobbyField internal constructor(
     fun isRequired(): Boolean = isProperty() && (findOverriddenField()?.isRequired() ?: (type.isId() || required))
 
     fun isDefault(): Boolean = isProperty() && (findOverriddenField()?.isDefault() ?: default)
+
+    fun isSelection(): Boolean = selection && arguments.values.any { it.type.nullable }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -65,7 +68,8 @@ class KobbyFieldScope internal constructor(
     name: String,
     type: KobbyType,
     required: Boolean,
-    default: Boolean
+    default: Boolean,
+    selection: Boolean
 ) {
     private val comments = mutableListOf<String>()
     private val arguments = mutableMapOf<String, KobbyArgument>()
@@ -76,6 +80,7 @@ class KobbyFieldScope internal constructor(
         type,
         required,
         default,
+        selection,
         comments,
         arguments
     )

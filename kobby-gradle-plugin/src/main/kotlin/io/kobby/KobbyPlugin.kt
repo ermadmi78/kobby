@@ -43,6 +43,9 @@ class KobbyPlugin : Plugin<Project> {
                                 default?.also {
                                     kotlinTask.schemaDirectiveDefault.convention(it)
                                 }
+                                selection?.also {
+                                    kotlinTask.schemaDirectiveSelection.convention(it)
+                                }
                             }
                         }
 
@@ -137,34 +140,54 @@ class KobbyPlugin : Plugin<Project> {
                                     kotlinTask.entityProjectionArgument.convention(it)
                                 }
                                 withPrefix?.also {
-                                    kotlinTask.entityProjectionWithPrefix.convention(it)
+                                    kotlinTask.entityWithPrefix.convention(it)
                                 }
                                 withPostfix?.also {
-                                    kotlinTask.entityProjectionWithPostfix.convention(it)
+                                    kotlinTask.entityWithPostfix.convention(it)
                                 }
                                 withoutPrefix?.also {
-                                    kotlinTask.entityProjectionWithoutPrefix.convention(it)
+                                    kotlinTask.entityWithoutPrefix.convention(it)
                                 }
                                 withoutPostfix?.also {
-                                    kotlinTask.entityProjectionWithoutPostfix.convention(it)
+                                    kotlinTask.entityWithoutPostfix.convention(it)
                                 }
                                 qualificationPrefix?.also {
-                                    kotlinTask.entityProjectionQualificationPrefix.convention(it)
+                                    kotlinTask.entityQualificationPrefix.convention(it)
                                 }
                                 qualificationPostfix?.also {
-                                    kotlinTask.entityProjectionQualificationPostfix.convention(it)
+                                    kotlinTask.entityQualificationPostfix.convention(it)
                                 }
                                 qualifiedProjectionPrefix?.also {
-                                    kotlinTask.entityProjectionQualifiedProjectionPrefix.convention(it)
+                                    kotlinTask.entityQualifiedProjectionPrefix.convention(it)
                                 }
                                 qualifiedProjectionPostfix?.also {
-                                    kotlinTask.entityProjectionQualifiedProjectionPostfix.convention(it)
+                                    kotlinTask.entityQualifiedProjectionPostfix.convention(it)
                                 }
                                 onPrefix?.also {
-                                    kotlinTask.entityProjectionOnPrefix.convention(it)
+                                    kotlinTask.entityOnPrefix.convention(it)
                                 }
                                 onPostfix?.also {
-                                    kotlinTask.entityProjectionOnPostfix.convention(it)
+                                    kotlinTask.entityOnPostfix.convention(it)
+                                }
+                            }
+                            selectionExtension.valueOrNull?.apply {
+                                selectionPrefix?.also {
+                                    kotlinTask.entitySelectionPrefix.convention(it)
+                                }
+                                selectionPostfix?.also {
+                                    kotlinTask.entitySelectionPostfix.convention(it)
+                                }
+                                selectionArgument?.also {
+                                    kotlinTask.entitySelectionArgument.convention(it)
+                                }
+                                queryPrefix?.also {
+                                    kotlinTask.entityQueryPrefix.convention(it)
+                                }
+                                queryPostfix?.also {
+                                    kotlinTask.entityQueryPostfix.convention(it)
+                                }
+                                queryArgument?.also {
+                                    kotlinTask.entityQueryArgument.convention(it)
                                 }
                             }
                         }

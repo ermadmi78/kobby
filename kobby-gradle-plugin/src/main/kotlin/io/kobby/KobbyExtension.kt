@@ -52,6 +52,7 @@ open class KobbySchemaExtension {
 open class KobbySchemaDirectiveExtension {
     var required: String? = null
     var default: String? = null
+    var selection: String? = null
 
     override fun toString(): String {
         return "KobbySchemaDirectiveExtension(required=$required, default=$default)"

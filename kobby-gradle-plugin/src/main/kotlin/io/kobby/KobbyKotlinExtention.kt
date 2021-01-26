@@ -198,10 +198,16 @@ open class KobbyKotlinEntityExtension {
     var postfix: String? = null
 
     internal val projectionExtension = lazy { KobbyKotlinEntityProjectionExtension() }
+    internal val selectionExtension = lazy { KobbyKotlinEntitySelectionExtension() }
 
     /** Kotlin DSL Projection generator configuration */
     fun projection(action: Action<KobbyKotlinEntityProjectionExtension>) {
         action.execute(projectionExtension.value)
+    }
+
+    /** Kotlin DSL Selection generator configuration */
+    fun selection(action: Action<KobbyKotlinEntitySelectionExtension>) {
+        action.execute(selectionExtension.value)
     }
 
     override fun toString(): String {
@@ -251,6 +257,29 @@ open class KobbyKotlinEntityProjectionExtension {
                 "qualifiedProjectionPostfix=$qualifiedProjectionPostfix, " +
                 "onPrefix=$onPrefix, " +
                 "onPostfix=$onPostfix)"
+    }
+}
+
+@Kobby
+open class KobbyKotlinEntitySelectionExtension {
+    var selectionPrefix: String? = null
+    var selectionPostfix: String? = null
+
+    var selectionArgument: String? = null
+
+    var queryPrefix: String? = null
+    var queryPostfix: String? = null
+
+    var queryArgument: String? = null
+
+    override fun toString(): String {
+        return "KobbyKotlinEntitySelectionExtension(" +
+                "selectionPrefix=$selectionPrefix, " +
+                "selectionPostfix=$selectionPostfix, " +
+                "selectionArgument=$selectionArgument, " +
+                "queryPrefix=$queryPrefix, " +
+                "queryPostfix=$queryPostfix, " +
+                "queryArgument=$queryArgument)"
     }
 }
 

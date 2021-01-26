@@ -6,6 +6,8 @@ import io.kobby.model.Decoration
 import io.kobby.model.KobbyDirective
 import io.kobby.model.parseSchema
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
+import org.gradle.api.artifacts.ResolvedDependency
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.MapProperty
@@ -46,6 +48,14 @@ open class KobbyKotlin : DefaultTask() {
         description = "name of directive \"default\" (default \"default\")"
     )
     val schemaDirectiveDefault: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "schemaDirectiveSelection",
+        description = "name of directive \"selection\" (default \"selection\")"
+    )
+    val schemaDirectiveSelection: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
@@ -249,82 +259,130 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
-        option = "entityProjectionWithPrefix",
+        option = "entityWithPrefix",
         description = "prefix of projection 'with' method (default \"with\")"
     )
-    val entityProjectionWithPrefix: Property<String> = project.objects.property(String::class.java)
+    val entityWithPrefix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionWithPostfix",
+        option = "entityWithPostfix",
         description = "postfix of projection 'with' method (default null)"
     )
-    val entityProjectionWithPostfix: Property<String> = project.objects.property(String::class.java)
+    val entityWithPostfix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionWithoutPrefix",
+        option = "entityWithoutPrefix",
         description = "prefix of projection 'with' method (default \"without\")"
     )
-    val entityProjectionWithoutPrefix: Property<String> = project.objects.property(String::class.java)
+    val entityWithoutPrefix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionWithoutPostfix",
+        option = "entityWithoutPostfix",
         description = "postfix of projection 'with' method (default null)"
     )
-    val entityProjectionWithoutPostfix: Property<String> = project.objects.property(String::class.java)
+    val entityWithoutPostfix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionQualificationPrefix",
+        option = "entityQualificationPrefix",
         description = "prefix for generated qualification classes (default null)"
     )
-    val entityProjectionQualificationPrefix: Property<String> = project.objects.property(String::class.java)
+    val entityQualificationPrefix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionQualificationPostfix",
+        option = "entityQualificationPostfix",
         description = "postfix for generated qualification classes (default \"Qualification\")"
     )
-    val entityProjectionQualificationPostfix: Property<String> = project.objects.property(String::class.java)
+    val entityQualificationPostfix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionQualifiedProjectionPrefix",
+        option = "entityQualifiedProjectionPrefix",
         description = "prefix for generated qualification classes (default null)"
     )
-    val entityProjectionQualifiedProjectionPrefix: Property<String> = project.objects.property(String::class.java)
+    val entityQualifiedProjectionPrefix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionQualifiedProjectionPostfix",
+        option = "entityQualifiedProjectionPostfix",
         description = "postfix for generated qualification classes (default \"QualifiedProjection\")"
     )
-    val entityProjectionQualifiedProjectionPostfix: Property<String> = project.objects.property(String::class.java)
+    val entityQualifiedProjectionPostfix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionOnPrefix",
+        option = "entityOnPrefix",
         description = "prefix of qualification 'on' method (default \"on\")"
     )
-    val entityProjectionOnPrefix: Property<String> = project.objects.property(String::class.java)
+    val entityOnPrefix: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
     @Option(
-        option = "entityProjectionOnPostfix",
+        option = "entityOnPostfix",
         description = "postfix of qualification 'on' method (default null)"
     )
-    val entityProjectionOnPostfix: Property<String> = project.objects.property(String::class.java)
+    val entityOnPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entitySelectionPrefix",
+        description = "prefix for generated selection classes (default null)"
+    )
+    val entitySelectionPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entitySelectionPostfix",
+        description = "postfix for generated selection classes (default \"Selection\")"
+    )
+    val entitySelectionPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entitySelectionArgument",
+        description = "name of selection lambda argument (default \"__selection\")"
+    )
+    val entitySelectionArgument: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityQueryPrefix",
+        description = "prefix for generated query classes (default null)"
+    )
+    val entityQueryPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityQueryPostfix",
+        description = "postfix for generated query classes (default \"Query\")"
+    )
+    val entityQueryPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityQueryArgument",
+        description = "name of query lambda argument (default \"__query\")"
+    )
+    val entityQueryArgument: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
@@ -365,6 +423,7 @@ open class KobbyKotlin : DefaultTask() {
         }))
         schemaDirectiveRequired.convention(KobbyDirective.REQUIRED)
         schemaDirectiveDefault.convention(KobbyDirective.DEFAULT)
+        schemaDirectiveSelection.convention(KobbyDirective.SELECTION)
 
         scalars.convention(PREDEFINED_SCALARS)
 
@@ -373,7 +432,9 @@ open class KobbyKotlin : DefaultTask() {
 
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
-        dtoJacksonEnabled.convention(true)
+        dtoJacksonEnabled.convention(project.provider {
+            project.hasDependency("com.fasterxml.jackson.core", "jackson-annotations")
+        })
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
         dtoGraphQLEnabled.convention(true)
@@ -383,11 +444,15 @@ open class KobbyKotlin : DefaultTask() {
         entityPackageName.convention("entity")
         entityProjectionPostfix.convention("Projection")
         entityProjectionArgument.convention("__projection")
-        entityProjectionWithPrefix.convention("with")
-        entityProjectionWithoutPrefix.convention("without")
-        entityProjectionQualificationPostfix.convention("Qualification")
-        entityProjectionQualifiedProjectionPostfix.convention("QualifiedProjection")
-        entityProjectionOnPrefix.convention("on")
+        entityWithPrefix.convention("with")
+        entityWithoutPrefix.convention("without")
+        entityQualificationPostfix.convention("Qualification")
+        entityQualifiedProjectionPostfix.convention("QualifiedProjection")
+        entityOnPrefix.convention("on")
+        entitySelectionPostfix.convention("Selection")
+        entitySelectionArgument.convention("__selection")
+        entityQueryPostfix.convention("Query")
+        entityQueryArgument.convention("__query")
 
         implPackageName.convention("impl")
         implPostfix.convention("Impl")
@@ -404,7 +469,8 @@ open class KobbyKotlin : DefaultTask() {
 
         val directiveLayout = mapOf(
             KobbyDirective.REQUIRED to schemaDirectiveRequired.get(),
-            KobbyDirective.DEFAULT to schemaDirectiveDefault.get()
+            KobbyDirective.DEFAULT to schemaDirectiveDefault.get(),
+            KobbyDirective.SELECTION to schemaDirectiveSelection.get()
         )
 
         val context = (contextName.orNull
@@ -485,14 +551,17 @@ open class KobbyKotlin : DefaultTask() {
                 KotlinEntityProjectionLayout(
                     Decoration(entityProjectionPrefix.orNull, entityProjectionPostfix.orNull),
                     entityProjectionArgument.get(),
-                    Decoration(entityProjectionWithPrefix.orNull, entityProjectionWithPostfix.orNull),
-                    Decoration(entityProjectionWithoutPrefix.orNull, entityProjectionWithoutPostfix.orNull),
-                    Decoration(entityProjectionQualificationPrefix.orNull, entityProjectionQualificationPostfix.orNull),
-                    Decoration(
-                        entityProjectionQualifiedProjectionPrefix.orNull,
-                        entityProjectionQualifiedProjectionPostfix.orNull
-                    ),
-                    Decoration(entityProjectionOnPrefix.orNull, entityProjectionOnPostfix.orNull)
+                    Decoration(entityWithPrefix.orNull, entityWithPostfix.orNull),
+                    Decoration(entityWithoutPrefix.orNull, entityWithoutPostfix.orNull),
+                    Decoration(entityQualificationPrefix.orNull, entityQualificationPostfix.orNull),
+                    Decoration(entityQualifiedProjectionPrefix.orNull, entityQualifiedProjectionPostfix.orNull),
+                    Decoration(entityOnPrefix.orNull, entityOnPostfix.orNull)
+                ),
+                KotlinEntitySelectionLayout(
+                    Decoration(entitySelectionPrefix.orNull, entitySelectionPostfix.orNull),
+                    entitySelectionArgument.get(),
+                    Decoration(entityQueryPrefix.orNull, entityQueryPostfix.orNull),
+                    entityQueryArgument.get()
                 )
             ),
             KotlinImplLayout(
@@ -512,6 +581,21 @@ open class KobbyKotlin : DefaultTask() {
             it.writeTo(targetDirectory)
         }
     }
+
+    private fun Project.resolveDependencies(): Sequence<ResolvedDependency> = this.configurations.asSequence()
+        .filter { it.isCanBeResolved }
+        .flatMap { it.resolvedConfiguration.firstLevelModuleDependencies }
+        .flatMap {
+            sequence {
+                yield(it)
+                yieldAll(it.children)
+            }
+        }
+
+    private fun Project.hasDependency(moduleGroup: String, moduleName: String): Boolean =
+        this.resolveDependencies().any {
+            it.moduleGroup == moduleGroup && it.moduleName == moduleName
+        }
 
     private fun String.forEachPath(action: (String) -> Unit) =
         this.splitToSequence('/', '\\')
