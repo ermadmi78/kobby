@@ -3,6 +3,7 @@ package io.kobby.generator.kotlin
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import io.kobby.model.KobbyNode
+import io.kobby.model.KobbyNodeKind.INPUT
 import io.kobby.model.KobbySchema
 
 /**
@@ -57,7 +58,7 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
                     field.arguments.values.asSequence()
                         .filter { !isSelection || !it.type.nullable }
                         .forEach { arg ->
-                            buildParameter(arg.name, arg.type.dtoType) {
+                            buildParameter(arg.name, arg.type.entityType) {
                                 if (arg.type.nullable) {
                                     defaultValue("null")
                                 }
@@ -88,6 +89,15 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
                         mutable()
                         arg.comments {
                             addKdoc(it)
+                        }
+                    }
+                    if (dto.builder.enabled && arg.type.node.kind == INPUT) {
+                        buildFunction(arg.name) {
+                            arg.comments {
+                                addKdoc(it)
+                            }
+                            addParameter("block", arg.type.node.builderLambda)
+                            addStatement("${arg.name} = %T(block)", arg.type.node.dtoClass)
                         }
                     }
                 }
@@ -170,6 +180,51 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
             buildProjection(node)
             buildQualification(node)
             buildQualifiedProjection(node)
+            buildSelection(node)
+        }
+    }
+
+    //******************************************************************************************************************
+    //                                         Query and Mutation
+    //******************************************************************************************************************
+    sequenceOf(schema.query, schema.mutation).forEach { node ->
+        files += buildFile(entity.packageName, node.entityName) {
+            buildInterface(node.entityName) {
+                node.comments {
+                    addKdoc(it)
+                }
+                node.fields { field ->
+                    buildFunction(field.name) {
+                        returns(field.type.entityType)
+                        addModifiers(KModifier.ABSTRACT, KModifier.SUSPEND)
+                        field.comments {
+                            addKdoc(it)
+                        }
+
+                        val isSelection = field.isSelection()
+                        field.arguments.values.asSequence()
+                            .filter { !isSelection || !it.type.nullable }
+                            .forEach { arg ->
+                                buildParameter(arg.name, arg.type.entityType) {
+                                    if (arg.type.nullable) {
+                                        defaultValue("null")
+                                    }
+                                    arg.comments {
+                                        addKdoc(it)
+                                    }
+                                }
+                            }
+                        field.lambda?.also {
+                            buildParameter(it) {
+                                defaultValue("{}")
+                            }
+                        }
+                    }
+
+
+                }
+            }
+
             buildSelection(node)
         }
     }

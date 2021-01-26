@@ -50,6 +50,9 @@ data class KotlinLayout(
     internal val KobbyNode.builderClass: ClassName
         get() = ClassName(dto.packageName, builderName)
 
+    internal val KobbyNode.builderLambda: LambdaTypeName
+        get() = LambdaTypeName.get(builderClass, emptyList(), UNIT)
+
     // *****************************************************************************************************************
     //                                          Entity
     // *****************************************************************************************************************

@@ -170,7 +170,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             "${it.name}·?:·error(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
                         }
                     }
-                    addParameter("block", LambdaTypeName.get(node.builderClass, emptyList(), UNIT))
+                    addParameter("block", node.builderLambda)
                     returns(node.dtoClass)
                     addStatement("return %T().apply(block).run·{ %T($arguments) }", node.builderClass, node.dtoClass)
                 }
