@@ -129,6 +129,15 @@ class KobbyPlugin : Plugin<Project> {
                             postfix?.also {
                                 kotlinTask.entityPostfix.convention(it)
                             }
+                            queryProperty?.also {
+                                kotlinTask.entityQueryProperty.convention(it)
+                            }
+                            mutationProperty?.also {
+                                kotlinTask.entityMutationProperty.convention(it)
+                            }
+                            withCurrentProjectionFun?.also {
+                                kotlinTask.entityWithCurrentProjectionFun.convention(it)
+                            }
                             projectionExtension.valueOrNull?.apply {
                                 projectionPrefix?.also {
                                     kotlinTask.entityProjectionPrefix.convention(it)
@@ -200,6 +209,9 @@ class KobbyPlugin : Plugin<Project> {
                             }
                             postfix?.also {
                                 kotlinTask.implPostfix.convention(it)
+                            }
+                            internal?.also {
+                                kotlinTask.implInternal.convention(it)
                             }
                         }
                     } else {

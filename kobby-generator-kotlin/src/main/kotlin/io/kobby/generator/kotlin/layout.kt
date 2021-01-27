@@ -247,6 +247,9 @@ class KotlinEntityLayout(
     val enabled: Boolean,
     packageName: String,
     val decoration: Decoration,
+    val queryProperty: String,
+    val mutationProperty: String,
+    val withCurrentProjectionFun: String,
     val projection: KotlinEntityProjectionLayout,
     val selection: KotlinEntitySelectionLayout
 ) {
@@ -272,7 +275,8 @@ class KotlinEntitySelectionLayout(
 
 class KotlinImplLayout(
     packageName: String,
-    val decoration: Decoration
+    val decoration: Decoration,
+    val internal: Boolean
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }

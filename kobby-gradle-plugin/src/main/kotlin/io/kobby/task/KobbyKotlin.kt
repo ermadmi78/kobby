@@ -235,6 +235,30 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "entityQueryProperty",
+        description = "name of entity 'query' property (default \"__query\")"
+    )
+    val entityQueryProperty: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityMutationProperty",
+        description = "name of entity 'mutation' property (default \"__mutation\")"
+    )
+    val entityMutationProperty: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityWithCurrentProjectionFun",
+        description = "name of entity 'withCurrentProjection' function (default \"__withCurrentProjection\")"
+    )
+    val entityWithCurrentProjectionFun: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "entityProjectionPrefix",
         description = "prefix for generated projection classes (default null)"
     )
@@ -409,6 +433,14 @@ open class KobbyKotlin : DefaultTask() {
     )
     val implPostfix: Property<String> = project.objects.property(String::class.java)
 
+    @Input
+    @Optional
+    @Option(
+        option = "implInternal",
+        description = "make generated implementation classes internal (default true)"
+    )
+    val implInternal: Property<Boolean> = project.objects.property(Boolean::class.java)
+
     @OutputDirectory
     val outputDirectory: DirectoryProperty = project.objects.directoryProperty()
 
@@ -442,6 +474,9 @@ open class KobbyKotlin : DefaultTask() {
 
         entityEnabled.convention(true)
         entityPackageName.convention("entity")
+        entityQueryProperty.convention("__query")
+        entityMutationProperty.convention("__mutation")
+        entityWithCurrentProjectionFun.convention("__withCurrentProjection")
         entityProjectionPostfix.convention("Projection")
         entityProjectionArgument.convention("__projection")
         entityWithPrefix.convention("with")
@@ -454,8 +489,9 @@ open class KobbyKotlin : DefaultTask() {
         entityQueryPostfix.convention("Query")
         entityQueryArgument.convention("__query")
 
-        implPackageName.convention("impl")
+        implPackageName.convention("entity.impl")
         implPostfix.convention("Impl")
+        implInternal.convention(true)
 
         outputDirectory.convention(project.layout.buildDirectory.dir("generated/source/kobby/main/kotlin"))
     }
@@ -548,6 +584,9 @@ open class KobbyKotlin : DefaultTask() {
                 entityEnabled.get(),
                 entityPackage.toPackageName(),
                 Decoration(entityPrefix.orNull, entityPostfix.orNull),
+                entityQueryProperty.get(),
+                entityMutationProperty.get(),
+                entityWithCurrentProjectionFun.get(),
                 KotlinEntityProjectionLayout(
                     Decoration(entityProjectionPrefix.orNull, entityProjectionPostfix.orNull),
                     entityProjectionArgument.get(),
@@ -566,7 +605,8 @@ open class KobbyKotlin : DefaultTask() {
             ),
             KotlinImplLayout(
                 implPackage.toPackageName(),
-                Decoration(implPrefix.orNull, implPostfix.orNull)
+                Decoration(implPrefix.orNull, implPostfix.orNull),
+                implInternal.get()
             )
         )
 

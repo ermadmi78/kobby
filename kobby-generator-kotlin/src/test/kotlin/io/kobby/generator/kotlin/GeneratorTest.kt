@@ -49,6 +49,9 @@ class GeneratorTest : AnnotationSpec() {
                 true,
                 "kobby.entity",
                 Decoration(null, null),
+                "__query",
+                "__mutation",
+                "__withCurrentProjection",
                 KotlinEntityProjectionLayout(
                     Decoration(null, "Projection"),
                     "__projection",
@@ -66,8 +69,9 @@ class GeneratorTest : AnnotationSpec() {
                 )
             ),
             KotlinImplLayout(
-                "kobby.impl",
-                Decoration(null, "Impl")
+                "kobby.entity.impl",
+                Decoration(null, "Impl"),
+                true
             )
         )
         val files = generateKotlin(schema, layout)

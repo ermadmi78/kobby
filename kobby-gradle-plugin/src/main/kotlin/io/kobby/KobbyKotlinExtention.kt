@@ -196,6 +196,9 @@ open class KobbyKotlinEntityExtension {
     var packageName: String? = null
     var prefix: String? = null
     var postfix: String? = null
+    var queryProperty: String? = null
+    var mutationProperty: String? = null
+    var withCurrentProjectionFun: String? = null
 
     internal val projectionExtension = lazy { KobbyKotlinEntityProjectionExtension() }
     internal val selectionExtension = lazy { KobbyKotlinEntitySelectionExtension() }
@@ -216,7 +219,11 @@ open class KobbyKotlinEntityExtension {
                 "packageName=$packageName, " +
                 "prefix=$prefix, " +
                 "postfix=$postfix, " +
-                "projectionExtension=$projectionExtension)"
+                "queryProperty=$queryProperty, " +
+                "mutationProperty=$mutationProperty, " +
+                "withCurrentProjectionFun=$withCurrentProjectionFun, " +
+                "projectionExtension=$projectionExtension, " +
+                "selectionExtension=$selectionExtension)"
     }
 }
 
@@ -288,7 +295,13 @@ open class KobbyKotlinImplExtension {
     var packageName: String? = null
     var prefix: String? = null
     var postfix: String? = null
+    var internal: Boolean? = null
 
-    override fun toString(): String =
-        "KobbyKotlinImplExtension(packageName=$packageName, prefix=$prefix, postfix=$postfix)"
+    override fun toString(): String {
+        return "KobbyKotlinImplExtension(" +
+                "packageName=$packageName, " +
+                "prefix=$prefix, " +
+                "postfix=$postfix, " +
+                "internal=$internal)"
+    }
 }

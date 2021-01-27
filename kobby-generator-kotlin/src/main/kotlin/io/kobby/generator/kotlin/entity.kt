@@ -3,7 +3,7 @@ package io.kobby.generator.kotlin
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import io.kobby.model.KobbyNode
-import io.kobby.model.KobbyNodeKind.INPUT
+import io.kobby.model.KobbyNodeKind.*
 import io.kobby.model.KobbySchema
 
 /**
@@ -22,6 +22,29 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
             node.comments {
                 addKdoc(it)
             }
+
+            // __query
+            buildProperty(entity.queryProperty, schema.query.entityClass) {
+                if (node.implements.isNotEmpty()) {
+                    addModifiers(KModifier.OVERRIDE)
+                }
+            }
+
+            // __mutation
+            buildProperty(entity.mutationProperty, schema.mutation.entityClass) {
+                if (node.implements.isNotEmpty()) {
+                    addModifiers(KModifier.OVERRIDE)
+                }
+            }
+
+            // __withCurrentProjection
+            if (node.kind == OBJECT) {
+                buildFunction(entity.withCurrentProjectionFun) {
+                    addModifiers(KModifier.ABSTRACT)
+                    receiver(node.projectionClass)
+                }
+            }
+
             node.fields { field ->
                 buildProperty(field.name, field.type.entityType) {
                     if (field.isOverride()) {
@@ -193,6 +216,17 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
                 node.comments {
                     addKdoc(it)
                 }
+
+                // __query
+                if (node.kind == MUTATION) {
+                    buildProperty(entity.queryProperty, schema.query.entityClass)
+                }
+
+                // __mutation
+                if (node.kind == QUERY) {
+                    buildProperty(entity.mutationProperty, schema.mutation.entityClass)
+                }
+
                 node.fields { field ->
                     buildFunction(field.name) {
                         returns(field.type.entityType)
