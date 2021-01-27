@@ -71,7 +71,8 @@ class GeneratorTest : AnnotationSpec() {
             KotlinImplLayout(
                 "kobby.entity.impl",
                 Decoration(null, "Impl"),
-                true
+                true,
+                Decoration("__inner", null)
             )
         )
         val files = generateKotlin(schema, layout)

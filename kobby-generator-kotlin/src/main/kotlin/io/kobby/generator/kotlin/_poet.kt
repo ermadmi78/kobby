@@ -106,6 +106,14 @@ internal fun FunSpecBuilder.buildParameter(
     addParameter(it)
 }
 
+internal fun FunSpecBuilder.suppressUnusedParameter() {
+    addAnnotation(
+        AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
+            .addMember("%S", "UNUSED_PARAMETER")
+            .build()
+    )
+}
+
 // Primary constructor properties builder
 internal fun TypeSpecBuilder.buildPrimaryConstructorProperties(
     block: PrimaryConstructorPropertiesBuilder.() -> Unit

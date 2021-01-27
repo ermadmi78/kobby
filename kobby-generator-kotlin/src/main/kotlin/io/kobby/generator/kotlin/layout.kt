@@ -149,6 +149,63 @@ data class KotlinLayout(
             }
         }
 
+    // *****************************************************************************************************************
+    //                                          Impl
+    // *****************************************************************************************************************
+
+    internal val KobbyNode.implName: String
+        get() = name.decorate(impl.decoration)
+
+    internal val KobbyNode.implClass: ClassName
+        get() = ClassName(impl.packageName, implName)
+
+    internal val KobbyNode.implProjectionName: String
+        get() = qualifiedProjectionName.decorate(impl.decoration)
+
+    internal val KobbyNode.implProjectionClass: ClassName
+        get() = ClassName(impl.packageName, implProjectionName)
+
+    internal val KobbyField.implQueryName: String
+        get() = queryName.decorate(impl.decoration)
+
+    internal val KobbyField.implQueryClass: ClassName
+        get() = ClassName(impl.packageName, implQueryName)
+
+    internal val KobbyField.implSelectionName: String
+        get() = selectionName.decorate(impl.decoration)
+
+    internal val KobbyField.implSelectionClass: ClassName
+        get() = ClassName(impl.packageName, implSelectionName)
+
+    internal val KobbyNode.innerProjectionOnName: String
+        get() = "_" + projectionOnName.decorate(impl.innerDecoration)
+
+    internal val KobbyField.innerName: String
+        get() = name.decorate(impl.innerDecoration)
+
+    internal val KobbyField.innerClass: ClassName
+        get() = if (isSelection()) {
+            if (type.hasProjection) implQueryClass else implSelectionClass
+        } else {
+            if (type.hasProjection) type.node.implProjectionClass else BOOLEAN
+        }
+
+    internal val KobbyField.innerType: TypeName
+        get() = if (innerIsBoolean) BOOLEAN else innerClass.nullable()
+
+    internal val KobbyField.innerIsBoolean: Boolean
+        get() = !isSelection() && !type.hasProjection
+
+    internal val KobbyField.innerInitializer: String
+        get() = when {
+            !innerIsBoolean -> "null"
+            isDefault() -> "true"
+            else -> "false"
+        }
+
+    internal val KobbyArgument.innerName: String
+        get() = (field.name + name.capitalize()).decorate(impl.innerDecoration)
+
     //******************************************************************************************************************
     //                                          Jackson
     //******************************************************************************************************************
@@ -276,7 +333,8 @@ class KotlinEntitySelectionLayout(
 class KotlinImplLayout(
     packageName: String,
     val decoration: Decoration,
-    val internal: Boolean
+    val internal: Boolean,
+    val innerDecoration: Decoration
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }

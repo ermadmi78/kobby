@@ -296,12 +296,16 @@ open class KobbyKotlinImplExtension {
     var prefix: String? = null
     var postfix: String? = null
     var internal: Boolean? = null
+    var innerPrefix: String? = null
+    var innerPostfix: String? = null
 
     override fun toString(): String {
         return "KobbyKotlinImplExtension(" +
                 "packageName=$packageName, " +
                 "prefix=$prefix, " +
                 "postfix=$postfix, " +
-                "internal=$internal)"
+                "internal=$internal, " +
+                "innerPrefix=$innerPrefix, " +
+                "innerPostfix=$innerPostfix)"
     }
 }

@@ -213,6 +213,12 @@ class KobbyPlugin : Plugin<Project> {
                             internal?.also {
                                 kotlinTask.implInternal.convention(it)
                             }
+                            innerPrefix?.also {
+                                kotlinTask.implInnerPrefix.convention(it)
+                            }
+                            innerPostfix?.also {
+                                kotlinTask.implInnerPostfix.convention(it)
+                            }
                         }
                     } else {
                         kotlinTask.enabled = false

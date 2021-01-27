@@ -23,6 +23,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
     files += generateDto(schema, layout)
     if (entity.enabled) {
         files += generateEntity(schema, layout)
+        files += generateImpl(schema, layout)
     }
 
     files.map { it.toKotlinFile() }

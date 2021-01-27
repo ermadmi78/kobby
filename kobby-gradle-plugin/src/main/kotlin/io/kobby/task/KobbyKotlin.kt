@@ -441,6 +441,22 @@ open class KobbyKotlin : DefaultTask() {
     )
     val implInternal: Property<Boolean> = project.objects.property(Boolean::class.java)
 
+    @Input
+    @Optional
+    @Option(
+        option = "implInnerPrefix",
+        description = "prefix for generated implementation service properties (default \"__inner\")"
+    )
+    val implInnerPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "implInnerPostfix",
+        description = "postfix for generated implementation service properties (default \"Impl\")"
+    )
+    val implInnerPostfix: Property<String> = project.objects.property(String::class.java)
+
     @OutputDirectory
     val outputDirectory: DirectoryProperty = project.objects.directoryProperty()
 
@@ -492,6 +508,7 @@ open class KobbyKotlin : DefaultTask() {
         implPackageName.convention("entity.impl")
         implPostfix.convention("Impl")
         implInternal.convention(true)
+        implInnerPrefix.convention("__inner")
 
         outputDirectory.convention(project.layout.buildDirectory.dir("generated/source/kobby/main/kotlin"))
     }
@@ -606,7 +623,8 @@ open class KobbyKotlin : DefaultTask() {
             KotlinImplLayout(
                 implPackage.toPackageName(),
                 Decoration(implPrefix.orNull, implPostfix.orNull),
-                implInternal.get()
+                implInternal.get(),
+                Decoration(implInnerPrefix.orNull, implInnerPostfix.orNull)
             )
         )
 

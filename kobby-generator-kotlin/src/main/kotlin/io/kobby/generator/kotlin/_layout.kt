@@ -137,3 +137,12 @@ internal val KotlinContextLayout.dslName: String
 internal val KotlinContextLayout.dslClass: ClassName
     get() = ClassName(packageName, dslName)
 
+//******************************************************************************************************************
+//                                   KotlinImplLayout
+//******************************************************************************************************************
+
+internal val KotlinImplLayout.repeatProjectionName: String
+    get() = "_" + "repeatProjection".decorate(innerDecoration)
+
+internal val KotlinImplLayout.repeatSelectionName: String
+    get() = "_" + "repeatSelection".decorate(innerDecoration)
