@@ -1,9 +1,7 @@
 package io.kobby.generator.kotlin
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.TypeName
 import io.kobby.model.decorate
 import java.io.File
 import java.nio.file.Path
@@ -141,8 +139,17 @@ internal val KotlinContextLayout.dslClass: ClassName
 //                                   KotlinImplLayout
 //******************************************************************************************************************
 
-internal val KotlinImplLayout.repeatProjectionName: String
+internal val KotlinImplLayout.repeatProjectionFunName: String
     get() = "_" + "repeatProjection".decorate(innerDecoration)
 
-internal val KotlinImplLayout.repeatSelectionName: String
+internal val KotlinImplLayout.repeatSelectionFunName: String
     get() = "_" + "repeatSelection".decorate(innerDecoration)
+
+internal val KotlinImplLayout.buildFunName: String
+    get() = "_" + "build".decorate(innerDecoration)
+
+internal val buildFunArgSb: Pair<String, TypeName> =
+    Pair("sb", ClassName("kotlin.text", "StringBuilder"))
+
+internal val buildFunArgArguments: Pair<String, TypeName> =
+    Pair("arguments", MUTABLE_MAP.parameterizedBy(STRING, ANY))

@@ -114,6 +114,41 @@ internal fun FunSpecBuilder.suppressUnusedParameter() {
     )
 }
 
+internal fun FunSpecBuilder.controlFlow(flow: String, vararg args: Any, block: FunSpecBuilder.() -> Unit) {
+    beginControlFlow(flow, args)
+    apply(block)
+    endControlFlow()
+}
+
+internal fun FunSpecBuilder.ifFlow(condition: String, vararg args: Any, block: FunSpecBuilder.() -> Unit) {
+    beginControlFlow("if ($condition)", args)
+    apply(block)
+    endControlFlow()
+}
+
+internal fun FunSpecBuilder.ifFlowStatement(
+    condition: String,
+    vararg statementArgs: Any,
+    block: () -> String
+) = ifFlow(condition) {
+    addStatement(block(), statementArgs)
+}
+
+internal fun FunSpecBuilder.statement(vararg args: Any, block: () -> String) =
+    addStatement(block(), args)
+
+internal fun FunSpecBuilder.append(value: String) =
+    addStatement("append(%S)", value)
+
+internal fun FunSpecBuilder.append(value: Char) =
+    addStatement("append('$value')")
+
+internal fun FunSpecBuilder.spaceAppend(value: String) =
+    addStatement("append(%S)", " $value")
+
+internal fun FunSpecBuilder.spaceAppend(value: Char) =
+    addStatement("append(' ').append('$value')")
+
 // Primary constructor properties builder
 internal fun TypeSpecBuilder.buildPrimaryConstructorProperties(
     block: PrimaryConstructorPropertiesBuilder.() -> Unit

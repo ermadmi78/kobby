@@ -58,9 +58,9 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
             }
 
             node.subObjects { subObject ->
-                buildProperty(subObject.innerProjectionOnName, subObject.implProjectionClass.nullable()) {
+                buildProperty(subObject.innerProjectionOnName, subObject.implProjectionClass) {
                     mutable()
-                    initializer("null")
+                    initializer("%T()", subObject.implProjectionClass)
                 }
                 buildFunction(subObject.projectionOnName) {
                     addModifiers(KModifier.OVERRIDE)
@@ -72,43 +72,80 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
                 }
             }
 
-            buildFunction(impl.repeatProjectionName) {
+            buildFunction(impl.repeatProjectionFunName) {
                 suppressUnusedParameter()
+                if (impl.internal) {
+                    addModifiers(KModifier.INTERNAL)
+                }
                 val repeat = entity.projection.projectionArgument
                 buildParameter(repeat, node.qualifiedProjectionClass)
                 node.fields.values.asSequence().filter { !it.isRequired() }.forEach { field ->
                     if (field.innerIsBoolean) {
                         val negation = if (field.isDefault()) "!" else ""
-                        beginControlFlow("if ($negation${field.innerName})")
-                        addStatement("$repeat.${field.projectionFieldName}()")
-                        endControlFlow()
-                    } else {
-                        beginControlFlow("if (${field.innerName} != null)")
-
+                        ifFlowStatement("$negation${field.innerName}") {
+                            "$repeat.${field.projectionFieldName}()"
+                        }
+                    } else ifFlow("${field.innerName} != null") {
                         val isSelection = field.isSelection()
                         val args = field.arguments.values.asSequence()
                             .filter { !isSelection || !it.type.nullable }
                             .joinToString { it.innerName + if (it.type.nullable) "" else "!!" }
                             .let { if (it.isEmpty()) it else "($it)" }
-                        beginControlFlow("$repeat.${field.projectionFieldName}$args")
-                        if (field.type.hasProjection) {
-                            addStatement("this@${node.implProjectionName}.${field.innerName}!!.${impl.repeatProjectionName}(this)")
+                        controlFlow("$repeat.${field.projectionFieldName}$args") {
+                            if (field.type.hasProjection) statement {
+                                "this@${node.implProjectionName}" +
+                                        ".${field.innerName}!!.${impl.repeatProjectionFunName}(this)"
+                            }
+                            if (isSelection) statement {
+                                "this@${node.implProjectionName}" +
+                                        ".${field.innerName}!!.${impl.repeatSelectionFunName}(this)"
+                            }
                         }
-                        if (isSelection) {
-                            addStatement("this@${node.implProjectionName}.${field.innerName}!!.${impl.repeatSelectionName}(this)")
-                        }
-                        endControlFlow()
-
-                        endControlFlow()
                     }
+
                 }
 
                 node.subObjects { subObject ->
-                    beginControlFlow("if (${subObject.innerProjectionOnName} != null)")
-                    beginControlFlow("$repeat.${subObject.projectionOnName}")
-                    addStatement("this@${node.implProjectionName}.${subObject.innerProjectionOnName}!!.${impl.repeatProjectionName}(this)")
-                    endControlFlow()
-                    endControlFlow()
+                    controlFlow("$repeat.${subObject.projectionOnName}") {
+                        addStatement("this@${node.implProjectionName}.${subObject.innerProjectionOnName}.${impl.repeatProjectionFunName}(this)")
+                    }
+                }
+            }
+
+            buildFunction(impl.buildFunName) {
+                suppressUnusedParameter()
+                if (impl.internal) {
+                    addModifiers(KModifier.INTERNAL)
+                }
+                buildParameter(buildFunArgSb)
+                buildParameter(buildFunArgArguments)
+
+                controlFlow("${buildFunArgSb.first}.apply") {
+                    spaceAppend('{')
+                    node.fields { field ->
+                        when {
+                            field.isRequired() -> spaceAppend(field.name)
+                            field.innerIsBoolean -> ifFlow(field.innerName) {
+                                spaceAppend(field.name)
+                            }
+                            else -> ifFlow("${field.innerName} != null") {
+                                spaceAppend("${field.name}(")
+
+                                val isSelection = field.isSelection()
+                                field.arguments { arg ->
+                                    if (arg.type.nullable) {
+                                        val argName = if (isSelection)
+                                            "${field.innerName}!!.${arg.name}" else arg.innerName
+                                        ifFlow("$argName != null") {
+                                            //
+                                        }
+                                    }
+                                }
+                                append(')')
+                            }
+                        }
+                    }
+                    spaceAppend('}')
                 }
             }
         }
@@ -133,8 +170,11 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
                     }
                 }
 
-                buildFunction(impl.repeatSelectionName) {
+                buildFunction(impl.repeatSelectionFunName) {
                     suppressUnusedParameter()
+                    if (impl.internal) {
+                        addModifiers(KModifier.INTERNAL)
+                    }
                     val repeat = entity.selection.selectionArgument
                     buildParameter(repeat, field.selectionClass)
                     field.arguments.values.asSequence().filter { it.type.nullable }.forEach { arg ->

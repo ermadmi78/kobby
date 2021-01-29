@@ -181,7 +181,7 @@ data class KotlinLayout(
         get() = "_" + projectionOnName.decorate(impl.innerDecoration)
 
     internal val KobbyField.innerName: String
-        get() = name.decorate(impl.innerDecoration)
+        get() = (name + number).decorate(impl.innerDecoration)
 
     internal val KobbyField.innerClass: ClassName
         get() = if (isSelection()) {
@@ -204,7 +204,8 @@ data class KotlinLayout(
         }
 
     internal val KobbyArgument.innerName: String
-        get() = (field.name + name.capitalize()).decorate(impl.innerDecoration)
+        get() = (field.name + field.number + name.capitalize())
+            .decorate(impl.innerDecoration)
 
     //******************************************************************************************************************
     //                                          Jackson

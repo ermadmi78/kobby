@@ -96,6 +96,7 @@ class KobbyNodeScope internal constructor(
     private val enumValues = mutableMapOf<String, KobbyEnumValue>()
     private val fields = mutableMapOf<String, KobbyField>()
     private val node = KobbyNode(schema, name, kind, _implements, comments, enumValues, fields)
+    private var fieldNumber = 0
 
     fun addImplements(interfaceName: String) {
         _implements += interfaceName
@@ -119,7 +120,7 @@ class KobbyNodeScope internal constructor(
         default: Boolean,
         selection: Boolean,
         block: KobbyFieldScope.() -> Unit
-    ) = KobbyFieldScope(schema, node, name, type, required, default, selection)
+    ) = KobbyFieldScope(schema, node, name, type, fieldNumber++, required, default, selection)
         .apply(block).build().also {
             fields[it.name] = it
         }
