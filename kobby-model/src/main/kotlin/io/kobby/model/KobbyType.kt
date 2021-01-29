@@ -19,6 +19,8 @@ sealed class KobbyType {
     abstract val list: Boolean
 
     fun isId(): Boolean = !nullable && !list && node.kind == SCALAR && node.name == "ID"
+
+    abstract val sourceName: String
 }
 
 class KobbyListType(
@@ -29,6 +31,10 @@ class KobbyListType(
     override val nodeName: String get() = nested.nodeName
     override val node: KobbyNode get() = nested.node
     override val list: Boolean get() = true
+    override val sourceName: String
+        get() = "[${nested.sourceName}]".let {
+            if (nullable) it else "$it!"
+        }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -60,6 +66,10 @@ class KobbyNodeType(
         schema.all[nodeName]!!
     }
     override val list: Boolean get() = false
+    override val sourceName: String
+        get() = nodeName.let {
+            if (nullable) it else "$it!"
+        }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

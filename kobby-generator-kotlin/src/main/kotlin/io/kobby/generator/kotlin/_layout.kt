@@ -153,3 +153,5 @@ internal val buildFunArgSb: Pair<String, TypeName> =
 
 internal val buildFunArgArguments: Pair<String, TypeName> =
     Pair("arguments", MUTABLE_MAP.parameterizedBy(STRING, ANY))
+
+internal val argPrefix: String = "arg"

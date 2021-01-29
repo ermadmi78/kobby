@@ -129,6 +129,7 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
                                 spaceAppend(field.name)
                             }
                             else -> ifFlow("${field.innerName} != null") {
+                                addStatement("var counter = 0")
                                 spaceAppend("${field.name}(")
 
                                 val isSelection = field.isSelection()
@@ -137,7 +138,13 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
                                         val argName = if (isSelection)
                                             "${field.innerName}!!.${arg.name}" else arg.innerName
                                         ifFlow("$argName != null") {
-                                            //
+                                            ifFlow("counter++ > 0") {
+                                                append(", ")
+                                            }
+                                            val mapName = buildFunArgArguments.first
+                                            addStatement("val arg = %S + $mapName.size", argPrefix)
+                                            addStatement("$mapName[arg] = $argName!!")
+                                            addStatement("append(%S).append(arg)", "${arg.name}: \$")
                                         }
                                     }
                                 }
