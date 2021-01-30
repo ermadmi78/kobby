@@ -47,7 +47,7 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
 
             node.fields { field ->
                 buildProperty(field.name, field.type.entityType) {
-                    if (field.isOverride()) {
+                    if (field.isOverride) {
                         addModifiers(KModifier.OVERRIDE)
                     }
                     field.comments {
@@ -67,19 +67,18 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
             node.comments {
                 addKdoc(it)
             }
-            node.fields.values.asSequence().filter { !it.isRequired() }.forEach { field ->
+            node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
                 buildFunction(field.projectionFieldName) {
                     addModifiers(KModifier.ABSTRACT)
-                    if (field.isOverride()) {
+                    if (field.isOverride) {
                         addModifiers(KModifier.OVERRIDE)
                     }
                     field.comments {
                         addKdoc(it)
                     }
 
-                    val isSelection = field.isSelection()
                     field.arguments.values.asSequence()
-                        .filter { !isSelection || !it.type.nullable }
+                        .filter { !field.isSelection || !it.type.nullable }
                         .forEach { arg ->
                             buildParameter(arg.name, arg.type.entityType) {
                                 if (arg.type.nullable) {
@@ -101,7 +100,7 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
     }
 
     val buildSelection: FileSpecBuilder.(KobbyNode) -> Unit = { node ->
-        node.fields.values.asSequence().filter { it.isSelection() }.forEach { field ->
+        node.fields.values.asSequence().filter { it.isSelection }.forEach { field ->
             buildInterface(field.selectionName) {
                 addAnnotation(context.dslClass)
                 field.comments {
@@ -235,9 +234,8 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
                             addKdoc(it)
                         }
 
-                        val isSelection = field.isSelection()
                         field.arguments.values.asSequence()
-                            .filter { !isSelection || !it.type.nullable }
+                            .filter { !field.isSelection || !it.type.nullable }
                             .forEach { arg ->
                                 buildParameter(arg.name, arg.type.entityType) {
                                     if (arg.type.nullable) {

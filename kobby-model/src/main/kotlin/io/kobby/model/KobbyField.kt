@@ -23,21 +23,25 @@ class KobbyField internal constructor(
     fun comments(action: (String) -> Unit) = comments.forEach(action)
     fun arguments(action: (KobbyArgument) -> Unit) = arguments.values.forEach(action)
 
-    fun findOverriddenField(): KobbyField? = if (node.kind == OBJECT || node.kind == INTERFACE) {
-        node.implements.values.asSequence().map { it.fields[name] }.filterNotNull().firstOrNull()
-    } else {
-        null
+    val overriddenField: KobbyField? by lazy {
+        if (node.kind == OBJECT || node.kind == INTERFACE) {
+            node.implements.values.asSequence().map { it.fields[name] }.filterNotNull().firstOrNull()
+        } else {
+            null
+        }
     }
 
-    fun isOverride(): Boolean = findOverriddenField() != null
+    val isOverride: Boolean get() = overriddenField != null
 
-    fun isProperty(): Boolean = arguments.isEmpty() && (type.node.kind == SCALAR || type.node.kind == ENUM)
+    val isProperty: Boolean get() = arguments.isEmpty() && (type.node.kind == SCALAR || type.node.kind == ENUM)
 
-    fun isRequired(): Boolean = isProperty() && (findOverriddenField()?.isRequired() ?: (type.isId() || required))
+    val isRequired: Boolean get() = isProperty && (overriddenField?.isRequired ?: (type.isId() || required))
 
-    fun isDefault(): Boolean = isProperty() && (findOverriddenField()?.isDefault() ?: default)
+    val isDefault: Boolean get() = isProperty && (overriddenField?.isDefault ?: default)
 
-    fun isSelection(): Boolean = selection && arguments.values.any { it.type.nullable }
+    val isSelection: Boolean by lazy {
+        selection && arguments.values.any { it.type.nullable }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

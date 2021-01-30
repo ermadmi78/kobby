@@ -148,8 +148,11 @@ internal val KotlinImplLayout.repeatSelectionFunName: String
 internal val KotlinImplLayout.buildFunName: String
     get() = "_" + "build".decorate(innerDecoration)
 
-internal val buildFunArgSb: Pair<String, TypeName> =
-    Pair("sb", ClassName("kotlin.text", "StringBuilder"))
+internal val buildFunArgHeader: Pair<String, TypeName> =
+    Pair("header", ClassName("kotlin.text", "StringBuilder"))
+
+internal val buildFunArgBody: Pair<String, TypeName> =
+    Pair("body", ClassName("kotlin.text", "StringBuilder"))
 
 internal val buildFunArgArguments: Pair<String, TypeName> =
     Pair("arguments", MUTABLE_MAP.parameterizedBy(STRING, ANY))

@@ -16,6 +16,8 @@ class KobbyArgument internal constructor(
 ) {
     fun comments(action: (String) -> Unit) = comments.forEach(action)
 
+    val isSelection: Boolean get() = this.field.isSelection && type.nullable
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true

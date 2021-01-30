@@ -106,10 +106,10 @@ internal fun FunSpecBuilder.buildParameter(
     addParameter(it)
 }
 
-internal fun FunSpecBuilder.suppressUnusedParameter() {
+internal fun FunSpecBuilder.suppressUnused() {
     addAnnotation(
         AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
-            .addMember("%S", "UNUSED_PARAMETER")
+            .addMember("%S, %S", "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
             .build()
     )
 }

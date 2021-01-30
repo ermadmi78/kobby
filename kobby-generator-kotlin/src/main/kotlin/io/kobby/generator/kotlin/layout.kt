@@ -94,7 +94,7 @@ data class KotlinLayout(
         get() = LambdaTypeName.get(qualifiedProjectionClass, emptyList(), UNIT)
 
     internal val KobbyField.projectionFieldName: String
-        get() = if (isDefault())
+        get() = if (isDefault)
             name.decorate(entity.projection.withoutDecoration)
         else
             name.decorate(entity.projection.withDecoration)
@@ -133,7 +133,7 @@ data class KotlinLayout(
         get() = ClassName(entity.packageName, queryName)
 
     internal val KobbyField.lambda: Pair<String, LambdaTypeName>?
-        get() = if (isSelection()) {
+        get() = if (isSelection) {
             if (type.hasProjection) {
                 entity.selection.queryArgument to
                         LambdaTypeName.get(queryClass, emptyList(), UNIT)
@@ -184,7 +184,7 @@ data class KotlinLayout(
         get() = (name + number).decorate(impl.innerDecoration)
 
     internal val KobbyField.innerClass: ClassName
-        get() = if (isSelection()) {
+        get() = if (isSelection) {
             if (type.hasProjection) implQueryClass else implSelectionClass
         } else {
             if (type.hasProjection) type.node.implProjectionClass else BOOLEAN
@@ -194,12 +194,12 @@ data class KotlinLayout(
         get() = if (innerIsBoolean) BOOLEAN else innerClass.nullable()
 
     internal val KobbyField.innerIsBoolean: Boolean
-        get() = !isSelection() && !type.hasProjection
+        get() = !isSelection && !type.hasProjection
 
     internal val KobbyField.innerInitializer: String
         get() = when {
             !innerIsBoolean -> "null"
-            isDefault() -> "true"
+            isDefault -> "true"
             else -> "false"
         }
 
