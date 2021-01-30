@@ -3,6 +3,8 @@ package io.kobby.generator.kotlin
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import io.kobby.model.KobbyNode
+import io.kobby.model.KobbyNodeKind.INTERFACE
+import io.kobby.model.KobbyNodeKind.UNION
 import io.kobby.model.KobbySchema
 
 /**
@@ -188,6 +190,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 
             controlFlow("${buildFunArgBody.first}.apply") {
                 spaceAppend('{')
+
                 addStatement("")
                 node.fields { field ->
                     val fieldCondition = when {
@@ -198,6 +201,8 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     addComment("Field: ${field.name}")
                     ifFlow(fieldCondition) {
                         spaceAppend(field.name)
+
+                        // build arguments
                         if (field.arguments.isNotEmpty()) {
                             addStatement("var counter = 0")
                             append('(')
@@ -227,9 +232,38 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             }
                             append(')')
                         }
+
+                        // build field projection
+                        if (field.type.hasProjection) {
+                            addStatement("")
+                            addComment("Build nested projection of ${field.type.node.name}")
+                            addStatement(
+                                "${field.innerName}!!.${impl.buildFunName}(" +
+                                        "${buildFunArgHeader.first}, " +
+                                        "${buildFunArgBody.first}, " +
+                                        "${buildFunArgArguments.first})"
+                            )
+                        }
                     }
                     addStatement("")
                 }
+
+                if (node.kind == INTERFACE || node.kind == UNION) {
+                    spaceAppend("__typename")
+                    addStatement("")
+                    node.subObjects { subObject ->
+                        addComment("Qualification of: ${subObject.name}")
+                        spaceAppend("... on ${subObject.name}")
+                        addStatement(
+                            "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
+                                    "${buildFunArgHeader.first}, " +
+                                    "${buildFunArgBody.first}, " +
+                                    "${buildFunArgArguments.first})"
+                        )
+                        addStatement("")
+                    }
+                }
+
                 spaceAppend('}')
             }
         }
