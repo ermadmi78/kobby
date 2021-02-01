@@ -1,5 +1,6 @@
 package io.kobby.generator.kotlin
 
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import io.kobby.model.KobbyNode
@@ -89,6 +90,15 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             addModifiers(KModifier.INTERNAL)
         }
         addSuperinterface(node.qualifiedProjectionClass)
+
+        if (node.kind == INTERFACE) {
+            buildCompanionObject {
+                buildProperty(impl.interfaceIgnore) {
+                    val ignore = node.fields.values.joinToString { "\"${it.name}\"" }
+                    initializer("%T($ignore)", ClassName("kotlin.collections", "setOf"))
+                }
+            }
+        }
 
         node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
             buildProperty(field.innerName, field.innerType) {
@@ -184,6 +194,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             if (impl.internal) {
                 addModifiers(KModifier.INTERNAL)
             }
+            buildParameter(buildFunArgIgnore)
             buildParameter(buildFunArgHeader)
             buildParameter(buildFunArgBody)
             buildParameter(buildFunArgArguments)
@@ -194,12 +205,12 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 addStatement("")
                 node.fields { field ->
                     val fieldCondition = when {
-                        field.isRequired -> "true"
-                        field.innerIsBoolean -> field.innerName
-                        else -> "${field.innerName} != null"
+                        field.isRequired -> "%S !in ${buildFunArgIgnore.first}"
+                        field.innerIsBoolean -> "%S !in ${buildFunArgIgnore.first} && ${field.innerName}"
+                        else -> "%S !in ${buildFunArgIgnore.first} && ${field.innerName} != null"
                     }
                     addComment("Field: ${field.name}")
-                    ifFlow(fieldCondition) {
+                    ifFlow(fieldCondition, field.name) {
                         spaceAppend(field.name)
 
                         // build arguments
@@ -217,15 +228,15 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                                     val mapName = buildFunArgArguments.first
                                     addStatement("val arg = %S + $mapName.size", argPrefix)
                                     addStatement("$mapName[arg] = $argName!!")
-                                    addStatement("append(%S).append(arg)", "${arg.name}: \$")
+                                    addStatement("append(%S).append(%S).append(arg)", arg.name, ": \$")
 
                                     addStatement("")
                                     ifFlow("${buildFunArgHeader.first}.isNotEmpty()") {
                                         addStatement("${buildFunArgHeader.first}.append(%S)", ", ")
                                     }
                                     addStatement(
-                                        "${buildFunArgHeader.first}.append(%P)",
-                                        "\$arg: ${arg.type.sourceName}"
+                                        "${buildFunArgHeader.first}.append('$').append(arg).append(%S).append(%S)",
+                                        ": ", arg.type.sourceName
                                     )
                                 }
                                 addStatement("")
@@ -239,9 +250,11 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             addComment("Build nested projection of ${field.type.node.name}")
                             addStatement(
                                 "${field.innerName}!!.${impl.buildFunName}(" +
+                                        "%T(), " +
                                         "${buildFunArgHeader.first}, " +
                                         "${buildFunArgBody.first}, " +
-                                        "${buildFunArgArguments.first})"
+                                        "${buildFunArgArguments.first})",
+                                ClassName("kotlin.collections", "setOf")
                             )
                         }
                     }
@@ -251,15 +264,36 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 if (node.kind == INTERFACE || node.kind == UNION) {
                     spaceAppend("__typename")
                     addStatement("")
+                    addStatement("val ${buildFunValSubBody.first} = %T()", buildFunValSubBody.second)
+                    addStatement("")
                     node.subObjects { subObject ->
                         addComment("Qualification of: ${subObject.name}")
-                        spaceAppend("... on ${subObject.name}")
-                        addStatement(
-                            "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
-                                    "${buildFunArgHeader.first}, " +
-                                    "${buildFunArgBody.first}, " +
-                                    "${buildFunArgArguments.first})"
-                        )
+                        addStatement("${buildFunValSubBody.first}.clear()")
+                        if (node.kind == INTERFACE) {
+                            addStatement(
+                                "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
+                                        "${impl.interfaceIgnore.first}, " +
+                                        "${buildFunArgHeader.first}, " +
+                                        "${buildFunValSubBody.first}, " +
+                                        "${buildFunArgArguments.first})"
+                            )
+                        } else {
+                            addStatement(
+                                "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
+                                        "%T(), " +
+                                        "${buildFunArgHeader.first}, " +
+                                        "${buildFunValSubBody.first}, " +
+                                        "${buildFunArgArguments.first})",
+                                ClassName("kotlin.collections", "setOf")
+                            )
+                        }
+                        ifFlowStatement(
+                            "${buildFunValSubBody.first}.length > 4",
+                            " ... on ", subObject.name
+                        ) {
+                            "append(%S).append(%S).append(${buildFunValSubBody.first})"
+                        }
+
                         addStatement("")
                     }
                 }

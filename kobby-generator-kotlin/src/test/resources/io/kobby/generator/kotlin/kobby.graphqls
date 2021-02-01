@@ -44,6 +44,8 @@ type Country implements Entity, Base {
 
     film(id: ID!): Film
     films(condition: String = "", limit: Int = -1, offset: Int = -1): [Film!]!
+
+    season(condition: String, limit: Int, offset: Int): Subject
 }
 
 type Actor implements Entity, Base{
@@ -103,3 +105,5 @@ type Single {
 input SingleInput {
     id: ID!
 }
+
+union Subject = Actor | Film

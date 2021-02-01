@@ -148,6 +148,12 @@ internal val KotlinImplLayout.repeatSelectionFunName: String
 internal val KotlinImplLayout.buildFunName: String
     get() = "_" + "build".decorate(innerDecoration)
 
+internal val KotlinImplLayout.interfaceIgnore: Pair<String, TypeName>
+    get() = Pair("_" + "IGNORE".decorate(innerDecoration), SET.parameterizedBy(STRING))
+
+internal val buildFunArgIgnore: Pair<String, TypeName> =
+    Pair("ignore", SET.parameterizedBy(STRING))
+
 internal val buildFunArgHeader: Pair<String, TypeName> =
     Pair("header", ClassName("kotlin.text", "StringBuilder"))
 
@@ -158,3 +164,6 @@ internal val buildFunArgArguments: Pair<String, TypeName> =
     Pair("arguments", MUTABLE_MAP.parameterizedBy(STRING, ANY))
 
 internal val argPrefix: String = "arg"
+
+internal val buildFunValSubBody: Pair<String, TypeName> =
+    Pair("subBody", ClassName("kotlin.text", "StringBuilder"))

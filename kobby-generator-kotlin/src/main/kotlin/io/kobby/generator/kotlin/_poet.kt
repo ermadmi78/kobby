@@ -67,6 +67,12 @@ internal fun TypeSpecBuilder.buildFunction(
     addFunction(it)
 }
 
+internal fun TypeSpecBuilder.buildCompanionObject(
+    block: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.companionObjectBuilder().apply(block).build().also {
+    this.addType(it)
+}
+
 internal fun TypeSpecBuilder.buildPrimaryConstructor(
     block: FunSpecBuilder.() -> Unit
 ): FunSpec = FunSpec.constructorBuilder().apply(block).build().also {
@@ -115,13 +121,13 @@ internal fun FunSpecBuilder.suppressUnused() {
 }
 
 internal fun FunSpecBuilder.controlFlow(flow: String, vararg args: Any, block: FunSpecBuilder.() -> Unit) {
-    beginControlFlow(flow, args)
+    beginControlFlow(flow, args = args)
     apply(block)
     endControlFlow()
 }
 
 internal fun FunSpecBuilder.ifFlow(condition: String, vararg args: Any, block: FunSpecBuilder.() -> Unit) {
-    beginControlFlow("if ($condition)", args)
+    beginControlFlow("if ($condition)", args = args)
     apply(block)
     endControlFlow()
 }
@@ -131,11 +137,11 @@ internal fun FunSpecBuilder.ifFlowStatement(
     vararg statementArgs: Any,
     block: () -> String
 ) = ifFlow(condition) {
-    addStatement(block(), statementArgs)
+    addStatement(block(), args = statementArgs)
 }
 
 internal fun FunSpecBuilder.statement(vararg args: Any, block: () -> String) =
-    addStatement(block(), args)
+    addStatement(block(), args = args)
 
 internal fun FunSpecBuilder.append(value: String) =
     addStatement("append(%S)", value)
@@ -144,7 +150,7 @@ internal fun FunSpecBuilder.append(value: Char) =
     addStatement("append('$value')")
 
 internal fun FunSpecBuilder.spaceAppend(value: String) =
-    addStatement("append(%S)", " $value")
+    addStatement("append(' ').append(%S)", value)
 
 internal fun FunSpecBuilder.spaceAppend(value: Char) =
     addStatement("append(' ').append('$value')")
