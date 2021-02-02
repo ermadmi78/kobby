@@ -26,6 +26,9 @@ internal typealias FunSpecBuilder = FunSpec.Builder
 @KobbyScope
 internal typealias ParameterSpecBuilder = ParameterSpec.Builder
 
+@KobbyScope
+internal typealias CodeBlockBuilder = CodeBlock.Builder
+
 internal fun buildFile(
     packageName: String,
     fileName: String,
@@ -91,6 +94,49 @@ internal fun TypeSpecBuilder.buildProperty(
 ): PropertySpec = PropertySpec.builder(name, type).apply(block).build().also {
     addProperty(it)
 }
+
+internal fun PropertySpecBuilder.buildGetter(
+    block: FunSpecBuilder.() -> Unit
+): FunSpec = FunSpec.getterBuilder().apply(block).build().also {
+    getter(it)
+}
+
+internal fun PropertySpecBuilder.buildDelegate(
+    block: CodeBlockBuilder.() -> Unit
+): CodeBlock = CodeBlock.builder().apply(block).build().also {
+    delegate(it)
+}
+
+internal fun PropertySpecBuilder.buildLazyDelegate(
+    block: CodeBlockBuilder.() -> Unit
+): CodeBlock = buildDelegate {
+    controlFlow("lazy") {
+        apply(block)
+    }
+}
+
+internal fun CodeBlockBuilder.controlFlow(flow: String, vararg args: Any, block: CodeBlockBuilder.() -> Unit) {
+    beginControlFlow(flow, args = args)
+    apply(block)
+    endControlFlow()
+}
+
+internal fun CodeBlockBuilder.ifFlow(condition: String, vararg args: Any, block: CodeBlockBuilder.() -> Unit) {
+    beginControlFlow("if ($condition)", args = args)
+    apply(block)
+    endControlFlow()
+}
+
+internal fun CodeBlockBuilder.ifFlowStatement(
+    condition: String,
+    vararg statementArgs: Any,
+    block: () -> String
+) = ifFlow(condition) {
+    addStatement(block(), args = statementArgs)
+}
+
+internal fun CodeBlockBuilder.statement(vararg args: Any, block: () -> String) =
+    addStatement(block(), args = args)
 
 internal fun TypeSpecBuilder.buildEnumConstant(
     name: String,

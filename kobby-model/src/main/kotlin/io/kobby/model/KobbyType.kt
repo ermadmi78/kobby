@@ -21,6 +21,12 @@ sealed class KobbyType {
     fun isId(): Boolean = !nullable && !list && node.kind == SCALAR && node.name == "ID"
 
     abstract val sourceName: String
+
+    val nestedOrNull: KobbyType?
+        get() = when (this) {
+            is KobbyListType -> nested
+            else -> null
+        }
 }
 
 class KobbyListType(

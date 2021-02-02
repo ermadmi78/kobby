@@ -180,6 +180,18 @@ data class KotlinLayout(
     internal val KobbyNode.innerProjectionOnName: String
         get() = "_" + projectionOnName.decorate(impl.innerDecoration)
 
+    internal val KobbyNode.entityBuilderName: String
+        get() = "buildEntity"
+
+    internal val KobbyNode.entityBuilderArgQuery: Pair<String, TypeName>
+        get() = "query".decorate(impl.innerDecoration) to schema.query.entityClass
+
+    internal val KobbyNode.entityBuilderArgMutation: Pair<String, TypeName>
+        get() = "mutation".decorate(impl.innerDecoration) to schema.mutation.entityClass
+
+    internal val KobbyNode.entityBuilderArgProjection: Pair<String, TypeName>
+        get() = "projection".decorate(impl.innerDecoration) to implProjectionClass
+
     internal val KobbyField.innerName: String
         get() = (name + number).decorate(impl.innerDecoration)
 
@@ -202,6 +214,25 @@ data class KotlinLayout(
             isDefault -> "true"
             else -> "false"
         }
+
+    internal val KobbyField.resolverName: String
+        get() = name.decorate("resolve", null)
+
+    internal val KobbyField.resolverArgQuery: Pair<String, TypeName>
+        get() = "query".decorate(impl.innerDecoration) to schema.query.entityClass
+
+    internal val KobbyField.resolverArgMutation: Pair<String, TypeName>
+        get() = "mutation".decorate(impl.innerDecoration) to schema.mutation.entityClass
+
+    internal val KobbyField.resolverArgProjection: Pair<String, TypeName>
+        get() = "projection".decorate(impl.innerDecoration) to type.node.implProjectionClass
+
+    internal val KobbyField.notNullAssertion: String
+        get() = if (type.nullable) "" else "!!"
+
+    internal val KobbyField.noProjectionMessage: String
+        get() = "Property [$name] is not available - " +
+                "${if (isDefault) "remove" else "add"} [$projectionFieldName] projection to switch on it"
 
     internal val KobbyArgument.innerName: String
         get() = (field.name + field.number + name.capitalize())

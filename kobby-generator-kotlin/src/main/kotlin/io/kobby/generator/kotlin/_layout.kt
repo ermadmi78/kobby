@@ -139,6 +139,12 @@ internal val KotlinContextLayout.dslClass: ClassName
 //                                   KotlinImplLayout
 //******************************************************************************************************************
 
+internal val KotlinImplLayout.projectionPropertyName: String
+    get() = "projection".decorate(innerDecoration)
+
+internal val KotlinImplLayout.dtoPropertyName: String
+    get() = "dto".decorate(innerDecoration)
+
 internal val KotlinImplLayout.repeatProjectionFunName: String
     get() = "_" + "repeatProjection".decorate(innerDecoration)
 
