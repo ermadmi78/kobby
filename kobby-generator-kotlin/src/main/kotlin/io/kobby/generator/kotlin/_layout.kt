@@ -135,6 +135,24 @@ internal val KotlinContextLayout.dslName: String
 internal val KotlinContextLayout.dslClass: ClassName
     get() = ClassName(packageName, dslName)
 
+internal val KotlinContextLayout.adapterName: String
+    get() = "Adapter".decorate(decoration)
+
+internal val KotlinContextLayout.adapterClass: ClassName
+    get() = ClassName(packageName, adapterName)
+
+internal val KotlinContextLayout.adapterFunExecuteQuery: String
+    get() = "executeQuery"
+
+internal val KotlinContextLayout.adapterFunExecuteMutation: String
+    get() = "executeMutation"
+
+internal val KotlinContextLayout.adapterArgQuery: Pair<String, TypeName>
+    get() = "query" to STRING
+
+internal val KotlinContextLayout.adapterArgVariables: Pair<String, TypeName>
+    get() = "variables" to MAP.parameterizedBy(STRING, ANY.nullable())
+
 //******************************************************************************************************************
 //                                   KotlinImplLayout
 //******************************************************************************************************************
