@@ -56,6 +56,8 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
     //                                                Query
     //******************************************************************************************************************
     files += buildFile(impl.packageName, schema.query.implName) {
+        buildQueryOrMutation(schema.query, layout)
+        buildSelection(schema.query, layout)
         buildResolvers(schema.query, layout)
     }
 
@@ -63,6 +65,8 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
     //                                                Mutation
     //******************************************************************************************************************
     files += buildFile(impl.packageName, schema.mutation.implName) {
+        buildQueryOrMutation(schema.mutation, layout)
+        buildSelection(schema.mutation, layout)
         buildResolvers(schema.mutation, layout)
     }
 
@@ -504,6 +508,56 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 }
 
                 spaceAppend('}')
+            }
+        }
+    }
+}
+
+private fun FileSpecBuilder.buildQueryOrMutation(node: KobbyNode, layout: KotlinLayout) = with(layout) {
+    buildClass(node.implName) {
+        if (impl.internal) {
+            addModifiers(KModifier.INTERNAL)
+        }
+        addSuperinterface(node.entityClass)
+
+        buildPrimaryConstructorProperties {
+            buildProperty(node.qmArgAdapter) {
+                if (impl.internal) {
+                    addModifiers(KModifier.INTERNAL)
+                }
+            }
+            buildProperty(node.qmArgRef) {
+                addModifiers(KModifier.PRIVATE)
+            }
+        }
+
+        buildProperty(node.qmProperty) {
+            addModifiers(KModifier.OVERRIDE)
+            buildGetter {
+                addStatement("return ${node.qmArgRef.first}[0]!!")
+            }
+        }
+
+        node.fields { field ->
+            buildFunction(field.name) {
+                returns(field.type.entityType)
+                addModifiers(KModifier.OVERRIDE, KModifier.SUSPEND)
+
+                field.arguments.values.asSequence()
+                    .filter { !field.isSelection || !it.type.nullable }
+                    .forEach { arg ->
+                        buildParameter(arg.name, arg.type.entityType)
+                    }
+
+                val qmValProjection = field.qmValProjection
+                field.lambda?.also {
+                    buildParameter(it)
+                    addStatement("val $qmValProjection = %T().apply(${it.first})", field.innerClass)
+                }
+
+
+
+                addStatement("TODO()")
             }
         }
     }

@@ -252,8 +252,6 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
                             }
                         }
                     }
-
-
                 }
             }
 

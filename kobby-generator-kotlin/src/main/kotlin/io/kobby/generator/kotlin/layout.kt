@@ -238,6 +238,64 @@ data class KotlinLayout(
         get() = (field.name + field.number + name.capitalize())
             .decorate(impl.innerDecoration)
 
+    // Query and Mutation
+
+    internal val KobbyNode.qmHeader: String
+        get() = when (kind) {
+            QUERY -> "query"
+            MUTATION -> "mutation"
+            else -> error("Invalid algorithm")
+        }
+
+    internal val KobbyNode.qmOpposite: String
+        get() = when (kind) {
+            QUERY -> "mutation"
+            MUTATION -> "query"
+            else -> error("Invalid algorithm")
+        }
+
+    internal val KobbyNode.qmArgAdapter: Pair<String, TypeName>
+        get() = "adapter".decorate(impl.innerDecoration) to context.adapterClass
+
+    internal val KobbyNode.qmArgRef: Pair<String, TypeName>
+        get() = "${qmOpposite}Ref".decorate(impl.innerDecoration) to ARRAY.parameterizedBy(
+            when (kind) {
+                QUERY -> schema.mutation.entityClass.nullable()
+                MUTATION -> schema.query.entityClass.nullable()
+                else -> error("Invalid algorithm")
+            }
+        )
+
+    internal val KobbyNode.qmPropertyName: String
+        get() = when (kind) {
+            QUERY -> entity.mutationProperty
+            MUTATION -> entity.queryProperty
+            else -> error("Invalid algorithm")
+        }
+
+    internal val KobbyNode.qmProperty: Pair<String, TypeName>
+        get() = qmPropertyName to when (kind) {
+            QUERY -> schema.mutation.entityClass
+            MUTATION -> schema.query.entityClass
+            else -> error("Invalid algorithm")
+        }
+
+    internal val KobbyField.qmValProjection: String
+        get() = if (isSelection) {
+            if (type.hasProjection) {
+                entity.selection.queryArgument
+            } else {
+                entity.selection.selectionArgument
+            }
+        } else {
+            if (type.hasProjection) {
+                entity.projection.projectionArgument
+            } else {
+                "invalidAlgorithm"
+            }
+        }.trim('_').decorate(impl.innerDecoration)
+
+
     //******************************************************************************************************************
     //                                          Jackson
     //******************************************************************************************************************
