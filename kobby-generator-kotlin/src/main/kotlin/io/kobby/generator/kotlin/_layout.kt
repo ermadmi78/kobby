@@ -3,6 +3,7 @@ package io.kobby.generator.kotlin
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.kobby.model.decorate
+import io.kobby.model.isNotEmpty
 import java.io.File
 import java.nio.file.Path
 
@@ -129,6 +130,20 @@ internal val KotlinDtoGraphQLLayout.mutationResultClass: ClassName
 //                                   KotlinContextLayout
 //******************************************************************************************************************
 
+internal val KotlinContextLayout.contextName: String
+    get() = "Context".decorate(decoration)
+
+internal val KotlinContextLayout.contextClass: ClassName
+    get() = ClassName(packageName, contextName)
+
+internal val KotlinLayout.contextImplName: String
+    get() = context.contextName.run {
+        if (impl.decoration.isNotEmpty()) decorate(impl.decoration) else decorate(null, "Impl")
+    }
+
+internal val KotlinLayout.contextImplClass: ClassName
+    get() = ClassName(context.packageName, contextImplName)
+
 internal val KotlinContextLayout.dslName: String
     get() = "DSL".decorate(decoration)
 
@@ -156,6 +171,9 @@ internal val KotlinContextLayout.adapterArgVariables: Pair<String, TypeName>
 //******************************************************************************************************************
 //                                   KotlinImplLayout
 //******************************************************************************************************************
+
+internal val KotlinImplLayout.contextPropertyName: String
+    get() = "context".decorate(innerDecoration)
 
 internal val KotlinImplLayout.projectionPropertyName: String
     get() = "projection".decorate(innerDecoration)

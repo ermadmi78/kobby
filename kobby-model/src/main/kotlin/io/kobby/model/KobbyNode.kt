@@ -76,8 +76,6 @@ class KobbyNode internal constructor(
 
 enum class KobbyNodeKind {
     SCALAR,
-    QUERY,
-    MUTATION,
     OBJECT,
     INTERFACE,
     UNION,

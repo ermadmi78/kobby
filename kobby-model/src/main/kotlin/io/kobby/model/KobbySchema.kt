@@ -11,8 +11,6 @@ import kotlin.LazyThreadSafetyMode.NONE
 class KobbySchema internal constructor(
     val all: Map<String, KobbyNode>,
     val scalars: Map<String, KobbyNode>,
-    private val _query: Array<KobbyNode?>,
-    private val _mutation: Array<KobbyNode?>,
     val objects: Map<String, KobbyNode>,
     val interfaces: Map<String, KobbyNode>,
     val unions: Map<String, KobbyNode>,
@@ -22,8 +20,8 @@ class KobbySchema internal constructor(
     // name of interface or union -> set of names of object or interface
     val subObjectsIndex: Map<String, Set<String>>
 ) {
-    val query: KobbyNode by lazy(NONE) { _query[0]!! }
-    val mutation: KobbyNode by lazy(NONE) { _mutation[0]!! }
+    val query: KobbyNode by lazy(NONE) { objects[QUERY]!! }
+    val mutation: KobbyNode by lazy(NONE) { objects[MUTATION]!! }
 
     fun all(action: (KobbyNode) -> Unit) = all.values.forEach(action)
     fun scalars(action: (KobbyNode) -> Unit) = scalars.values.forEach(action)
@@ -33,11 +31,10 @@ class KobbySchema internal constructor(
     fun enums(action: (KobbyNode) -> Unit) = enums.values.forEach(action)
     fun inputs(action: (KobbyNode) -> Unit) = inputs.values.forEach(action)
 
-    fun objectsWithQueryAndMutation(action: (KobbyNode) -> Unit) = sequence {
-        yield(query)
-        yield(mutation)
-        yieldAll(objects.values)
-    }.forEach(action)
+    companion object {
+        const val QUERY = "Query"
+        const val MUTATION = "Mutation"
+    }
 }
 
 fun KobbySchema(block: KobbySchemaScope.() -> Unit): KobbySchema =
@@ -47,8 +44,6 @@ fun KobbySchema(block: KobbySchemaScope.() -> Unit): KobbySchema =
 class KobbySchemaScope internal constructor() {
     private val all = mutableMapOf<String, KobbyNode>()
     private val scalars = mutableMapOf<String, KobbyNode>()
-    private val _query = arrayOfNulls<KobbyNode>(1)
-    private val _mutation = arrayOfNulls<KobbyNode>(1)
     private val objects = mutableMapOf<String, KobbyNode>()
     private val interfaces = mutableMapOf<String, KobbyNode>()
     private val unions = mutableMapOf<String, KobbyNode>()
@@ -59,8 +54,6 @@ class KobbySchemaScope internal constructor() {
     val schema = KobbySchema(
         all,
         scalars,
-        _query,
-        _mutation,
         objects,
         interfaces,
         unions,
@@ -72,13 +65,11 @@ class KobbySchemaScope internal constructor() {
     fun addNode(
         name: String,
         kind: KobbyNodeKind,
-        block: KobbyNodeScope.() -> Unit
+        block: KobbyNodeScope.() -> Unit = {}
     ) = KobbyNodeScope(schema, name, kind).apply(block).build().also { node ->
         all[node.name] = node
         when (node.kind) {
             SCALAR -> scalars[node.name] = node
-            QUERY -> _query[0] = node
-            MUTATION -> _mutation[0] = node
             OBJECT -> {
                 objects[node.name] = node
                 node._implements.forEach {
@@ -97,26 +88,33 @@ class KobbySchemaScope internal constructor() {
         }
     }
 
-    fun addScalar(name: String, block: KobbyNodeScope.() -> Unit) =
+    fun addScalar(name: String, block: KobbyNodeScope.() -> Unit = {}) =
         addNode(name, SCALAR, block)
 
-    fun addObject(name: String, block: KobbyNodeScope.() -> Unit) = when (name) {
-        "Query" -> addNode(name, QUERY, block)
-        "Mutation" -> addNode(name, MUTATION, block)
-        else -> addNode(name, OBJECT, block)
-    }
+    fun addObject(name: String, block: KobbyNodeScope.() -> Unit = {}) =
+        addNode(name, OBJECT, block)
 
-    fun addInterface(name: String, block: KobbyNodeScope.() -> Unit) =
+    fun addInterface(name: String, block: KobbyNodeScope.() -> Unit = {}) =
         addNode(name, INTERFACE, block)
 
-    fun addUnion(name: String, block: KobbyNodeScope.() -> Unit) =
+    fun addUnion(name: String, block: KobbyNodeScope.() -> Unit = {}) =
         addNode(name, UNION, block)
 
-    fun addEnum(name: String, block: KobbyNodeScope.() -> Unit) =
+    fun addEnum(name: String, block: KobbyNodeScope.() -> Unit = {}) =
         addNode(name, ENUM, block)
 
-    fun addInput(name: String, block: KobbyNodeScope.() -> Unit) =
+    fun addInput(name: String, block: KobbyNodeScope.() -> Unit = {}) =
         addNode(name, INPUT, block)
 
-    fun build(): KobbySchema = schema
+    fun build(): KobbySchema {
+        if (objects[KobbySchema.QUERY] == null) {
+            addObject(KobbySchema.QUERY)
+        }
+
+        if (objects[KobbySchema.MUTATION] == null) {
+            addObject(KobbySchema.MUTATION)
+        }
+
+        return schema
+    }
 }

@@ -115,6 +115,22 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "contextQuery",
+        description = "name of context query function (default \"query\")"
+    )
+    val contextQuery: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "contextQuery",
+        description = "name of context mutation function (default \"mutation\")"
+    )
+    val contextMutation: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoPackageName",
         description = "package name relative to root package name for generated DTO classes (default \"dto\")"
     )
@@ -235,24 +251,8 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
-        option = "entityQueryProperty",
-        description = "name of entity 'query' property (default \"__query\")"
-    )
-    val entityQueryProperty: Property<String> = project.objects.property(String::class.java)
-
-    @Input
-    @Optional
-    @Option(
-        option = "entityMutationProperty",
-        description = "name of entity 'mutation' property (default \"__mutation\")"
-    )
-    val entityMutationProperty: Property<String> = project.objects.property(String::class.java)
-
-    @Input
-    @Optional
-    @Option(
         option = "entityWithCurrentProjectionFun",
-        description = "name of entity 'withCurrentProjection' function (default \"__withCurrentProjection\")"
+        description = "name of entity 'withCurrentProjection' function (default \"withCurrentProjection\")"
     )
     val entityWithCurrentProjectionFun: Property<String> = project.objects.property(String::class.java)
 
@@ -284,7 +284,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityWithPrefix",
-        description = "prefix of projection 'with' method (default \"with\")"
+        description = "prefix of projection 'with' method (default null)"
     )
     val entityWithPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -300,7 +300,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityWithoutPrefix",
-        description = "prefix of projection 'with' method (default \"without\")"
+        description = "prefix of projection 'with' method (default \"__without\")"
     )
     val entityWithoutPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -348,7 +348,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityOnPrefix",
-        description = "prefix of qualification 'on' method (default \"on\")"
+        description = "prefix of qualification 'on' method (default \"__on\")"
     )
     val entityOnPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -478,6 +478,9 @@ open class KobbyKotlin : DefaultTask() {
         relativePackage.convention(true)
         rootPackageName.convention("kobby.kotlin")
 
+        contextQuery.convention("query")
+        contextMutation.convention("mutation")
+
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
         dtoJacksonEnabled.convention(project.provider {
@@ -490,16 +493,13 @@ open class KobbyKotlin : DefaultTask() {
 
         entityEnabled.convention(true)
         entityPackageName.convention("entity")
-        entityQueryProperty.convention("__query")
-        entityMutationProperty.convention("__mutation")
-        entityWithCurrentProjectionFun.convention("__withCurrentProjection")
+        entityWithCurrentProjectionFun.convention("withCurrentProjection")
         entityProjectionPostfix.convention("Projection")
         entityProjectionArgument.convention("__projection")
-        entityWithPrefix.convention("with")
-        entityWithoutPrefix.convention("without")
+        entityWithoutPrefix.convention("__without")
         entityQualificationPostfix.convention("Qualification")
         entityQualifiedProjectionPostfix.convention("QualifiedProjection")
-        entityOnPrefix.convention("on")
+        entityOnPrefix.convention("__on")
         entitySelectionPostfix.convention("Selection")
         entitySelectionArgument.convention("__selection")
         entityQueryPostfix.convention("Query")
@@ -578,7 +578,9 @@ open class KobbyKotlin : DefaultTask() {
             KotlinContextLayout(
                 contextPackage.toPackageName(),
                 context,
-                Decoration(capitalizedContext, null)
+                Decoration(capitalizedContext, null),
+                contextQuery.get(),
+                contextMutation.get()
             ),
             KotlinDtoLayout(
                 dtoPackage.toPackageName(),
@@ -601,8 +603,6 @@ open class KobbyKotlin : DefaultTask() {
                 entityEnabled.get(),
                 entityPackage.toPackageName(),
                 Decoration(entityPrefix.orNull, entityPostfix.orNull),
-                entityQueryProperty.get(),
-                entityMutationProperty.get(),
                 entityWithCurrentProjectionFun.get(),
                 KotlinEntityProjectionLayout(
                     Decoration(entityProjectionPrefix.orNull, entityProjectionPostfix.orNull),

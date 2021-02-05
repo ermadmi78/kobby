@@ -15,7 +15,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
     //******************************************************************************************************************
     //                                                Objects
     //******************************************************************************************************************
-    schema.objectsWithQueryAndMutation { node ->
+    schema.objects { node ->
         files += buildFile(dto.packageName, node.dtoName) {
             // Build object DTO class
             buildClass(node.dtoName) {

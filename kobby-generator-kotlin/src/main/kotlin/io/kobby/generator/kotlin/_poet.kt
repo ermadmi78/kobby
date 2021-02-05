@@ -166,6 +166,14 @@ internal fun FunSpecBuilder.suppressUnused() {
     )
 }
 
+internal fun FunSpecBuilder.suppressBlocking() {
+    addAnnotation(
+        AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
+            .addMember("%S", "BlockingMethodInNonBlockingContext")
+            .build()
+    )
+}
+
 internal fun FunSpecBuilder.controlFlow(flow: String, vararg args: Any, block: FunSpecBuilder.() -> Unit) {
     beginControlFlow(flow, args = args)
     apply(block)

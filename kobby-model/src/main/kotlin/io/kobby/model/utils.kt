@@ -7,6 +7,10 @@ package io.kobby.model
  */
 data class Decoration(val prefix: String?, val postfix: String?)
 
+fun Decoration.isEmpty(): Boolean = prefix.isNullOrEmpty() && postfix.isNullOrEmpty()
+
+fun Decoration.isNotEmpty(): Boolean = !isEmpty()
+
 fun String.decorate(decoration: Decoration): String =
     decorate(decoration.prefix, decoration.postfix)
 

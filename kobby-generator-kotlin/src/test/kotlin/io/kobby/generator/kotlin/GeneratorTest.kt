@@ -29,7 +29,9 @@ class GeneratorTest : AnnotationSpec() {
             KotlinContextLayout(
                 "kobby",
                 "kobby",
-                Decoration("Kobby", null)
+                Decoration("Kobby", null),
+                "query",
+                "mutation"
             ),
             KotlinDtoLayout(
                 "kobby.dto",
@@ -49,17 +51,15 @@ class GeneratorTest : AnnotationSpec() {
                 true,
                 "kobby.entity",
                 Decoration(null, null),
-                "__query",
-                "__mutation",
-                "__withCurrentProjection",
+                "withCurrentProjection",
                 KotlinEntityProjectionLayout(
                     Decoration(null, "Projection"),
                     "__projection",
-                    Decoration("with", null),
-                    Decoration("without", null),
+                    Decoration(null, null),
+                    Decoration("__without", null),
                     Decoration(null, "Qualification"),
                     Decoration(null, "QualifiedProjection"),
-                    Decoration("on", null)
+                    Decoration("__on", null)
                 ),
                 KotlinEntitySelectionLayout(
                     Decoration(null, "Selection"),

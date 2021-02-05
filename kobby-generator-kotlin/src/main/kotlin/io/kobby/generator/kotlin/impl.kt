@@ -52,24 +52,6 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
         }
     }
 
-    //******************************************************************************************************************
-    //                                                Query
-    //******************************************************************************************************************
-    files += buildFile(impl.packageName, schema.query.implName) {
-        buildQueryOrMutation(schema.query, layout)
-        buildSelection(schema.query, layout)
-        buildResolvers(schema.query, layout)
-    }
-
-    //******************************************************************************************************************
-    //                                                Mutation
-    //******************************************************************************************************************
-    files += buildFile(impl.packageName, schema.mutation.implName) {
-        buildQueryOrMutation(schema.mutation, layout)
-        buildSelection(schema.mutation, layout)
-        buildResolvers(schema.mutation, layout)
-    }
-
     files
 }
 
@@ -80,14 +62,12 @@ private fun FileSpecBuilder.buildObjectEntityBuilder(node: KobbyNode, layout: Ko
             addModifiers(KModifier.INTERNAL)
         }
 
-        buildParameter(node.entityBuilderArgQuery)
-        buildParameter(node.entityBuilderArgMutation)
-        buildParameter(node.entityBuilderArgProjection)
+        buildParameter(impl.contextPropertyName, context.contextClass)
+        buildParameter(node.implProjectionProperty)
         returns(node.entityClass)
 
         statement(node.implClass) {
-            "return %T(${node.entityBuilderArgQuery.first}, " +
-                    "${node.entityBuilderArgMutation.first}, ${node.entityBuilderArgProjection.first}, this)"
+            "return %T(${impl.contextPropertyName}, ${impl.projectionPropertyName}, this)"
         }
     }
 }
@@ -99,18 +79,16 @@ private fun FileSpecBuilder.buildInterfaceOrUnionEntityBuilder(node: KobbyNode, 
             addModifiers(KModifier.INTERNAL)
         }
 
-        buildParameter(node.entityBuilderArgQuery)
-        buildParameter(node.entityBuilderArgMutation)
-        buildParameter(node.entityBuilderArgProjection)
+        buildParameter(impl.contextPropertyName, context.contextClass)
+        buildParameter(node.implProjectionProperty)
         returns(node.entityClass)
 
         controlFlow("return when(this)") {
             node.subObjects { subObject ->
                 statement(subObject.dtoClass, subObject.implClass) {
                     "is %T -> %T(" +
-                            "${node.entityBuilderArgQuery.first}, " +
-                            "${node.entityBuilderArgMutation.first}, " +
-                            "${node.entityBuilderArgProjection.first}.${subObject.innerProjectionOnName}, " +
+                            "${impl.contextPropertyName}, " +
+                            "${impl.projectionPropertyName}.${subObject.innerProjectionOnName}, " +
                             "this)"
                 }
             }
@@ -127,15 +105,13 @@ private fun FileSpecBuilder.buildResolvers(node: KobbyNode, layout: KotlinLayout
                 addModifiers(KModifier.INTERNAL)
             }
 
-            buildParameter(field.resolverArgQuery)
-            buildParameter(field.resolverArgMutation)
-            buildParameter(field.resolverArgProjection)
+            buildParameter(impl.contextPropertyName, context.contextClass)
+            buildParameter(field.type.node.implProjectionProperty)
             returns(field.type.entityType)
 
             val builderCall = "${field.type.node.entityBuilderName}(" +
-                    "${field.resolverArgQuery.first}, " +
-                    "${field.resolverArgMutation.first}, " +
-                    "${field.resolverArgProjection.first})"
+                    "${impl.contextPropertyName}, " +
+                    "${impl.projectionPropertyName})"
 
             if (field.type.run { !nullable && list }) {
                 statement(ClassName("kotlin.collections", "listOf")) {
@@ -170,18 +146,15 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
         addSuperinterface(node.entityClass)
 
         buildPrimaryConstructorProperties {
-            // __query
-            buildProperty(entity.queryProperty, node.schema.query.entityClass) {
-                addModifiers(KModifier.OVERRIDE)
-            }
-
-            // __mutation
-            buildProperty(entity.mutationProperty, node.schema.mutation.entityClass) {
-                addModifiers(KModifier.OVERRIDE)
+            // context
+            buildProperty(impl.contextPropertyName, context.contextClass) {
+                if (impl.internal) {
+                    addModifiers(KModifier.INTERNAL)
+                }
             }
 
             // projection
-            buildProperty(impl.projectionPropertyName, node.implProjectionClass) {
+            buildProperty(node.implProjectionProperty) {
                 if (impl.internal) {
                     addModifiers(KModifier.INTERNAL)
                 }
@@ -195,6 +168,29 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             }
         }
 
+        // context query
+        buildFunction(context.query) {
+            addModifiers(KModifier.OVERRIDE, KModifier.SUSPEND)
+            buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
+            returns(node.schema.query.entityClass)
+
+            addStatement(
+                "return ${impl.contextPropertyName}.${context.query}(${entity.projection.projectionArgument})"
+            )
+        }
+
+        // context mutation
+        buildFunction(context.mutation) {
+            addModifiers(KModifier.OVERRIDE, KModifier.SUSPEND)
+            buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
+            returns(node.schema.mutation.entityClass)
+
+            addStatement(
+                "return ${impl.contextPropertyName}.${context.mutation}(${entity.projection.projectionArgument})"
+            )
+        }
+
+        // withCurrentProjection
         buildFunction(entity.withCurrentProjectionFun) {
             addModifiers(KModifier.OVERRIDE)
             receiver(node.projectionClass)
@@ -219,7 +215,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
                         statement {
                             "${impl.dtoPropertyName}.${field.resolverName}(" +
-                                    "${entity.queryProperty}, ${entity.mutationProperty}, $projectionRef!!)"
+                                    "${impl.contextPropertyName}, $projectionRef!!)"
                         }
                     }
                 } else {
@@ -367,25 +363,31 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             val repeat = entity.projection.projectionArgument
             buildParameter(repeat, node.qualifiedProjectionClass)
             node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
-                if (field.innerIsBoolean) {
-                    val negation = if (field.isDefault) "!" else ""
-                    ifFlowStatement("$negation${field.innerName}") {
-                        "$repeat.${field.projectionFieldName}()"
-                    }
-                } else ifFlow("${field.innerName} != null") {
-                    val args = field.arguments.values.asSequence()
+                val condition = if (field.innerIsBoolean) "${if (field.isDefault) "!" else ""}${field.innerName}"
+                else "${field.innerName} != null"
+
+                ifFlow(condition) {
+                    var args = field.arguments.values.asSequence()
                         .filter { !field.isSelection || !it.type.nullable }
-                        .joinToString { it.innerName + if (it.type.nullable) "" else "!!" }
-                        .let { if (it.isEmpty()) it else "($it)" }
-                    controlFlow("$repeat.${field.projectionFieldName}$args") {
-                        if (field.type.hasProjection) statement {
-                            "this@${node.implProjectionName}" +
-                                    ".${field.innerName}!!.${impl.repeatProjectionFunName}(this)"
+                        .joinToString {
+                            it.innerName + if (it.type.nullable) "" else "!!"
                         }
-                        if (field.isSelection) statement {
-                            "this@${node.implProjectionName}" +
-                                    ".${field.innerName}!!.${impl.repeatSelectionFunName}(this)"
+                    if (field.type.hasProjection || field.isSelection) {
+                        if (args.isNotEmpty()) {
+                            args = "($args)"
                         }
+                        controlFlow("$repeat.${field.projectionFieldName}$args") {
+                            if (field.type.hasProjection) statement {
+                                "this@${node.implProjectionName}" +
+                                        ".${field.innerName}!!.${impl.repeatProjectionFunName}(this)"
+                            }
+                            if (field.isSelection) statement {
+                                "this@${node.implProjectionName}" +
+                                        ".${field.innerName}!!.${impl.repeatSelectionFunName}(this)"
+                            }
+                        }
+                    } else {
+                        addStatement("$repeat.${field.projectionFieldName}($args)")
                     }
                 }
 
@@ -508,56 +510,6 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 }
 
                 spaceAppend('}')
-            }
-        }
-    }
-}
-
-private fun FileSpecBuilder.buildQueryOrMutation(node: KobbyNode, layout: KotlinLayout) = with(layout) {
-    buildClass(node.implName) {
-        if (impl.internal) {
-            addModifiers(KModifier.INTERNAL)
-        }
-        addSuperinterface(node.entityClass)
-
-        buildPrimaryConstructorProperties {
-            buildProperty(node.qmArgAdapter) {
-                if (impl.internal) {
-                    addModifiers(KModifier.INTERNAL)
-                }
-            }
-            buildProperty(node.qmArgRef) {
-                addModifiers(KModifier.PRIVATE)
-            }
-        }
-
-        buildProperty(node.qmProperty) {
-            addModifiers(KModifier.OVERRIDE)
-            buildGetter {
-                addStatement("return ${node.qmArgRef.first}[0]!!")
-            }
-        }
-
-        node.fields { field ->
-            buildFunction(field.name) {
-                returns(field.type.entityType)
-                addModifiers(KModifier.OVERRIDE, KModifier.SUSPEND)
-
-                field.arguments.values.asSequence()
-                    .filter { !field.isSelection || !it.type.nullable }
-                    .forEach { arg ->
-                        buildParameter(arg.name, arg.type.entityType)
-                    }
-
-                val qmValProjection = field.qmValProjection
-                field.lambda?.also {
-                    buildParameter(it)
-                    addStatement("val $qmValProjection = %T().apply(${it.first})", field.innerClass)
-                }
-
-
-
-                addStatement("TODO()")
             }
         }
     }

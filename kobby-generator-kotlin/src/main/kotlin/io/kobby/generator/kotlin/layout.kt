@@ -165,6 +165,9 @@ data class KotlinLayout(
     internal val KobbyNode.implProjectionClass: ClassName
         get() = ClassName(impl.packageName, implProjectionName)
 
+    internal val KobbyNode.implProjectionProperty: Pair<String, TypeName>
+        get() = impl.projectionPropertyName to implProjectionClass
+
     internal val KobbyField.implQueryName: String
         get() = queryName.decorate(impl.decoration)
 
@@ -182,15 +185,6 @@ data class KotlinLayout(
 
     internal val KobbyNode.entityBuilderName: String
         get() = "buildEntity"
-
-    internal val KobbyNode.entityBuilderArgQuery: Pair<String, TypeName>
-        get() = "query".decorate(impl.innerDecoration) to schema.query.entityClass
-
-    internal val KobbyNode.entityBuilderArgMutation: Pair<String, TypeName>
-        get() = "mutation".decorate(impl.innerDecoration) to schema.mutation.entityClass
-
-    internal val KobbyNode.entityBuilderArgProjection: Pair<String, TypeName>
-        get() = "projection".decorate(impl.innerDecoration) to implProjectionClass
 
     internal val KobbyField.innerName: String
         get() = (name + number).decorate(impl.innerDecoration)
@@ -218,15 +212,6 @@ data class KotlinLayout(
     internal val KobbyField.resolverName: String
         get() = name.decorate("resolve", null)
 
-    internal val KobbyField.resolverArgQuery: Pair<String, TypeName>
-        get() = "query".decorate(impl.innerDecoration) to schema.query.entityClass
-
-    internal val KobbyField.resolverArgMutation: Pair<String, TypeName>
-        get() = "mutation".decorate(impl.innerDecoration) to schema.mutation.entityClass
-
-    internal val KobbyField.resolverArgProjection: Pair<String, TypeName>
-        get() = "projection".decorate(impl.innerDecoration) to type.node.implProjectionClass
-
     internal val KobbyField.notNullAssertion: String
         get() = if (type.nullable) "" else "!!"
 
@@ -237,63 +222,6 @@ data class KotlinLayout(
     internal val KobbyArgument.innerName: String
         get() = (field.name + field.number + name.capitalize())
             .decorate(impl.innerDecoration)
-
-    // Query and Mutation
-
-    internal val KobbyNode.qmHeader: String
-        get() = when (kind) {
-            QUERY -> "query"
-            MUTATION -> "mutation"
-            else -> error("Invalid algorithm")
-        }
-
-    internal val KobbyNode.qmOpposite: String
-        get() = when (kind) {
-            QUERY -> "mutation"
-            MUTATION -> "query"
-            else -> error("Invalid algorithm")
-        }
-
-    internal val KobbyNode.qmArgAdapter: Pair<String, TypeName>
-        get() = "adapter".decorate(impl.innerDecoration) to context.adapterClass
-
-    internal val KobbyNode.qmArgRef: Pair<String, TypeName>
-        get() = "${qmOpposite}Ref".decorate(impl.innerDecoration) to ARRAY.parameterizedBy(
-            when (kind) {
-                QUERY -> schema.mutation.entityClass.nullable()
-                MUTATION -> schema.query.entityClass.nullable()
-                else -> error("Invalid algorithm")
-            }
-        )
-
-    internal val KobbyNode.qmPropertyName: String
-        get() = when (kind) {
-            QUERY -> entity.mutationProperty
-            MUTATION -> entity.queryProperty
-            else -> error("Invalid algorithm")
-        }
-
-    internal val KobbyNode.qmProperty: Pair<String, TypeName>
-        get() = qmPropertyName to when (kind) {
-            QUERY -> schema.mutation.entityClass
-            MUTATION -> schema.query.entityClass
-            else -> error("Invalid algorithm")
-        }
-
-    internal val KobbyField.qmValProjection: String
-        get() = if (isSelection) {
-            if (type.hasProjection) {
-                entity.selection.queryArgument
-            } else {
-                entity.selection.selectionArgument
-            }
-        } else {
-            if (type.hasProjection) {
-                entity.projection.projectionArgument
-            } else {
-                "invalidAlgorithm"
-            }
-        }.trim('_').decorate(impl.innerDecoration)
 
 
     //******************************************************************************************************************
@@ -358,7 +286,9 @@ data class KotlinLayout(
 class KotlinContextLayout(
     packageName: String,
     val name: String,
-    val decoration: Decoration
+    val decoration: Decoration,
+    val query: String,
+    val mutation: String
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
@@ -394,8 +324,6 @@ class KotlinEntityLayout(
     val enabled: Boolean,
     packageName: String,
     val decoration: Decoration,
-    val queryProperty: String,
-    val mutationProperty: String,
     val withCurrentProjectionFun: String,
     val projection: KotlinEntityProjectionLayout,
     val selection: KotlinEntitySelectionLayout
