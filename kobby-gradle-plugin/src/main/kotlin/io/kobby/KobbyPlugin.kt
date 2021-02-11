@@ -160,6 +160,9 @@ class KobbyPlugin : Plugin<Project> {
                                 withoutPostfix?.also {
                                     kotlinTask.entityWithoutPostfix.convention(it)
                                 }
+                                minimizeFun?.also {
+                                    kotlinTask.entityMinimizeFun.convention(it)
+                                }
                                 qualificationPrefix?.also {
                                     kotlinTask.entityQualificationPrefix.convention(it)
                                 }

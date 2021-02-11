@@ -336,6 +336,7 @@ class KotlinEntityProjectionLayout(
     val projectionArgument: String,
     val withDecoration: Decoration,
     val withoutDecoration: Decoration,
+    val minimizeFun: String,
     val qualificationDecoration: Decoration,
     val qualifiedProjectionDecoration: Decoration,
     val onDecoration: Decoration

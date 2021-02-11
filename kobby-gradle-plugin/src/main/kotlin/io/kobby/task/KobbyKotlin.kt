@@ -252,7 +252,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityWithCurrentProjectionFun",
-        description = "name of entity 'withCurrentProjection' function (default \"withCurrentProjection\")"
+        description = "name of entity 'withCurrentProjection' function (default \"__withCurrentProjection\")"
     )
     val entityWithCurrentProjectionFun: Property<String> = project.objects.property(String::class.java)
 
@@ -311,6 +311,14 @@ open class KobbyKotlin : DefaultTask() {
         description = "postfix of projection 'with' method (default null)"
     )
     val entityWithoutPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityMinimizeFun",
+        description = "name of projection 'minimize' function (default \"__minimize\")"
+    )
+    val entityMinimizeFun: Property<String> = project.objects.property(String::class.java)
 
     @Input
     @Optional
@@ -493,10 +501,11 @@ open class KobbyKotlin : DefaultTask() {
 
         entityEnabled.convention(true)
         entityPackageName.convention("entity")
-        entityWithCurrentProjectionFun.convention("withCurrentProjection")
+        entityWithCurrentProjectionFun.convention("__withCurrentProjection")
         entityProjectionPostfix.convention("Projection")
         entityProjectionArgument.convention("__projection")
         entityWithoutPrefix.convention("__without")
+        entityMinimizeFun.convention("__minimize")
         entityQualificationPostfix.convention("Qualification")
         entityQualifiedProjectionPostfix.convention("QualifiedProjection")
         entityOnPrefix.convention("__on")
@@ -609,6 +618,7 @@ open class KobbyKotlin : DefaultTask() {
                     entityProjectionArgument.get(),
                     Decoration(entityWithPrefix.orNull, entityWithPostfix.orNull),
                     Decoration(entityWithoutPrefix.orNull, entityWithoutPostfix.orNull),
+                    entityMinimizeFun.get(),
                     Decoration(entityQualificationPrefix.orNull, entityQualificationPostfix.orNull),
                     Decoration(entityQualifiedProjectionPrefix.orNull, entityQualifiedProjectionPostfix.orNull),
                     Decoration(entityOnPrefix.orNull, entityOnPostfix.orNull)

@@ -244,6 +244,8 @@ open class KobbyKotlinEntityProjectionExtension {
     var withoutPrefix: String? = null
     var withoutPostfix: String? = null
 
+    var minimizeFun: String? = null
+
     var qualificationPrefix: String? = null
     var qualificationPostfix: String? = null
 
@@ -262,6 +264,7 @@ open class KobbyKotlinEntityProjectionExtension {
                 "withPostfix=$withPostfix, " +
                 "withoutPrefix=$withoutPrefix, " +
                 "withoutPostfix=$withoutPostfix, " +
+                "minimizeFun=$minimizeFun, " +
                 "qualificationPrefix=$qualificationPrefix, " +
                 "qualificationPostfix=$qualificationPostfix, " +
                 "qualifiedProjectionPrefix=$qualifiedProjectionPrefix, " +

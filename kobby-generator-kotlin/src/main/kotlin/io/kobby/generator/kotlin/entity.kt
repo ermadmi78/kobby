@@ -138,6 +138,16 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 }
             }
         }
+
+        // minimize function
+        buildFunction(entity.projection.minimizeFun) {
+            if (node.implements.isNotEmpty()) {
+                addModifiers(KModifier.OVERRIDE)
+            }
+            node.fields.values.asSequence().filter { !it.isRequired && it.isDefault }.forEach { field ->
+                addStatement("${field.projectionFieldName}()")
+            }
+        }
     }
 }
 
