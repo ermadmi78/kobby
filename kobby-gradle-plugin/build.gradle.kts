@@ -16,7 +16,7 @@ gradlePlugin {
             id = "io.kobby"
             implementationClass = "io.kobby.KobbyPlugin"
             displayName = title
-            description = "Kobby is а Gradle plugin for generating Kotlin DSL Client by GraphQL schema"
+            description = "Kobby is a Gradle plugin for generating Kotlin DSL Client by GraphQL schema"
         }
     }
 }
