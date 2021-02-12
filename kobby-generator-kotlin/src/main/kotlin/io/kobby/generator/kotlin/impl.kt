@@ -410,107 +410,120 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             buildParameter(buildFunArgBody)
             buildParameter(buildFunArgArguments)
 
-            controlFlow("${buildFunArgBody.first}.apply") {
-                spaceAppend('{')
+            val ignore = buildFunArgIgnore.first
+            val header = buildFunArgHeader.first
+            val body = buildFunArgBody.first
+            val arguments = buildFunArgArguments.first
 
-                addStatement("")
-                node.fields { field ->
-                    val fieldCondition = when {
-                        field.isRequired -> "%S !in ${buildFunArgIgnore.first}"
-                        field.innerIsBoolean -> "%S !in ${buildFunArgIgnore.first} && ${field.innerName}"
-                        else -> "%S !in ${buildFunArgIgnore.first} && ${field.innerName} != null"
-                    }
-                    addComment("Field: ${field.name}")
-                    ifFlow(fieldCondition, field.name) {
-                        spaceAppend(field.name)
+            buildAppendChain(body) { spaceAppendLiteral('{') }
 
-                        // build arguments
-                        if (field.arguments.isNotEmpty()) {
-                            addStatement("var counter = 0")
-                            append('(')
-                            addStatement("")
-                            field.arguments { arg ->
-                                val argName = if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
-                                addComment("Argument: ${field.name}.${arg.name}")
-                                ifFlow(if (arg.type.nullable) "$argName != null" else "true") {
-                                    ifFlow("counter++ > 0") {
-                                        append(", ")
-                                    }
-                                    val mapName = buildFunArgArguments.first
-                                    addStatement("val arg = %S + $mapName.size", argPrefix)
-                                    addStatement("$mapName[arg] = $argName!!")
-                                    addStatement("append(%S).append(%S).append('$').append(arg)", arg.name, ": ")
-
-                                    addStatement("")
-                                    ifFlow("${buildFunArgHeader.first}.isNotEmpty()") {
-                                        addStatement("${buildFunArgHeader.first}.append(%S)", ", ")
-                                    }
-                                    addStatement(
-                                        "${buildFunArgHeader.first}.append('$').append(arg).append(%S).append(%S)",
-                                        ": ", arg.type.sourceName
-                                    )
-                                }
-                                addStatement("")
-                            }
-                            append(')')
-                        }
-
-                        // build field projection
-                        if (field.type.hasProjection) {
-                            addStatement("")
-                            addComment("Build nested projection of ${field.type.node.name}")
-                            addStatement(
-                                "${field.innerName}!!.${impl.buildFunName}(" +
-                                        "%T(), " +
-                                        "${buildFunArgHeader.first}, " +
-                                        "${buildFunArgBody.first}, " +
-                                        "${buildFunArgArguments.first})",
-                                ClassName("kotlin.collections", "setOf")
-                            )
-                        }
-                    }
-                    addStatement("")
+            addStatement("")
+            node.fields { field ->
+                val fieldCondition = when {
+                    field.isRequired -> "%S !in $ignore"
+                    field.innerIsBoolean -> "%S !in $ignore && ${field.innerName}"
+                    else -> "%S !in $ignore && ${field.innerName} != null"
                 }
+                addComment("Field: ${field.name}")
+                ifFlow(fieldCondition, field.name) {
+                    buildAppendChain(body) { spaceAppendLiteral(field.name) }
 
-                if (node.kind == INTERFACE || node.kind == UNION) {
-                    spaceAppend("__typename")
-                    addStatement("")
-                    addStatement("val ${buildFunValSubBody.first} = %T()", buildFunValSubBody.second)
-                    addStatement("")
-                    node.subObjects { subObject ->
-                        addComment("Qualification of: ${subObject.name}")
-                        addStatement("${buildFunValSubBody.first}.clear()")
-                        if (node.kind == INTERFACE) {
-                            addStatement(
-                                "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
-                                        "${impl.interfaceIgnore.first}, " +
-                                        "${buildFunArgHeader.first}, " +
-                                        "${buildFunValSubBody.first}, " +
-                                        "${buildFunArgArguments.first})"
-                            )
-                        } else {
-                            addStatement(
-                                "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
-                                        "%T(), " +
-                                        "${buildFunArgHeader.first}, " +
-                                        "${buildFunValSubBody.first}, " +
-                                        "${buildFunArgArguments.first})",
-                                ClassName("kotlin.collections", "setOf")
-                            )
-                        }
-                        ifFlowStatement(
-                            "${buildFunValSubBody.first}.length > 4",
-                            " ... on ", subObject.name
-                        ) {
-                            "append(%S).append(%S).append(${buildFunValSubBody.first})"
-                        }
-
+                    // build arguments
+                    if (field.arguments.isNotEmpty()) {
+                        addStatement("var counter = 0")
+                        buildAppendChain(body) { appendLiteral('(') }
                         addStatement("")
+                        field.arguments { arg ->
+                            val argName = if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
+                            addComment("Argument: ${field.name}.${arg.name}")
+                            ifFlow(if (arg.type.nullable) "$argName != null" else "true") {
+                                ifFlow("counter++ > 0") {
+                                    buildAppendChain(body) { appendLiteral(", ") }
+                                }
+                                val mapName = arguments
+                                addStatement("val arg = %S + $mapName.size", argPrefix)
+                                addStatement("$mapName[arg] = $argName!!")
+                                buildAppendChain(body) {
+                                    appendLiteral(arg.name)
+                                    appendLiteral(": ")
+                                    appendLiteral('$')
+                                    appendExactly("arg")
+                                }
+
+                                addStatement("")
+                                ifFlow("$header.isNotEmpty()") {
+                                    buildAppendChain(header) { appendLiteral(", ") }
+                                }
+                                buildAppendChain(header) {
+                                    appendLiteral('$')
+                                    appendExactly("arg")
+                                    appendLiteral(": ")
+                                    appendLiteral(arg.type.sourceName)
+                                }
+                            }
+                            addStatement("")
+                        }
+                        buildAppendChain(body) { appendLiteral(')') }
+                    }
+
+                    // build field projection
+                    if (field.type.hasProjection) {
+                        addStatement("")
+                        addComment("Build nested projection of ${field.type.node.name}")
+                        addStatement(
+                            "${field.innerName}!!.${impl.buildFunName}(" +
+                                    "%T(), " +
+                                    "$header, " +
+                                    "$body, " +
+                                    "$arguments)",
+                            ClassName("kotlin.collections", "setOf")
+                        )
                     }
                 }
-
-                spaceAppend('}')
+                addStatement("")
             }
+
+            if (node.kind == INTERFACE || node.kind == UNION) {
+                val subBody = buildFunValSubBody.first
+
+                buildAppendChain(body) { spaceAppendLiteral("__typename") }
+                addStatement("")
+                addStatement("val $subBody = %T()", buildFunValSubBody.second)
+                addStatement("")
+                node.subObjects { subObject ->
+                    addComment("Qualification of: ${subObject.name}")
+                    addStatement("$subBody.clear()")
+                    if (node.kind == INTERFACE) {
+                        addStatement(
+                            "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
+                                    "${impl.interfaceIgnore.first}, " +
+                                    "$header, " +
+                                    "$subBody, " +
+                                    "$arguments)"
+                        )
+                    } else {
+                        addStatement(
+                            "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
+                                    "%T(), " +
+                                    "$header, " +
+                                    "$subBody, " +
+                                    "$arguments)",
+                            ClassName("kotlin.collections", "setOf")
+                        )
+                    }
+                    ifFlow("$subBody.length > 4") {
+                        buildAppendChain(body) {
+                            appendLiteral(" ... on ")
+                            appendLiteral(subObject.name)
+                            appendExactly(subBody)
+                        }
+                    }
+
+                    addStatement("")
+                }
+            }
+
+            buildAppendChain(body) { spaceAppendLiteral('}') }
         }
     }
 }

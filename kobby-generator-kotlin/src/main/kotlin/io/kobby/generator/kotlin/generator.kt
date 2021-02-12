@@ -147,13 +147,13 @@ private fun TypeSpecBuilder.buildContextFunction(
             "val $operation = buildString(" +
                     "${header.first}.length + ${body.first}.length + ${operation.length + 2})"
         ) {
-            append(operation)
+            buildAppendChain { appendLiteral(operation) }
             ifFlow("${header.first}.isNotEmpty()") {
-                append('(')
-                addStatement("append(${header.first})")
-                append(')')
+                buildAppendChain {
+                    appendLiteral('(').appendExactly(header.first).appendLiteral(')')
+                }
             }
-            addStatement("append(${body.first})")
+            buildAppendChain { appendExactly(body.first) }
         }
 
         val dto = operation.run {

@@ -197,17 +197,64 @@ internal fun FunSpecBuilder.ifFlowStatement(
 internal fun FunSpecBuilder.statement(vararg args: Any, block: () -> String) =
     addStatement(block(), args = args)
 
-internal fun FunSpecBuilder.append(value: String) =
-    addStatement("append(%S)", value)
+internal fun FunSpecBuilder.buildAppendChain(
+    variable: String = "",
+    block: AppendChainBuilder.() -> Unit
+): FunSpecBuilder = AppendChainBuilder(this, variable).apply(block).build()
 
-internal fun FunSpecBuilder.append(value: Char) =
-    addStatement("append('$value')")
+internal class AppendChainBuilder(private val funBuilder: FunSpecBuilder, variable: String) {
+    private val statement: StringBuilder = StringBuilder()
+    private val args: MutableList<Any> = mutableListOf()
 
-internal fun FunSpecBuilder.spaceAppend(value: String) =
-    addStatement("append(' ').append(%S)", value)
+    init {
+        if (variable.isNotBlank()) {
+            statement.append(variable.trim())
+        }
+    }
 
-internal fun FunSpecBuilder.spaceAppend(value: Char) =
-    addStatement("append(' ').append('$value')")
+    fun appendExactly(value: String): AppendChainBuilder {
+        if (statement.isNotEmpty()) {
+            statement.append('.')
+        }
+
+        statement.append("append($value)")
+
+        return this
+    }
+
+    fun appendLiteral(value: String): AppendChainBuilder {
+        if (statement.isNotEmpty()) {
+            statement.append('.')
+        }
+
+        statement.append("append(%S)")
+        args += value
+
+        return this
+    }
+
+    fun appendLiteral(value: Char): AppendChainBuilder {
+        if (statement.isNotEmpty()) {
+            statement.append('.')
+        }
+
+        statement.append("append('$value')")
+
+        return this
+    }
+
+    fun spaceAppendExactly(value: String): AppendChainBuilder =
+        appendLiteral(' ').appendExactly(value)
+
+    fun spaceAppendLiteral(value: String): AppendChainBuilder =
+        appendLiteral(' ').appendLiteral(value)
+
+    fun spaceAppendLiteral(value: Char): AppendChainBuilder =
+        appendLiteral(' ').appendLiteral(value)
+
+    fun build(): FunSpecBuilder =
+        funBuilder.addStatement(statement.toString(), args = args.toTypedArray())
+}
 
 // Primary constructor properties builder
 internal fun TypeSpecBuilder.buildPrimaryConstructorProperties(
