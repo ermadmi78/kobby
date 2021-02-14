@@ -25,7 +25,7 @@ tasks {
     val shadowJarTask = named("shadowJar", ShadowJar::class.java)
     val relocateShadowJar = register("relocateShadowJar", ConfigureShadowRelocation::class.java) {
         target = shadowJarTask.get()
-        prefix = "io.kobby.model.shadow"
+        prefix = "io.github.ermadmi78.kobby.model.shadow"
     }
     shadowJarTask.configure {
         dependsOn(relocateShadowJar)

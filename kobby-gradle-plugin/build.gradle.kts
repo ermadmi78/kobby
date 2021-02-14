@@ -13,8 +13,8 @@ plugins {
 gradlePlugin {
     plugins {
         create("KobbyPlugin") {
-            id = "io.kobby"
-            implementationClass = "io.kobby.KobbyPlugin"
+            id = "io.github.ermadmi78.kobby"
+            implementationClass = "io.github.ermadmi78.kobby.KobbyPlugin"
             displayName = title
             description = "Kobby is a Gradle plugin for generating Kotlin DSL Client by GraphQL schema"
         }
