@@ -1,6 +1,7 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.time.Instant
 
 description = "Kotlin DSL over GraphQL schema generator"
 extra["isReleaseVersion"] = !version.toString().endsWith("SNAPSHOT")
@@ -49,6 +50,18 @@ subprojects {
             kotlinOptions {
                 jvmTarget = kotlinJvmVersion
                 freeCompilerArgs = listOf("-Xjsr305=strict")
+            }
+        }
+
+        jar {
+            manifest {
+                attributes["Built-By"] = "https://github.com/ermadmi78"
+                attributes["Build-Jdk"] =
+                    "${System.getProperty("java.version")} (${System.getProperty("java.vendor")} ${System.getProperty("java.vm.version")})"
+                attributes["Build-Timestamp"] = Instant.now().toString()
+                attributes["Created-By"] = "Gradle ${gradle.gradleVersion}"
+                attributes["Implementation-Title"] = currentProject.name
+                attributes["Implementation-Version"] = project.version
             }
         }
 
