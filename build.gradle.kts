@@ -1,10 +1,13 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 description = "Kotlin DSL over GraphQL schema generator"
+extra["isReleaseVersion"] = !version.toString().endsWith("SNAPSHOT")
 
 plugins {
     kotlin("jvm")
+    id("org.jetbrains.dokka") apply false
     `java-library`
     `maven-publish`
     signing
@@ -34,15 +37,10 @@ subprojects {
     val currentProject = this
 
     apply(plugin = "kotlin")
+    apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
-
-    @Suppress("UnstableApiUsage")
-    java {
-        withJavadocJar()
-        withSourcesJar()
-    }
 
     println("${currentProject.group}:${currentProject.name}")
 
@@ -60,6 +58,21 @@ subprojects {
             useJUnitPlatform()
         }
 
+        // published artifacts
+        val jarComponent = currentProject.components.getByName("java")
+        val sourcesJar by registering(Jar::class) {
+            archiveClassifier.set("sources")
+            from(sourceSets.main.get().allSource)
+        }
+        val dokka by getting(DokkaTask::class) {
+            outputFormat = "javadoc"
+            outputDirectory = "$buildDir/javadoc"
+        }
+        val javadocJar by registering(Jar::class) {
+            archiveClassifier.set("javadoc")
+            from("$buildDir/javadoc")
+            dependsOn(dokka.path)
+        }
         publishing {
             repositories {
                 mavenLocal()
@@ -95,10 +108,13 @@ subprojects {
                         }
                     }
                 }
-                create<MavenPublication>("pluginMaven") {
-                    if (currentProject.name != "kobby-gradle-plugin") {
-                        from(currentProject.components["java"])
-                    }
+                create<MavenPublication>("mavenJava") {
+                    from(jarComponent)
+                    // no need to publish sources or javadocs for SNAPSHOT builds
+                    //if (rootProject.extra["isReleaseVersion"] as Boolean) {
+                    artifact(sourcesJar.get())
+                    artifact(javadocJar.get())
+                    //}
                 }
             }
         }
