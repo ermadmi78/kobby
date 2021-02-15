@@ -9,7 +9,7 @@ val graphQLJavaVersion: String by project
  * Special configuration to be included in resulting shadowed jar, but not added to the generated pom and gradle
  * metadata files.
  */
-val shadowImplementation by configurations.creating
+val shadowImplementation: Configuration by configurations.creating
 configurations["compileOnly"].extendsFrom(shadowImplementation)
 configurations["testImplementation"].extendsFrom(shadowImplementation)
 
