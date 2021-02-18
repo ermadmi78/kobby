@@ -88,9 +88,8 @@ subprojects {
         }
         publishing {
             repositories {
-                mavenLocal()
-                if (rootProject.extra["isReleaseVersion"] as Boolean) {
-                    mavenCentral()
+                if (!(rootProject.extra["isReleaseVersion"] as Boolean)) {
+                    mavenLocal()
                 }
             }
             publications {
@@ -156,5 +155,11 @@ subprojects {
         testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
         testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
         testImplementation("io.kotest:kotest-property:$kotestVersion")
+    }
+}
+
+tasks {
+    jar {
+        enabled = false
     }
 }
