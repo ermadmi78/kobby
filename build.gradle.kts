@@ -89,6 +89,9 @@ subprojects {
         publishing {
             repositories {
                 mavenLocal()
+                if (rootProject.extra["isReleaseVersion"] as Boolean) {
+                    mavenCentral()
+                }
             }
             publications {
                 withType<MavenPublication> {
@@ -124,21 +127,22 @@ subprojects {
                 create<MavenPublication>("mavenJava") {
                     from(jarComponent)
                     // no need to publish sources or javadocs for SNAPSHOT builds
-                    //if (rootProject.extra["isReleaseVersion"] as Boolean) {
-                    artifact(sourcesJar.get())
-                    artifact(javadocJar.get())
-                    //}
+                    if (rootProject.extra["isReleaseVersion"] as Boolean) {
+                        artifact(sourcesJar.get())
+                        artifact(javadocJar.get())
+                    }
                 }
             }
         }
         signing {
-//            setRequired {
-//                (rootProject.extra["isReleaseVersion"] as Boolean) &&
-//                        (gradle.taskGraph.hasTask("publish") || gradle.taskGraph.hasTask("publishPlugins"))
-//            }
-//            val signingKey: String? = System.getenv("GPG_SECRET")
-//            val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
-//            useInMemoryPgpKeys(signingKey, signingPassword)
+            setRequired {
+                (rootProject.extra["isReleaseVersion"] as Boolean) &&
+                        (gradle.taskGraph.hasTask("publish") || gradle.taskGraph.hasTask("publishPlugins"))
+            }
+            val signingKey: String? = System.getenv("GPG_SECRET")
+            val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
+            @Suppress("UnstableApiUsage")
+            useInMemoryPgpKeys(signingKey, signingPassword)
             sign(publishing.publications)
         }
     }
