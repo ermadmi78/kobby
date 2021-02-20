@@ -155,8 +155,9 @@ subprojects {
             }
         }
         signing {
+            val isReleaseVersion = rootProject.extra["isReleaseVersion"] as Boolean
             setRequired {
-                (rootProject.extra["isReleaseVersion"] as Boolean) &&
+                isReleaseVersion &&
                         (gradle.taskGraph.hasTask("publish") || gradle.taskGraph.hasTask("publishPlugins"))
             }
             if (project.properties["signing.keyId"] == null) {
@@ -165,7 +166,10 @@ subprojects {
                 @Suppress("UnstableApiUsage")
                 useInMemoryPgpKeys(signingKey, signingPassword)
             }
-            sign(publishing.publications)
+
+            if (isReleaseVersion) {
+                sign(publishing.publications)
+            }
         }
     }
 
