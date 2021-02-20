@@ -1,3 +1,4 @@
+import de.marcphilipp.gradle.nexus.NexusPublishExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -12,6 +13,7 @@ plugins {
     `java-library`
     `maven-publish`
     signing
+    id("de.marcphilipp.nexus-publish")
 }
 
 allprojects {
@@ -27,6 +29,25 @@ allprojects {
         mavenLocal()
         jcenter()
         mavenCentral()
+    }
+
+    if (rootProject.extra["isReleaseVersion"] as Boolean) {
+        apply(plugin = "de.marcphilipp.nexus-publish")
+
+        configure<NexusPublishExtension> {
+            repositories {
+                sonatype {
+                    username.set(
+                        project.properties["sonatype.username"] as? String
+                            ?: System.getenv("SONATYPE_USERNAME")
+                    )
+                    password.set(
+                        project.properties["sonatype.password"] as? String
+                            ?: System.getenv("SONATYPE_PASSWORD")
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -138,10 +159,12 @@ subprojects {
                 (rootProject.extra["isReleaseVersion"] as Boolean) &&
                         (gradle.taskGraph.hasTask("publish") || gradle.taskGraph.hasTask("publishPlugins"))
             }
-            val signingKey: String? = System.getenv("GPG_SECRET")
-            val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
-            @Suppress("UnstableApiUsage")
-            useInMemoryPgpKeys(signingKey, signingPassword)
+            if (project.properties["signing.keyId"] == null) {
+                val signingKey: String? = System.getenv("GPG_SECRET")
+                val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
+                @Suppress("UnstableApiUsage")
+                useInMemoryPgpKeys(signingKey, signingPassword)
+            }
             sign(publishing.publications)
         }
     }
