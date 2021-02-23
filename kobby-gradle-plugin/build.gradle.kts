@@ -30,12 +30,8 @@ pluginBundle {
 tasks {
     publishPlugins {
         doFirst {
-            System.getenv("PLUGIN_PORTAL_KEY")?.also {
-                System.setProperty("gradle.publish.key", it)
-            }
-            System.getenv("PLUGIN_PORTAL_SECRET")?.also {
-                System.setProperty("gradle.publish.secret", it)
-            }
+            System.setProperty("gradle.publish.key", System.getenv("PLUGIN_PORTAL_KEY"))
+            System.setProperty("gradle.publish.secret", System.getenv("PLUGIN_PORTAL_SECRET"))
         }
     }
 }

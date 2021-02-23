@@ -38,14 +38,8 @@ allprojects {
         configure<NexusPublishExtension> {
             repositories {
                 sonatype {
-                    username.set(
-                        project.properties["sonatype.username"] as? String
-                            ?: System.getenv("SONATYPE_USERNAME")
-                    )
-                    password.set(
-                        project.properties["sonatype.password"] as? String
-                            ?: System.getenv("SONATYPE_PASSWORD")
-                    )
+                    username.set(System.getenv("SONATYPE_USERNAME"))
+                    password.set(System.getenv("SONATYPE_PASSWORD"))
                 }
             }
         }
@@ -156,21 +150,16 @@ subprojects {
             }
         }
         signing {
-            val isReleaseVersion = rootProject.extra["isReleaseVersion"] as Boolean
             setRequired {
-                isReleaseVersion &&
+                rootProject.extra["isReleaseVersion"] as Boolean &&
                         (gradle.taskGraph.hasTask("publish") || gradle.taskGraph.hasTask("publishPlugins"))
             }
-            if (project.properties["signing.keyId"] == null) {
-                val signingKey: String? = System.getenv("GPG_SECRET")
-                val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
-                @Suppress("UnstableApiUsage")
-                useInMemoryPgpKeys(signingKey, signingPassword)
-            }
+            val signingKey: String? = System.getenv("GPG_SECRET")
+            val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
+            @Suppress("UnstableApiUsage")
+            useInMemoryPgpKeys(signingKey, signingPassword)
 
-            if (isReleaseVersion) {
-                sign(publishing.publications)
-            }
+            sign(publishing.publications)
         }
     }
 
@@ -191,10 +180,8 @@ tasks {
         enabled = false
     }
     nexusStaging {
-        username = project.properties["sonatype.username"] as? String
-            ?: System.getenv("SONATYPE_USERNAME")
-        password = project.properties["sonatype.password"] as? String
-            ?: System.getenv("SONATYPE_PASSWORD")
+        username = System.getenv("SONATYPE_USERNAME")
+        password = System.getenv("SONATYPE_PASSWORD")
         packageGroup = rootProject.group.toString()
         numberOfRetries = 60
         delayBetweenRetriesInMillis = 5000
