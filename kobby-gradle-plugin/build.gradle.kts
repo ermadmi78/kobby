@@ -26,3 +26,16 @@ pluginBundle {
     vcsUrl = "https://github.com/ermadmi78/kobby"
     tags = listOf("graphql", "kotlin", "graphql-client", "dsl")
 }
+
+tasks {
+    publishPlugins {
+        doFirst {
+            System.getenv("PLUGIN_PORTAL_KEY")?.also {
+                System.setProperty("gradle.publish.key", it)
+            }
+            System.getenv("PLUGIN_PORTAL_SECRET")?.also {
+                System.setProperty("gradle.publish.secret", it)
+            }
+        }
+    }
+}

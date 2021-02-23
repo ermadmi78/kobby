@@ -14,6 +14,7 @@ plugins {
     `maven-publish`
     signing
     id("de.marcphilipp.nexus-publish")
+    id("io.codearte.nexus-staging")
 }
 
 allprojects {
@@ -188,5 +189,14 @@ subprojects {
 tasks {
     jar {
         enabled = false
+    }
+    nexusStaging {
+        username = project.properties["sonatype.username"] as? String
+            ?: System.getenv("SONATYPE_USERNAME")
+        password = project.properties["sonatype.password"] as? String
+            ?: System.getenv("SONATYPE_PASSWORD")
+        packageGroup = rootProject.group.toString()
+        numberOfRetries = 60
+        delayBetweenRetriesInMillis = 5000
     }
 }
