@@ -133,7 +133,9 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     }
                 field.lambda?.also {
                     buildParameter(it) {
-                        defaultValue("{}")
+                        if (!field.isOverride) {
+                            defaultValue("{}")
+                        }
                     }
                 }
             }
