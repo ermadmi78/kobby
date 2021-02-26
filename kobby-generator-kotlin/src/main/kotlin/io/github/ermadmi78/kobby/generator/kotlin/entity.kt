@@ -123,7 +123,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     .filter { !field.isSelection || !it.type.nullable }
                     .forEach { arg ->
                         buildParameter(arg.name, arg.type.entityType) {
-                            if (arg.type.nullable) {
+                            if (!field.isOverride && arg.type.nullable) {
                                 defaultValue("null")
                             }
                             arg.comments {
