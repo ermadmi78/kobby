@@ -12,8 +12,16 @@ class KobbyArgument internal constructor(
 
     val name: String,
     val type: KobbyType,
-    val comments: List<String>
+    private val _comments: List<String>
 ) {
+    val comments: List<String> by lazy {
+        if (_comments.isNotEmpty()) {
+            _comments
+        } else {
+            field.overriddenField?.arguments?.get(name)?.comments ?: emptyList()
+        }
+    }
+
     fun comments(action: (String) -> Unit) = comments.forEach(action)
 
     val isSelection: Boolean get() = this.field.isSelection && type.nullable

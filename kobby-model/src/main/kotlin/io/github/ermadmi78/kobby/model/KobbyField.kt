@@ -17,9 +17,17 @@ class KobbyField internal constructor(
     private val required: Boolean,
     private val default: Boolean,
     private val selection: Boolean,
-    val comments: List<String>,
+    private val _comments: List<String>,
     val arguments: Map<String, KobbyArgument>
 ) {
+    val comments: List<String> by lazy {
+        if (_comments.isNotEmpty()) {
+            _comments
+        } else {
+            overriddenField?.comments ?: emptyList()
+        }
+    }
+
     fun comments(action: (String) -> Unit) = comments.forEach(action)
     fun arguments(action: (KobbyArgument) -> Unit) = arguments.values.forEach(action)
 
