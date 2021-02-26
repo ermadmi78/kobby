@@ -29,11 +29,23 @@ internal typealias ParameterSpecBuilder = ParameterSpec.Builder
 @KobbyScope
 internal typealias CodeBlockBuilder = CodeBlock.Builder
 
+private val SUPPRESS = AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
+    .addMember("%S", "RedundantVisibilityModifier")
+    .addMember("%S", "RedundantUnitReturnType")
+    .addMember("%S", "FunctionName")
+    .addMember("%S", "PropertyName")
+    .addMember("%S", "ObjectPropertyName")
+    .addMember("%S", "MemberVisibilityCanBePrivate")
+    .addMember("%S", "ConstantConditionIf")
+    .addMember("%S", "CanBeParameter")
+    .addMember("%S", "unused")
+    .build()
+
 internal fun buildFile(
     packageName: String,
     fileName: String,
     block: FileSpecBuilder.() -> Unit
-): FileSpec = FileSpec.builder(packageName, fileName).apply(block).build()
+): FileSpec = FileSpec.builder(packageName, fileName).apply { addAnnotation(SUPPRESS) }.apply(block).build()
 
 internal fun FileSpecBuilder.buildClass(
     name: String,
