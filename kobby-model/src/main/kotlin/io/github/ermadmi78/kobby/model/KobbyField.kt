@@ -48,7 +48,7 @@ class KobbyField internal constructor(
     val isDefault: Boolean get() = isProperty && (overriddenField?.isDefault ?: default)
 
     val isSelection: Boolean by lazy {
-        selection && arguments.values.any { it.type.nullable }
+        overriddenField?.isSelection ?: (selection && arguments.values.any { it.type.nullable })
     }
 
     override fun equals(other: Any?): Boolean {

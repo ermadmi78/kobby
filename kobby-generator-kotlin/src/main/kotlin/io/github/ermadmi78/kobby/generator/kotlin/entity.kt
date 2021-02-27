@@ -154,7 +154,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 }
 
 private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout) = with(layout) {
-    node.fields.values.asSequence().filter { it.isSelection }.forEach { field ->
+    node.fields.values.asSequence().filter { !it.isOverride && it.isSelection }.forEach { field ->
         buildInterface(field.selectionName) {
             addAnnotation(context.dslClass)
             field.comments {

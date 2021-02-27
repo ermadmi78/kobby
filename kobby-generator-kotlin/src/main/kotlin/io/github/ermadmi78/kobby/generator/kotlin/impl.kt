@@ -240,7 +240,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 }
 
 private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout) = with(layout) {
-    node.fields.values.asSequence().filter { it.isSelection }.forEach { field ->
+    node.fields.values.asSequence().filter { !it.isOverride && it.isSelection }.forEach { field ->
         val isQuery = field.type.hasProjection
         buildClass(if (isQuery) field.implQueryName else field.implSelectionName) {
             if (impl.internal) {

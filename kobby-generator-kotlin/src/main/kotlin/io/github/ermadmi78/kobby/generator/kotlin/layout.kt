@@ -121,33 +121,38 @@ data class KotlinLayout(
         get() = name.decorate(entity.projection.onDecoration)
 
     internal val KobbyField.selectionName: String
-        get() = "${node.name}${name.capitalize()}".decorate(entity.selection.selectionDecoration)
+        get() = overriddenField?.selectionName
+            ?: "${node.name}${name.capitalize()}".decorate(entity.selection.selectionDecoration)
 
     internal val KobbyField.selectionClass: ClassName
-        get() = ClassName(entity.packageName, selectionName)
+        get() = overriddenField?.selectionClass
+            ?: ClassName(entity.packageName, selectionName)
 
     internal val KobbyField.queryName: String
-        get() = "${node.name}${name.capitalize()}".decorate(entity.selection.queryDecoration)
+        get() = overriddenField?.queryName
+            ?: "${node.name}${name.capitalize()}".decorate(entity.selection.queryDecoration)
 
     internal val KobbyField.queryClass: ClassName
-        get() = ClassName(entity.packageName, queryName)
+        get() = overriddenField?.queryClass
+            ?: ClassName(entity.packageName, queryName)
 
     internal val KobbyField.lambda: Pair<String, LambdaTypeName>?
-        get() = if (isSelection) {
-            if (type.hasProjection) {
-                entity.selection.queryArgument to
-                        LambdaTypeName.get(queryClass, emptyList(), UNIT)
+        get() = overriddenField?.lambda
+            ?: if (isSelection) {
+                if (type.hasProjection) {
+                    entity.selection.queryArgument to
+                            LambdaTypeName.get(queryClass, emptyList(), UNIT)
+                } else {
+                    entity.selection.selectionArgument to
+                            LambdaTypeName.get(selectionClass, emptyList(), UNIT)
+                }
             } else {
-                entity.selection.selectionArgument to
-                        LambdaTypeName.get(selectionClass, emptyList(), UNIT)
+                if (type.hasProjection) {
+                    entity.projection.projectionArgument to type.node.projectionLambda
+                } else {
+                    null
+                }
             }
-        } else {
-            if (type.hasProjection) {
-                entity.projection.projectionArgument to type.node.projectionLambda
-            } else {
-                null
-            }
-        }
 
     // *****************************************************************************************************************
     //                                          Impl
