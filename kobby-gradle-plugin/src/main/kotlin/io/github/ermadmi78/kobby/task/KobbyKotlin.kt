@@ -519,7 +519,7 @@ open class KobbyKotlin : DefaultTask() {
         implInternal.convention(true)
         implInnerPrefix.convention("__inner")
 
-        outputDirectory.convention(project.layout.buildDirectory.dir("generated/source/kobby/main/kotlin"))
+        outputDirectory.convention(project.layout.buildDirectory.dir("generated/sources/kobby/main/kotlin"))
     }
 
     @TaskAction
