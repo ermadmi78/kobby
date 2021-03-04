@@ -88,7 +88,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
         }
 
         node.fields { field ->
-            buildProperty(field.name, field.type.entityType) {
+            buildProperty(field.name, field.entityType) {
                 if (field.isOverride) {
                     addModifiers(KModifier.OVERRIDE)
                 }
@@ -120,10 +120,10 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 }
 
                 field.arguments.values.asSequence()
-                    .filter { !field.isSelection || !it.type.nullable }
+                    .filter { !field.isSelection || !it.isInitialized }
                     .forEach { arg ->
-                        buildParameter(arg.name, arg.type.entityType) {
-                            if (!field.isOverride && arg.type.nullable) {
+                        buildParameter(arg.name, arg.entityType) {
+                            if (!field.isOverride && arg.isInitialized) {
                                 defaultValue("null")
                             }
                             arg.comments {
@@ -160,8 +160,8 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
             field.comments {
                 addKdoc(it)
             }
-            field.arguments.values.asSequence().filter { it.type.nullable }.forEach { arg ->
-                buildProperty(arg.name, arg.type.entityType) {
+            field.arguments.values.asSequence().filter { it.isInitialized }.forEach { arg ->
+                buildProperty(arg.name, arg.entityType) {
                     mutable()
                     arg.comments {
                         addKdoc(it)

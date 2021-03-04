@@ -12,6 +12,7 @@ class KobbyArgument internal constructor(
 
     val name: String,
     val type: KobbyType,
+    val hasDefaultValue: Boolean,
     private val _comments: List<String>
 ) {
     val comments: List<String> by lazy {
@@ -24,7 +25,9 @@ class KobbyArgument internal constructor(
 
     fun comments(action: (String) -> Unit) = comments.forEach(action)
 
-    val isSelection: Boolean get() = this.field.isSelection && type.nullable
+    val isInitialized: Boolean get() = type.nullable || hasDefaultValue
+
+    val isSelection: Boolean get() = this.field.isSelection && isInitialized
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -51,14 +54,15 @@ class KobbyArgument internal constructor(
 
 @KobbyScope
 class KobbyArgumentScope internal constructor(
-    val schema: KobbySchema,
-    val node: KobbyNode,
-    val field: KobbyField,
+    schema: KobbySchema,
+    node: KobbyNode,
+    field: KobbyField,
     name: String,
-    type: KobbyType
+    type: KobbyType,
+    hasDefaultValue: Boolean
 ) {
     private val comments = mutableListOf<String>()
-    private val argument = KobbyArgument(schema, node, field, name, type, comments)
+    private val argument = KobbyArgument(schema, node, field, name, type, hasDefaultValue, comments)
 
     fun addComment(comment: String) {
         comments += comment

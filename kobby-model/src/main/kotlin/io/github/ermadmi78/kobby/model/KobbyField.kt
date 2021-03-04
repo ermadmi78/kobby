@@ -48,7 +48,7 @@ class KobbyField internal constructor(
     val isDefault: Boolean get() = isProperty && (overriddenField?.isDefault ?: default)
 
     val isSelection: Boolean by lazy {
-        overriddenField?.isSelection ?: (selection && arguments.values.any { it.type.nullable })
+        overriddenField?.isSelection ?: (selection && arguments.values.any { it.isInitialized })
     }
 
     override fun equals(other: Any?): Boolean {
@@ -107,8 +107,9 @@ class KobbyFieldScope internal constructor(
     fun addArgument(
         name: String,
         type: KobbyType,
+        hasDefaultValue: Boolean,
         block: KobbyArgumentScope.() -> Unit
-    ) = KobbyArgumentScope(schema, node, field, name, type).apply(block).build().also {
+    ) = KobbyArgumentScope(schema, node, field, name, type, hasDefaultValue).apply(block).build().also {
         arguments[it.name] = it
     }
 

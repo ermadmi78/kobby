@@ -67,7 +67,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                             addComment(it.content)
                         }
                         field.inputValueDefinitions.forEach { arg ->
-                            addArgument(arg.name, arg.resolveType(schema)) {
+                            addArgument(arg.name, arg.type.resolve(schema), arg.defaultValue != null) {
                                 arg.comments.forEach {
                                     addComment(it.content)
                                 }
@@ -95,7 +95,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                             addComment(it.content)
                         }
                         field.inputValueDefinitions.forEach { arg ->
-                            addArgument(arg.name, arg.resolveType(schema)) {
+                            addArgument(arg.name, arg.type.resolve(schema), arg.defaultValue != null) {
                                 arg.comments.forEach {
                                     addComment(it.content)
                                 }
@@ -128,7 +128,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                 type.allInputValues().forEach { input ->
                     addField(
                         input.name,
-                        input.resolveType(schema),
+                        input.type.resolve(schema),
                         false,
                         false,
                         false
@@ -223,13 +223,3 @@ private fun Type<*>.resolve(schema: KobbySchema, nullable: Boolean = true): Kobb
     is TypeName -> KobbyNodeType(schema, name, nullable)
     else -> error("Unexpected Type successor: ${this::javaClass.name}")
 }
-
-private fun Type<*>.resolveNullable(schema: KobbySchema): KobbyType = when (this) {
-    is NonNullType -> type.resolveNullable(schema)
-    is ListType -> KobbyListType(type.resolve(schema), true)
-    is TypeName -> KobbyNodeType(schema, name, true)
-    else -> error("Unexpected Type successor: ${this::javaClass.name}")
-}
-
-private fun InputValueDefinition.resolveType(schema: KobbySchema): KobbyType =
-    if (defaultValue == null) type.resolve(schema) else type.resolveNullable(schema)

@@ -62,15 +62,20 @@ data class KotlinLayout(
             else -> false
         }
 
-    internal val KobbyType.entityType: TypeName
-        get() = when (this) {
-            is KobbyListType -> LIST.parameterizedBy(nested.entityType)
-            is KobbyNodeType -> when (node.kind) {
-                SCALAR -> scalars[node.name]!!.typeName
-                ENUM, INPUT -> node.dtoClass
-                else -> node.entityClass
-            }
-        }.let { if (nullable) it.nullable() else it }
+    internal val KobbyField.entityType: TypeName
+        get() = type.toEntityType(false)
+
+    internal val KobbyArgument.entityType: TypeName
+        get() = type.toEntityType(hasDefaultValue)
+
+    private fun KobbyType.toEntityType(makeNullable: Boolean): TypeName = when (this) {
+        is KobbyListType -> LIST.parameterizedBy(nested.toEntityType(false))
+        is KobbyNodeType -> when (node.kind) {
+            SCALAR -> scalars[node.name]!!.typeName
+            ENUM, INPUT -> node.dtoClass
+            else -> node.entityClass
+        }
+    }.let { if (nullable || makeNullable) it.nullable() else it }
 
     internal val KobbyNode.entityName: String
         get() = when (kind) {
