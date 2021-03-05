@@ -431,7 +431,19 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     // build arguments
                     if (field.arguments.isNotEmpty()) {
                         addStatement("var counter = 0")
-                        buildAppendChain(body) { appendLiteral('(') }
+                        val addBracketsExpression: String = field.arguments.values.let { args ->
+                            if (!args.any { it.isInitialized }) "true"
+                            else args.asSequence()
+                                .filter { it.isInitialized }
+                                .map { arg ->
+                                    if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
+                                }
+                                .joinToString(" || ") { "$it != null" }
+                        }
+                        addStatement("val addBrackets = $addBracketsExpression")
+                        ifFlow("addBrackets") {
+                            buildAppendChain(body) { appendLiteral('(') }
+                        }
                         addStatement("")
                         field.arguments { arg ->
                             val argName = if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
@@ -463,7 +475,9 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             }
                             addStatement("")
                         }
-                        buildAppendChain(body) { appendLiteral(')') }
+                        ifFlow("addBrackets") {
+                            buildAppendChain(body) { appendLiteral(')') }
+                        }
                     }
 
                     // build field projection
