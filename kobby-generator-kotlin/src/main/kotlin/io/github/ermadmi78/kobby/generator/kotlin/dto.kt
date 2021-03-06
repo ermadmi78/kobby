@@ -19,7 +19,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.packageName, node.dtoName) {
             // Build object DTO class
             buildClass(node.dtoName) {
-                jacksonize(node)
+                jacksonizeClass(node)
                 addModifiers(KModifier.DATA)
                 node.comments {
                     addKdoc(it)
@@ -39,7 +39,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         }
                     }
                     customizeConstructor {
-                        jacksonize()
+                        jacksonizeConstructor()
                     }
                 }
             }
@@ -80,6 +80,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
     schema.interfaces { node ->
         files += buildFile(dto.packageName, node.dtoName) {
             buildInterface(node.dtoName) {
+                jacksonizeInterface(node)
                 node.comments {
                     addKdoc(it)
                 }
@@ -106,6 +107,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
     schema.unions { node ->
         files += buildFile(dto.packageName, node.dtoName) {
             buildInterface(node.dtoName) {
+                jacksonizeInterface(node)
                 node.comments {
                     addKdoc(it)
                 }
@@ -140,7 +142,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.packageName, node.dtoName) {
             // Build input DTO class
             buildClass(node.dtoName) {
-                jacksonize(node)
+                jacksonizeClass(node)
                 addModifiers(KModifier.DATA)
                 node.comments {
                     addKdoc(it)
@@ -154,7 +156,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         }
                     }
                     customizeConstructor {
-                        jacksonize()
+                        jacksonizeConstructor()
                     }
                 }
             }

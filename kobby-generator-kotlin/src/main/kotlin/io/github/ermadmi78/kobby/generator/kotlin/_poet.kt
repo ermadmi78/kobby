@@ -360,6 +360,16 @@ internal object JacksonAnnotations {
         "com.fasterxml.jackson.annotation",
         "JsonInclude"
     )
+
+    val JSON_SUB_TYPES = ClassName(
+        "com.fasterxml.jackson.annotation",
+        "JsonSubTypes"
+    )
+
+    val JSON_SUB_TYPES_TYPE = ClassName(
+        "com.fasterxml.jackson.annotation",
+        "JsonSubTypes", "Type"
+    )
 }
 
 internal enum class JacksonInclude {

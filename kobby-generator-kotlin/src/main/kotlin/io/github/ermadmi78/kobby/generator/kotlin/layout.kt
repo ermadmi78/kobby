@@ -238,7 +238,7 @@ data class KotlinLayout(
     //                                          Jackson
     //******************************************************************************************************************
 
-    internal fun TypeSpecBuilder.jacksonize(node: KobbyNode): TypeSpecBuilder {
+    internal fun TypeSpecBuilder.jacksonizeClass(node: KobbyNode): TypeSpecBuilder {
         if (!dto.jackson.enabled) {
             return this
         }
@@ -254,7 +254,7 @@ data class KotlinLayout(
                 .addMember("use = %T.Id.NAME", JacksonAnnotations.JSON_TYPE_INFO)
                 .addMember("include = %T.As.PROPERTY", JacksonAnnotations.JSON_TYPE_INFO)
                 .addMember("property = %S", "__typename")
-                .addMember("defaultImpl = ${node.dtoName}::class")
+                .addMember("defaultImpl = %T::class", node.dtoClass)
                 .build()
         )
 
@@ -267,7 +267,37 @@ data class KotlinLayout(
         return this
     }
 
-    internal fun FunSpecBuilder.jacksonize(): FunSpecBuilder {
+    internal fun TypeSpecBuilder.jacksonizeInterface(node: KobbyNode): TypeSpecBuilder {
+        if (!dto.jackson.enabled) {
+            return this
+        }
+
+        addAnnotation(
+            AnnotationSpec.builder(JacksonAnnotations.JSON_TYPE_INFO)
+                .addMember("use = %T.Id.NAME", JacksonAnnotations.JSON_TYPE_INFO)
+                .addMember("include = %T.As.PROPERTY", JacksonAnnotations.JSON_TYPE_INFO)
+                .addMember("property = %S", "__typename")
+                .build()
+        )
+
+        val subTypes = mutableListOf<AnnotationSpec>()
+        node.subObjects { subObjectNode ->
+            subTypes += AnnotationSpec.builder(JacksonAnnotations.JSON_SUB_TYPES_TYPE)
+                .addMember("value = %T::class", subObjectNode.dtoClass)
+                .addMember("name = %S", subObjectNode.name)
+                .build()
+        }
+
+        addAnnotation(
+            AnnotationSpec.builder(JacksonAnnotations.JSON_SUB_TYPES)
+                .addMember("\n⇥${subTypes.joinToString(",\n") { "%L" }}⇤\n", *subTypes.toTypedArray())
+                .build()
+        )
+
+        return this
+    }
+
+    internal fun FunSpecBuilder.jacksonizeConstructor(): FunSpecBuilder {
         if (dto.jackson.enabled && parameters.size == 1) {
             addAnnotation(JacksonAnnotations.JSON_CREATOR)
         }
