@@ -195,8 +195,8 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             addModifiers(KModifier.OVERRIDE)
             receiver(node.projectionClass)
 
-            statement {
-                "${impl.projectionPropertyName}.${impl.repeatProjectionFunName}(this)"
+            statement(ClassName("kotlin.collections", "setOf")) {
+                "${impl.projectionPropertyName}.${impl.repeatProjectionFunName}(%T(), this)"
             }
         }
 
@@ -342,16 +342,25 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 if (impl.internal) {
                     addModifiers(KModifier.INTERNAL)
                 }
-                mutable()
                 initializer("%T()", subObject.implProjectionClass)
             }
             buildFunction(subObject.projectionOnName) {
                 addModifiers(KModifier.OVERRIDE)
                 buildParameter(entity.projection.projectionArgument, subObject.projectionLambda)
-                addStatement(
-                    "${subObject.innerProjectionOnName} = %T().apply(${entity.projection.projectionArgument})",
-                    subObject.implProjectionClass
-                )
+                if (node.kind == INTERFACE) {
+                    addStatement(
+                        "%T().apply(${entity.projection.projectionArgument}).${impl.repeatProjectionFunName}" +
+                                "(${impl.interfaceIgnore.first}, ${subObject.innerProjectionOnName})",
+                        subObject.implProjectionClass
+                    )
+                } else {
+                    addStatement(
+                        "%T().apply(${entity.projection.projectionArgument}).${impl.repeatProjectionFunName}" +
+                                "(%T(), ${subObject.innerProjectionOnName})",
+                        subObject.implProjectionClass,
+                        ClassName("kotlin.collections", "setOf")
+                    )
+                }
             }
         }
 
@@ -360,13 +369,18 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             if (impl.internal) {
                 addModifiers(KModifier.INTERNAL)
             }
+
+            val ignore = buildFunArgIgnore.first
+            buildParameter(buildFunArgIgnore)
+
             val repeat = entity.projection.projectionArgument
             buildParameter(repeat, node.qualifiedProjectionClass)
+
             node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
                 val condition = if (field.innerIsBoolean) "${if (field.isDefault) "!" else ""}${field.innerName}"
                 else "${field.innerName} != null"
 
-                ifFlow(condition) {
+                ifFlow("%S !in $ignore && $condition", field.name) {
                     var args = field.arguments.values.asSequence()
                         .filter { !field.isSelection || !it.isInitialized }
                         .joinToString {
@@ -377,9 +391,11 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             args = "($args)"
                         }
                         controlFlow("$repeat.${field.projectionFieldName}$args") {
-                            if (field.type.hasProjection) statement {
-                                "this@${node.implProjectionName}" +
-                                        ".${field.innerName}!!.${impl.repeatProjectionFunName}(this)"
+                            if (field.type.hasProjection) {
+                                statement(ClassName("kotlin.collections", "setOf")) {
+                                    "this@${node.implProjectionName}" +
+                                            ".${field.innerName}!!.${impl.repeatProjectionFunName}(%T(), this)"
+                                }
                             }
                             if (field.isSelection) statement {
                                 "this@${node.implProjectionName}" +
@@ -395,7 +411,10 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 
             node.subObjects { subObject ->
                 controlFlow("$repeat.${subObject.projectionOnName}") {
-                    addStatement("this@${node.implProjectionName}.${subObject.innerProjectionOnName}.${impl.repeatProjectionFunName}(this)")
+                    statement(ClassName("kotlin.collections", "setOf")) {
+                        "this@${node.implProjectionName}.${subObject.innerProjectionOnName}" +
+                                ".${impl.repeatProjectionFunName}(%T(), this)"
+                    }
                 }
             }
         }
