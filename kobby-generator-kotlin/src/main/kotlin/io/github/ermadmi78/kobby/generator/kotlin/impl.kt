@@ -282,17 +282,19 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         addSuperinterface(node.qualifiedProjectionClass)
 
         if (node.kind == INTERFACE) {
-            buildCompanionObject {
+            buildProperty(impl.interfaceIgnore) {
                 if (impl.internal) {
                     addModifiers(KModifier.INTERNAL)
                 }
-                buildProperty(impl.interfaceIgnore) {
-                    if (impl.internal) {
-                        addModifiers(KModifier.INTERNAL)
-                    }
-                    val ignore = node.fields.values.joinToString { "\"${it.name}\"" }
-                    initializer("%T($ignore)", ClassName("kotlin.collections", "setOf"))
-                }
+                val ignore = node.fields.values.asSequence()
+                    .filter { it.isRequired || it.isDefault }
+                    .map { it.name }
+                    .toList()
+                initializer(
+                    "%T(${ignore.joinToString { "%S" }})",
+                    ClassName("kotlin.collections", "mutableSetOf"),
+                    *ignore.toTypedArray()
+                )
             }
         }
 
@@ -334,6 +336,25 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     .forEach { arg ->
                         addStatement("${arg.innerName} = ${arg.name}")
                     }
+
+                if (node.kind == INTERFACE || node.kind == UNION) {
+                    node.subObjects { subObject ->
+                        addStatement("")
+
+                        val subField = subObject.fields[field.name]!!
+                        addStatement("${subObject.innerProjectionOnName}.${subField.innerName} = ${field.innerName}")
+                        subField.arguments.values.asSequence()
+                            .filter { !subField.isSelection || !it.isInitialized }
+                            .forEach { subArg ->
+                                addStatement("${subObject.innerProjectionOnName}.${subArg.innerName} = ${subArg.name}")
+                            }
+                    }
+
+                    if (node.kind == INTERFACE && !field.isDefault) {
+                        addStatement("")
+                        addStatement("${impl.interfaceIgnore.first} += %S", field.name)
+                    }
+                }
             }
         }
 

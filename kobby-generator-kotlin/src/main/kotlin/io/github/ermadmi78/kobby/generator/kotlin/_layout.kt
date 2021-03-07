@@ -191,7 +191,7 @@ internal val KotlinImplLayout.buildFunName: String
     get() = "_" + "build".decorate(innerDecoration)
 
 internal val KotlinImplLayout.interfaceIgnore: Pair<String, TypeName>
-    get() = Pair("_" + "IGNORE".decorate(innerDecoration), SET.parameterizedBy(STRING))
+    get() = Pair("_" + "ignore".decorate(innerDecoration), MUTABLE_SET.parameterizedBy(STRING))
 
 internal val buildFunArgIgnore: Pair<String, TypeName> =
     Pair("ignore", SET.parameterizedBy(STRING))
