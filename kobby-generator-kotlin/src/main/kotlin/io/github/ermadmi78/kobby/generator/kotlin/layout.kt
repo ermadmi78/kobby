@@ -62,6 +62,12 @@ data class KotlinLayout(
             else -> false
         }
 
+    internal val KobbyType.hasDefaults: Boolean
+        get() = when (node.kind) {
+            OBJECT, INTERFACE -> node.fields.values.any { it.isRequired || it.isDefault }
+            else -> true
+        }
+
     internal val KobbyField.entityType: TypeName
         get() = type.toEntityType(false)
 
