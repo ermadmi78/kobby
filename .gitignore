@@ -23,3 +23,6 @@ hs_err_pid*
 /.gradle/
 /.idea/
 build/
+
+# OS X DS_Store
+.DS_Store
