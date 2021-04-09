@@ -149,7 +149,10 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 }
                 buildPrimaryConstructorProperties {
                     node.fields { field ->
-                        buildProperty(field.name, field.type.dtoType) {
+                        buildProperty(
+                            field.name,
+                            if (field.hasDefaultValue) field.type.dtoType.nullable() else field.type.dtoType
+                        ) {
                             field.comments {
                                 addKdoc(it)
                             }
@@ -166,7 +169,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 // Builder function
                 buildFunction(node.dtoName) {
                     val arguments = node.fields.values.joinToString {
-                        if (it.type.nullable) {
+                        if (it.type.nullable || it.hasDefaultValue) {
                             it.name
                         } else {
                             "${it.name}·?:·error(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"

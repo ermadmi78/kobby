@@ -13,6 +13,7 @@ class KobbyField internal constructor(
 
     val name: String,
     val type: KobbyType,
+    val hasDefaultValue: Boolean,
     val number: Int,
     private val required: Boolean,
     private val default: Boolean,
@@ -80,6 +81,7 @@ class KobbyFieldScope internal constructor(
     val node: KobbyNode,
     name: String,
     type: KobbyType,
+    hasDefaultValue: Boolean,
     number: Int,
     required: Boolean,
     default: Boolean,
@@ -92,6 +94,7 @@ class KobbyFieldScope internal constructor(
         node,
         name,
         type,
+        hasDefaultValue,
         number,
         required,
         default,

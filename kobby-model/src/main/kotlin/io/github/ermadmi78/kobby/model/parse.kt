@@ -59,6 +59,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                     addField(
                         field.name,
                         field.type.resolve(schema),
+                        false,
                         field.isRequired(),
                         field.isDefault(),
                         field.isSelection()
@@ -87,6 +88,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                     addField(
                         field.name,
                         field.type.resolve(schema),
+                        false,
                         field.isRequired(),
                         field.isDefault(),
                         field.isSelection()
@@ -129,6 +131,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                     addField(
                         input.name,
                         input.type.resolve(schema),
+                        input.defaultValue != null,
                         false,
                         false,
                         false

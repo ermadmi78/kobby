@@ -114,11 +114,12 @@ class KobbyNodeScope internal constructor(
     fun addField(
         name: String,
         type: KobbyType,
+        hasDefaultValue: Boolean,
         required: Boolean,
         default: Boolean,
         selection: Boolean,
         block: KobbyFieldScope.() -> Unit
-    ) = KobbyFieldScope(schema, node, name, type, fieldNumber++, required, default, selection)
+    ) = KobbyFieldScope(schema, node, name, type, hasDefaultValue, fieldNumber++, required, default, selection)
         .apply(block).build().also {
             fields[it.name] = it
         }
