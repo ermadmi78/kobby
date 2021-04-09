@@ -43,7 +43,7 @@ class KobbyField internal constructor(
 
     val isProperty: Boolean get() = arguments.isEmpty() && (type.node.kind == SCALAR || type.node.kind == ENUM)
 
-    val isRequired: Boolean get() = isProperty && (overriddenField?.isRequired ?: (type.isId() || required))
+    val isRequired: Boolean get() = isProperty && (overriddenField?.isRequired ?: required)
 
     val isDefault: Boolean get() = isProperty && (overriddenField?.isDefault ?: default)
 

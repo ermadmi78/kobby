@@ -1,7 +1,5 @@
 package io.github.ermadmi78.kobby.model
 
-import io.github.ermadmi78.kobby.model.KobbyNodeKind.SCALAR
-
 /**
  * Created on 19.01.2021
  *
@@ -17,8 +15,6 @@ sealed class KobbyType {
     abstract val nullable: Boolean
 
     abstract val list: Boolean
-
-    fun isId(): Boolean = !nullable && !list && node.kind == SCALAR && node.name == "ID"
 
     abstract val sourceName: String
 
