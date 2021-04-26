@@ -342,6 +342,7 @@ class KotlinContextLayout(
 class KotlinDtoLayout(
     packageName: String,
     val decoration: Decoration,
+    val applyPrimaryKeys: Boolean,
     val jackson: KotlinDtoJacksonLayout,
     val builder: KotlinDtoBuilderLayout,
     val graphql: KotlinDtoGraphQLLayout

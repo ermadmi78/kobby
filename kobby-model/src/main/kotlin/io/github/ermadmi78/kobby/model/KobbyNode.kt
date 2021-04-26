@@ -51,6 +51,16 @@ class KobbyNode internal constructor(
     fun enumValues(action: (KobbyEnumValue) -> Unit) = enumValues.values.forEach(action)
     fun fields(action: (KobbyField) -> Unit) = fields.values.forEach(action)
 
+    val primaryKeysCount: Int by lazy {
+        fields.values.count { it.isPrimaryKey }
+    }
+
+    fun primaryKeys(action: (KobbyField) -> Unit) = fields.values.asSequence()
+        .filter { it.isPrimaryKey }
+        .forEach(action)
+
+    fun firstPrimaryKey(): KobbyField = fields.values.first { it.isPrimaryKey }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -115,14 +125,25 @@ class KobbyNodeScope internal constructor(
         name: String,
         type: KobbyType,
         hasDefaultValue: Boolean,
+        primaryKey: Boolean,
         required: Boolean,
         default: Boolean,
         selection: Boolean,
         block: KobbyFieldScope.() -> Unit
-    ) = KobbyFieldScope(schema, node, name, type, hasDefaultValue, fieldNumber++, required, default, selection)
-        .apply(block).build().also {
-            fields[it.name] = it
-        }
+    ) = KobbyFieldScope(
+        schema,
+        node,
+        name,
+        type,
+        hasDefaultValue,
+        fieldNumber++,
+        primaryKey,
+        required,
+        default,
+        selection
+    ).apply(block).build().also {
+        fields[it.name] = it
+    }
 
     fun build(): KobbyNode = node
 }

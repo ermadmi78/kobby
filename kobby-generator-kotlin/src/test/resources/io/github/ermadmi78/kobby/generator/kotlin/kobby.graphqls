@@ -1,3 +1,5 @@
+directive @primaryKey on FIELD_DEFINITION
+
 scalar JSON
 scalar DateTime
 
@@ -25,7 +27,7 @@ type Mutation {
 }
 
 interface Base {
-    id: ID!
+    id: ID! @primaryKey
 }
 
 interface Entity implements Base {
@@ -59,7 +61,7 @@ type Actor implements Entity, Base{
 
     fields: JSON!
 
-    countryId: ID!
+    countryId: ID! @primaryKey
     country: Country!
 
     films(condition: String = "", limit: Int = -1, offset: Int = -1): [Film!]!
@@ -99,7 +101,7 @@ input FilmInput {
 }
 
 type Single {
-    id: ID!
+    id: ID! @primaryKey
 }
 
 input SingleInput {

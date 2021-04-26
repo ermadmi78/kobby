@@ -132,6 +132,7 @@ open class KobbyKotlinDtoExtension {
     var packageName: String? = null
     var prefix: String? = null
     var postfix: String? = null
+    var applyPrimaryKeys: Boolean? = null
 
     internal val jacksonExtension = lazy { KobbyKotlinDtoJacksonExtension() }
     internal val builderExtension = lazy { KobbyKotlinDtoBuilderExtension() }
@@ -157,6 +158,7 @@ open class KobbyKotlinDtoExtension {
                 "packageName=$packageName, " +
                 "prefix=$prefix, " +
                 "postfix=$postfix, " +
+                "applyPrimaryKeys=$applyPrimaryKeys, " +
                 "jacksonExtension=$jacksonExtension, " +
                 "builderExtension=$builderExtension, " +
                 "graphQLExtension=$graphQLExtension)"

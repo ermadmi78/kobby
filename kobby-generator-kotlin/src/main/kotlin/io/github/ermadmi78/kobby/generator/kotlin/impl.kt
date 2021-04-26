@@ -1,8 +1,6 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
-import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.*
 import io.github.ermadmi78.kobby.model.KobbyNode
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.INTERFACE
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.UNION
@@ -145,6 +143,8 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
         }
         addSuperinterface(node.entityClass)
 
+        val innerDto = impl.dtoPropertyName
+
         buildPrimaryConstructorProperties {
             // context
             buildProperty(impl.contextPropertyName, context.contextClass) {
@@ -161,9 +161,68 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             }
 
             // dto
-            buildProperty(impl.dtoPropertyName, node.dtoClass) {
+            buildProperty(innerDto, node.dtoClass) {
                 if (impl.internal) {
                     addModifiers(KModifier.INTERNAL)
+                }
+            }
+        }
+
+        // Entity equals and hashCode generation by @primaryKey directive
+        if (node.primaryKeysCount > 0) {
+            buildFunction(EQUALS_FUN) {
+                addModifiers(KModifier.OVERRIDE)
+                buildParameter(EQUALS_ARG, ANY.nullable())
+                returns(BOOLEAN)
+
+                ifFlowStatement("this === $EQUALS_ARG") {
+                    "return true"
+                }
+                ifFlowStatement("javaClass != $EQUALS_ARG?.javaClass") {
+                    "return false"
+                }
+
+                addStatement("")
+                addStatement("$EQUALS_ARG as %T", node.implClass)
+
+                if (node.primaryKeysCount == 1) {
+                    node.firstPrimaryKey().also {
+                        addStatement("return $innerDto.${it.name} == $EQUALS_ARG.$innerDto.${it.name}")
+                    }
+                } else {
+                    addStatement("")
+                    node.primaryKeys {
+                        ifFlowStatement("$innerDto.${it.name} != $EQUALS_ARG.$innerDto.${it.name}") {
+                            "return false"
+                        }
+                    }
+
+                    addStatement("")
+                    addStatement("return true")
+                }
+            }
+
+            buildFunction(HASH_CODE_FUN) {
+                addModifiers(KModifier.OVERRIDE)
+                returns(INT)
+
+                if (node.primaryKeysCount == 1) {
+                    node.firstPrimaryKey().also {
+                        addStatement("return $innerDto.${it.name}?.hashCode() ?: 0")
+                    }
+                } else {
+                    var first = true
+                    node.primaryKeys {
+                        if (first) {
+                            first = false
+                            addStatement("var $HASH_CODE_RES = $innerDto.${it.name}?.hashCode() ?: 0")
+                        } else {
+                            addStatement(
+                                "$HASH_CODE_RES = 31 * $HASH_CODE_RES + ($innerDto.${it.name}?.hashCode() ?: 0)"
+                            )
+                        }
+                    }
+                    addStatement("return $HASH_CODE_RES")
                 }
             }
         }
@@ -214,8 +273,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                         ) { "%T(%S)" }
 
                         statement {
-                            "${impl.dtoPropertyName}.${field.resolverName}(" +
-                                    "${impl.contextPropertyName}, $projectionRef!!)"
+                            "$innerDto.${field.resolverName}(${impl.contextPropertyName}, $projectionRef!!)"
                         }
                     }
                 } else {
@@ -230,7 +288,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                         }
 
                         statement {
-                            "return ${impl.dtoPropertyName}.${field.name}${field.notNullAssertion}"
+                            "return $innerDto.${field.name}${field.notNullAssertion}"
                         }
                     }
                 }

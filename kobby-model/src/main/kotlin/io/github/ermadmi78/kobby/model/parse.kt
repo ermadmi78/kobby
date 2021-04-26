@@ -11,6 +11,7 @@ import java.io.Reader
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 object KobbyDirective {
+    const val PRIMARY_KEY: String = "primaryKey"
     const val REQUIRED: String = "required"
     const val DEFAULT: String = "default"
     const val SELECTION: String = "selection"
@@ -60,6 +61,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.name,
                         field.type.resolve(schema),
                         false,
+                        field.isPrimaryKey(),
                         field.isRequired(),
                         field.isDefault(),
                         field.isSelection()
@@ -89,6 +91,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.name,
                         field.type.resolve(schema),
                         false,
+                        field.isPrimaryKey(),
                         field.isRequired(),
                         field.isDefault(),
                         field.isSelection()
@@ -132,9 +135,10 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         input.name,
                         input.type.resolve(schema),
                         input.defaultValue != null,
-                        false,
-                        false,
-                        false
+                        primaryKey = false,
+                        required = false,
+                        default = false,
+                        selection = false
                     ) {
                         input.comments.forEach {
                             addComment(it.content)
@@ -185,6 +189,10 @@ private class RegistryScope(
             yieldAll(it.inputValueDefinitions)
         }
     }
+
+    fun FieldDefinition.isPrimaryKey(): Boolean = directives.firstOrNull {
+        it.name == directiveLayout[KobbyDirective.PRIMARY_KEY] ?: KobbyDirective.PRIMARY_KEY
+    } != null
 
     fun FieldDefinition.isRequired(): Boolean = directives.firstOrNull {
         it.name == directiveLayout[KobbyDirective.REQUIRED] ?: KobbyDirective.REQUIRED

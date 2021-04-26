@@ -37,6 +37,9 @@ class KobbyPlugin : Plugin<Project> {
                                 kotlinTask.schemaFile.convention(p.layout.file(p.provider { it }))
                             }
                             directiveExtension.valueOrNull?.apply {
+                                primaryKey?.also {
+                                    kotlinTask.schemaDirectivePrimaryKey.convention(it)
+                                }
                                 required?.also {
                                     kotlinTask.schemaDirectiveRequired.convention(it)
                                 }
@@ -90,6 +93,9 @@ class KobbyPlugin : Plugin<Project> {
                             }
                             postfix?.also {
                                 kotlinTask.dtoPostfix.convention(it)
+                            }
+                            applyPrimaryKeys?.also {
+                                kotlinTask.dtoApplyPrimaryKeys.convention(it)
                             }
                             jacksonExtension.valueOrNull?.apply {
                                 enabled?.also {

@@ -15,6 +15,7 @@ class KobbyField internal constructor(
     val type: KobbyType,
     val hasDefaultValue: Boolean,
     val number: Int,
+    private val primaryKey: Boolean,
     private val required: Boolean,
     private val default: Boolean,
     private val selection: Boolean,
@@ -44,7 +45,9 @@ class KobbyField internal constructor(
 
     val isProperty: Boolean get() = arguments.isEmpty() && (type.node.kind == SCALAR || type.node.kind == ENUM)
 
-    val isRequired: Boolean get() = isProperty && (overriddenField?.isRequired ?: required)
+    val isPrimaryKey: Boolean get() = isProperty && (overriddenField?.isPrimaryKey ?: primaryKey)
+
+    val isRequired: Boolean get() = isProperty && (overriddenField?.isRequired ?: primaryKey || required)
 
     val isDefault: Boolean get() = isProperty && (overriddenField?.isDefault ?: default)
 
@@ -83,6 +86,7 @@ class KobbyFieldScope internal constructor(
     type: KobbyType,
     hasDefaultValue: Boolean,
     number: Int,
+    primaryKey: Boolean,
     required: Boolean,
     default: Boolean,
     selection: Boolean
@@ -96,6 +100,7 @@ class KobbyFieldScope internal constructor(
         type,
         hasDefaultValue,
         number,
+        primaryKey,
         required,
         default,
         selection,

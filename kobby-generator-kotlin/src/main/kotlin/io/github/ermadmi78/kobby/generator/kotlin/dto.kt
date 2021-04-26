@@ -42,6 +42,63 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         jacksonizeConstructor()
                     }
                 }
+
+                // DTO equals and hashCode generation by @primaryKey directive
+                if (dto.applyPrimaryKeys && node.primaryKeysCount > 0) {
+                    buildFunction(EQUALS_FUN) {
+                        addModifiers(KModifier.OVERRIDE)
+                        buildParameter(EQUALS_ARG, ANY.nullable())
+                        returns(BOOLEAN)
+
+                        ifFlowStatement("this === $EQUALS_ARG") {
+                            "return true"
+                        }
+                        ifFlowStatement("javaClass != $EQUALS_ARG?.javaClass") {
+                            "return false"
+                        }
+
+                        addStatement("")
+                        addStatement("$EQUALS_ARG as %T", node.dtoClass)
+
+                        if (node.primaryKeysCount == 1) {
+                            node.firstPrimaryKey().also {
+                                addStatement("return ${it.name} == $EQUALS_ARG.${it.name}")
+                            }
+                        } else {
+                            addStatement("")
+                            node.primaryKeys {
+                                ifFlowStatement("${it.name} != $EQUALS_ARG.${it.name}") {
+                                    "return false"
+                                }
+                            }
+
+                            addStatement("")
+                            addStatement("return true")
+                        }
+                    }
+
+                    buildFunction(HASH_CODE_FUN) {
+                        addModifiers(KModifier.OVERRIDE)
+                        returns(INT)
+
+                        if (node.primaryKeysCount == 1) {
+                            node.firstPrimaryKey().also {
+                                addStatement("return ${it.name}?.hashCode() ?: 0")
+                            }
+                        } else {
+                            var first = true
+                            node.primaryKeys {
+                                if (first) {
+                                    first = false
+                                    addStatement("var $HASH_CODE_RES = ${it.name}?.hashCode() ?: 0")
+                                } else {
+                                    addStatement("$HASH_CODE_RES = 31 * $HASH_CODE_RES + (${it.name}?.hashCode() ?: 0)")
+                                }
+                            }
+                            addStatement("return $HASH_CODE_RES")
+                        }
+                    }
+                }
             }
 
             // Build object DTO builder

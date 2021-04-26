@@ -36,6 +36,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "schemaDirectivePrimaryKey",
+        description = "name of directive \"primaryKey\" (default \"primaryKey\")"
+    )
+    val schemaDirectivePrimaryKey: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "schemaDirectiveRequired",
         description = "name of directive \"required\" (default \"required\")"
     )
@@ -151,6 +159,14 @@ open class KobbyKotlin : DefaultTask() {
         description = "postfix for generated DTO classes (default \"Dto\")"
     )
     val dtoPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoApplyPrimaryKeys",
+        description = "Generate equals and hashCode for DTO classes by @primaryKey directive (default false)"
+    )
+    val dtoApplyPrimaryKeys: Property<Boolean> = project.objects.property(Boolean::class.java)
 
     @Input
     @Optional
@@ -477,6 +493,7 @@ open class KobbyKotlin : DefaultTask() {
                 it.include("**/*.graphqls")
             }.filter { it.isFile }.singleFile
         }))
+        schemaDirectivePrimaryKey.convention(KobbyDirective.PRIMARY_KEY)
         schemaDirectiveRequired.convention(KobbyDirective.REQUIRED)
         schemaDirectiveDefault.convention(KobbyDirective.DEFAULT)
         schemaDirectiveSelection.convention(KobbyDirective.SELECTION)
@@ -491,6 +508,7 @@ open class KobbyKotlin : DefaultTask() {
 
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
+        dtoApplyPrimaryKeys.convention(false)
         dtoJacksonEnabled.convention(project.provider {
             project.hasDependency("com.fasterxml.jackson.core", "jackson-annotations")
         })
@@ -530,6 +548,7 @@ open class KobbyKotlin : DefaultTask() {
         }
 
         val directiveLayout = mapOf(
+            KobbyDirective.PRIMARY_KEY to schemaDirectivePrimaryKey.get(),
             KobbyDirective.REQUIRED to schemaDirectiveRequired.get(),
             KobbyDirective.DEFAULT to schemaDirectiveDefault.get(),
             KobbyDirective.SELECTION to schemaDirectiveSelection.get()
@@ -594,6 +613,7 @@ open class KobbyKotlin : DefaultTask() {
             KotlinDtoLayout(
                 dtoPackage.toPackageName(),
                 Decoration(dtoPrefix.orNull, dtoPostfix.orNull),
+                dtoApplyPrimaryKeys.get(),
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),

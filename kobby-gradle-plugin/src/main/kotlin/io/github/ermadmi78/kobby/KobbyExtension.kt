@@ -50,12 +50,18 @@ open class KobbySchemaExtension {
 
 @Kobby
 open class KobbySchemaDirectiveExtension {
+    var primaryKey: String? = null
     var required: String? = null
     var default: String? = null
     var selection: String? = null
 
     override fun toString(): String {
-        return "KobbySchemaDirectiveExtension(required=$required, default=$default)"
+        return "KobbySchemaDirectiveExtension(" +
+                "primaryKey=$primaryKey, " +
+                "required=$required, " +
+                "default=$default, " +
+                "selection=$selection" +
+                ")"
     }
 }
 

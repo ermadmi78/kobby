@@ -36,6 +36,7 @@ class GeneratorTest : AnnotationSpec() {
             KotlinDtoLayout(
                 "kobby.dto",
                 Decoration(null, "Dto"),
+                true,
                 KotlinDtoJacksonLayout(true),
                 KotlinDtoBuilderLayout(
                     true,

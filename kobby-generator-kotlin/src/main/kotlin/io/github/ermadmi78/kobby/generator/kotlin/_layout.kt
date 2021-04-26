@@ -12,6 +12,12 @@ import java.nio.file.Path
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
+
+const val EQUALS_FUN = "equals"
+const val EQUALS_ARG = "other"
+const val HASH_CODE_FUN = "hashCode"
+const val HASH_CODE_RES = "result"
+
 //******************************************************************************************************************
 //                                   KotlinFile
 //******************************************************************************************************************
