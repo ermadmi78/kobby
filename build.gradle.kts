@@ -1,7 +1,7 @@
-import de.marcphilipp.gradle.nexus.NexusPublishExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.time.Duration
 import java.time.Instant
 
 description = "Kotlin DSL over GraphQL schema generator"
@@ -13,36 +13,20 @@ plugins {
     `java-library`
     `maven-publish`
     signing
-    id("de.marcphilipp.nexus-publish")
-    id("io.codearte.nexus-staging")
+    id("io.github.gradle-nexus.publish-plugin")
 }
 
 allprojects {
     buildscript {
         repositories {
             mavenLocal()
-            jcenter()
             mavenCentral()
         }
     }
 
     repositories {
         mavenLocal()
-        jcenter()
         mavenCentral()
-    }
-
-    if (rootProject.extra["isReleaseVersion"] as Boolean) {
-        apply(plugin = "de.marcphilipp.nexus-publish")
-
-        configure<NexusPublishExtension> {
-            repositories {
-                sonatype {
-                    username.set(System.getenv("SONATYPE_USERNAME"))
-                    password.set(System.getenv("SONATYPE_PASSWORD"))
-                }
-            }
-        }
     }
 }
 
@@ -93,14 +77,12 @@ subprojects {
             archiveClassifier.set("sources")
             from(sourceSets.main.get().allSource)
         }
-        val dokka by getting(DokkaTask::class) {
-            outputFormat = "javadoc"
-            outputDirectory = "$buildDir/javadoc"
-        }
+
+        val dokka = named("dokkaJavadoc", DokkaTask::class)
         val javadocJar by registering(Jar::class) {
             archiveClassifier.set("javadoc")
-            from("$buildDir/javadoc")
-            dependsOn(dokka.path)
+            from("$buildDir/dokka/javadoc")
+            dependsOn(dokka)
         }
         publishing {
             repositories {
@@ -179,11 +161,19 @@ tasks {
     jar {
         enabled = false
     }
-    nexusStaging {
-        username = System.getenv("SONATYPE_USERNAME")
-        password = System.getenv("SONATYPE_PASSWORD")
-        packageGroup = rootProject.group.toString()
-        numberOfRetries = 60
-        delayBetweenRetriesInMillis = 5000
+    if (rootProject.extra["isReleaseVersion"] as Boolean) {
+        nexusPublishing {
+            repositories {
+                sonatype {
+                    username.set(System.getenv("SONATYPE_USERNAME"))
+                    password.set(System.getenv("SONATYPE_PASSWORD"))
+                }
+            }
+
+            transitionCheckOptions {
+                maxRetries.set(60)
+                delayBetween.set(Duration.ofMillis(5000))
+            }
+        }
     }
 }

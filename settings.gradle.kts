@@ -8,15 +8,13 @@ pluginManagement {
     val pluginPublishVersion: String by settings
     val pluginShadowVersion: String by settings
     val nexusPublishVersion: String by settings
-    val nexusStagingVersion: String by settings
 
     plugins {
         kotlin("jvm") version kotlinVersion
         id("org.jetbrains.dokka") version dokkaVersion
         id("com.gradle.plugin-publish") version pluginPublishVersion
         id("com.github.johnrengelman.shadow") version pluginShadowVersion
-        id("de.marcphilipp.nexus-publish") version nexusPublishVersion
-        id("io.codearte.nexus-staging") version nexusStagingVersion
+        id("io.github.gradle-nexus.publish-plugin") version nexusPublishVersion
     }
 }
 
