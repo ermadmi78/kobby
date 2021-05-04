@@ -264,7 +264,7 @@ We can upload complex graph by means of our Kotlin DSL:
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/complex_query.png)
 
-GraphQL unions and interfaces is supported too:
+GraphQL unions and interfaces are supported too:
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/union_query.png)
 
