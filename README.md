@@ -154,7 +154,7 @@ dependencies {
 
 Execute `gradle build` command to generate Kotlin DSL. Entry point of DSL will be placed in `cinema.kt` file:
 
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
+![alt text](https://github.com/ermadmi78/kobby/blob/main/images/cinema_api.png)
 
 ## Write DSL Adapter
 
