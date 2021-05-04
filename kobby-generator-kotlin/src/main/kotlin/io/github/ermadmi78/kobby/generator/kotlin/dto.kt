@@ -20,7 +20,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             // Build object DTO class
             buildClass(node.dtoName) {
                 jacksonizeClass(node)
-                addModifiers(KModifier.DATA)
+                if (node.fields.isNotEmpty()) {
+                    addModifiers(KModifier.DATA)
+                }
                 node.comments {
                     addKdoc(it)
                 }
@@ -102,7 +104,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             }
 
             // Build object DTO builder
-            if (dto.builder.enabled) {
+            if (dto.builder.enabled && node.fields.isNotEmpty()) {
                 // Builder function
                 buildFunction(node.dtoName) {
                     val arguments = node.fields.values.joinToString { it.name }
