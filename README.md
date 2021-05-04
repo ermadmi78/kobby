@@ -235,7 +235,7 @@ see [here](https://github.com/ermadmi78/kobby-gradle-example/blob/main/cinema-se
 ## Configure [Ktor](https://ktor.io/) client
 
 ```kotlin
-    private val httpClient = HttpClient {
+private val httpClient = HttpClient {
     expectSuccess = true
     install(JsonFeature) {
         serializer = JacksonSerializer() {
