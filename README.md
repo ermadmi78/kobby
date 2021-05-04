@@ -1,4 +1,5 @@
 # Overview
+
 **Kobby is a codegen plugin for Kotlin DSL Client from GraphQL schema**
 
 Gradle plugin is available [here](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
@@ -16,6 +17,7 @@ Usage example see [here](https://github.com/ermadmi78/kobby-gradle-example)
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
 
 # License
+
 [Apache License Version 2.0](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
 
 # Usage
@@ -236,7 +238,7 @@ Your can use any other HTTP Client to implement adapter. For example,
 see [here](https://github.com/ermadmi78/kobby-gradle-example/blob/main/cinema-server/src/test/kotlin/io/github/ermadmi78/kobby/cinema/server/CinemaTestAdapter.kt)
 `CinemaAdapter` for Spring integration tests.
 
-## Configure [Ktor](https://ktor.io/) client
+## Configure Ktor client
 
 ```kotlin
 private val httpClient = HttpClient {
