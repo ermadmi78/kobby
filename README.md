@@ -2,4 +2,4 @@
 
 Usage example see [here](https://github.com/ermadmi78/kobby-gradle-example)
 
-[[https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png|alt=octocat]]
+![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
