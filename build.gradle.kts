@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.Duration
 import java.time.Instant
 
-description = "Kotlin DSL over GraphQL schema generator"
+description = "Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema"
 extra["isReleaseVersion"] = !version.toString().endsWith("SNAPSHOT")
 
 plugins {
