@@ -73,15 +73,15 @@ dependencies {
 ## Generate Kotlin DSL from your GraphQL schema
 
 Execute `gradle build` command to generate Kotlin DSL. Entry point of DSL will be placed in `cinema.kt` file
-(name of DSL entry point file is same as name of GraphQL schema):
+(name of DSL entry point file is same as name of GraphQL schema file):
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/cinema_api.png)
 
 ## Write DSL Adapter
 
 In `cinema.kt` will be placed `cinemaContextOf` builder function, that creates `CinemaContext` - the entry point of
-generated DSL. 
-Note, that prefixes of builder function, adapter and context interfaces are same as name of GraphQL schema.
+generated DSL. Note, that prefixes of builder function, adapter and context interfaces are same as name of GraphQL
+schema file.
 
 ```kotlin
 public fun cinemaContextOf(adapter: CinemaAdapter): CinemaContext = CinemaContextImpl(adapter)
