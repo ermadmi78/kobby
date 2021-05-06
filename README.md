@@ -1,8 +1,10 @@
 # Overview
 
-**Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema**
+## Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema
 
-Gradle plugin is available [here](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
+![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
+
+## Gradle
 
 ```kotlin
 plugins {
@@ -10,17 +12,17 @@ plugins {
 }
 ```
 
+## Maven
+
 Maven plugin is under construction now
-
-Usage example see [here](https://github.com/ermadmi78/kobby-gradle-example)
-
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
 
 # License
 
 [Apache License Version 2.0](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
 
 # Usage
+
+Usage example see [here](https://github.com/ermadmi78/kobby-gradle-example)
 
 ## Define your GraphQL schema
 
