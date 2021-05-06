@@ -24,102 +24,16 @@ Usage example see [here](https://github.com/ermadmi78/kobby-gradle-example)
 
 ## Define your GraphQL schema
 
-Put your GraphQL schema in project resources with `graphqls` extension. For example let define
+Put your GraphQL schema in project resources with `graphqls` extension. For example, let define
 [cinema.graphqls](https://github.com/ermadmi78/kobby-gradle-example/blob/gradle-tutorial/cinema-api/src/main/resources/io/github/ermadmi78/kobby/cinema/api/cinema.graphqls)
 schema and put it in `resources/io/github/ermadmi78/kobby/cinema/api/`
 
-```graphql
-scalar Date
-
-type Query {
-    country(id: ID!): Country
-    countries(name: String, limit: Int! = 10, offset: Int! = 0): [Country!]!
-
-    film(id: ID!): Film
-    films(title: String, genre: Genre, limit: Int! = 10, offset: Int! = 0): [Film!]!
-
-    actor(id: ID!): Actor
-    actors(firstName: String, lastName: String, birthdayFrom: Date, birthdayTo: Date, gender: Gender,
-        limit: Int! = 10, offset: Int! = 0): [Actor!]!
-}
-
-type Mutation {
-    createCountry(name: String!): Country!
-    createFilm(countryId: ID!,film: FilmInput!): Film!
-    createActor(countryId: ID!, actor: ActorInput!): Actor!
-    associate(filmId: ID!, actorId: ID!): Boolean!
-}
-
-interface Entity {
-    id: ID!
-}
-
-type Country implements Entity {
-    id: ID!
-    name: String!
-
-    film(id: ID!): Film
-    films(title: String, genre: Genre, limit: Int! = 10, offset: Int! = 0): [Film!]!
-
-    actor(id: ID!): Actor
-    actors(firstName: String, lastName: String, birthdayFrom: Date, birthdayTo: Date, gender: Gender,
-        limit: Int! = 10, offset: Int! = 0): [Actor!]!
-
-    native: [Native!]!
-}
-
-type Film implements Entity {
-    id: ID!
-    title: String!
-    genre: Genre!
-    countryId: ID!
-    country: Country!
-    actors(firstName: String, lastName: String, birthdayFrom: Date, birthdayTo: Date, gender: Gender,
-        limit: Int! = 10, offset: Int! = 0): [Actor!]!
-}
-
-enum Genre {
-    DRAMA
-    COMEDY
-    THRILLER
-    HORROR
-}
-
-input FilmInput {
-    title: String!
-    genre: Genre! = DRAMA
-}
-
-type Actor implements Entity {
-    id: ID!
-    firstName: String!
-    lastName: String
-    birthday: Date!
-    gender: Gender!
-    countryId: ID!
-    country: Country!
-    films(title: String, genre: Genre, limit: Int! = 10, offset: Int! = 0): [Film!]!
-}
-
-enum Gender {
-    MALE
-    FEMALE
-}
-
-input ActorInput {
-    firstName: String!
-    lastName: String
-    birthday: Date!
-    gender: Gender!
-}
-
-union Native = Actor | Film
-```
-
 ## Configure Kobby Gradle plugin
 
-Add Kobby plugin to your `build.gradle.kts`, configure Kotlin datatype for `scalar Date` defined in GraphQL schema and
-add Jackson dependency to generate Jackson annotations for DTO classes:
+* Add Kobby plugin to your `build.gradle.kts`, to generate Kotlin DSL.
+* Configure Kotlin data types for scalars, defined in GraphQL schema (use `kobby` extension in `build.gradle.kts`).
+* Add Jackson dependency to generate Jackson annotations for DTO classes.
+* Add Kotlin plugin to your `build.gradle.kts`, to compile generated DSL.
 
 ```kotlin
 import io.github.ermadmi78.kobby.kobby
@@ -158,14 +72,16 @@ dependencies {
 
 ## Generate Kotlin DSL from your GraphQL schema
 
-Execute `gradle build` command to generate Kotlin DSL. Entry point of DSL will be placed in `cinema.kt` file:
+Execute `gradle build` command to generate Kotlin DSL. Entry point of DSL will be placed in `cinema.kt` file
+(name of DSL entry point file is same as name of GraphQL schema):
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/cinema_api.png)
 
 ## Write DSL Adapter
 
-In `cinema.kt` will be placed `cinemaContextOf` function, that creates `CinemaContext` - the entry point of generated
-DSL.
+In `cinema.kt` will be placed `cinemaContextOf` builder function, that creates `CinemaContext` - the entry point of
+generated DSL. 
+Note, that prefixes of builder function, adapter and context interfaces are same as name of GraphQL schema.
 
 ```kotlin
 public fun cinemaContextOf(adapter: CinemaAdapter): CinemaContext = CinemaContextImpl(adapter)
@@ -256,7 +172,7 @@ private val httpClient = HttpClient {
 }
 ```
 
-## Ok, we are ready to execute GraphQL queries by means of generated KotlinDSL
+## Ok, we are ready to execute GraphQL queries by means of generated Kotlin DSL
 
 Simple query:
 
