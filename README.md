@@ -152,7 +152,7 @@ class CinemaKtorAdapter(private val client: HttpClient) : CinemaAdapter {
 
 Your can use any other HTTP Client to implement adapter. For example,
 see [here](https://github.com/ermadmi78/kobby-gradle-example/blob/main/cinema-server/src/test/kotlin/io/github/ermadmi78/kobby/cinema/server/CinemaTestAdapter.kt)
-`CinemaAdapter` for Spring integration tests.
+adapter implementation for Spring Boot integration tests.
 
 ## Configure Ktor client
 
@@ -174,19 +174,19 @@ private val httpClient = HttpClient {
 
 ## Ok, we are ready to execute GraphQL queries by means of generated Kotlin DSL
 
-Simple query:
+### Simple query
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
 
-Simple mutation:
+### Simple mutation
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/mutation.png)
 
-We can upload complex graph by means of our Kotlin DSL:
+### We can upload complex graph by means of our Kotlin DSL
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/complex_query.png)
 
-GraphQL unions and interfaces are supported too:
+### GraphQL's unions and interfaces are supported too
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/union_query.png)
 
