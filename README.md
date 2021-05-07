@@ -4,6 +4,10 @@
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
 
+The generated DSL supports execution of complex GraphQL queries and mutations in Kotlin with syntax similar to native
+GraphQL syntax. Moreover, you can customize generated DSL by means of GraphQL schema directives and Kotlin extension
+functions.
+
 ## Gradle
 
 ```kotlin
