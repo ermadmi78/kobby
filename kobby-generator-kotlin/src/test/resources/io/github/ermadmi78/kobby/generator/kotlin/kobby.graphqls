@@ -1,4 +1,5 @@
 directive @primaryKey on FIELD_DEFINITION
+directive @resolve on FIELD_DEFINITION
 
 scalar JSON
 scalar DateTime
@@ -59,10 +60,10 @@ type Actor implements Entity, Base{
     lastName: String!
     middleName: String
 
-    fields: JSON!
+    fields: JSON! @resolve
 
     countryId: ID! @primaryKey
-    country: Country!
+    country: Country! @resolve
 
     films(condition: String = "", limit: Int = -1, offset: Int = -1): [Film!]!
 }
@@ -83,7 +84,7 @@ type Film implements Entity, Base {
     genre: Genre!
 
     countryId: ID!
-    country: Country!
+    country: Country! @resolve
 
     actors(condition: String = "", limit: Int = -1, offset: Int = -1): [Actor!]!
 }

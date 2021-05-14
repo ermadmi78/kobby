@@ -20,7 +20,8 @@ data class KotlinLayout(
     val context: KotlinContextLayout,
     val dto: KotlinDtoLayout,
     val entity: KotlinEntityLayout,
-    val impl: KotlinImplLayout
+    val impl: KotlinImplLayout,
+    val resolver: KotlinResolverLayout,
 ) {
     // *****************************************************************************************************************
     //                                          DTO
@@ -239,6 +240,17 @@ data class KotlinLayout(
         get() = (field.name + field.number + name.capitalize())
             .decorate(impl.innerDecoration)
 
+    // *****************************************************************************************************************
+    //                                          Resolver
+    // *****************************************************************************************************************
+
+    internal val KobbyNode.resolverName: String
+        get() = name.decorate(resolver.decoration)
+
+    internal val KobbyField.resolverArgument: String
+        get() = (resolver.argument ?: node.name.decapitalize()).let {
+            if (it in arguments) it.decorate(impl.innerDecoration) else it
+        }
 
     //******************************************************************************************************************
     //                                          Jackson
@@ -401,6 +413,16 @@ class KotlinImplLayout(
     val decoration: Decoration,
     val internal: Boolean,
     val innerDecoration: Decoration
+) {
+    val packageName: String = packageName.validateKotlinPath()
+}
+
+class KotlinResolverLayout(
+    val enabled: Boolean,
+    packageName: String,
+    val decoration: Decoration,
+    val argument: String?, // null - generate argument name from bean name
+    val toDoMessage: String?
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }

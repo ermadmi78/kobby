@@ -67,6 +67,14 @@ open class KobbyKotlin : DefaultTask() {
 
     @Input
     @Optional
+    @Option(
+        option = "schemaDirectiveResolve",
+        description = "name of directive \"resolve\" (default \"resolve\")"
+    )
+    val schemaDirectiveResolve: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
     val scalars: MapProperty<String, KotlinType> =
         project.objects.mapProperty(String::class.java, KotlinType::class.java)
 
@@ -481,6 +489,55 @@ open class KobbyKotlin : DefaultTask() {
     )
     val implInnerPostfix: Property<String> = project.objects.property(String::class.java)
 
+    @Input
+    @Optional
+    @Option(
+        option = "resolverEnabled",
+        description = "generate graphql-java-kickstart resolvers (default false)"
+    )
+    val resolverEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "resolverPackageName",
+        description = "package name relative to root package name " +
+                "for generated graphql-java-kickstart resolvers (default \"resolver\")"
+    )
+    val resolverPackageName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "resolverPrefix",
+        description = "prefix for generated graphql-java-kickstart resolvers (default \"<Context name>\")"
+    )
+    val resolverPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "resolverPostfix",
+        description = "postfix for generated graphql-java-kickstart resolvers (default \"Resolver\")"
+    )
+    val resolverPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "resolverArgument",
+        description = "name of resolver bean argument. null - generate argument name from bean name (default null)"
+    )
+    val resolverArgument: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "resolverToDoMessage",
+        description = "error message for generated graphql-java-kickstart resolvers (default null)"
+    )
+    val resolverToDoMessage: Property<String> = project.objects.property(String::class.java)
+
     @OutputDirectory
     val outputDirectory: DirectoryProperty = project.objects.directoryProperty()
 
@@ -497,6 +554,7 @@ open class KobbyKotlin : DefaultTask() {
         schemaDirectiveRequired.convention(KobbyDirective.REQUIRED)
         schemaDirectiveDefault.convention(KobbyDirective.DEFAULT)
         schemaDirectiveSelection.convention(KobbyDirective.SELECTION)
+        schemaDirectiveResolve.convention(KobbyDirective.RESOLVE)
 
         scalars.convention(PREDEFINED_SCALARS)
 
@@ -537,6 +595,12 @@ open class KobbyKotlin : DefaultTask() {
         implInternal.convention(true)
         implInnerPrefix.convention("__inner")
 
+        resolverEnabled.convention(project.provider {
+            project.hasDependency("com.graphql-java-kickstart", "graphql-java-tools")
+        })
+        resolverPackageName.convention("resolver")
+        resolverPostfix.convention("Resolver")
+
         outputDirectory.convention(project.layout.buildDirectory.dir("generated/sources/kobby/main/kotlin"))
     }
 
@@ -551,7 +615,8 @@ open class KobbyKotlin : DefaultTask() {
             KobbyDirective.PRIMARY_KEY to schemaDirectivePrimaryKey.get(),
             KobbyDirective.REQUIRED to schemaDirectiveRequired.get(),
             KobbyDirective.DEFAULT to schemaDirectiveDefault.get(),
-            KobbyDirective.SELECTION to schemaDirectiveSelection.get()
+            KobbyDirective.SELECTION to schemaDirectiveSelection.get(),
+            KobbyDirective.RESOLVE to schemaDirectiveResolve.get()
         )
 
         val context = (contextName.orNull
@@ -599,6 +664,11 @@ open class KobbyKotlin : DefaultTask() {
         val implPackage: List<String> = mutableListOf<String>().also { list ->
             list += rootPackage
             implPackageName.orNull?.forEachPackage { list += it }
+        }
+
+        val resolverPackage: List<String> = mutableListOf<String>().also { list ->
+            list += rootPackage
+            resolverPackageName.orNull?.forEachPackage { list += it }
         }
 
         val layout = KotlinLayout(
@@ -655,6 +725,17 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(implPrefix.orNull, implPostfix.orNull),
                 implInternal.get(),
                 Decoration(implInnerPrefix.orNull, implInnerPostfix.orNull)
+            ),
+            KotlinResolverLayout(
+                resolverEnabled.get(),
+                resolverPackage.toPackageName(),
+                Decoration(
+                    (resolverPrefix.orNull?.trim() ?: capitalizedContext).let {
+                        if (it == "GraphQL") "IGraphQL" else it
+                    }, resolverPostfix.orNull
+                ),
+                resolverArgument.orNull,
+                resolverToDoMessage.orNull
             )
         )
 

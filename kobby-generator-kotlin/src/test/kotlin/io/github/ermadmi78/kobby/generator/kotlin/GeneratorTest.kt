@@ -75,6 +75,13 @@ class GeneratorTest : AnnotationSpec() {
                 Decoration(null, "Impl"),
                 true,
                 Decoration("__inner", null)
+            ),
+            KotlinResolverLayout(
+                true,
+                "resolvers",
+                Decoration("IGraphQL", "Resolver"),
+                null,
+                "Not implemented yet"
             )
         )
         val files = generateKotlin(schema, layout)

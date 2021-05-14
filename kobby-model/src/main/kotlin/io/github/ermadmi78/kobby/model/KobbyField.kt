@@ -19,6 +19,7 @@ class KobbyField internal constructor(
     private val required: Boolean,
     private val default: Boolean,
     private val selection: Boolean,
+    private val resolve: Boolean,
     private val _comments: List<String>,
     val arguments: Map<String, KobbyArgument>
 ) {
@@ -55,6 +56,10 @@ class KobbyField internal constructor(
         overriddenField?.isSelection ?: (selection && arguments.values.any { it.isInitialized })
     }
 
+    val isResolve: Boolean by lazy {
+        node.isOperation || (overriddenField?.isResolve ?: (resolve || arguments.isNotEmpty()))
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -89,7 +94,8 @@ class KobbyFieldScope internal constructor(
     primaryKey: Boolean,
     required: Boolean,
     default: Boolean,
-    selection: Boolean
+    selection: Boolean,
+    resolve: Boolean
 ) {
     private val comments = mutableListOf<String>()
     private val arguments = mutableMapOf<String, KobbyArgument>()
@@ -104,6 +110,7 @@ class KobbyFieldScope internal constructor(
         required,
         default,
         selection,
+        resolve,
         comments,
         arguments
     )

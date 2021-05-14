@@ -1,6 +1,7 @@
 package io.github.ermadmi78.kobby.model
 
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.*
+import kotlin.LazyThreadSafetyMode.NONE
 
 /**
  * Created on 18.01.2021
@@ -60,6 +61,17 @@ class KobbyNode internal constructor(
         .forEach(action)
 
     fun firstPrimaryKey(): KobbyField = fields.values.first { it.isPrimaryKey }
+
+    val isOperation: Boolean by lazy(NONE) {
+        kind == OBJECT && schema.operations.containsValue(name)
+    }
+
+    val isQuery: Boolean = schema.operations[Operation.QUERY] == name
+    val isMutation: Boolean = schema.operations[Operation.MUTATION] == name
+
+    val isResolve: Boolean by lazy {
+        kind == OBJECT && (isOperation || fields.values.any { it.isResolve })
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -129,6 +141,7 @@ class KobbyNodeScope internal constructor(
         required: Boolean,
         default: Boolean,
         selection: Boolean,
+        resolve: Boolean,
         block: KobbyFieldScope.() -> Unit
     ) = KobbyFieldScope(
         schema,
@@ -140,7 +153,8 @@ class KobbyNodeScope internal constructor(
         primaryKey,
         required,
         default,
-        selection
+        selection,
+        resolve
     ).apply(block).build().also {
         fields[it.name] = it
     }

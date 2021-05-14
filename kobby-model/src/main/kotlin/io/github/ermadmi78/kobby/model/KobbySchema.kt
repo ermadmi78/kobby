@@ -9,6 +9,7 @@ import kotlin.LazyThreadSafetyMode.NONE
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 class KobbySchema internal constructor(
+    val operations: Map<Operation, String>, // operation to node name
     val all: Map<String, KobbyNode>,
     val scalars: Map<String, KobbyNode>,
     val objects: Map<String, KobbyNode>,
@@ -20,8 +21,8 @@ class KobbySchema internal constructor(
     // name of interface or union -> set of names of object or interface
     val subObjectsIndex: Map<String, Set<String>>
 ) {
-    val query: KobbyNode by lazy(NONE) { objects[QUERY]!! }
-    val mutation: KobbyNode by lazy(NONE) { objects[MUTATION]!! }
+    val query: KobbyNode by lazy(NONE) { objects[operations[Operation.QUERY]!!]!! }
+    val mutation: KobbyNode by lazy(NONE) { objects[operations[Operation.MUTATION]!!]!! }
 
     fun all(action: (KobbyNode) -> Unit) = all.values.forEach(action)
     fun scalars(action: (KobbyNode) -> Unit) = scalars.values.forEach(action)
@@ -30,11 +31,6 @@ class KobbySchema internal constructor(
     fun unions(action: (KobbyNode) -> Unit) = unions.values.forEach(action)
     fun enums(action: (KobbyNode) -> Unit) = enums.values.forEach(action)
     fun inputs(action: (KobbyNode) -> Unit) = inputs.values.forEach(action)
-
-    companion object {
-        const val QUERY = "Query"
-        const val MUTATION = "Mutation"
-    }
 }
 
 fun KobbySchema(block: KobbySchemaScope.() -> Unit): KobbySchema =
@@ -42,6 +38,11 @@ fun KobbySchema(block: KobbySchemaScope.() -> Unit): KobbySchema =
 
 @KobbyScope
 class KobbySchemaScope internal constructor() {
+    private val operations = mutableMapOf<Operation, String>().also {
+        Operation.values().forEach { operation ->
+            it[operation] = operation.defaultNodeName
+        }
+    }
     private val all = mutableMapOf<String, KobbyNode>()
     private val scalars = mutableMapOf<String, KobbyNode>()
     private val objects = mutableMapOf<String, KobbyNode>()
@@ -52,6 +53,7 @@ class KobbySchemaScope internal constructor() {
     private val subObjectsIndex = mutableMapOf<String, MutableSet<String>>()
 
     val schema = KobbySchema(
+        operations,
         all,
         scalars,
         objects,
@@ -61,6 +63,10 @@ class KobbySchemaScope internal constructor() {
         inputs,
         subObjectsIndex
     )
+
+    fun addOperation(operation: Operation, nodeName: String) {
+        operations[operation] = nodeName
+    }
 
     fun addNode(
         name: String,
@@ -106,14 +112,24 @@ class KobbySchemaScope internal constructor() {
     fun addInput(name: String, block: KobbyNodeScope.() -> Unit = {}) =
         addNode(name, INPUT, block)
 
+    private fun Operation.buildDefaultIfNeed() {
+        operations[this]!!.takeIf { it !in objects }?.also {
+            addObject(it)
+        }
+    }
+
     fun build(): KobbySchema {
-        if (objects[KobbySchema.QUERY] == null) {
-            addObject(KobbySchema.QUERY)
+        // Check operation node names
+        mutableSetOf<String>().also { names ->
+            operations.values.forEach {
+                if (!names.add(it)) {
+                    throw IllegalStateException("Duplicate operation node name: '$it'")
+                }
+            }
         }
 
-        if (objects[KobbySchema.MUTATION] == null) {
-            addObject(KobbySchema.MUTATION)
-        }
+        Operation.QUERY.buildDefaultIfNeed()
+        Operation.MUTATION.buildDefaultIfNeed()
 
         return schema
     }

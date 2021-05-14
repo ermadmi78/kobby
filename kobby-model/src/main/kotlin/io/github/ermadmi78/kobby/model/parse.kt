@@ -15,6 +15,7 @@ object KobbyDirective {
     const val REQUIRED: String = "required"
     const val DEFAULT: String = "default"
     const val SELECTION: String = "selection"
+    const val RESOLVE: String = "resolve"
 }
 
 fun parseSchema(
@@ -27,6 +28,14 @@ fun parseSchema(
 }.toRegistryScope(directiveLayout).parseSchemaImpl()
 
 private fun RegistryScope.parseSchemaImpl() = KobbySchema {
+    schemaDefinition?.operationTypeDefinitions?.forEach { definition ->
+        Operation.of(definition.name)?.also { operation ->
+            definition.typeName?.name?.trim()?.takeIf { it.isNotEmpty() }?.also { nodeName ->
+                addOperation(operation, nodeName)
+            }
+        }
+    }
+
     scalars.values.forEach { scalar ->
         addScalar(scalar.name) {
             scalar.comments.forEach {
@@ -64,7 +73,8 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.isPrimaryKey(),
                         field.isRequired(),
                         field.isDefault(),
-                        field.isSelection()
+                        field.isSelection(),
+                        field.isResolve()
                     ) {
                         field.comments.forEach {
                             addComment(it.content)
@@ -94,7 +104,8 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.isPrimaryKey(),
                         field.isRequired(),
                         field.isDefault(),
-                        field.isSelection()
+                        field.isSelection(),
+                        field.isResolve()
                     ) {
                         field.comments.forEach {
                             addComment(it.content)
@@ -138,7 +149,8 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         primaryKey = false,
                         required = false,
                         default = false,
-                        selection = false
+                        selection = false,
+                        resolve = false
                     ) {
                         input.comments.forEach {
                             addComment(it.content)
@@ -151,6 +163,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
 }
 
 private class RegistryScope(
+    val schemaDefinition: SchemaDefinition?,
     val directiveLayout: Map<String, String>,
     val types: Map<String, TypeDefinition<*>>,
     val scalars: Map<String, TypeDefinition<*>>,
@@ -205,10 +218,15 @@ private class RegistryScope(
     fun FieldDefinition.isSelection(): Boolean = directives.firstOrNull {
         it.name == directiveLayout[KobbyDirective.SELECTION] ?: KobbyDirective.SELECTION
     } != null
+
+    fun FieldDefinition.isResolve(): Boolean = directives.firstOrNull {
+        it.name == directiveLayout[KobbyDirective.RESOLVE] ?: KobbyDirective.RESOLVE
+    } != null
 }
 
 private fun TypeDefinitionRegistry.toRegistryScope(directiveLayout: Map<String, String>): RegistryScope =
     RegistryScope(
+        schemaDefinition().orElse(null),
         directiveLayout,
         types(),
         scalars(),

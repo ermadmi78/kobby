@@ -1,3 +1,7 @@
+@file:Suppress(
+    "unused"
+)
+
 package io.github.ermadmi78.kobby
 
 import io.github.ermadmi78.kobby.generator.kotlin.KotlinTypes.PREDEFINED_SCALARS
@@ -48,6 +52,9 @@ class KobbyPlugin : Plugin<Project> {
                                 }
                                 selection?.also {
                                     kotlinTask.schemaDirectiveSelection.convention(it)
+                                }
+                                resolve?.also {
+                                    kotlinTask.schemaDirectiveResolve.convention(it)
                                 }
                             }
                         }
@@ -227,6 +234,26 @@ class KobbyPlugin : Plugin<Project> {
                             }
                             innerPostfix?.also {
                                 kotlinTask.implInnerPostfix.convention(it)
+                            }
+                        }
+                        kotlinExtension.resolverExtension.valueOrNull?.apply {
+                            enabled?.also {
+                                kotlinTask.resolverEnabled.convention(it)
+                            }
+                            packageName?.also {
+                                kotlinTask.resolverPackageName.convention(it)
+                            }
+                            prefix?.also {
+                                kotlinTask.resolverPrefix.convention(it)
+                            }
+                            postfix?.also {
+                                kotlinTask.resolverPostfix.convention(it)
+                            }
+                            argument?.also {
+                                kotlinTask.resolverArgument.convention(it)
+                            }
+                            toDoMessage?.also {
+                                kotlinTask.resolverToDoMessage.convention(it)
                             }
                         }
                     } else {

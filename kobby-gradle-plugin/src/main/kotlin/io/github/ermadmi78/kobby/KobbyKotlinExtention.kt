@@ -1,3 +1,7 @@
+@file:Suppress(
+    "unused"
+)
+
 package io.github.ermadmi78.kobby
 
 import io.github.ermadmi78.kobby.generator.kotlin.KotlinType
@@ -21,6 +25,7 @@ open class KobbyKotlinExtension {
     internal val dtoExtension = lazy { KobbyKotlinDtoExtension() }
     internal val entityExtension = lazy { KobbyKotlinEntityExtension() }
     internal val implExtension = lazy { KobbyKotlinImplExtension() }
+    internal val resolverExtension = lazy { KobbyKotlinResolverExtension() }
 
     /** Kotlin DSL Context generator configuration */
     fun context(action: Action<KobbyKotlinContextExtension>) {
@@ -42,6 +47,11 @@ open class KobbyKotlinExtension {
         action.execute(implExtension.value)
     }
 
+    /** Kotlin DSL resolvers generator configuration */
+    fun resolver(action: Action<KobbyKotlinResolverExtension>) {
+        action.execute(resolverExtension.value)
+    }
+
     override fun toString(): String {
         return "KobbyKotlinExtension(" +
                 "enabled=$enabled, " +
@@ -52,7 +62,9 @@ open class KobbyKotlinExtension {
                 "contextExtension=$contextExtension, " +
                 "dtoExtension=$dtoExtension, " +
                 "entityExtension=$entityExtension, " +
-                "implExtension=$implExtension)"
+                "implExtension=$implExtension, " +
+                "resolverExtension=$resolverExtension" +
+                ")"
     }
 
     // *****************************************************************************************************************
@@ -316,5 +328,26 @@ open class KobbyKotlinImplExtension {
                 "internal=$internal, " +
                 "innerPrefix=$innerPrefix, " +
                 "innerPostfix=$innerPostfix)"
+    }
+}
+
+@Kobby
+open class KobbyKotlinResolverExtension {
+    var enabled: Boolean? = null
+    var packageName: String? = null
+    var prefix: String? = null
+    var postfix: String? = null
+    var argument: String? = null
+    var toDoMessage: String? = null
+
+    override fun toString(): String {
+        return "KobbyKotlinResolverExtension(" +
+                "enabled=$enabled, " +
+                "packageName=$packageName, " +
+                "interfacePrefix=$prefix, " +
+                "interfacePostfix=$postfix, " +
+                "argument=$argument, " +
+                "toDoMessage=$toDoMessage" +
+                ")"
     }
 }
