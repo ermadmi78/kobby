@@ -530,10 +530,10 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     if (field.arguments.isNotEmpty()) {
                         addStatement("var counter = 0")
                         val addBracketsExpression: String = field.arguments.values.let { args ->
-                            if (!args.any { it.isInitialized }) "true"
+                            if (args.any { !it.isInitialized }) "true"
                             else args.asSequence()
-                                .filter { it.isInitialized }
                                 .map { arg ->
+                                    require(arg.isInitialized) { "Invalid algorithm" }
                                     if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
                                 }
                                 .joinToString(" || ") { "$it != null" }
