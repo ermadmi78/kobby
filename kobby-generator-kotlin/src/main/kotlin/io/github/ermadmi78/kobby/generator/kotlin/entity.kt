@@ -3,7 +3,6 @@ package io.github.ermadmi78.kobby.generator.kotlin
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier
 import io.github.ermadmi78.kobby.model.KobbyNode
-import io.github.ermadmi78.kobby.model.KobbyNodeKind.INPUT
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.OBJECT
 import io.github.ermadmi78.kobby.model.KobbySchema
 
@@ -165,15 +164,6 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
                     mutable()
                     arg.comments {
                         addKdoc(it)
-                    }
-                }
-                if (dto.builder.enabled && arg.type.node.kind == INPUT) {
-                    buildFunction(arg.name) {
-                        arg.comments {
-                            addKdoc(it)
-                        }
-                        addParameter("block", arg.type.node.builderLambda)
-                        addStatement("${arg.name} = %T(block)", arg.type.node.dtoClass)
                     }
                 }
             }
