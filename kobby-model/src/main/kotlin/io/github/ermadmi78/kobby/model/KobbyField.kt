@@ -13,7 +13,7 @@ class KobbyField internal constructor(
 
     val name: String,
     val type: KobbyType,
-    val hasDefaultValue: Boolean,
+    val defaultValue: KobbyLiteral?,
     val number: Int,
     private val primaryKey: Boolean,
     private val required: Boolean,
@@ -23,6 +23,8 @@ class KobbyField internal constructor(
     private val _comments: List<String>,
     val arguments: Map<String, KobbyArgument>
 ) {
+    val hasDefaultValue: Boolean get() = defaultValue != null
+
     val comments: List<String> by lazy {
         if (_comments.isNotEmpty()) {
             _comments
@@ -89,7 +91,7 @@ class KobbyFieldScope internal constructor(
     val node: KobbyNode,
     name: String,
     type: KobbyType,
-    hasDefaultValue: Boolean,
+    defaultValue: KobbyLiteral?,
     number: Int,
     primaryKey: Boolean,
     required: Boolean,
@@ -104,7 +106,7 @@ class KobbyFieldScope internal constructor(
         node,
         name,
         type,
-        hasDefaultValue,
+        defaultValue,
         number,
         primaryKey,
         required,
@@ -122,9 +124,9 @@ class KobbyFieldScope internal constructor(
     fun addArgument(
         name: String,
         type: KobbyType,
-        hasDefaultValue: Boolean,
+        defaultValue: KobbyLiteral?,
         block: KobbyArgumentScope.() -> Unit
-    ) = KobbyArgumentScope(schema, node, field, name, type, hasDefaultValue).apply(block).build().also {
+    ) = KobbyArgumentScope(schema, node, field, name, type, defaultValue).apply(block).build().also {
         arguments[it.name] = it
     }
 

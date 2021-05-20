@@ -69,7 +69,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                     addField(
                         field.name,
                         field.type.resolve(schema),
-                        false,
+                        null,
                         field.isPrimaryKey(),
                         field.isRequired(),
                         field.isDefault(),
@@ -80,7 +80,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                             addComment(it.content)
                         }
                         field.inputValueDefinitions.forEach { arg ->
-                            addArgument(arg.name, arg.type.resolve(schema), arg.defaultValue != null) {
+                            addArgument(arg.name, arg.type.resolve(schema), arg.defaultValue?.resolve()) {
                                 arg.comments.forEach {
                                     addComment(it.content)
                                 }
@@ -100,7 +100,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                     addField(
                         field.name,
                         field.type.resolve(schema),
-                        false,
+                        null,
                         field.isPrimaryKey(),
                         field.isRequired(),
                         field.isDefault(),
@@ -111,7 +111,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                             addComment(it.content)
                         }
                         field.inputValueDefinitions.forEach { arg ->
-                            addArgument(arg.name, arg.type.resolve(schema), arg.defaultValue != null) {
+                            addArgument(arg.name, arg.type.resolve(schema), arg.defaultValue?.resolve()) {
                                 arg.comments.forEach {
                                     addComment(it.content)
                                 }
@@ -145,7 +145,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                     addField(
                         input.name,
                         input.type.resolve(schema),
-                        input.defaultValue != null,
+                        input.defaultValue?.resolve(),
                         primaryKey = false,
                         required = false,
                         default = false,
@@ -251,4 +251,21 @@ private fun Type<*>.resolve(schema: KobbySchema, nullable: Boolean = true): Kobb
     is ListType -> KobbyListType(type.resolve(schema), nullable)
     is TypeName -> KobbyNodeType(schema, name, nullable)
     else -> error("Unexpected Type successor: ${this::javaClass.name}")
+}
+
+private fun Value<*>.resolve(): KobbyLiteral = when (this) {
+    is NullValue -> KobbyNullLiteral
+    is BooleanValue -> KobbyBooleanLiteral(isValue)
+    is IntValue -> KobbyIntLiteral(value)
+    is FloatValue -> KobbyFloatLiteral(value)
+    is StringValue -> KobbyStringLiteral(value)
+    is EnumValue -> KobbyEnumLiteral(name)
+    is ArrayValue -> KobbyListLiteral(values.map { it.resolve() })
+    is ObjectValue -> KobbyObjectLiteral(
+        objectFields.asSequence()
+            .map { it.name to it.value.resolve() }
+            .toMap()
+    )
+    is VariableReference -> KobbyVariableLiteral(name)
+    else -> error("Unknown value type: ${this::class.java}")
 }

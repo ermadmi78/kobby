@@ -54,6 +54,106 @@ data class KotlinLayout(
     internal val KobbyNode.builderLambda: LambdaTypeName
         get() = LambdaTypeName.get(builderClass, emptyList(), UNIT)
 
+    internal fun KobbyLiteral.buildInitializer(type: KobbyType, args: MutableList<Any?>): String = when (this) {
+        is KobbyNullLiteral -> "null"
+        is KobbyBooleanLiteral -> {
+            args.add(value)
+            "%L"
+        }
+        is KobbyIntLiteral -> {
+            val kotlinType: KotlinType? = type.node.takeIf { it.kind == SCALAR }?.let { scalars[it.name] }
+            if (KotlinTypes.LONG == kotlinType) {
+                args.add(value.toLong())
+                "%LL"
+            } else {
+                args.add(value.toInt())
+                "%L"
+            }
+        }
+        is KobbyFloatLiteral -> {
+            val kotlinType: KotlinType? = type.node.takeIf { it.kind == SCALAR }?.let { scalars[it.name] }
+            if (KotlinTypes.DOUBLE == kotlinType) {
+                args.add(value.toDouble())
+                "%L"
+            } else {
+                args.add(value.toFloat())
+                "%LF"
+            }
+        }
+        is KobbyStringLiteral -> {
+            args.add(value)
+            "%S"
+        }
+        is KobbyEnumLiteral -> {
+            if (type.node.kind == ENUM) {
+                args.add(type.node.dtoClass)
+                "%T.$name"
+            } else {
+                name
+            }
+        }
+        is KobbyListLiteral -> {
+            val nestedType = type.nestedOrNull
+            if (nestedType != null) {
+                args.add(
+                    ClassName("kotlin.collections", "listOf")
+                        .parameterizedBy(nestedType.dtoType)
+                )
+                if (values.isEmpty()) {
+                    "%T()"
+                } else {
+                    val sb = StringBuilder()
+                    sb.append("%T(")
+                    var first = true
+                    for (nestedLiteral in values) {
+                        if (first) {
+                            first = false
+                        } else {
+                            sb.append(", ")
+                        }
+                        sb.append(nestedLiteral.buildInitializer(nestedType, args))
+                    }
+                    sb.append(")")
+                    sb.toString()
+                }
+            } else {
+                args.add(
+                    ClassName("kotlin.collections", "listOf")
+                        .parameterizedBy(ANY.nullable())
+                )
+                "%T()"
+            }
+        }
+        is KobbyObjectLiteral -> {
+            if (type.node.kind == INPUT) {
+                args.add(type.dtoType)
+                if (values.isEmpty()) {
+                    "%T()"
+                } else {
+                    val sb = StringBuilder()
+                    sb.append("%T(")
+                    var first = true
+                    for (nestedPair in values) {
+                        val nestedField = type.node.fields[nestedPair.key] ?: continue
+                        if (first) {
+                            first = false
+                        } else {
+                            sb.append(", ")
+                        }
+
+                        sb.append(nestedPair.key).append(" = ")
+                        sb.append(nestedPair.value.buildInitializer(nestedField.type, args))
+                    }
+                    sb.append(")")
+                    sb.toString()
+                }
+            } else {
+                type.node.name
+            }
+        }
+        is KobbyVariableLiteral -> name
+    }
+
     // *****************************************************************************************************************
     //                                          Entity
     // *****************************************************************************************************************

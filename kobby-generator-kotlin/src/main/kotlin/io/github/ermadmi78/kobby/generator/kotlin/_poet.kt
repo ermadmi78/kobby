@@ -39,6 +39,7 @@ private val SUPPRESS = AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
     .addMember("%S", "ConstantConditionIf")
     .addMember("%S", "CanBeParameter")
     .addMember("%S", "unused")
+    .addMember("%S", "RemoveExplicitTypeArguments")
     .build()
 
 internal fun buildFile(
@@ -299,6 +300,30 @@ internal class PrimaryConstructorPropertiesBuilder(
             primaryConstructorBuilder.addParameter(
                 ParameterSpec.builder(name, type).apply {
                     if (type.isNullable) {
+                        defaultValue("null")
+                    }
+                }.build()
+            )
+            it.initializer(name)
+        }
+        .apply(block)
+        .build()
+        .also {
+            classBuilder.addProperty(it)
+        }
+
+    internal fun buildPropertyWithDefault(
+        name: String,
+        type: TypeName,
+        defaultValue: CodeBlock?,
+        block: PropertySpecBuilder.() -> Unit = {}
+    ): PropertySpec = PropertySpec.builder(name, type)
+        .also {
+            primaryConstructorBuilder.addParameter(
+                ParameterSpec.builder(name, type).apply {
+                    if (defaultValue != null) {
+                        defaultValue(defaultValue)
+                    } else if (type.isNullable) {
                         defaultValue("null")
                     }
                 }.build()

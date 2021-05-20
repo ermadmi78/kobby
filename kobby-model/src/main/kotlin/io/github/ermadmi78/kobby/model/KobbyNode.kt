@@ -136,7 +136,7 @@ class KobbyNodeScope internal constructor(
     fun addField(
         name: String,
         type: KobbyType,
-        hasDefaultValue: Boolean,
+        defaultValue: KobbyLiteral?,
         primaryKey: Boolean,
         required: Boolean,
         default: Boolean,
@@ -148,7 +148,7 @@ class KobbyNodeScope internal constructor(
         node,
         name,
         type,
-        hasDefaultValue,
+        defaultValue,
         fieldNumber++,
         primaryKey,
         required,

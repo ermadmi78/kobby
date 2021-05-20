@@ -128,6 +128,12 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             arg.comments {
                                 addKdoc(it)
                             }
+                            arg.defaultValue?.also { literal ->
+                                if (arg.comments.isNotEmpty()) {
+                                    addKdoc(" ");
+                                }
+                                addKdoc("Default: $literal")
+                            }
                         }
                     }
                 field.lambda?.also {
@@ -164,6 +170,12 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
                     mutable()
                     arg.comments {
                         addKdoc(it)
+                    }
+                    arg.defaultValue?.also { literal ->
+                        if (arg.comments.isNotEmpty()) {
+                            addKdoc("  \n> ")
+                        }
+                        addKdoc("Default: $literal")
                     }
                 }
             }

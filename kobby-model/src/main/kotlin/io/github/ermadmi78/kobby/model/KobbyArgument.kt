@@ -12,9 +12,11 @@ class KobbyArgument internal constructor(
 
     val name: String,
     val type: KobbyType,
-    val hasDefaultValue: Boolean,
+    val defaultValue: KobbyLiteral?,
     private val _comments: List<String>
 ) {
+    val hasDefaultValue: Boolean get() = defaultValue != null
+
     val comments: List<String> by lazy {
         if (_comments.isNotEmpty()) {
             _comments
@@ -59,10 +61,10 @@ class KobbyArgumentScope internal constructor(
     field: KobbyField,
     name: String,
     type: KobbyType,
-    hasDefaultValue: Boolean
+    defaultValue: KobbyLiteral?
 ) {
     private val comments = mutableListOf<String>()
-    private val argument = KobbyArgument(schema, node, field, name, type, hasDefaultValue, comments)
+    private val argument = KobbyArgument(schema, node, field, name, type, defaultValue, comments)
 
     fun addComment(comment: String) {
         comments += comment

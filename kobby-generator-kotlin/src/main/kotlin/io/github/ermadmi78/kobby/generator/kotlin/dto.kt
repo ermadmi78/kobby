@@ -208,12 +208,20 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 }
                 buildPrimaryConstructorProperties {
                     node.fields { field ->
-                        buildProperty(
-                            field.name,
-                            if (field.hasDefaultValue) field.type.dtoType.nullable() else field.type.dtoType
-                        ) {
+                        val defaultValue: CodeBlock? = field.defaultValue?.let { literal ->
+                            val args = mutableListOf<Any?>()
+                            val format = literal.buildInitializer(field.type, args)
+                            CodeBlock.of(format, *args.toTypedArray())
+                        }
+                        buildPropertyWithDefault(field.name, field.type.dtoType, defaultValue) {
                             field.comments {
                                 addKdoc(it)
+                            }
+                            field.defaultValue?.also { literal ->
+                                if (field.comments.isNotEmpty()) {
+                                    addKdoc("  \n> ")
+                                }
+                                addKdoc("Default: $literal")
                             }
                         }
                     }
@@ -246,12 +254,28 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         addKdoc(it)
                     }
                     node.fields { field ->
-                        buildProperty(field.name, field.type.dtoType.nullable()) {
+                        buildProperty(
+                            field.name,
+                            if (field.hasDefaultValue) field.type.dtoType else field.type.dtoType.nullable()
+                        ) {
                             field.comments {
                                 addKdoc(it)
                             }
                             mutable()
-                            initializer("null")
+
+                            val literal = field.defaultValue
+                            if (literal == null) {
+                                initializer("null")
+                            } else {
+                                if (field.comments.isNotEmpty()) {
+                                    addKdoc("  \n> ")
+                                }
+                                addKdoc("Default: $literal")
+
+                                val args = mutableListOf<Any?>()
+                                val format = literal.buildInitializer(field.type, args)
+                                initializer(CodeBlock.of(format, *args.toTypedArray()))
+                            }
                         }
                     }
                 }
