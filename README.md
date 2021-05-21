@@ -166,9 +166,11 @@ adapter implementation for Spring Boot integration tests.
 private val httpClient = HttpClient {
     expectSuccess = true
     install(JsonFeature) {
-        serializer = JacksonSerializer() {
+        serializer = JacksonSerializer {
             registerModule(ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
             registerModule(JavaTimeModule())
+            // Force Jackson to serialize dates as String
+            disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         }
     }
     defaultRequest {
