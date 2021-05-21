@@ -12,7 +12,7 @@ functions.
 
 ```kotlin
 plugins {
-    id("io.github.ermadmi78.kobby") version "1.0.0-beta.03"
+    id("io.github.ermadmi78.kobby") version "1.0.0-beta.04"
 }
 ```
 
