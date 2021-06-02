@@ -68,6 +68,7 @@ class KobbyNode internal constructor(
 
     val isQuery: Boolean = schema.operations[Operation.QUERY] == name
     val isMutation: Boolean = schema.operations[Operation.MUTATION] == name
+    val isSubscription: Boolean = schema.operations[Operation.SUBSCRIPTION] == name
 
     val isResolve: Boolean by lazy {
         kind == OBJECT && (isOperation || fields.values.any { it.isResolve })

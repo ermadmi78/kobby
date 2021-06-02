@@ -23,6 +23,11 @@ class KobbySchema internal constructor(
 ) {
     val query: KobbyNode by lazy(NONE) { objects[operations[Operation.QUERY]!!]!! }
     val mutation: KobbyNode by lazy(NONE) { objects[operations[Operation.MUTATION]!!]!! }
+    val subscription: KobbyNode by lazy(NONE) { objects[operations[Operation.SUBSCRIPTION]!!]!! }
+
+    fun operations(action: (KobbyNode) -> Unit) = Operation.values().asSequence().map {
+        objects[operations[it]!!]!!
+    }.forEach(action)
 
     fun all(action: (KobbyNode) -> Unit) = all.values.forEach(action)
     fun scalars(action: (KobbyNode) -> Unit) = scalars.values.forEach(action)
@@ -130,6 +135,7 @@ class KobbySchemaScope internal constructor() {
 
         Operation.QUERY.buildDefaultIfNeed()
         Operation.MUTATION.buildDefaultIfNeed()
+        Operation.SUBSCRIPTION.buildDefaultIfNeed()
 
         return schema
     }

@@ -1,7 +1,8 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.KModifier.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.ermadmi78.kobby.model.KobbyNode
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.OBJECT
 import io.github.ermadmi78.kobby.model.KobbySchema
@@ -66,22 +67,29 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
         // context query
         buildFunction(context.query) {
-            addModifiers(KModifier.OVERRIDE, KModifier.SUSPEND, KModifier.ABSTRACT)
+            addModifiers(OVERRIDE, SUSPEND, ABSTRACT)
             buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
             returns(node.schema.query.entityClass)
         }
 
         // context mutation
         buildFunction(context.mutation) {
-            addModifiers(KModifier.OVERRIDE, KModifier.SUSPEND, KModifier.ABSTRACT)
+            addModifiers(OVERRIDE, SUSPEND, ABSTRACT)
             buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
             returns(node.schema.mutation.entityClass)
+        }
+
+        // context subscription
+        buildFunction(context.subscription) {
+            addModifiers(OVERRIDE, ABSTRACT)
+            buildParameter(entity.projection.projectionArgument, node.schema.subscription.projectionLambda)
+            returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
         }
 
         // withCurrentProjection
         if (node.kind == OBJECT) {
             buildFunction(entity.withCurrentProjectionFun) {
-                addModifiers(KModifier.ABSTRACT)
+                addModifiers(ABSTRACT)
                 receiver(node.projectionClass)
             }
         }
@@ -89,7 +97,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
         node.fields { field ->
             buildProperty(field.name, field.entityType) {
                 if (field.isOverride) {
-                    addModifiers(KModifier.OVERRIDE)
+                    addModifiers(OVERRIDE)
                 }
                 field.comments {
                     addKdoc(it)
@@ -110,9 +118,9 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         }
         node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
             buildFunction(field.projectionFieldName) {
-                addModifiers(KModifier.ABSTRACT)
+                addModifiers(ABSTRACT)
                 if (field.isOverride) {
-                    addModifiers(KModifier.OVERRIDE)
+                    addModifiers(OVERRIDE)
                 }
                 field.comments {
                     addKdoc(it)
@@ -149,7 +157,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         // minimize function
         buildFunction(entity.projection.minimizeFun) {
             if (node.implements.isNotEmpty()) {
-                addModifiers(KModifier.OVERRIDE)
+                addModifiers(OVERRIDE)
             }
             node.fields.values.asSequence().filter { !it.isRequired && it.isDefault }.forEach { field ->
                 addStatement("${field.projectionFieldName}()")
@@ -202,7 +210,7 @@ private fun FileSpecBuilder.buildQualification(node: KobbyNode, layout: KotlinLa
         }
         node.subObjects { subObject ->
             buildFunction(subObject.projectionOnName) {
-                addModifiers(KModifier.ABSTRACT)
+                addModifiers(ABSTRACT)
                 subObject.comments {
                     addKdoc(it)
                 }

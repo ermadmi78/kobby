@@ -31,7 +31,8 @@ class GeneratorTest : AnnotationSpec() {
                 "kobby",
                 Decoration("Kobby", null),
                 "query",
-                "mutation"
+                "mutation",
+                "subscription"
             ),
             KotlinDtoLayout(
                 "kobby.dto",
@@ -77,6 +78,7 @@ class GeneratorTest : AnnotationSpec() {
                 Decoration("__inner", null)
             ),
             KotlinResolverLayout(
+                true,
                 true,
                 "resolvers",
                 Decoration("IGraphQL", "Resolver"),

@@ -28,6 +28,9 @@ internal fun generateResolver(schema: KobbySchema, layout: KotlinLayout): List<F
                         node.isMutation -> ClassName(
                             "graphql.kickstart.tools", "GraphQLMutationResolver"
                         )
+                        node.isSubscription -> ClassName(
+                            "graphql.kickstart.tools", "GraphQLSubscriptionResolver"
+                        )
                         else -> ClassName(
                             "graphql.kickstart.tools", "GraphQLResolver"
                         ).parameterizedBy(node.dtoClass)
@@ -43,7 +46,15 @@ internal fun generateResolver(schema: KobbySchema, layout: KotlinLayout): List<F
                         field.comments {
                             addKdoc(it)
                         }
-                        returns(field.type.dtoType)
+
+                        if (resolver.publisherEnabled && node.isSubscription) {
+                            returns(
+                                ClassName("org.reactivestreams", "Publisher")
+                                    .parameterizedBy(field.type.dtoType)
+                            )
+                        } else {
+                            returns(field.type.dtoType)
+                        }
 
                         if (!node.isOperation) {
                             buildParameter(field.resolverArgument, node.dtoClass)

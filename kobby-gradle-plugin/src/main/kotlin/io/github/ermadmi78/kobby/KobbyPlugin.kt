@@ -90,6 +90,9 @@ class KobbyPlugin : Plugin<Project> {
                             mutation?.also {
                                 kotlinTask.contextMutation.convention(it)
                             }
+                            subscription?.also {
+                                kotlinTask.contextSubscription.convention(it)
+                            }
                         }
                         kotlinExtension.dtoExtension.valueOrNull?.apply {
                             packageName?.also {
@@ -239,6 +242,9 @@ class KobbyPlugin : Plugin<Project> {
                         kotlinExtension.resolverExtension.valueOrNull?.apply {
                             enabled?.also {
                                 kotlinTask.resolverEnabled.convention(it)
+                            }
+                            publisherEnabled?.also {
+                                kotlinTask.resolverPublisherEnabled.convention(it)
                             }
                             packageName?.also {
                                 kotlinTask.resolverPackageName.convention(it)

@@ -1,6 +1,8 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.KModifier.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.ermadmi78.kobby.model.KobbyNode
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.INTERFACE
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.UNION
@@ -57,7 +59,7 @@ private fun FileSpecBuilder.buildObjectEntityBuilder(node: KobbyNode, layout: Ko
     buildFunction(node.entityBuilderName) {
         receiver(node.dtoClass)
         if (impl.internal) {
-            addModifiers(KModifier.INTERNAL)
+            addModifiers(INTERNAL)
         }
 
         buildParameter(impl.contextPropertyName, context.contextClass)
@@ -74,7 +76,7 @@ private fun FileSpecBuilder.buildInterfaceOrUnionEntityBuilder(node: KobbyNode, 
     buildFunction(node.entityBuilderName) {
         receiver(node.dtoClass)
         if (impl.internal) {
-            addModifiers(KModifier.INTERNAL)
+            addModifiers(INTERNAL)
         }
 
         buildParameter(impl.contextPropertyName, context.contextClass)
@@ -100,7 +102,7 @@ private fun FileSpecBuilder.buildResolvers(node: KobbyNode, layout: KotlinLayout
         buildFunction(field.resolverName) {
             receiver(node.dtoClass)
             if (impl.internal) {
-                addModifiers(KModifier.INTERNAL)
+                addModifiers(INTERNAL)
             }
 
             buildParameter(impl.contextPropertyName, context.contextClass)
@@ -139,7 +141,7 @@ private fun KobbyType.expand(receiver: String, resolveNull: Boolean, block: () -
 private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) = with(layout) {
     buildClass(node.implName) {
         if (impl.internal) {
-            addModifiers(KModifier.INTERNAL)
+            addModifiers(INTERNAL)
         }
         addSuperinterface(node.entityClass)
 
@@ -149,21 +151,21 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             // context
             buildProperty(impl.contextPropertyName, context.contextClass) {
                 if (impl.internal) {
-                    addModifiers(KModifier.INTERNAL)
+                    addModifiers(INTERNAL)
                 }
             }
 
             // projection
             buildProperty(node.implProjectionProperty) {
                 if (impl.internal) {
-                    addModifiers(KModifier.INTERNAL)
+                    addModifiers(INTERNAL)
                 }
             }
 
             // dto
             buildProperty(innerDto, node.dtoClass) {
                 if (impl.internal) {
-                    addModifiers(KModifier.INTERNAL)
+                    addModifiers(INTERNAL)
                 }
             }
         }
@@ -171,7 +173,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
         // Entity equals and hashCode generation by @primaryKey directive
         if (node.primaryKeysCount > 0) {
             buildFunction(EQUALS_FUN) {
-                addModifiers(KModifier.OVERRIDE)
+                addModifiers(OVERRIDE)
                 buildParameter(EQUALS_ARG, ANY.nullable())
                 returns(BOOLEAN)
 
@@ -203,7 +205,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             }
 
             buildFunction(HASH_CODE_FUN) {
-                addModifiers(KModifier.OVERRIDE)
+                addModifiers(OVERRIDE)
                 returns(INT)
 
                 if (node.primaryKeysCount == 1) {
@@ -229,7 +231,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
         // context query
         buildFunction(context.query) {
-            addModifiers(KModifier.OVERRIDE, KModifier.SUSPEND)
+            addModifiers(OVERRIDE, SUSPEND)
             buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
             returns(node.schema.query.entityClass)
 
@@ -240,7 +242,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
         // context mutation
         buildFunction(context.mutation) {
-            addModifiers(KModifier.OVERRIDE, KModifier.SUSPEND)
+            addModifiers(OVERRIDE, SUSPEND)
             buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
             returns(node.schema.mutation.entityClass)
 
@@ -249,9 +251,20 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             )
         }
 
+        // context subscription
+        buildFunction(context.subscription) {
+            addModifiers(OVERRIDE)
+            buildParameter(entity.projection.projectionArgument, node.schema.subscription.projectionLambda)
+            returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
+
+            addStatement(
+                "return ${impl.contextPropertyName}.${context.subscription}(${entity.projection.projectionArgument})"
+            )
+        }
+
         // withCurrentProjection
         buildFunction(entity.withCurrentProjectionFun) {
-            addModifiers(KModifier.OVERRIDE)
+            addModifiers(OVERRIDE)
             receiver(node.projectionClass)
 
             statement(ClassName("kotlin.collections", "setOf")) {
@@ -261,7 +274,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
         node.fields { field ->
             buildProperty(field.name, field.entityType) {
-                addModifiers(KModifier.OVERRIDE)
+                addModifiers(OVERRIDE)
 
                 if (field.type.hasProjection) {
                     val projectionRef = "${impl.projectionPropertyName}.${field.innerName}"
@@ -302,7 +315,7 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
         val isQuery = field.type.hasProjection
         buildClass(if (isQuery) field.implQueryName else field.implSelectionName) {
             if (impl.internal) {
-                addModifiers(KModifier.INTERNAL)
+                addModifiers(INTERNAL)
             }
             if (isQuery) {
                 superclass(field.type.node.implProjectionClass)
@@ -311,7 +324,7 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
             field.arguments.values.asSequence().filter { it.isInitialized }.forEach { arg ->
                 buildProperty(arg.name, arg.entityType) {
                     mutable()
-                    addModifiers(KModifier.OVERRIDE)
+                    addModifiers(OVERRIDE)
                     initializer("null")
                 }
             }
@@ -319,7 +332,7 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
             buildFunction(impl.repeatSelectionFunName) {
                 suppressUnused()
                 if (impl.internal) {
-                    addModifiers(KModifier.INTERNAL)
+                    addModifiers(INTERNAL)
                 }
                 val repeat = entity.selection.selectionArgument
                 buildParameter(repeat, field.selectionClass)
@@ -333,16 +346,16 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
 
 private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayout) = with(layout) {
     buildClass(node.implProjectionName) {
-        addModifiers(KModifier.OPEN)
+        addModifiers(OPEN)
         if (impl.internal) {
-            addModifiers(KModifier.INTERNAL)
+            addModifiers(INTERNAL)
         }
         addSuperinterface(node.qualifiedProjectionClass)
 
         if (node.kind == INTERFACE) {
             buildProperty(impl.interfaceIgnore) {
                 if (impl.internal) {
-                    addModifiers(KModifier.INTERNAL)
+                    addModifiers(INTERNAL)
                 }
                 val ignore = node.fields.values.asSequence()
                     .filter { it.isRequired || it.isDefault }
@@ -359,7 +372,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
             buildProperty(field.innerName, field.innerType) {
                 if (impl.internal) {
-                    addModifiers(KModifier.INTERNAL)
+                    addModifiers(INTERNAL)
                 }
                 mutable()
                 initializer(field.innerInitializer)
@@ -369,7 +382,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 .forEach { arg ->
                     buildProperty(arg.innerName, arg.entityType.nullable()) {
                         if (impl.internal) {
-                            addModifiers(KModifier.INTERNAL)
+                            addModifiers(INTERNAL)
                         }
                         mutable()
                         initializer("null")
@@ -377,7 +390,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 }
 
             buildFunction(field.projectionFieldName) {
-                addModifiers(KModifier.OVERRIDE)
+                addModifiers(OVERRIDE)
                 field.arguments.values.asSequence()
                     .filter { !field.isSelection || !it.isInitialized }
                     .forEach { arg ->
@@ -419,12 +432,12 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         node.subObjects { subObject ->
             buildProperty(subObject.innerProjectionOnName, subObject.implProjectionClass) {
                 if (impl.internal) {
-                    addModifiers(KModifier.INTERNAL)
+                    addModifiers(INTERNAL)
                 }
                 initializer("%T()", subObject.implProjectionClass)
             }
             buildFunction(subObject.projectionOnName) {
-                addModifiers(KModifier.OVERRIDE)
+                addModifiers(OVERRIDE)
                 buildParameter(entity.projection.projectionArgument, subObject.projectionLambda)
                 if (node.kind == INTERFACE) {
                     addStatement(
@@ -446,7 +459,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         buildFunction(impl.repeatProjectionFunName) {
             suppressUnused()
             if (impl.internal) {
-                addModifiers(KModifier.INTERNAL)
+                addModifiers(INTERNAL)
             }
 
             val ignore = buildFunArgIgnore.first
@@ -501,7 +514,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         buildFunction(impl.buildFunName) {
             suppressUnused()
             if (impl.internal) {
-                addModifiers(KModifier.INTERNAL)
+                addModifiers(INTERNAL)
             }
             buildParameter(buildFunArgIgnore)
             buildParameter(buildFunArgHeader)
@@ -550,9 +563,8 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                                 ifFlow("counter++ > 0") {
                                     buildAppendChain(body) { appendLiteral(", ") }
                                 }
-                                val mapName = arguments
-                                addStatement("val arg = %S + $mapName.size", argPrefix)
-                                addStatement("$mapName[arg] = $argName!!")
+                                addStatement("val arg = %S + $arguments.size", argPrefix)
+                                addStatement("$arguments[arg] = $argName!!")
                                 buildAppendChain(body) {
                                     appendLiteral(arg.name)
                                     appendLiteral(": ")

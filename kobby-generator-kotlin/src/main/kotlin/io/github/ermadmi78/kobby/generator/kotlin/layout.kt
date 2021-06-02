@@ -2,6 +2,12 @@ package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_CREATOR
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_INCLUDE
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES_TYPE
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_INFO
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_NAME
 import io.github.ermadmi78.kobby.model.*
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.*
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.ENUM
@@ -341,6 +347,16 @@ data class KotlinLayout(
             .decorate(impl.innerDecoration)
 
     // *****************************************************************************************************************
+    //                                          Context
+    // *****************************************************************************************************************
+    internal val KobbySchema.receiverSubscriptionDtoLambda: LambdaTypeName
+        get() = LambdaTypeName.get(
+            context.receiverClass.parameterizedBy(subscription.dtoClass),
+            emptyList(),
+            UNIT
+        ).copy(suspending = true)
+
+    // *****************************************************************************************************************
     //                                          Resolver
     // *****************************************************************************************************************
 
@@ -361,26 +377,20 @@ data class KotlinLayout(
             return this
         }
 
-        addAnnotation(
-            AnnotationSpec.builder(JacksonAnnotations.JSON_TYPE_NAME)
-                .addMember("value = %S", node.name)
-                .build()
-        )
+        buildAnnotation(JSON_TYPE_NAME) {
+            addMember("value = %S", node.name)
+        }
 
-        addAnnotation(
-            AnnotationSpec.builder(JacksonAnnotations.JSON_TYPE_INFO)
-                .addMember("use = %T.Id.NAME", JacksonAnnotations.JSON_TYPE_INFO)
-                .addMember("include = %T.As.PROPERTY", JacksonAnnotations.JSON_TYPE_INFO)
-                .addMember("property = %S", "__typename")
-                .addMember("defaultImpl = %T::class", node.dtoClass)
-                .build()
-        )
+        buildAnnotation(JSON_TYPE_INFO) {
+            addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
+            addMember("include = %T.As.PROPERTY", JSON_TYPE_INFO)
+            addMember("property = %S", "__typename")
+            addMember("defaultImpl = %T::class", node.dtoClass)
+        }
 
-        addAnnotation(
-            AnnotationSpec.builder(JacksonAnnotations.JSON_INCLUDE)
-                .addMember("value = %T.Include.NON_ABSENT", JacksonAnnotations.JSON_INCLUDE)
-                .build()
-        )
+        buildAnnotation(JSON_INCLUDE) {
+            addMember("value = %T.Include.NON_ABSENT", JSON_INCLUDE)
+        }
 
         return this
     }
@@ -390,34 +400,27 @@ data class KotlinLayout(
             return this
         }
 
-        addAnnotation(
-            AnnotationSpec.builder(JacksonAnnotations.JSON_TYPE_INFO)
-                .addMember("use = %T.Id.NAME", JacksonAnnotations.JSON_TYPE_INFO)
-                .addMember("include = %T.As.PROPERTY", JacksonAnnotations.JSON_TYPE_INFO)
-                .addMember("property = %S", "__typename")
-                .build()
-        )
-
-        val subTypes = mutableListOf<AnnotationSpec>()
-        node.subObjects { subObjectNode ->
-            subTypes += AnnotationSpec.builder(JacksonAnnotations.JSON_SUB_TYPES_TYPE)
-                .addMember("value = %T::class", subObjectNode.dtoClass)
-                .addMember("name = %S", subObjectNode.name)
-                .build()
+        buildAnnotation(JSON_TYPE_INFO) {
+            addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
+            addMember("include = %T.As.PROPERTY", JSON_TYPE_INFO)
+            addMember("property = %S", "__typename")
         }
 
-        addAnnotation(
-            AnnotationSpec.builder(JacksonAnnotations.JSON_SUB_TYPES)
-                .addMember("\n⇥${subTypes.joinToString(",\n") { "%L" }}⇤\n", *subTypes.toTypedArray())
-                .build()
-        )
+        buildAnnotation(JSON_SUB_TYPES) {
+            for (subObjectNode in node.subObjects.values) {
+                buildAnnotation(JSON_SUB_TYPES_TYPE) {
+                    addMember("value = %T::class", subObjectNode.dtoClass)
+                    addMember("name = %S", subObjectNode.name)
+                }
+            }
+        }
 
         return this
     }
 
     internal fun FunSpecBuilder.jacksonizeConstructor(): FunSpecBuilder {
         if (dto.jackson.enabled && parameters.size == 1) {
-            addAnnotation(JacksonAnnotations.JSON_CREATOR)
+            addAnnotation(JSON_CREATOR)
         }
 
         return this
@@ -431,11 +434,9 @@ data class KotlinLayout(
 
     internal fun PropertySpecBuilder.jacksonInclude(include: JacksonInclude): PropertySpecBuilder {
         if (dto.jackson.enabled) {
-            addAnnotation(
-                AnnotationSpec.builder(JacksonAnnotations.JSON_INCLUDE)
-                    .addMember("value = %T.Include.${include.name}", JacksonAnnotations.JSON_INCLUDE)
-                    .build()
-            )
+            buildAnnotation(JSON_INCLUDE) {
+                addMember("value = %T.Include.${include.name}", JSON_INCLUDE)
+            }
         }
         return this
     }
@@ -446,7 +447,8 @@ class KotlinContextLayout(
     val name: String,
     val decoration: Decoration,
     val query: String,
-    val mutation: String
+    val mutation: String,
+    val subscription: String
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
@@ -519,6 +521,7 @@ class KotlinImplLayout(
 
 class KotlinResolverLayout(
     val enabled: Boolean,
+    val publisherEnabled: Boolean,
     packageName: String,
     val decoration: Decoration,
     val argument: String?, // null - generate argument name from bean name

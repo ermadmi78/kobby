@@ -127,6 +127,7 @@ open class KobbyKotlinContextExtension {
     var postfix: String? = null
     var query: String? = null
     var mutation: String? = null
+    var subscription: String? = null
 
     override fun toString(): String {
         return "KobbyKotlinContextExtension(" +
@@ -135,7 +136,8 @@ open class KobbyKotlinContextExtension {
                 "prefix=$prefix, " +
                 "postfix=$postfix, " +
                 "query=$query, " +
-                "mutation=$mutation)"
+                "mutation=$mutation, " +
+                "subscription=$subscription)"
     }
 }
 
@@ -334,6 +336,7 @@ open class KobbyKotlinImplExtension {
 @Kobby
 open class KobbyKotlinResolverExtension {
     var enabled: Boolean? = null
+    var publisherEnabled: Boolean? = null
     var packageName: String? = null
     var prefix: String? = null
     var postfix: String? = null
@@ -343,6 +346,7 @@ open class KobbyKotlinResolverExtension {
     override fun toString(): String {
         return "KobbyKotlinResolverExtension(" +
                 "enabled=$enabled, " +
+                "publisherEnabled=$publisherEnabled, " +
                 "packageName=$packageName, " +
                 "interfacePrefix=$prefix, " +
                 "interfacePostfix=$postfix, " +

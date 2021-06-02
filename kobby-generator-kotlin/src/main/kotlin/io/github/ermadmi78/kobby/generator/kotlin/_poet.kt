@@ -29,6 +29,9 @@ internal typealias ParameterSpecBuilder = ParameterSpec.Builder
 @KobbyScope
 internal typealias CodeBlockBuilder = CodeBlock.Builder
 
+@KobbyScope
+internal typealias AnnotationSpecBuilder = AnnotationSpec.Builder
+
 private val SUPPRESS = AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
     .addMember("%S", "RedundantVisibilityModifier")
     .addMember("%S", "RedundantUnitReturnType")
@@ -59,6 +62,13 @@ internal fun FileSpecBuilder.buildInterface(
     name: String,
     block: TypeSpecBuilder.() -> Unit
 ): TypeSpec = TypeSpec.interfaceBuilder(name).apply(block).build().also {
+    addType(it)
+}
+
+internal fun FileSpecBuilder.buildFunInterface(
+    name: String,
+    block: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.funInterfaceBuilder(name).apply(block).build().also {
     addType(it)
 }
 
@@ -106,6 +116,34 @@ internal fun TypeSpecBuilder.buildProperty(
     block: PropertySpecBuilder.() -> Unit = {}
 ): PropertySpec = PropertySpec.builder(name, type).apply(block).build().also {
     addProperty(it)
+}
+
+internal fun TypeSpecBuilder.deprecate(message: String): TypeSpecBuilder = addAnnotation(
+    AnnotationSpec.builder(ClassName("kotlin", "Deprecated"))
+        .addMember("%S", message)
+        .build()
+)
+
+internal fun TypeSpecBuilder.buildAnnotation(
+    type: ClassName,
+    block: AnnotationSpecBuilder.() -> Unit = {}
+): AnnotationSpec = AnnotationSpec.builder(type).apply(block).build().also {
+    addAnnotation(it)
+}
+
+internal fun AnnotationSpecBuilder.buildAnnotation(
+    type: ClassName,
+    format: String = "%L",
+    block: AnnotationSpecBuilder.() -> Unit = {}
+): AnnotationSpec = AnnotationSpec.builder(type).apply(block).build().also {
+    addMember(format, it)
+}
+
+internal fun PropertySpecBuilder.buildAnnotation(
+    type: ClassName,
+    block: AnnotationSpecBuilder.() -> Unit = {}
+): AnnotationSpec = AnnotationSpec.builder(type).apply(block).build().also {
+    addAnnotation(it)
 }
 
 internal fun PropertySpecBuilder.buildGetter(

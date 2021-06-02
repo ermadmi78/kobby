@@ -147,6 +147,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "contextSubscription",
+        description = "name of context subscription function (default \"subscription\")"
+    )
+    val contextSubscription: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoPackageName",
         description = "package name relative to root package name for generated DTO classes (default \"dto\")"
     )
@@ -500,6 +508,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "resolverPublisherEnabled",
+        description = "generate publishers for subscription resolvers (default false)"
+    )
+    val resolverPublisherEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "resolverPackageName",
         description = "package name relative to root package name " +
                 "for generated graphql-java-kickstart resolvers (default \"resolver\")"
@@ -563,6 +579,7 @@ open class KobbyKotlin : DefaultTask() {
 
         contextQuery.convention("query")
         contextMutation.convention("mutation")
+        contextSubscription.convention("subscription")
 
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
@@ -597,6 +614,9 @@ open class KobbyKotlin : DefaultTask() {
 
         resolverEnabled.convention(project.provider {
             project.hasDependency("com.graphql-java-kickstart", "graphql-java-tools")
+        })
+        resolverPublisherEnabled.convention(project.provider {
+            project.hasDependency("org.reactivestreams", "reactive-streams")
         })
         resolverPackageName.convention("resolver")
         resolverPostfix.convention("Resolver")
@@ -678,7 +698,8 @@ open class KobbyKotlin : DefaultTask() {
                 context,
                 Decoration(capitalizedContext, null),
                 contextQuery.get(),
-                contextMutation.get()
+                contextMutation.get(),
+                contextSubscription.get()
             ),
             KotlinDtoLayout(
                 dtoPackage.toPackageName(),
@@ -728,6 +749,7 @@ open class KobbyKotlin : DefaultTask() {
             ),
             KotlinResolverLayout(
                 resolverEnabled.get(),
+                resolverPublisherEnabled.get(),
                 resolverPackage.toPackageName(),
                 Decoration(
                     (resolverPrefix.orNull?.trim() ?: capitalizedContext).let {

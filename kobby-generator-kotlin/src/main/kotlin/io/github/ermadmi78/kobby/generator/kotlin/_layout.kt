@@ -132,6 +132,59 @@ internal val KotlinDtoGraphQLLayout.mutationResultName: String
 internal val KotlinDtoGraphQLLayout.mutationResultClass: ClassName
     get() = ClassName(packageName, mutationResultName)
 
+internal val KotlinDtoGraphQLLayout.subscriptionResultName: String
+    get() = "SubscriptionResult".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.subscriptionResultClass: ClassName
+    get() = ClassName(packageName, subscriptionResultName)
+
+internal val KotlinDtoGraphQLLayout.errorResultName: String
+    get() = "ErrorResult".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.errorResultClass: ClassName
+    get() = ClassName(packageName, errorResultName)
+
+//******************************************************************************************************************
+//                                   Messaging
+//******************************************************************************************************************
+
+internal val KotlinDtoGraphQLLayout.messageName: String
+    get() = "Message".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.messageClass: ClassName
+    get() = ClassName(packageName, messageName)
+
+internal val KotlinDtoGraphQLLayout.clientMessageName: String
+    get() = "ClientMessage".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.clientMessageClass: ClassName
+    get() = ClassName(packageName, clientMessageName)
+
+internal val KotlinDtoGraphQLLayout.serverMessageName: String
+    get() = "ServerMessage".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.serverMessageClass: ClassName
+    get() = ClassName(packageName, serverMessageName)
+
+internal enum class GqlMessage(val type: String, internal val _name: String, val client: Boolean, val server: Boolean) {
+    GQL_CONNECTION_INIT("connection_init", "ConnectionInit", true, false),
+    GQL_START("start", "Start", true, false),
+    GQL_STOP("stop", "Stop", true, false),
+    GQL_CONNECTION_TERMINATE("connection_terminate", "ConnectionTerminate", true, false),
+    GQL_CONNECTION_ERROR("connection_error", "ConnectionError", false, true),
+    GQL_CONNECTION_ACK("connection_ack", "ConnectionAck", false, true),
+    GQL_DATA("data", "Data", false, true),
+    GQL_ERROR("error", "Error", false, true),
+    GQL_COMPLETE("complete", "Complete", false, true),
+    GQL_CONNECTION_KEEP_ALIVE("ka", "ConnectionKeepAlive", false, true)
+}
+
+internal fun KotlinDtoGraphQLLayout.messageImplName(massage: GqlMessage) =
+    "Message${massage._name}".decorate(decoration)
+
+internal fun KotlinDtoGraphQLLayout.messageImplClass(massage: GqlMessage) =
+    ClassName(packageName, messageImplName(massage))
+
 //******************************************************************************************************************
 //                                   KotlinContextLayout
 //******************************************************************************************************************
@@ -149,6 +202,18 @@ internal val KotlinLayout.contextImplName: String
 
 internal val KotlinLayout.contextImplClass: ClassName
     get() = ClassName(context.packageName, contextImplName)
+
+internal val KotlinContextLayout.subscriberName: String
+    get() = "Subscriber".decorate(decoration)
+
+internal val KotlinContextLayout.subscriberClass: ClassName
+    get() = ClassName(packageName, subscriberName)
+
+internal val KotlinContextLayout.subscriberFunSubscribe: String
+    get() = "subscribe"
+
+internal val KotlinContextLayout.subscriberArgBlock: String
+    get() = "block"
 
 internal val KotlinContextLayout.dslName: String
     get() = "DSL".decorate(decoration)
@@ -168,11 +233,39 @@ internal val KotlinContextLayout.adapterFunExecuteQuery: String
 internal val KotlinContextLayout.adapterFunExecuteMutation: String
     get() = "executeMutation"
 
+internal val KotlinContextLayout.adapterFunExecuteSubscription: String
+    get() = "executeSubscription"
+
 internal val KotlinContextLayout.adapterArgQuery: Pair<String, TypeName>
     get() = "query" to STRING
 
 internal val KotlinContextLayout.adapterArgVariables: Pair<String, TypeName>
     get() = "variables" to MAP.parameterizedBy(STRING, ANY.nullable())
+
+internal val KotlinContextLayout.adapterArgBlock: String
+    get() = "block"
+
+internal val KotlinContextLayout.receiverName: String
+    get() = "Receiver".decorate(decoration)
+
+internal val KotlinContextLayout.receiverClass: ClassName
+    get() = ClassName(packageName, receiverName)
+
+internal val KotlinContextLayout.receiverFunReceive: String
+    get() = "receive"
+
+internal fun KotlinContextLayout.receiverLambda(receiverType: TypeName): LambdaTypeName =
+    LambdaTypeName.get(
+        receiverClass.parameterizedBy(receiverType),
+        emptyList(),
+        UNIT
+    ).copy(suspending = true)
+
+internal val KotlinContextLayout.mapperName: String
+    get() = "Mapper".decorate(decoration)
+
+internal val KotlinContextLayout.mapperClass: ClassName
+    get() = ClassName(packageName, mapperName)
 
 //******************************************************************************************************************
 //                                   KotlinImplLayout

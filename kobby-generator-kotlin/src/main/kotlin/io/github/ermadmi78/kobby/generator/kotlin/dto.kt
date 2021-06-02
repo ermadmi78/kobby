@@ -2,6 +2,11 @@ package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_INCLUDE
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES_TYPE
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_INFO
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_NAME
 import io.github.ermadmi78.kobby.model.KobbySchema
 
 /**
@@ -394,6 +399,218 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     }
                     buildProperty(argErrors) {
                         jacksonIncludeNonEmpty()
+                    }
+                }
+            }
+        }
+
+        // GraphQL SubscriptionResult
+        files += buildFile(dto.graphql.packageName, dto.graphql.subscriptionResultName) {
+            buildClass(dto.graphql.subscriptionResultName) {
+                addModifiers(KModifier.DATA)
+                buildPrimaryConstructorProperties {
+                    buildProperty("data", schema.subscription.dtoClass.nullable()) {
+                        jacksonIncludeNonAbsent()
+                    }
+                    buildProperty(argErrors) {
+                        jacksonIncludeNonEmpty()
+                    }
+                }
+            }
+        }
+
+        // GraphQL ErrorResult
+        files += buildFile(dto.graphql.packageName, dto.graphql.errorResultName) {
+            buildClass(dto.graphql.errorResultName) {
+                addModifiers(KModifier.DATA)
+                buildPrimaryConstructorProperties {
+                    buildProperty(argErrors) {
+                        jacksonIncludeNonEmpty()
+                    }
+                    customizeConstructor {
+                        jacksonizeConstructor()
+                    }
+                }
+            }
+        }
+
+        // GraphQL Messaging
+        files += buildFile(dto.graphql.packageName, "messaging") {
+            buildInterface(dto.graphql.messageName) {
+                addKdoc(
+                    "Message protocol description see [here]" +
+                            "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
+                )
+                if (dto.jackson.enabled) {
+                    buildAnnotation(JSON_TYPE_INFO) {
+                        addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
+                        addMember("include = %T.As.PROPERTY", JSON_TYPE_INFO)
+                        addMember("property = %S", "type")
+                    }
+
+                    buildAnnotation(JSON_SUB_TYPES) {
+                        for (message in GqlMessage.values()) {
+                            buildAnnotation(JSON_SUB_TYPES_TYPE) {
+                                addMember("value = %T::class", dto.graphql.messageImplClass(message))
+                                addMember("name = %S", message.type)
+                            }
+                        }
+                    }
+                }
+            }
+
+            buildInterface(dto.graphql.clientMessageName) {
+                addKdoc(
+                    "Message protocol description see [here]" +
+                            "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
+                )
+                if (dto.jackson.enabled) {
+                    buildAnnotation(JSON_TYPE_INFO) {
+                        addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
+                        addMember("include = %T.As.PROPERTY", JSON_TYPE_INFO)
+                        addMember("property = %S", "type")
+                    }
+
+                    buildAnnotation(JSON_SUB_TYPES) {
+                        for (message in GqlMessage.values()) {
+                            if (message.client) {
+                                buildAnnotation(JSON_SUB_TYPES_TYPE) {
+                                    addMember("value = %T::class", dto.graphql.messageImplClass(message))
+                                    addMember("name = %S", message.type)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            buildInterface(dto.graphql.serverMessageName) {
+                addKdoc(
+                    "Message protocol description see [here]" +
+                            "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
+                )
+                if (dto.jackson.enabled) {
+                    buildAnnotation(JSON_TYPE_INFO) {
+                        addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
+                        addMember("include = %T.As.PROPERTY", JSON_TYPE_INFO)
+                        addMember("property = %S", "type")
+                    }
+
+                    buildAnnotation(JSON_SUB_TYPES) {
+                        for (message in GqlMessage.values()) {
+                            if (message.server) {
+                                buildAnnotation(JSON_SUB_TYPES_TYPE) {
+                                    addMember("value = %T::class", dto.graphql.messageImplClass(message))
+                                    addMember("name = %S", message.type)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            GqlMessage.values().forEach { message ->
+                buildClass(dto.graphql.messageImplName(message)) {
+                    if (dto.jackson.enabled) {
+                        buildAnnotation(JSON_TYPE_NAME) {
+                            addMember("value = %S", message.type)
+                        }
+
+                        buildAnnotation(JSON_TYPE_INFO) {
+                            addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
+                            addMember("include = %T.As.PROPERTY", JSON_TYPE_INFO)
+                            addMember("property = %S", "type")
+                            addMember("defaultImpl = %T::class", dto.graphql.messageImplClass(message))
+                        }
+
+                        buildAnnotation(JSON_INCLUDE) {
+                            addMember("value = %T.Include.NON_ABSENT", JSON_INCLUDE)
+                        }
+                    }
+
+                    addKdoc("See ${message.name} [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)")
+
+                    addSuperinterface(dto.graphql.messageClass)
+                    if (message.client) {
+                        addSuperinterface(dto.graphql.clientMessageClass)
+                    }
+                    if (message.server) {
+                        addSuperinterface(dto.graphql.serverMessageClass)
+                    }
+
+                    when (message) {
+                        GqlMessage.GQL_CONNECTION_INIT -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("payload", MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
+                                }
+                            }
+                        }
+                        GqlMessage.GQL_START -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("id", STRING)
+                                buildProperty("payload", dto.graphql.requestClass)
+                            }
+                        }
+                        GqlMessage.GQL_STOP -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("id", STRING)
+                                customizeConstructor {
+                                    jacksonizeConstructor()
+                                }
+                            }
+                        }
+                        GqlMessage.GQL_CONNECTION_TERMINATE -> {
+                            // Do nothing
+                        }
+                        GqlMessage.GQL_CONNECTION_ERROR -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("payload", ANY.nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
+                                }
+                            }
+                        }
+                        GqlMessage.GQL_CONNECTION_ACK -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("payload", ANY.nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
+                                }
+                            }
+                        }
+                        GqlMessage.GQL_DATA -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("id", STRING)
+                                buildProperty("payload", dto.graphql.subscriptionResultClass)
+                            }
+                        }
+                        GqlMessage.GQL_ERROR -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("id", STRING)
+                                buildProperty("payload", dto.graphql.errorResultClass)
+                            }
+                        }
+                        GqlMessage.GQL_COMPLETE -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("id", STRING)
+                                customizeConstructor {
+                                    jacksonizeConstructor()
+                                }
+                            }
+                        }
+                        GqlMessage.GQL_CONNECTION_KEEP_ALIVE -> {
+                            // Do nothing
+                        }
                     }
                 }
             }
