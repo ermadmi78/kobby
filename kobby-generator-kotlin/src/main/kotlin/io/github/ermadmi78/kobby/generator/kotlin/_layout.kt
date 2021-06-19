@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
@@ -267,6 +269,12 @@ internal val KotlinContextLayout.mapperName: String
 internal val KotlinContextLayout.mapperClass: ClassName
     get() = ClassName(packageName, mapperName)
 
+internal val KotlinContextLayout.mapperFunSerialize: String
+    get() = "serialize"
+
+internal val KotlinContextLayout.mapperFunDeserialize: String
+    get() = "deserialize"
+
 //******************************************************************************************************************
 //                                   KotlinImplLayout
 //******************************************************************************************************************
@@ -304,7 +312,63 @@ internal val buildFunArgBody: Pair<String, TypeName> =
 internal val buildFunArgArguments: Pair<String, TypeName> =
     Pair("arguments", MUTABLE_MAP.parameterizedBy(STRING, ANY))
 
-internal val argPrefix: String = "arg"
+internal val argPrefix: String get() = "arg"
 
 internal val buildFunValSubBody: Pair<String, TypeName> =
     Pair("subBody", ClassName("kotlin.text", "StringBuilder"))
+
+//******************************************************************************************************************
+//                                   KotlinAdapterKtorLayout
+//******************************************************************************************************************
+
+internal val KotlinAdapterKtorLayout.simpleName: String
+    get() = "Simple".decorate(decoration)
+
+internal val KotlinAdapterKtorLayout.simpleClass: ClassName
+    get() = ClassName(packageName, simpleName)
+
+internal val KotlinAdapterKtorLayout.simplePropertyClient: String get() = "client"
+internal val KotlinAdapterKtorLayout.simplePropertyUrl: String get() = "url"
+internal val KotlinAdapterKtorLayout.simplePropertyHeaders: String get() = "headers"
+internal val KotlinAdapterKtorLayout.simplePropertyListener: String get() = "listener"
+internal val KotlinAdapterKtorLayout.simpleValRequest: String get() = "request"
+internal val KotlinAdapterKtorLayout.simpleValResult: String get() = "result"
+
+//******************************************************************************************************************
+
+internal val KotlinAdapterKtorLayout.compositeName: String
+    get() = "Composite".decorate(decoration)
+
+internal val KotlinAdapterKtorLayout.compositeClass: ClassName
+    get() = ClassName(packageName, compositeName)
+
+internal val KotlinAdapterKtorLayout.compositePropertyClient: String get() = "client"
+internal val KotlinAdapterKtorLayout.compositePropertyHttpUrl: String get() = "httpUrl"
+internal val KotlinAdapterKtorLayout.compositePropertyWebSocketUrl: String get() = "webSocketUrl"
+internal val KotlinAdapterKtorLayout.compositePropertyMapper: String get() = "mapper"
+internal val KotlinAdapterKtorLayout.compositePropertyRequestHeaders: String get() = "requestHeaders"
+internal val KotlinAdapterKtorLayout.compositePropertySubscriptionPayload: String get() = "subscriptionPayload"
+internal val KotlinAdapterKtorLayout.compositePropertyHttpTokenHeader: String
+    get() = "httpAuthorizationTokenHeader"
+internal val KotlinAdapterKtorLayout.compositePropertyWebSocketTokenHeader: String
+    get() = "webSocketAuthorizationTokenHeader"
+internal val KotlinAdapterKtorLayout.compositePropertyIdGenerator: String get() = "idGenerator"
+internal val KotlinAdapterKtorLayout.compositePropertyListener: String get() = "listener"
+internal val KotlinAdapterKtorLayout.compositeValRequest: String get() = "request"
+internal val KotlinAdapterKtorLayout.compositeValContent: String get() = "content"
+internal val KotlinAdapterKtorLayout.compositeValResult: String get() = "result"
+internal val KotlinAdapterKtorLayout.compositeValInitPayload: String get() = "initPayload"
+
+internal val KotlinAdapterKtorLayout.compositeFunExecuteSubscriptionImpl: String get() = "executeSubscriptionImpl"
+internal val KotlinAdapterKtorLayout.compositeValReply: String get() = "reply"
+internal val KotlinAdapterKtorLayout.compositeValReceiver: String get() = "receiver"
+internal val KotlinAdapterKtorLayout.compositeValSubscriptionId: String get() = "subscriptionId"
+
+internal val KotlinAdapterKtorLayout.compositeFunSendMessage: String get() = "sendMessage"
+internal val KotlinAdapterKtorLayout.compositePropertyMessage: String get() = "message"
+internal val KotlinAdapterKtorLayout.compositeFunReceiveMessage: String get() = "receiveMessage"
+
+//******************************************************************************************************************
+@Suppress("CHANGING_ARGUMENTS_EXECUTION_ORDER_FOR_NAMED_VARARGS")
+internal val KotlinDtoLayout.adapterListenerLambda: LambdaTypeName
+    get() = LambdaTypeName.get(parameters = arrayOf(graphql.requestClass), returnType = UNIT)

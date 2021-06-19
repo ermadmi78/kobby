@@ -27,7 +27,8 @@ data class KotlinLayout(
     val dto: KotlinDtoLayout,
     val entity: KotlinEntityLayout,
     val impl: KotlinImplLayout,
-    val resolver: KotlinResolverLayout,
+    val adapter: KotlinAdapterLayout,
+    val resolver: KotlinResolverLayout
 ) {
     // *****************************************************************************************************************
     //                                          DTO
@@ -515,6 +516,19 @@ class KotlinImplLayout(
     val decoration: Decoration,
     val internal: Boolean,
     val innerDecoration: Decoration
+) {
+    val packageName: String = packageName.validateKotlinPath()
+}
+
+class KotlinAdapterLayout(
+    val ktor: KotlinAdapterKtorLayout
+)
+
+class KotlinAdapterKtorLayout(
+    val simpleEnabled: Boolean,
+    val compositeEnabled: Boolean,
+    packageName: String,
+    val decoration: Decoration
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }

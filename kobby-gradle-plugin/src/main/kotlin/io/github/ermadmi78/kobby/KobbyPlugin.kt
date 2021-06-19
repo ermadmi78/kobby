@@ -239,6 +239,25 @@ class KobbyPlugin : Plugin<Project> {
                                 kotlinTask.implInnerPostfix.convention(it)
                             }
                         }
+                        kotlinExtension.adapterExtension.valueOrNull?.apply {
+                            ktorExtension.valueOrNull?.apply {
+                                simpleEnabled?.also {
+                                    kotlinTask.adapterKtorSimpleEnabled.convention(it)
+                                }
+                                compositeEnabled?.also {
+                                    kotlinTask.adapterKtorCompositeEnabled.convention(it)
+                                }
+                                packageName?.also {
+                                    kotlinTask.adapterKtorPackageName.convention(it)
+                                }
+                                prefix?.also {
+                                    kotlinTask.adapterKtorPrefix.convention(it)
+                                }
+                                postfix?.also {
+                                    kotlinTask.adapterKtorPostfix.convention(it)
+                                }
+                            }
+                        }
                         kotlinExtension.resolverExtension.valueOrNull?.apply {
                             enabled?.also {
                                 kotlinTask.resolverEnabled.convention(it)

@@ -25,6 +25,7 @@ open class KobbyKotlinExtension {
     internal val dtoExtension = lazy { KobbyKotlinDtoExtension() }
     internal val entityExtension = lazy { KobbyKotlinEntityExtension() }
     internal val implExtension = lazy { KobbyKotlinImplExtension() }
+    internal val adapterExtension = lazy { KobbyKotlinAdapterExtension() }
     internal val resolverExtension = lazy { KobbyKotlinResolverExtension() }
 
     /** Kotlin DSL Context generator configuration */
@@ -47,6 +48,11 @@ open class KobbyKotlinExtension {
         action.execute(implExtension.value)
     }
 
+    /** Kotlin DSL adapter generator configuration */
+    fun adapter(action: Action<KobbyKotlinAdapterExtension>) {
+        action.execute(adapterExtension.value)
+    }
+
     /** Kotlin DSL resolvers generator configuration */
     fun resolver(action: Action<KobbyKotlinResolverExtension>) {
         action.execute(resolverExtension.value)
@@ -63,6 +69,7 @@ open class KobbyKotlinExtension {
                 "dtoExtension=$dtoExtension, " +
                 "entityExtension=$entityExtension, " +
                 "implExtension=$implExtension, " +
+                "adapterExtension=$adapterExtension, " +
                 "resolverExtension=$resolverExtension" +
                 ")"
     }
@@ -330,6 +337,38 @@ open class KobbyKotlinImplExtension {
                 "internal=$internal, " +
                 "innerPrefix=$innerPrefix, " +
                 "innerPostfix=$innerPostfix)"
+    }
+}
+
+@Kobby
+open class KobbyKotlinAdapterExtension {
+    internal val ktorExtension = lazy { KobbyKotlinAdapterKtorExtension() }
+
+    /** Kotlin DSL Ktor adapter generator configuration */
+    fun ktor(action: Action<KobbyKotlinAdapterKtorExtension>) {
+        action.execute(ktorExtension.value)
+    }
+
+    override fun toString(): String {
+        return "KobbyKotlinAdapterExtension(ktorExtension=$ktorExtension)"
+    }
+}
+
+@Kobby
+open class KobbyKotlinAdapterKtorExtension {
+    var simpleEnabled: Boolean? = null
+    var compositeEnabled: Boolean? = null
+    var packageName: String? = null
+    var prefix: String? = null
+    var postfix: String? = null
+
+    override fun toString(): String {
+        return "KobbyKotlinAdapterKtorExtension(" +
+                "simpleEnabled=$simpleEnabled, " +
+                "compositeEnabled=$compositeEnabled, " +
+                "packageName=$packageName, " +
+                "prefix=$prefix, " +
+                "postfix=$postfix)"
     }
 }
 

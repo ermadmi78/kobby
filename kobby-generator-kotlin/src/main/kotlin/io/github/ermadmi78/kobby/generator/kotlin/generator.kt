@@ -121,13 +121,13 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
             buildInterface(context.mapperName) {
                 addKdoc("Helper interface for default adapter implementations")
 
-                buildFunction("serialize") {
+                buildFunction(context.mapperFunSerialize) {
                     addModifiers(ABSTRACT)
                     buildParameter("value", ANY)
                     returns(STRING)
                 }
 
-                buildFunction("deserialize") {
+                buildFunction(context.mapperFunDeserialize) {
                     addModifiers(ABSTRACT)
                     val typeVariable = TypeVariableName.invoke("T", ANY)
                     addTypeVariable(typeVariable)
@@ -152,6 +152,9 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
     if (entity.enabled) {
         files += generateEntity(schema, layout)
         files += generateImpl(schema, layout)
+        if (dto.graphql.enabled) {
+            files += generateKtorAdapter(schema, layout)
+        }
     }
     if (resolver.enabled) {
         files += generateResolver(schema, layout)

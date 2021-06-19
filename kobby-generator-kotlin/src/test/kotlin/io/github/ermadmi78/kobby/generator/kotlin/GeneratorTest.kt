@@ -77,6 +77,14 @@ class GeneratorTest : AnnotationSpec() {
                 true,
                 Decoration("__inner", null)
             ),
+            KotlinAdapterLayout(
+                KotlinAdapterKtorLayout(
+                    true,
+                    true,
+                    "kobby.adapter.ktor",
+                    Decoration("Kobby", "Adapter")
+                )
+            ),
             KotlinResolverLayout(
                 true,
                 true,

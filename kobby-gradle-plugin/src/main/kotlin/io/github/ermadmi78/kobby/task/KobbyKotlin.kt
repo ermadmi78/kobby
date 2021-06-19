@@ -500,6 +500,47 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "adapterKtorSimpleEnabled",
+        description = "generate default SimpleKtorAdapter (default false)"
+    )
+    val adapterKtorSimpleEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "adapterKtorCompositeEnabled",
+        description = "generate default CompositeKtorAdapter (default false)"
+    )
+    val adapterKtorCompositeEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "adapterKtorPackageName",
+        description = "package name relative to root package name " +
+                "for generated Ktor adapters (default \"adapter.ktor\")"
+    )
+    val adapterKtorPackageName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "adapterKtorPrefix",
+        description = "prefix for generated Ktor adapters (default \"<Context name>\")"
+    )
+    val adapterKtorPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "adapterKtorPostfix",
+        description = "postfix for generated Ktor adapters (default \"KtorAdapter\")"
+    )
+    val adapterKtorPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "resolverEnabled",
         description = "generate graphql-java-kickstart resolvers (default false)"
     )
@@ -612,6 +653,15 @@ open class KobbyKotlin : DefaultTask() {
         implInternal.convention(true)
         implInnerPrefix.convention("__inner")
 
+        adapterKtorSimpleEnabled.convention(project.provider {
+            project.hasDependency("io.ktor", "ktor-client-cio")
+        })
+        adapterKtorCompositeEnabled.convention(project.provider {
+            project.hasDependency("io.ktor", "ktor-client-cio")
+        })
+        adapterKtorPackageName.convention("adapter.ktor")
+        adapterKtorPostfix.convention("KtorAdapter")
+
         resolverEnabled.convention(project.provider {
             project.hasDependency("com.graphql-java-kickstart", "graphql-java-tools")
         })
@@ -686,6 +736,11 @@ open class KobbyKotlin : DefaultTask() {
             implPackageName.orNull?.forEachPackage { list += it }
         }
 
+        val adapterKtorPackage: List<String> = mutableListOf<String>().also { list ->
+            list += rootPackage
+            adapterKtorPackageName.orNull?.forEachPackage { list += it }
+        }
+
         val resolverPackage: List<String> = mutableListOf<String>().also { list ->
             list += rootPackage
             resolverPackageName.orNull?.forEachPackage { list += it }
@@ -746,6 +801,17 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(implPrefix.orNull, implPostfix.orNull),
                 implInternal.get(),
                 Decoration(implInnerPrefix.orNull, implInnerPostfix.orNull)
+            ),
+            KotlinAdapterLayout(
+                KotlinAdapterKtorLayout(
+                    adapterKtorSimpleEnabled.get(),
+                    adapterKtorCompositeEnabled.get(),
+                    adapterKtorPackage.toPackageName(),
+                    Decoration(
+                        adapterKtorPrefix.orNull?.trim() ?: capitalizedContext,
+                        adapterKtorPostfix.orNull
+                    )
+                )
             ),
             KotlinResolverLayout(
                 resolverEnabled.get(),
