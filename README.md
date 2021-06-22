@@ -26,7 +26,8 @@ Maven plugin is under construction now
 
 # Usage
 
-Usage example see [here](https://github.com/ermadmi78/kobby-gradle-example)
+Usage example see [here](https://github.com/ermadmi78/kobby-gradle-example).
+Kotlin at least version 1.5 is required to compile generated DSL.
 
 ## Define your GraphQL schema
 
