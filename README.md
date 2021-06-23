@@ -191,6 +191,10 @@ private val httpClient = HttpClient {
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/mutation.png)
 
+### Simple subscription
+
+![alt text](https://github.com/ermadmi78/kobby/blob/main/images/subscription.png)
+
 ### We can upload complex graph by means of our Kotlin DSL
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/complex_query.png)
