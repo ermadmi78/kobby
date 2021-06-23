@@ -153,7 +153,7 @@ in subpackage `adapter.ktor`. The prefix `<Cinema>` by default is schema name.
 You can change default prefix by means of `prefix` variable in `ktor` section of `kobby` extension.
 
 
-**Implicit way to configure adapter generation** is just add `ktor-client-cio` dependency to your `build.gradle.kts`:
+**Implicit way to configure adapter generation** is to just add `ktor-client-cio` dependency to your `build.gradle.kts`:
 ```kotlin
 val jacksonVersion: String by project
 val ktorVersion: String by project
