@@ -8,6 +8,7 @@ import io.github.ermadmi78.kobby.generator.kotlin.KotlinTypes.PREDEFINED_SCALARS
 import io.github.ermadmi78.kobby.task.KobbyKotlin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFile
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskInstantiationException
 
@@ -33,32 +34,36 @@ class KobbyPlugin : Plugin<Project> {
 
         project.afterEvaluate { p ->
             p.tasks.findByPath(COMPILE_KOTLIN_TASK_NAME)?.also { compileKotlinTask ->
+                extension.schemaExtension.valueOrNull?.apply {
+                    if (extension.kotlinExtension.valueOrNull?.enabled != false) {
+                        val kotlinTask = p.tasks.named(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java).get()
+                        location?.also {
+                            kotlinTask.schemaLocation.convention(p.provider<Iterable<RegularFile>> {
+                                it.map { p.layout.file(p.provider { it }).get() }
+                            })
+                        }
+                        directiveExtension.valueOrNull?.apply {
+                            primaryKey?.also {
+                                kotlinTask.schemaDirectivePrimaryKey.convention(it)
+                            }
+                            required?.also {
+                                kotlinTask.schemaDirectiveRequired.convention(it)
+                            }
+                            default?.also {
+                                kotlinTask.schemaDirectiveDefault.convention(it)
+                            }
+                            selection?.also {
+                                kotlinTask.schemaDirectiveSelection.convention(it)
+                            }
+                            resolve?.also {
+                                kotlinTask.schemaDirectiveResolve.convention(it)
+                            }
+                        }
+                    }
+                }
                 extension.kotlinExtension.valueOrNull?.also { kotlinExtension ->
                     val kotlinTask = p.tasks.named(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java).get()
                     if (kotlinExtension.enabled) {
-                        extension.schemaExtension.valueOrNull?.apply {
-                            local?.also {
-                                kotlinTask.schemaFile.convention(p.layout.file(p.provider { it }))
-                            }
-                            directiveExtension.valueOrNull?.apply {
-                                primaryKey?.also {
-                                    kotlinTask.schemaDirectivePrimaryKey.convention(it)
-                                }
-                                required?.also {
-                                    kotlinTask.schemaDirectiveRequired.convention(it)
-                                }
-                                default?.also {
-                                    kotlinTask.schemaDirectiveDefault.convention(it)
-                                }
-                                selection?.also {
-                                    kotlinTask.schemaDirectiveSelection.convention(it)
-                                }
-                                resolve?.also {
-                                    kotlinTask.schemaDirectiveResolve.convention(it)
-                                }
-                            }
-                        }
-
                         kotlinExtension.scalars?.also {
                             kotlinTask.scalars.convention(PREDEFINED_SCALARS + it)
                         }
@@ -306,7 +311,7 @@ class KobbyPlugin : Plugin<Project> {
             } ?: extension.kotlinExtension.valueOrNull?.also { kotlinExtension ->
                 if (kotlinExtension.enabled) {
                     throw TaskInstantiationException(
-                        "$KOBBY: [${KobbyKotlin.TASK_NAME}] task cannot be created " +
+                        "$KOBBY [${KobbyKotlin.TASK_NAME}] Task cannot be created " +
                                 "because [$COMPILE_KOTLIN_TASK_NAME] task is not configures. " +
                                 "Configure Kotlin plugin please."
                     )

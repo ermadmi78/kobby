@@ -30,17 +30,11 @@ data class KotlinLayout(
     val adapter: KotlinAdapterLayout,
     val resolver: KotlinResolverLayout
 ) {
-    private fun getScalarType(name: String): KotlinType {
-        val result = scalars[name]
-        if (result == null) {
-            val message = "Kotlin data type for scalar '$name' not found. " +
+    private fun getScalarType(name: String): KotlinType = scalars[name]
+        ?: throw IllegalStateException(
+            "Kotlin data type for scalar '$name' not found. " +
                     "Please, configure it by means of 'kobby' extension. https://github.com/ermadmi78/kobby"
-            System.err.println(message)
-            throw IllegalStateException(message)
-        }
-
-        return result
-    }
+        )
 
     // *****************************************************************************************************************
     //                                          DTO

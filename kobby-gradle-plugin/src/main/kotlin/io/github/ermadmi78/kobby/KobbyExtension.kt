@@ -2,7 +2,7 @@ package io.github.ermadmi78.kobby
 
 import org.gradle.api.Action
 import org.gradle.api.Project
-import java.io.File
+import org.gradle.api.file.FileCollection
 
 @DslMarker
 annotation class Kobby
@@ -36,7 +36,7 @@ open class KobbyExtension {
 
 @Kobby
 open class KobbySchemaExtension {
-    var local: File? = null
+    var location: FileCollection? = null
     internal var directiveExtension = lazy { KobbySchemaDirectiveExtension() }
 
     fun directive(action: Action<KobbySchemaDirectiveExtension>) {
@@ -44,7 +44,7 @@ open class KobbySchemaExtension {
     }
 
     override fun toString(): String {
-        return "KobbySchemaExtension(local=$local, directiveExtension=$directiveExtension)"
+        return "KobbySchemaExtension(location=$location, directiveExtension=$directiveExtension)"
     }
 }
 
