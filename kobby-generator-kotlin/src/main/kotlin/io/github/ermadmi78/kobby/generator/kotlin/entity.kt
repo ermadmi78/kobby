@@ -146,7 +146,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     }
                 field.lambda?.also {
                     buildParameter(it) {
-                        if (!field.isOverride && field.type.hasDefaults) {
+                        if (!field.isOverride && field.type.node.hasDefaults) {
                             defaultValue("{}")
                         }
                     }
@@ -215,7 +215,9 @@ private fun FileSpecBuilder.buildQualification(node: KobbyNode, layout: KotlinLa
                     addKdoc(it)
                 }
                 buildParameter(entity.projection.projectionArgument, subObject.projectionLambda) {
-                    defaultValue("{}")
+                    if (subObject.hasDefaults) {
+                        defaultValue("{}")
+                    }
                 }
             }
         }

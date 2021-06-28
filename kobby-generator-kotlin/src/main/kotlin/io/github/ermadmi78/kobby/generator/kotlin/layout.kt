@@ -170,10 +170,10 @@ data class KotlinLayout(
             else -> false
         }
 
-    internal val KobbyType.hasDefaults: Boolean
-        get() = when (node.kind) {
-            OBJECT, INTERFACE -> node.fields.values.any { it.isRequired || it.isDefault }
-            else -> true
+    internal val KobbyNode.hasDefaults: Boolean
+        get() = when (kind) {
+            OBJECT -> fields.values.any { it.isRequired || it.isDefault }
+            else -> true // unions and interfaces always has default projection __typename
         }
 
     internal val KobbyField.entityType: TypeName
