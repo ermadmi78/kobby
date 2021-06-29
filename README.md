@@ -12,7 +12,7 @@ and Kotlin extension functions.
 
 ```kotlin
 plugins {
-    id("io.github.ermadmi78.kobby") version "1.0.0-beta.06"
+    id("io.github.ermadmi78.kobby") version "1.0.0-beta.07"
 }
 ```
 
