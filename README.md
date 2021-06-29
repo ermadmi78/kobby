@@ -57,17 +57,8 @@ kobby {
     kotlin {
         scalars = mapOf(
             "Date" to typeOf("java.time", "LocalDate"),
+            "JSON" to typeMap.parameterize(typeString, typeAny.nullable())
         )
-    }
-}
-
-val kotlinJvmVersion: String by project
-tasks {
-    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = kotlinJvmVersion
-            freeCompilerArgs = listOf("-Xjsr305=strict")
-        }
     }
 }
 

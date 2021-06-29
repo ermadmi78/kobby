@@ -30,6 +30,18 @@ data class KotlinLayout(
     val adapter: KotlinAdapterLayout,
     val resolver: KotlinResolverLayout
 ) {
+    private fun getScalarType(name: String): KotlinType {
+        val result = scalars[name]
+        if (result == null) {
+            val message = "Kotlin data type for scalar '$name' not found. " +
+                    "Please, configure it by means of 'kobby' extension. https://github.com/ermadmi78/kobby"
+            System.err.println(message)
+            throw IllegalStateException(message)
+        }
+
+        return result
+    }
+
     // *****************************************************************************************************************
     //                                          DTO
     // *****************************************************************************************************************
@@ -38,7 +50,7 @@ data class KotlinLayout(
         get() = when (this) {
             is KobbyListType -> LIST.parameterizedBy(nested.dtoType)
             is KobbyNodeType -> when (node.kind) {
-                SCALAR -> scalars[node.name]!!.typeName
+                SCALAR -> getScalarType(node.name).typeName
                 else -> node.dtoClass
             }
         }.let { if (nullable) it.nullable() else it }
@@ -185,7 +197,7 @@ data class KotlinLayout(
     private fun KobbyType.toEntityType(makeNullable: Boolean): TypeName = when (this) {
         is KobbyListType -> LIST.parameterizedBy(nested.toEntityType(false))
         is KobbyNodeType -> when (node.kind) {
-            SCALAR -> scalars[node.name]!!.typeName
+            SCALAR -> getScalarType(node.name).typeName
             ENUM, INPUT -> node.dtoClass
             else -> node.entityClass
         }

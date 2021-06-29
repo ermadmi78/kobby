@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.time.Duration
 import java.time.Instant
 
@@ -46,7 +45,7 @@ subprojects {
     println("${currentProject.group}:${currentProject.name}")
 
     tasks {
-        withType<KotlinCompile> {
+        compileKotlin {
             kotlinOptions {
                 jvmTarget = kotlinJvmVersion
                 freeCompilerArgs = listOf("-Xjsr305=strict")
