@@ -202,9 +202,10 @@ open class KobbyKotlinDtoBuilderExtension {
     var enabled: Boolean? = null
     var prefix: String? = null
     var postfix: String? = null
+    var copyFun: String? = null
 
     override fun toString(): String {
-        return "KobbyKotlinDtoBuilderExtension(enabled=$enabled, prefix=$prefix, postfix=$postfix)"
+        return "KobbyKotlinDtoBuilderExtension(enabled=$enabled, prefix=$prefix, postfix=$postfix, copyFun=$copyFun)"
     }
 }
 

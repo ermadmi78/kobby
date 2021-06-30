@@ -219,6 +219,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoBuilderCopyFun",
+        description = "name of copy function for DTO classes (default \"copy\")"
+    )
+    val dtoBuilderCopyFun: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoGraphQLEnabled",
         description = "generate GraphQL DTO classes (default true)"
     )
@@ -630,6 +638,7 @@ open class KobbyKotlin : DefaultTask() {
         })
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
+        dtoBuilderCopyFun.convention("copy")
         dtoGraphQLEnabled.convention(true)
         dtoGraphQLPackageName.convention("graphql")
 
@@ -763,7 +772,8 @@ open class KobbyKotlin : DefaultTask() {
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),
-                    Decoration(dtoBuilderPrefix.orNull, dtoBuilderPostfix.orNull)
+                    Decoration(dtoBuilderPrefix.orNull, dtoBuilderPostfix.orNull),
+                    dtoBuilderCopyFun.get()
                 ),
                 KotlinDtoGraphQLLayout(
                     dtoGraphQLEnabled.get(),

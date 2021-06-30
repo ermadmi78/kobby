@@ -122,6 +122,9 @@ class KobbyPlugin : Plugin<Project> {
                                 postfix?.also {
                                     kotlinTask.dtoBuilderPostfix.convention(it)
                                 }
+                                copyFun?.also {
+                                    kotlinTask.dtoBuilderCopyFun.convention(it)
+                                }
                             }
                             graphQLExtension.valueOrNull?.apply {
                                 enabled?.also {

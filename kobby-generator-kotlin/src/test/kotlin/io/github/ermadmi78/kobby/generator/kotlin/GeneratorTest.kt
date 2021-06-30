@@ -42,6 +42,7 @@ class GeneratorTest : AnnotationSpec() {
                 KotlinDtoBuilderLayout(
                     true,
                     Decoration(null, "Builder"),
+                    "copy"
                 ),
                 KotlinDtoGraphQLLayout(
                     true,

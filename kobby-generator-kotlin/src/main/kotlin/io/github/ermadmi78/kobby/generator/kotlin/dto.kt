@@ -112,10 +112,45 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             if (dto.builder.enabled && node.fields.isNotEmpty()) {
                 // Builder function
                 buildFunction(node.dtoName) {
-                    val arguments = node.fields.values.joinToString { it.name }
-                    addParameter("block", LambdaTypeName.get(node.builderClass, emptyList(), UNIT))
+                    addParameter("block", node.builderLambda)
                     returns(node.dtoClass)
-                    addStatement("return %T().apply(block).run·{ %T($arguments) }", node.builderClass, node.dtoClass)
+
+                    addStatement("// ${node.dtoName} builder DSL")
+                    controlFlow(
+                        "return %T().%T(block).%T",
+                        node.builderClass,
+                        ClassName("kotlin", "apply"),
+                        ClassName("kotlin", "let")
+                    ) {
+                        val arguments = node.fields.values.joinToString(",\n") { "it.${it.name}" }
+                        addStatement("%T(\n⇥$arguments⇤\n)", node.dtoClass)
+                    }
+                }
+
+                // Copy function
+                buildFunction(dto.builder.copyFun) {
+                    receiver(node.dtoClass)
+                    addParameter("block", node.builderLambda)
+                    returns(node.dtoClass)
+
+                    addStatement("//·${node.dtoName}·${dto.builder.copyFun}·DSL")
+                    controlFlow(
+                        "return %T().%T",
+                        node.builderClass,
+                        ClassName("kotlin", "also")
+                    ) {
+                        node.fields { field ->
+                            addStatement("it.${field.name} = ${field.name}")
+                        }
+                    }
+                    controlFlow(
+                        ".%T(block).%T",
+                        ClassName("kotlin", "apply"),
+                        ClassName("kotlin", "let")
+                    ) {
+                        val arguments = node.fields.values.joinToString(",\n") { "it.${it.name}" }
+                        addStatement("%T(\n⇥$arguments⇤\n)", node.dtoClass)
+                    }
                 }
 
                 // Builder class
@@ -237,19 +272,64 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             }
 
             // Build input DTO builder
-            if (dto.builder.enabled) {
+            if (dto.builder.enabled && node.fields.isNotEmpty()) {
                 // Builder function
                 buildFunction(node.dtoName) {
-                    val arguments = node.fields.values.joinToString {
-                        if (it.type.nullable || it.hasDefaultValue) {
-                            it.name
-                        } else {
-                            "${it.name}·?:·error(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
-                        }
-                    }
                     addParameter("block", node.builderLambda)
                     returns(node.dtoClass)
-                    addStatement("return %T().apply(block).run·{ %T($arguments) }", node.builderClass, node.dtoClass)
+
+                    addStatement("// ${node.dtoName} builder DSL")
+                    controlFlow(
+                        "return %T().%T(block).%T",
+                        node.builderClass,
+                        ClassName("kotlin", "apply"),
+                        ClassName("kotlin", "let")
+                    ) {
+                        val types: MutableList<ClassName> = mutableListOf(node.dtoClass)
+                        val arguments = node.fields.values.joinToString(",\n") {
+                            if (it.type.nullable || it.hasDefaultValue) {
+                                "it.${it.name}"
+                            } else {
+                                types += ClassName("kotlin", "error")
+                                "it.${it.name}·?:·%T(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
+                            }
+                        }
+                        addStatement("%T(\n⇥$arguments⇤\n)", *types.toTypedArray())
+                    }
+                }
+
+                // Copy function
+                buildFunction(dto.builder.copyFun) {
+                    receiver(node.dtoClass)
+                    addParameter("block", node.builderLambda)
+                    returns(node.dtoClass)
+
+                    addStatement("//·${node.dtoName}·${dto.builder.copyFun}·DSL")
+                    controlFlow(
+                        "return %T().%T",
+                        node.builderClass,
+                        ClassName("kotlin", "also")
+                    ) {
+                        node.fields { field ->
+                            addStatement("it.${field.name} = ${field.name}")
+                        }
+                    }
+                    controlFlow(
+                        ".%T(block).%T",
+                        ClassName("kotlin", "apply"),
+                        ClassName("kotlin", "let")
+                    ) {
+                        val types: MutableList<ClassName> = mutableListOf(node.dtoClass)
+                        val arguments = node.fields.values.joinToString(",\n") {
+                            if (it.type.nullable || it.hasDefaultValue) {
+                                "it.${it.name}"
+                            } else {
+                                types += ClassName("kotlin", "error")
+                                "it.${it.name}·?:·%T(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
+                            }
+                        }
+                        addStatement("%T(\n⇥$arguments⇤\n)", *types.toTypedArray())
+                    }
                 }
 
                 // Builder class

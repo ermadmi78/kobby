@@ -483,7 +483,8 @@ data class KotlinDtoJacksonLayout(
 
 data class KotlinDtoBuilderLayout(
     val enabled: Boolean,
-    val decoration: Decoration
+    val decoration: Decoration,
+    val copyFun: String
 )
 
 class KotlinDtoGraphQLLayout(
