@@ -194,6 +194,22 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoInputPrefix",
+        description = "prefix for generated DTO input objects (default null)"
+    )
+    val dtoInputPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoInputPostfix",
+        description = "postfix for generated DTO input objects (default null)"
+    )
+    val dtoInputPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoApplyPrimaryKeys",
         description = "Generate equals and hashCode for DTO classes by @primaryKey directive (default false)"
     )
@@ -791,6 +807,7 @@ open class KobbyKotlin : DefaultTask() {
                 dtoPackage.toPackageName(),
                 Decoration(dtoPrefix.orNull, dtoPostfix.orNull),
                 Decoration(dtoEnumPrefix.orNull, dtoEnumPostfix.orNull),
+                Decoration(dtoInputPrefix.orNull, dtoInputPostfix.orNull),
                 dtoApplyPrimaryKeys.get(),
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(

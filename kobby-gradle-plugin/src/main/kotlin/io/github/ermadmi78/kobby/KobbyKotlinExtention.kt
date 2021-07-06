@@ -155,6 +155,8 @@ open class KobbyKotlinDtoExtension {
     var postfix: String? = null
     var enumPrefix: String? = null
     var enumPostfix: String? = null
+    var inputPrefix: String? = null
+    var inputPostfix: String? = null
     var applyPrimaryKeys: Boolean? = null
 
     internal val jacksonExtension = lazy { KobbyKotlinDtoJacksonExtension() }
@@ -183,6 +185,8 @@ open class KobbyKotlinDtoExtension {
                 "postfix=$postfix, " +
                 "enumPrefix=$enumPrefix, " +
                 "enumPostfix=$enumPostfix, " +
+                "inputPrefix=$inputPrefix, " +
+                "inputPostfix=$inputPostfix, " +
                 "applyPrimaryKeys=$applyPrimaryKeys, " +
                 "jacksonExtension=$jacksonExtension, " +
                 "builderExtension=$builderExtension, " +
