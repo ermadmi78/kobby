@@ -56,6 +56,9 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
     types.values.forEach { type ->
         when (type) {
             is ObjectTypeDefinition -> addObject(type.name) {
+                type.description?.content?.also {
+                    addComment(it)
+                }
                 type.comments.forEach {
                     addComment(it.content)
                 }
@@ -76,11 +79,17 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.isSelection(),
                         field.isResolve()
                     ) {
+                        field.description?.content?.also {
+                            addComment(it)
+                        }
                         field.comments.forEach {
                             addComment(it.content)
                         }
                         field.inputValueDefinitions.forEach { arg ->
                             addArgument(arg.name, arg.type.resolve(schema), arg.defaultValue?.resolve()) {
+                                arg.description?.content?.also {
+                                    addComment(it)
+                                }
                                 arg.comments.forEach {
                                     addComment(it.content)
                                 }
@@ -90,6 +99,9 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                 }
             }
             is InterfaceTypeDefinition -> addInterface(type.name) {
+                type.description?.content?.also {
+                    addComment(it)
+                }
                 type.comments.forEach {
                     addComment(it.content)
                 }
@@ -107,11 +119,17 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.isSelection(),
                         field.isResolve()
                     ) {
+                        field.description?.content?.also {
+                            addComment(it)
+                        }
                         field.comments.forEach {
                             addComment(it.content)
                         }
                         field.inputValueDefinitions.forEach { arg ->
                             addArgument(arg.name, arg.type.resolve(schema), arg.defaultValue?.resolve()) {
+                                arg.description?.content?.also {
+                                    addComment(it)
+                                }
                                 arg.comments.forEach {
                                     addComment(it.content)
                                 }
@@ -121,16 +139,25 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                 }
             }
             is UnionTypeDefinition -> addUnion(type.name) {
+                type.description?.content?.also {
+                    addComment(it)
+                }
                 type.comments.forEach {
                     addComment(it.content)
                 }
             }
             is EnumTypeDefinition -> addEnum(type.name) {
+                type.description?.content?.also {
+                    addComment(it)
+                }
                 type.comments.forEach {
                     addComment(it.content)
                 }
                 type.allEnumValues().forEach { enumValue ->
                     addEnumValue(enumValue.name) {
+                        enumValue.description?.content?.also {
+                            addComment(it)
+                        }
                         enumValue.comments.forEach {
                             addComment(it.content)
                         }
@@ -138,6 +165,9 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                 }
             }
             is InputObjectTypeDefinition -> addInput(type.name) {
+                type.description?.content?.also {
+                    addComment(it)
+                }
                 type.comments.forEach {
                     addComment(it.content)
                 }
@@ -152,6 +182,9 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         selection = false,
                         resolve = false
                     ) {
+                        input.description?.content?.also {
+                            addComment(it)
+                        }
                         input.comments.forEach {
                             addComment(it.content)
                         }
