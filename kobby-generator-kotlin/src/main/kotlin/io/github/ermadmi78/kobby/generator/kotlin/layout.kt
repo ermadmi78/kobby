@@ -51,7 +51,8 @@ data class KotlinLayout(
 
     internal val KobbyNode.dtoName: String
         get() = when (kind) {
-            ENUM, INPUT -> name
+            ENUM -> name.decorate(dto.enumDecoration)
+            INPUT -> name
             else -> name.decorate(dto.decoration)
         }
 
@@ -463,6 +464,7 @@ class KotlinContextLayout(
 class KotlinDtoLayout(
     packageName: String,
     val decoration: Decoration,
+    val enumDecoration: Decoration,
     val applyPrimaryKeys: Boolean,
     val jackson: KotlinDtoJacksonLayout,
     val builder: KotlinDtoBuilderLayout,

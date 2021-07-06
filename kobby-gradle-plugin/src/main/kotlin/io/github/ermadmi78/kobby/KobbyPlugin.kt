@@ -109,6 +109,12 @@ class KobbyPlugin : Plugin<Project> {
                             postfix?.also {
                                 kotlinTask.dtoPostfix.convention(it)
                             }
+                            enumPrefix?.also {
+                                kotlinTask.dtoEnumPrefix.convention(it)
+                            }
+                            enumPostfix?.also {
+                                kotlinTask.dtoEnumPostfix.convention(it)
+                            }
                             applyPrimaryKeys?.also {
                                 kotlinTask.dtoApplyPrimaryKeys.convention(it)
                             }

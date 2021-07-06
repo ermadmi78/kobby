@@ -178,6 +178,22 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoEnumPrefix",
+        description = "prefix for generated DTO enums (default null)"
+    )
+    val dtoEnumPrefix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoEnumPostfix",
+        description = "postfix for generated DTO enums (default null)"
+    )
+    val dtoEnumPostfix: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoApplyPrimaryKeys",
         description = "Generate equals and hashCode for DTO classes by @primaryKey directive (default false)"
     )
@@ -774,6 +790,7 @@ open class KobbyKotlin : DefaultTask() {
             KotlinDtoLayout(
                 dtoPackage.toPackageName(),
                 Decoration(dtoPrefix.orNull, dtoPostfix.orNull),
+                Decoration(dtoEnumPrefix.orNull, dtoEnumPostfix.orNull),
                 dtoApplyPrimaryKeys.get(),
                 KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
                 KotlinDtoBuilderLayout(
