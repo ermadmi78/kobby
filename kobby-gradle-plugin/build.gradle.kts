@@ -34,4 +34,18 @@ tasks {
             System.setProperty("gradle.publish.secret", System.getenv("PLUGIN_PORTAL_SECRET"))
         }
     }
+    test {
+        dependsOn(":resolveIntegrationTestDependencies")
+
+        val testKotlinVersion: String by project
+        systemProperty("testKotlinVersion", testKotlinVersion)
+    }
+    named("pluginUnderTestMetadata") {
+        dependsOn(":kobby-model:shadowJar")
+    }
+}
+
+val springVersion: String by project
+dependencies {
+    testImplementation("org.springframework:spring-core:$springVersion")
 }

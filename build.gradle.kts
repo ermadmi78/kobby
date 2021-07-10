@@ -32,7 +32,7 @@ allprojects {
 subprojects {
     val kotlinJvmVersion: String by project
     val kotlinVersion: String by project
-    val kotestVersion: String by project
+    val junitVersion: String by project
 
     val currentProject = this
 
@@ -51,6 +51,12 @@ subprojects {
                 freeCompilerArgs = listOf("-Xjsr305=strict")
             }
         }
+        compileTestKotlin {
+            kotlinOptions {
+                jvmTarget = kotlinJvmVersion
+                freeCompilerArgs = listOf("-Xjsr305=strict")
+            }
+        }
 
         jar {
             manifest {
@@ -62,6 +68,10 @@ subprojects {
                 attributes["Implementation-Title"] = currentProject.name
                 attributes["Implementation-Version"] = project.version
             }
+
+            // NOTE: in order to run gradle and maven plugin integration tests
+            // we need to have our build artifacts available in local repo
+            finalizedBy("publishToMavenLocal")
         }
 
         test {
@@ -150,9 +160,8 @@ subprojects {
         testImplementation(kotlin("test", kotlinVersion))
         testImplementation(kotlin("test-junit5", kotlinVersion))
 
-        testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-        testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
-        testImplementation("io.kotest:kotest-property:$kotestVersion")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+        testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
     }
 }
 
@@ -173,6 +182,14 @@ tasks {
                 maxRetries.set(60)
                 delayBetween.set(Duration.ofMillis(5000))
             }
+        }
+    }
+
+    register("resolveIntegrationTestDependencies") {
+        // our Gradle and Maven integration tests run in separate VMs that will need access to the generated artifacts
+        // we will need to run them after artifacts are published to local m2 repo
+        for (graphQLKotlinProject in project.childProjects) {
+            dependsOn(":${graphQLKotlinProject.key}:publishToMavenLocal")
         }
     }
 }

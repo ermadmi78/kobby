@@ -1,0 +1,17 @@
+# Query type
+type Query {
+    # find all
+    all(
+        # limit result list
+        limit: Int
+    ): [Simple!]!
+}
+
+# Simple type
+type Simple {
+    # id of simple
+    id: ID!
+
+    # name of simple
+    name: String!
+}

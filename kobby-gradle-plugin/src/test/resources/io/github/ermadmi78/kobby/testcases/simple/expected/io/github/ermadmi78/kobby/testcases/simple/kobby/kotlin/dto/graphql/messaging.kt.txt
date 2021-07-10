@@ -1,0 +1,116 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.graphql
+
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface SimpleMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface SimpleClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface SimpleServerMessage
+
+/**
+ * See GQL_CONNECTION_INIT
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class SimpleMessageConnectionInit(
+  public val payload: Map<String, Any?>? = null
+) : SimpleMessage, SimpleClientMessage
+
+/**
+ * See GQL_START
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class SimpleMessageStart(
+  public val id: String,
+  public val payload: SimpleRequest
+) : SimpleMessage, SimpleClientMessage
+
+/**
+ * See GQL_STOP
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class SimpleMessageStop(
+  public val id: String
+) : SimpleMessage, SimpleClientMessage
+
+/**
+ * See GQL_CONNECTION_TERMINATE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public class SimpleMessageConnectionTerminate : SimpleMessage, SimpleClientMessage
+
+/**
+ * See GQL_CONNECTION_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class SimpleMessageConnectionError(
+  public val payload: Any? = null
+) : SimpleMessage, SimpleServerMessage
+
+/**
+ * See GQL_CONNECTION_ACK
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class SimpleMessageConnectionAck(
+  public val payload: Any? = null
+) : SimpleMessage, SimpleServerMessage
+
+/**
+ * See GQL_DATA
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class SimpleMessageData(
+  public val id: String,
+  public val payload: SimpleSubscriptionResult
+) : SimpleMessage, SimpleServerMessage
+
+/**
+ * See GQL_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class SimpleMessageError(
+  public val id: String,
+  public val payload: SimpleErrorResult
+) : SimpleMessage, SimpleServerMessage
+
+/**
+ * See GQL_COMPLETE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class SimpleMessageComplete(
+  public val id: String
+) : SimpleMessage, SimpleServerMessage
+
+/**
+ * See GQL_CONNECTION_KEEP_ALIVE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public class SimpleMessageConnectionKeepAlive : SimpleMessage, SimpleServerMessage

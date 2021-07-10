@@ -1,0 +1,24 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.graphql
+
+import kotlin.Suppress
+
+public enum class SimpleErrorType {
+  InvalidSyntax,
+  ValidationError,
+  DataFetchingException,
+  OperationNotSupported,
+  ExecutionAborted,
+}

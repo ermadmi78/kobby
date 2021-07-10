@@ -1,0 +1,65 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleContext
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleDSL
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleSubscriber
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+/**
+ *  Simple type
+ */
+public interface Simple : SimpleContext {
+  /**
+   *  id of simple
+   */
+  public val id: Long
+
+  /**
+   *  name of simple
+   */
+  public val name: String
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      SimpleSubscriber<Subscription>
+
+  public fun SimpleProjection.__withCurrentProjection(): Unit
+}
+
+/**
+ *  Simple type
+ */
+@SimpleDSL
+public interface SimpleProjection {
+  /**
+   *  id of simple
+   */
+  public fun id(): Unit
+
+  /**
+   *  name of simple
+   */
+  public fun name(): Unit
+
+  public fun __minimize(): Unit {
+  }
+}

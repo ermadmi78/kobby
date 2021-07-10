@@ -1,0 +1,77 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleDSL
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+/**
+ *  Simple type
+ */
+public data class SimpleDto(
+  /**
+   *  id of simple
+   */
+  public val id: Long? = null,
+  /**
+   *  name of simple
+   */
+  public val name: String? = null
+)
+
+public fun SimpleDto(block: SimpleDtoBuilder.() -> Unit): SimpleDto {
+  // SimpleDto builder DSL
+  return SimpleDtoBuilder().apply(block).let {
+    SimpleDto(
+          it.id,
+          it.name
+        )
+  }
+}
+
+public fun SimpleDto.copy(block: SimpleDtoBuilder.() -> Unit): SimpleDto {
+  // SimpleDto copy DSL
+  return SimpleDtoBuilder().also {
+    it.id = id
+    it.name = name
+  }
+  .apply(block).let {
+    SimpleDto(
+          it.id,
+          it.name
+        )
+  }
+}
+
+/**
+ *  Simple type
+ */
+@SimpleDSL
+public class SimpleDtoBuilder {
+  /**
+   *  id of simple
+   */
+  public var id: Long? = null
+
+  /**
+   *  name of simple
+   */
+  public var name: String? = null
+}
