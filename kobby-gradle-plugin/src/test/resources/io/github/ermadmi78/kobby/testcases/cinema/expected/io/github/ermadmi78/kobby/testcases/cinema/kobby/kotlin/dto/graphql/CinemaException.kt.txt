@@ -1,0 +1,26 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql
+
+import kotlin.RuntimeException
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+
+public class CinemaException(
+  message: String,
+  public val request: CinemaRequest,
+  public val errors: List<CinemaError>? = null
+) : RuntimeException(message + (errors?.joinToString(",\n  ", "\n  ", "\n") { it.toString() } ?:
+    ""))

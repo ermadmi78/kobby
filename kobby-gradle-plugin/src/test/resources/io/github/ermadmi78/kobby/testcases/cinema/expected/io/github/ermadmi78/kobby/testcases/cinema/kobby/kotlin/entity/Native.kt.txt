@@ -1,0 +1,65 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
+import kotlin.Suppress
+import kotlin.Unit
+
+/**
+ * Union of natives
+ */
+public interface Native : CinemaContext {
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CinemaSubscriber<Subscription>
+}
+
+/**
+ * Union of natives
+ */
+@CinemaDSL
+public interface NativeProjection {
+  public fun __minimize(): Unit {
+  }
+}
+
+/**
+ * Union of natives
+ */
+@CinemaDSL
+public interface NativeQualification {
+  /**
+   * Film entity.
+   * The film belongs to one country and can be played by several actors.
+   */
+  public fun __onFilm(__projection: FilmProjection.() -> Unit = {}): Unit
+
+  /**
+   * Actor entity.
+   * The actor belongs to one country and can play in several films.
+   */
+  public fun __onActor(__projection: ActorProjection.() -> Unit = {}): Unit
+}
+
+/**
+ * Union of natives
+ */
+@CinemaDSL
+public interface NativeQualifiedProjection : NativeProjection, NativeQualification

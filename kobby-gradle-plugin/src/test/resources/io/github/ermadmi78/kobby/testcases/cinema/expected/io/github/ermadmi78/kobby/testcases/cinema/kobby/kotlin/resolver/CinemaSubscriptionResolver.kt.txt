@@ -1,0 +1,39 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.resolver
+
+import graphql.kickstart.tools.GraphQLSubscriptionResolver
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.ActorDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.CountryDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.FilmDto
+import kotlin.Long
+import kotlin.Suppress
+import org.reactivestreams.Publisher
+
+public interface CinemaSubscriptionResolver : GraphQLSubscriptionResolver {
+  /**
+   * Listen new countries
+   */
+  public suspend fun countryCreated(): Publisher<CountryDto>
+
+  /**
+   * Listen new films
+   */
+  public suspend fun filmCreated(countryId: Long?): Publisher<FilmDto>
+
+  /**
+   * Listen new actors
+   */
+  public suspend fun actorCreated(countryId: Long?): Publisher<ActorDto>
+}

@@ -1,0 +1,70 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Subscription : CinemaContext {
+  /**
+   * Listen new countries
+   */
+  public val countryCreated: Country
+
+  /**
+   * Listen new films
+   */
+  public val filmCreated: Film
+
+  /**
+   * Listen new actors
+   */
+  public val actorCreated: Actor
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CinemaSubscriber<Subscription>
+
+  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+}
+
+@CinemaDSL
+public interface SubscriptionProjection {
+  /**
+   * Listen new countries
+   */
+  public fun countryCreated(__projection: CountryProjection.() -> Unit = {}): Unit
+
+  /**
+   * Listen new films
+   */
+  public fun filmCreated(countryId: Long? = null, __projection: FilmProjection.() -> Unit = {}):
+      Unit
+
+  /**
+   * Listen new actors
+   */
+  public fun actorCreated(countryId: Long? = null, __projection: ActorProjection.() -> Unit = {}):
+      Unit
+
+  public fun __minimize(): Unit {
+  }
+}

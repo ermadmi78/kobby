@@ -22,14 +22,15 @@ import kotlin.test.fail
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 class TestCasesScanner {
-    companion object {
-        const val TEST_KOTLIN_VERSION = "testKotlinVersion"
-    }
+    private fun String.replaceProperty(property: String): String =
+        replace(property, System.getProperty(property) ?: error("$property is not configured"))
 
-    private val testKotlinVersion = System.getProperty(TEST_KOTLIN_VERSION)
-        ?: error("$TEST_KOTLIN_VERSION is not configured")
-
-    private fun String.applyVersions(): String = replace(TEST_KOTLIN_VERSION, testKotlinVersion)
+    private fun String.applyVersions(): String = this
+        .replaceProperty("testKotlinVersion")
+        .replaceProperty("testJacksonVersion")
+        .replaceProperty("testKtorVersion")
+        .replaceProperty("testKickstartGraphqlJavaToolsVersion")
+        .replaceProperty("testReactiveStreamsVersion")
 
     @Test
     fun scan(@TempDir tempDir: Path) {

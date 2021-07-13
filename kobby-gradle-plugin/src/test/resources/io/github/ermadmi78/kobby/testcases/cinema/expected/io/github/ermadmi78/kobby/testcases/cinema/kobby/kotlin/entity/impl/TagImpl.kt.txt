@@ -1,0 +1,98 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.TagDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.SubscriptionProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Tag
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.TagProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+
+internal class TagImpl(
+  internal val __innerContext: CinemaContext,
+  internal val __innerProjection: TagProjectionImpl,
+  internal val __innerDto: TagDto
+) : Tag {
+  public override val `value`: String
+    get() {
+      if (!__innerProjection.__innerValue0) {
+        error("Property [value] is not available - add [value] projection to switch on it")
+      }
+      return __innerDto.value!!
+    }
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CinemaSubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun TagProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class TagProjectionImpl : TagProjection {
+  internal var __innerValue0: Boolean = false
+
+  public override fun `value`(): Unit {
+    __innerValue0 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: TagProjection): Unit {
+    if ("value" !in ignore && __innerValue0) {
+      __projection.value()
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: value
+    if ("value" !in ignore && __innerValue0) {
+      body.append(' ').append("value")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun TagDto.buildEntity(__innerContext: CinemaContext,
+    __innerProjection: TagProjectionImpl): Tag = TagImpl(__innerContext, __innerProjection, this)

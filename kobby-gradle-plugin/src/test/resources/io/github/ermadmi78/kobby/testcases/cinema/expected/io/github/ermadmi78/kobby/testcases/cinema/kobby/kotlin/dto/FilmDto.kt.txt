@@ -1,0 +1,169 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.let
+
+/**
+ * Film entity.
+ * The film belongs to one country and can be played by several actors.
+ */
+@JsonTypeName(value = "Film")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = FilmDto::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class FilmDto(
+  /**
+   * Unique identifier of entity
+   */
+  public override val id: Long? = null,
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public override val fields: Map<String, Any?>? = null,
+  /**
+   * Tags of entity
+   */
+  public override val tags: List<TagDto>? = null,
+  /**
+   * Title of film
+   */
+  public val title: String? = null,
+  /**
+   * Genre of film.
+   */
+  public val genre: Genre? = null,
+  /**
+   * ID of the country to which the film belongs
+   */
+  public val countryId: Long? = null,
+  /**
+   * The country to which the film belongs
+   */
+  public val country: CountryDto? = null,
+  /**
+   * Find actors of film by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public val actors: List<ActorDto>? = null
+) : EntityDto, TaggableDto, NativeDto
+
+public fun FilmDto(block: FilmDtoBuilder.() -> Unit): FilmDto {
+  // FilmDto builder DSL
+  return FilmDtoBuilder().apply(block).let {
+    FilmDto(
+          it.id,
+          it.fields,
+          it.tags,
+          it.title,
+          it.genre,
+          it.countryId,
+          it.country,
+          it.actors
+        )
+  }
+}
+
+public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto {
+  // FilmDto copy DSL
+  return FilmDtoBuilder().also {
+    it.id = id
+    it.fields = fields
+    it.tags = tags
+    it.title = title
+    it.genre = genre
+    it.countryId = countryId
+    it.country = country
+    it.actors = actors
+  }
+  .apply(block).let {
+    FilmDto(
+          it.id,
+          it.fields,
+          it.tags,
+          it.title,
+          it.genre,
+          it.countryId,
+          it.country,
+          it.actors
+        )
+  }
+}
+
+/**
+ * Film entity.
+ * The film belongs to one country and can be played by several actors.
+ */
+@CinemaDSL
+public class FilmDtoBuilder {
+  /**
+   * Unique identifier of entity
+   */
+  public var id: Long? = null
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public var fields: Map<String, Any?>? = null
+
+  /**
+   * Tags of entity
+   */
+  public var tags: List<TagDto>? = null
+
+  /**
+   * Title of film
+   */
+  public var title: String? = null
+
+  /**
+   * Genre of film.
+   */
+  public var genre: Genre? = null
+
+  /**
+   * ID of the country to which the film belongs
+   */
+  public var countryId: Long? = null
+
+  /**
+   * The country to which the film belongs
+   */
+  public var country: CountryDto? = null
+
+  /**
+   * Find actors of film by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public var actors: List<ActorDto>? = null
+}

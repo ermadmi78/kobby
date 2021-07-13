@@ -1,0 +1,21 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.adapter.ktor
+
+import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.readText
+import kotlin.String
+import kotlin.Suppress
+
+internal fun Frame.Text.readFrameText(): String = readText()

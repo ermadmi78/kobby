@@ -1,0 +1,133 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Boolean
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "Mutation")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = MutationDto::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class MutationDto(
+  /**
+   * Create country
+   */
+  public val createCountry: CountryDto? = null,
+  /**
+   * Create film
+   */
+  public val createFilm: FilmDto? = null,
+  /**
+   * Create actor
+   */
+  public val createActor: ActorDto? = null,
+  /**
+   * Associate film with actor
+   */
+  public val associate: Boolean? = null,
+  /**
+   * Add tag to film.
+   * Returns false if the film already had such a tag
+   */
+  public val tagFilm: Boolean? = null,
+  /**
+   * Add tag to actor.
+   * Returns false if the actor already had such a tag
+   */
+  public val tagActor: Boolean? = null
+)
+
+public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {
+  // MutationDto builder DSL
+  return MutationDtoBuilder().apply(block).let {
+    MutationDto(
+          it.createCountry,
+          it.createFilm,
+          it.createActor,
+          it.associate,
+          it.tagFilm,
+          it.tagActor
+        )
+  }
+}
+
+public fun MutationDto.copy(block: MutationDtoBuilder.() -> Unit): MutationDto {
+  // MutationDto copy DSL
+  return MutationDtoBuilder().also {
+    it.createCountry = createCountry
+    it.createFilm = createFilm
+    it.createActor = createActor
+    it.associate = associate
+    it.tagFilm = tagFilm
+    it.tagActor = tagActor
+  }
+  .apply(block).let {
+    MutationDto(
+          it.createCountry,
+          it.createFilm,
+          it.createActor,
+          it.associate,
+          it.tagFilm,
+          it.tagActor
+        )
+  }
+}
+
+@CinemaDSL
+public class MutationDtoBuilder {
+  /**
+   * Create country
+   */
+  public var createCountry: CountryDto? = null
+
+  /**
+   * Create film
+   */
+  public var createFilm: FilmDto? = null
+
+  /**
+   * Create actor
+   */
+  public var createActor: ActorDto? = null
+
+  /**
+   * Associate film with actor
+   */
+  public var associate: Boolean? = null
+
+  /**
+   * Add tag to film.
+   * Returns false if the film already had such a tag
+   */
+  public var tagFilm: Boolean? = null
+
+  /**
+   * Add tag to actor.
+   * Returns false if the actor already had such a tag
+   */
+  public var tagActor: Boolean? = null
+}
