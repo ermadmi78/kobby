@@ -1,0 +1,24 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.resolver
+
+import graphql.kickstart.tools.GraphQLSubscriptionResolver
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyEventDto
+import kotlin.String
+import kotlin.Suppress
+import org.reactivestreams.Publisher
+
+public interface GraphqlMySubscriptionResolver : GraphQLSubscriptionResolver {
+  public suspend fun onInsert(pattern: String?): Publisher<MyEventDto>
+}

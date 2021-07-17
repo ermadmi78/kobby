@@ -1,0 +1,135 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlContext
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlSubscriber
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MySubscriptionDto
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyEvent
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyEventProjection
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyMutation
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyMutationProjection
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyQuery
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyQueryProjection
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MySubscription
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MySubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+
+internal class MySubscriptionImpl(
+  internal val __innerContext: GraphqlContext,
+  internal val __innerProjection: MySubscriptionProjectionImpl,
+  internal val __innerDto: MySubscriptionDto
+) : MySubscription {
+  public override val onInsert: MyEvent by lazy {
+    if (__innerProjection.__innerOnInsert0 == null) {
+      error("Property [onInsert] is not available - add [onInsert] projection to switch on it")
+    }
+    __innerDto.resolveOnInsert(__innerContext, __innerProjection.__innerOnInsert0!!)
+  }
+
+
+  public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MyMutationProjection.() -> Unit): MyMutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: MySubscriptionProjection.() -> Unit):
+      GraphqlSubscriber<MySubscription> = __innerContext.subscription(__projection)
+
+  public override fun MySubscriptionProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class MySubscriptionProjectionImpl : MySubscriptionProjection {
+  internal var __innerOnInsert0: MyEventProjectionImpl? = null
+
+  internal var __innerOnInsert0Pattern: String? = null
+
+  public override fun onInsert(pattern: String?, __projection: MyEventProjection.() -> Unit): Unit {
+    __innerOnInsert0 = MyEventProjectionImpl().apply(__projection)
+    __innerOnInsert0Pattern = pattern
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>,
+      __projection: MySubscriptionProjection): Unit {
+    if ("onInsert" !in ignore && __innerOnInsert0 != null) {
+      __projection.onInsert(__innerOnInsert0Pattern) {
+        this@MySubscriptionProjectionImpl.__innerOnInsert0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: onInsert
+    if ("onInsert" !in ignore && __innerOnInsert0 != null) {
+      body.append(' ').append("onInsert")
+      var counter = 0
+      val addBrackets = __innerOnInsert0Pattern != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: onInsert.pattern
+      if (__innerOnInsert0Pattern != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerOnInsert0Pattern!!
+        body.append("pattern").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of MyEvent
+      __innerOnInsert0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun MySubscriptionDto.buildEntity(__innerContext: GraphqlContext,
+    __innerProjection: MySubscriptionProjectionImpl): MySubscription =
+    MySubscriptionImpl(__innerContext, __innerProjection, this)
+
+internal fun MySubscriptionDto.resolveOnInsert(__innerContext: GraphqlContext,
+    __innerProjection: MyEventProjectionImpl): MyEvent = onInsert?.buildEntity(__innerContext,
+    __innerProjection)!!

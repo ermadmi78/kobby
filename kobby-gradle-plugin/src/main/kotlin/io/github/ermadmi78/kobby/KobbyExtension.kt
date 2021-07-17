@@ -32,19 +32,43 @@ open class KobbyExtension {
     fun kotlin(action: Action<KobbyKotlinExtension>) {
         action.execute(kotlinExtension.value)
     }
+
+    override fun toString(): String {
+        return "KobbyExtension(schemaExtension=$schemaExtension, kotlinExtension=$kotlinExtension)"
+    }
 }
 
 @Kobby
 open class KobbySchemaExtension {
-    var location: FileCollection? = null
+    var files: FileCollection? = null
+    internal var scanExtension = lazy { KobbySchemaScanExtension() }
     internal var directiveExtension = lazy { KobbySchemaDirectiveExtension() }
+
+    fun scan(action: Action<KobbySchemaScanExtension>) {
+        action.execute(scanExtension.value)
+    }
 
     fun directive(action: Action<KobbySchemaDirectiveExtension>) {
         action.execute(directiveExtension.value)
     }
 
     override fun toString(): String {
-        return "KobbySchemaExtension(location=$location, directiveExtension=$directiveExtension)"
+        return "KobbySchemaExtension(" +
+                "files=$files, " +
+                "scanExtension=$scanExtension, " +
+                "directiveExtension=$directiveExtension" +
+                ")"
+    }
+}
+
+@Kobby
+open class KobbySchemaScanExtension {
+    var dir: String? = null
+    var includes: Iterable<String>? = null
+    var excludes: Iterable<String>? = null
+
+    override fun toString(): String {
+        return "KobbySchemaScanExtension(dir=$dir, includes=$includes, excludes=$excludes)"
     }
 }
 

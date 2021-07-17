@@ -1,0 +1,243 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonSubTypes
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = GraphqlMessageConnectionInit::class, name = "connection_init"),
+  JsonSubTypes.Type(value = GraphqlMessageStart::class, name = "start"),
+  JsonSubTypes.Type(value = GraphqlMessageStop::class, name = "stop"),
+  JsonSubTypes.Type(value = GraphqlMessageConnectionTerminate::class, name =
+        "connection_terminate"),
+  JsonSubTypes.Type(value = GraphqlMessageConnectionError::class, name = "connection_error"),
+  JsonSubTypes.Type(value = GraphqlMessageConnectionAck::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = GraphqlMessageData::class, name = "data"),
+  JsonSubTypes.Type(value = GraphqlMessageError::class, name = "error"),
+  JsonSubTypes.Type(value = GraphqlMessageComplete::class, name = "complete"),
+  JsonSubTypes.Type(value = GraphqlMessageConnectionKeepAlive::class, name = "ka")
+)
+public interface GraphqlMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = GraphqlMessageConnectionInit::class, name = "connection_init"),
+  JsonSubTypes.Type(value = GraphqlMessageStart::class, name = "start"),
+  JsonSubTypes.Type(value = GraphqlMessageStop::class, name = "stop"),
+  JsonSubTypes.Type(value = GraphqlMessageConnectionTerminate::class, name = "connection_terminate")
+)
+public interface GraphqlClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = GraphqlMessageConnectionError::class, name = "connection_error"),
+  JsonSubTypes.Type(value = GraphqlMessageConnectionAck::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = GraphqlMessageData::class, name = "data"),
+  JsonSubTypes.Type(value = GraphqlMessageError::class, name = "error"),
+  JsonSubTypes.Type(value = GraphqlMessageComplete::class, name = "complete"),
+  JsonSubTypes.Type(value = GraphqlMessageConnectionKeepAlive::class, name = "ka")
+)
+public interface GraphqlServerMessage
+
+/**
+ * See GQL_CONNECTION_INIT
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_init")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageConnectionInit::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GraphqlMessageConnectionInit @JsonCreator constructor(
+  public val payload: Map<String, Any?>? = null
+) : GraphqlMessage, GraphqlClientMessage
+
+/**
+ * See GQL_START
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "start")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageStart::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GraphqlMessageStart(
+  public val id: String,
+  public val payload: GraphqlRequest
+) : GraphqlMessage, GraphqlClientMessage
+
+/**
+ * See GQL_STOP
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "stop")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageStop::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GraphqlMessageStop @JsonCreator constructor(
+  public val id: String
+) : GraphqlMessage, GraphqlClientMessage
+
+/**
+ * See GQL_CONNECTION_TERMINATE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_terminate")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageConnectionTerminate::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public class GraphqlMessageConnectionTerminate : GraphqlMessage, GraphqlClientMessage
+
+/**
+ * See GQL_CONNECTION_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_error")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageConnectionError::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GraphqlMessageConnectionError @JsonCreator constructor(
+  public val payload: Any? = null
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_CONNECTION_ACK
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_ack")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageConnectionAck::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GraphqlMessageConnectionAck @JsonCreator constructor(
+  public val payload: Any? = null
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_DATA
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "data")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageData::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GraphqlMessageData(
+  public val id: String,
+  public val payload: GraphqlSubscriptionResult
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "error")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageError::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GraphqlMessageError(
+  public val id: String,
+  public val payload: GraphqlErrorResult
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_COMPLETE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "complete")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageComplete::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GraphqlMessageComplete @JsonCreator constructor(
+  public val id: String
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_CONNECTION_KEEP_ALIVE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ka")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GraphqlMessageConnectionKeepAlive::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public class GraphqlMessageConnectionKeepAlive : GraphqlMessage, GraphqlServerMessage

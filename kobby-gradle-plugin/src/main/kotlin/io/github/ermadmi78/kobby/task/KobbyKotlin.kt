@@ -4,6 +4,12 @@ import io.github.ermadmi78.kobby.generator.kotlin.*
 import io.github.ermadmi78.kobby.generator.kotlin.KotlinTypes.PREDEFINED_SCALARS
 import io.github.ermadmi78.kobby.model.Decoration
 import io.github.ermadmi78.kobby.model.KobbyDirective
+import io.github.ermadmi78.kobby.model.PluginUtils.contextName
+import io.github.ermadmi78.kobby.model.PluginUtils.extractCommonPrefix
+import io.github.ermadmi78.kobby.model.PluginUtils.forEachPackage
+import io.github.ermadmi78.kobby.model.PluginUtils.pathIterator
+import io.github.ermadmi78.kobby.model.PluginUtils.removePrefixOrEmpty
+import io.github.ermadmi78.kobby.model.PluginUtils.toPackageName
 import io.github.ermadmi78.kobby.model.parseSchema
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -23,14 +29,36 @@ import java.io.FileReader
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-@Suppress("UnstableApiUsage")
 open class KobbyKotlin : DefaultTask() {
     companion object {
         const val TASK_NAME = "kobbyKotlin"
     }
 
     @InputFiles
-    val schemaLocation: ListProperty<RegularFile> = project.objects.listProperty(RegularFile::class.java)
+    val schemaFiles: ListProperty<RegularFile> = project.objects.listProperty(RegularFile::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "schemaScanDir",
+        description = "path to directory relative to project basedir, " +
+                "where to look for schema files (default \"src/main/resources\")"
+    )
+    val schemaScanDir: Property<String> = project.objects.property(String::class.java)
+
+    /**
+     * ANT style include patterns to look for schema files (default `**`/`*`.graphqls)
+     */
+    @Input
+    @Optional
+    val schemaScanIncludes: ListProperty<String> = project.objects.listProperty(String::class.java)
+
+    /**
+     * ANT style exclude patterns to look for schema files (default empty)
+     */
+    @Input
+    @Optional
+    val schemaScanExcludes: ListProperty<String> = project.objects.listProperty(String::class.java)
 
     @Input
     @Optional
@@ -138,7 +166,7 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
-        option = "contextQuery",
+        option = "contextMutation",
         description = "name of context mutation function (default \"mutation\")"
     )
     val contextMutation: Property<String> = project.objects.property(String::class.java)
@@ -641,13 +669,18 @@ open class KobbyKotlin : DefaultTask() {
         group = "kobby"
         description = "Generate Kotlin DSL client by GraphQL schema"
 
-        schemaLocation.convention(project.provider<Iterable<RegularFile>> {
-            project.fileTree("src/main/resources") {
-                it.include("**/*.graphqls")
+        schemaFiles.convention(project.provider<Iterable<RegularFile>> {
+            project.fileTree(schemaScanDir.get()) {
+                it.include(schemaScanIncludes.get())
+                it.exclude(schemaScanExcludes.get())
             }.filter { it.isFile }.files.map {
                 project.layout.file(project.provider { it }).get()
             }
         })
+
+        schemaScanDir.convention("src/main/resources")
+        schemaScanIncludes.convention(listOf("**/*.graphqls"))
+        schemaScanExcludes.convention(listOf())
 
         schemaDirectivePrimaryKey.convention(KobbyDirective.PRIMARY_KEY)
         schemaDirectiveRequired.convention(KobbyDirective.REQUIRED)
@@ -719,7 +752,7 @@ open class KobbyKotlin : DefaultTask() {
 
     @TaskAction
     fun generateKotlinDslClientAction() {
-        val graphQLSchemaFiles: List<File> = schemaLocation.get().map {
+        val graphQLSchemaFiles: List<File> = schemaFiles.get().map {
             it.asFile.absoluteFile.also { file ->
                 if (!file.isFile) {
                     "Specified schema file does not exist: $it".throwIt()
@@ -728,7 +761,7 @@ open class KobbyKotlin : DefaultTask() {
         }
 
         if (graphQLSchemaFiles.isEmpty()) {
-            "GraphQL schema location not found".throwIt()
+            "GraphQL schema files not found".throwIt()
         }
 
         val directiveLayout = mapOf(
@@ -739,18 +772,18 @@ open class KobbyKotlin : DefaultTask() {
             KobbyDirective.RESOLVE to schemaDirectiveResolve.get()
         )
 
-        val context = (contextName.orNull ?: graphQLSchemaFiles.singleOrNull()?.contextName)
+        val contextName = (contextName.orNull ?: graphQLSchemaFiles.singleOrNull()?.contextName)
             ?.filter { it.isJavaIdentifierPart() }
             ?.takeIf { it.firstOrNull()?.isJavaIdentifierStart() ?: false }
             ?: "graphql"
-        val capitalizedContext = context.capitalize()
+        val capitalizedContextName = contextName.capitalize()
 
         val rootPackage: List<String> = mutableListOf<String>().also { list ->
             if (relativePackage.get()) {
                 graphQLSchemaFiles
                     .map { it.parent.pathIterator() }
                     .extractCommonPrefix()
-                    .removePrefixOrEmpty(project.file("src/main/resources").absoluteFile.path.pathIterator())
+                    .removePrefixOrEmpty(project.file(schemaScanDir.get()).absoluteFile.path.pathIterator())
                     .forEach {
                         list += it
                     }
@@ -797,8 +830,8 @@ open class KobbyKotlin : DefaultTask() {
             scalars.get(),
             KotlinContextLayout(
                 contextPackage.toPackageName(),
-                context,
-                Decoration(capitalizedContext, null),
+                contextName,
+                Decoration(contextPrefix.orNull ?: capitalizedContextName, contextPostfix.orNull),
                 contextQuery.get(),
                 contextMutation.get(),
                 contextSubscription.get()
@@ -819,7 +852,7 @@ open class KobbyKotlin : DefaultTask() {
                     dtoGraphQLEnabled.get(),
                     dtoGraphQLPackage.toPackageName(),
                     Decoration(
-                        dtoGraphQLPrefix.orNull?.trim() ?: capitalizedContext,
+                        dtoGraphQLPrefix.orNull?.trim() ?: capitalizedContextName,
                         dtoGraphQLPostfix.orNull
                     )
                 )
@@ -858,7 +891,7 @@ open class KobbyKotlin : DefaultTask() {
                     adapterKtorCompositeEnabled.get(),
                     adapterKtorPackage.toPackageName(),
                     Decoration(
-                        adapterKtorPrefix.orNull?.trim() ?: capitalizedContext,
+                        adapterKtorPrefix.orNull?.trim() ?: capitalizedContextName,
                         adapterKtorPostfix.orNull
                     )
                 )
@@ -868,7 +901,7 @@ open class KobbyKotlin : DefaultTask() {
                 resolverPublisherEnabled.get(),
                 resolverPackage.toPackageName(),
                 Decoration(
-                    (resolverPrefix.orNull?.trim() ?: capitalizedContext).let {
+                    (resolverPrefix.orNull?.trim() ?: capitalizedContextName).let {
                         if (it == "GraphQL") "IGraphQL" else it
                     }, resolverPostfix.orNull
                 ),
@@ -923,64 +956,4 @@ open class KobbyKotlin : DefaultTask() {
         this.resolveDependencies().any {
             it.moduleGroup == moduleGroup && it.moduleName == moduleName
         }
-
-    private val File.contextName: String?
-        get() = name
-            .splitToSequence('.')
-            .filter { it.isNotBlank() }
-            .firstOrNull()
-            ?.decapitalize()
-
-    private fun String.pathIterator(): Iterator<String> =
-        splitToSequence('/', '\\')
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
-            .iterator()
-
-    private fun List<Iterator<String>>.extractCommonPrefix(): Iterator<String> = iterator<String> {
-        while (true) {
-            var element: String? = null
-            for (iterator in this@extractCommonPrefix) {
-                if (!iterator.hasNext()) {
-                    return@iterator
-                }
-
-                val cur = iterator.next()
-                if (element == null) {
-                    element = cur
-                } else if (element != cur) {
-                    return@iterator
-                }
-            }
-
-            if (element == null) {
-                return@iterator
-            }
-
-            yield(element)
-        }
-    }
-
-    private fun <T : Any> Iterator<T>.removePrefixOrEmpty(prefix: Iterator<T>): Iterator<T> = iterator {
-        for (prefixElement in prefix) {
-            if (!this@removePrefixOrEmpty.hasNext()) {
-                return@iterator
-            }
-            if (prefixElement != this@removePrefixOrEmpty.next()) {
-                return@iterator
-            }
-        }
-
-        for (element in this@removePrefixOrEmpty) {
-            yield(element)
-        }
-    }
-
-    private fun String.forEachPackage(action: (String) -> Unit) =
-        this.splitToSequence('.')
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
-            .forEach(action)
-
-    private fun List<String>.toPackageName(): String = joinToString(".") { it }
 }

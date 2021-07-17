@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 rootProject.name = "kobby"
 
 pluginManagement {
@@ -8,6 +6,7 @@ pluginManagement {
     val pluginPublishVersion: String by settings
     val pluginShadowVersion: String by settings
     val nexusPublishVersion: String by settings
+    val mavenPluginDevelopmentVersion: String by settings
 
     plugins {
         kotlin("jvm") version kotlinVersion
@@ -15,6 +14,7 @@ pluginManagement {
         id("com.gradle.plugin-publish") version pluginPublishVersion
         id("com.github.johnrengelman.shadow") version pluginShadowVersion
         id("io.github.gradle-nexus.publish-plugin") version nexusPublishVersion
+        id("de.benediktritter.maven-plugin-development") version mavenPluginDevelopmentVersion
     }
 }
 

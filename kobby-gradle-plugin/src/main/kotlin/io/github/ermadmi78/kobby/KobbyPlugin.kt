@@ -18,7 +18,6 @@ import org.gradle.api.tasks.TaskInstantiationException
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
-@Suppress("UnstableApiUsage")
 class KobbyPlugin : Plugin<Project> {
     companion object {
         const val KOBBY = "kobby"
@@ -37,10 +36,21 @@ class KobbyPlugin : Plugin<Project> {
                 extension.schemaExtension.valueOrNull?.apply {
                     if (extension.kotlinExtension.valueOrNull?.enabled != false) {
                         val kotlinTask = p.tasks.named(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java).get()
-                        location?.also {
-                            kotlinTask.schemaLocation.convention(p.provider<Iterable<RegularFile>> {
+                        files?.also {
+                            kotlinTask.schemaFiles.convention(p.provider<Iterable<RegularFile>> {
                                 it.map { p.layout.file(p.provider { it }).get() }
                             })
+                        }
+                        scanExtension.valueOrNull?.apply {
+                            dir?.also {
+                                kotlinTask.schemaScanDir.convention(it)
+                            }
+                            includes?.also {
+                                kotlinTask.schemaScanIncludes.convention(it)
+                            }
+                            excludes?.also {
+                                kotlinTask.schemaScanExcludes.convention(it)
+                            }
                         }
                         directiveExtension.valueOrNull?.apply {
                             primaryKey?.also {

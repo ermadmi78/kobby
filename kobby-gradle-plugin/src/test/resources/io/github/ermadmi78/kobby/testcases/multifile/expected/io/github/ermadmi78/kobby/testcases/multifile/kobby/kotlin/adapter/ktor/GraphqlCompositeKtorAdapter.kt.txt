@@ -1,0 +1,248 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.adapter.ktor
+
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlAdapter
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlMapper
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlReceiver
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyMutationDto
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyQueryDto
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MySubscriptionDto
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlClientMessage
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlException
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageComplete
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageConnectionAck
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageConnectionError
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageConnectionInit
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageConnectionKeepAlive
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageConnectionTerminate
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageData
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageError
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageStart
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMessageStop
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMutationResult
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlQueryResult
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlRequest
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlServerMessage
+import io.ktor.client.HttpClient
+import io.ktor.client.features.websocket.ws
+import io.ktor.client.request.post
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.readText
+import io.ktor.http.ContentType
+import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.WebSocketSession
+import io.ktor.http.cio.websocket.send
+import io.ktor.http.contentType
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.Map
+import kotlin.collections.contains
+import kotlin.collections.forEach
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapOf
+import kotlin.collections.plus
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.error
+import kotlin.let
+import kotlin.random.Random
+import kotlin.require
+import kotlin.takeIf
+import kotlin.to
+
+public open class GraphqlCompositeKtorAdapter(
+  protected val client: HttpClient,
+  protected val httpUrl: String,
+  protected val webSocketUrl: String,
+  protected val mapper: GraphqlMapper,
+  protected val requestHeaders: Map<String, String> = mapOf(),
+  protected val subscriptionPayload: Map<String, Any?>? = null,
+  protected val httpAuthorizationTokenHeader: String = "Authorization",
+  protected val webSocketAuthorizationTokenHeader: String = "authToken",
+  protected val idGenerator: () -> String = { Random.nextLong().toString() },
+  protected val listener: (GraphqlRequest) -> Unit = {}
+) : GraphqlAdapter {
+  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
+      MyQueryDto {
+    val request = GraphqlRequest(query, variables)
+    listener(request)
+
+    val content = client.post<HttpResponse> {
+      body = mapper.serialize(request)
+      contentType(ContentType.Application.Json)
+      url(httpUrl)
+      for (element in requestHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .readText()
+
+    val result = mapper.deserialize(content, GraphqlQueryResult::class)
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw GraphqlException("GraphQL query failed", request, it)
+    }
+    return result.data ?: throw GraphqlException(
+          "GraphQL query completes successfully but returns no data",
+          request
+        )
+  }
+
+  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+      MyMutationDto {
+    val request = GraphqlRequest(query, variables)
+    listener(request)
+
+    val content = client.post<HttpResponse> {
+      body = mapper.serialize(request)
+      contentType(ContentType.Application.Json)
+      url(httpUrl)
+      for (element in requestHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .readText()
+
+    val result = mapper.deserialize(content, GraphqlMutationResult::class)
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw GraphqlException("GraphQL mutation failed", request, it)
+    }
+    return result.data ?: throw GraphqlException(
+          "GraphQL mutation completes successfully but returns no data",
+          request
+        )
+  }
+
+  public override suspend fun executeSubscription(
+    query: String,
+    variables: Map<String, Any?>,
+    block: suspend GraphqlReceiver<MySubscriptionDto>.() -> Unit
+  ): Unit {
+    client.ws(
+      webSocketUrl,
+      request = {
+        requestHeaders.forEach { (key, value) ->
+          headers[key] = value
+        }
+      }
+    ) {
+      var initPayload: Map<String, Any?>? = subscriptionPayload
+      if (httpAuthorizationTokenHeader in requestHeaders) {
+        if (initPayload == null) {
+          initPayload = mapOf()
+        }
+
+        if (webSocketAuthorizationTokenHeader !in initPayload) {
+          @Suppress("SuspiciousCollectionReassignment")
+          initPayload += mapOf(webSocketAuthorizationTokenHeader to
+              requestHeaders[httpAuthorizationTokenHeader])
+        }
+      }
+
+      val request = GraphqlRequest(query, variables)
+      listener(request)
+
+      executeSubscriptionImpl(initPayload, request, block)
+    }
+  }
+
+  protected open suspend fun WebSocketSession.executeSubscriptionImpl(
+    initPayload: Map<String, Any?>?,
+    request: GraphqlRequest,
+    block: suspend GraphqlReceiver<MySubscriptionDto>.() -> Unit
+  ): Unit {
+    sendMessage(GraphqlMessageConnectionInit(initPayload))
+    try {
+      while (true) {
+        when (val reply = receiveMessage()) {
+          is GraphqlMessageConnectionKeepAlive -> {
+            continue
+          }
+          is GraphqlMessageConnectionAck -> {
+            break
+          }
+          is GraphqlMessageConnectionError -> {
+            throw GraphqlException("""Connection error: ${reply.payload}""", request)
+          }
+          else -> {
+            throw GraphqlException("""Invalid protocol - unexpected reply: $reply""", request)
+          }
+        }
+      }
+
+      val subscriptionId = idGenerator()
+      sendMessage(GraphqlMessageStart(subscriptionId, request))
+
+      val receiver = GraphqlReceiver<MySubscriptionDto> {
+        while (true) {
+          when (val reply = receiveMessage()) {
+            is GraphqlMessageData -> {
+              require(reply.id == subscriptionId)
+
+              val result = reply.payload
+              result.errors?.takeIf { it.isNotEmpty() }?.let {
+                throw GraphqlException("GraphQL subscription failed", request, it)
+              }
+              return@GraphqlReceiver result.data ?: throw GraphqlException(
+                    "GraphQL subscription completes successfully but returns no data",
+                    request
+                  )
+            }
+            is GraphqlMessageError -> {
+              require(reply.id == subscriptionId)
+              throw GraphqlException("Subscription failed", request, reply.payload.errors)
+            }
+            is GraphqlMessageComplete -> {
+              require(reply.id == subscriptionId)
+              throw CancellationException("Subscription finished")
+            }
+            is GraphqlMessageConnectionKeepAlive -> {
+              continue
+            }
+            else -> {
+              throw GraphqlException("""Invalid protocol - unexpected reply: $reply""", request)
+            }
+          }
+        }
+
+        @Suppress("UNREACHABLE_CODE")
+        error("Invalid algorithm")
+      }
+
+      try {
+        block.invoke(receiver)
+      }
+      finally {
+        sendMessage(GraphqlMessageStop(subscriptionId))
+      }
+    }
+    finally {
+      sendMessage(GraphqlMessageConnectionTerminate())
+    }
+  }
+
+  protected open suspend fun WebSocketSession.sendMessage(message: GraphqlClientMessage): Unit {
+    val content = mapper.serialize(message)
+    send(content)
+  }
+
+  protected open suspend fun WebSocketSession.receiveMessage(): GraphqlServerMessage {
+    val content = (incoming.receive() as Frame.Text).readFrameText()
+    return mapper.deserialize(content, GraphqlServerMessage::class)
+  }
+}

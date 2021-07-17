@@ -1,0 +1,23 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.resolver
+
+import graphql.kickstart.tools.GraphQLMutationResolver
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyInput
+import kotlin.Boolean
+import kotlin.Suppress
+
+public interface GraphqlMyMutationResolver : GraphQLMutationResolver {
+  public suspend fun insert(`data`: MyInput): Boolean
+}

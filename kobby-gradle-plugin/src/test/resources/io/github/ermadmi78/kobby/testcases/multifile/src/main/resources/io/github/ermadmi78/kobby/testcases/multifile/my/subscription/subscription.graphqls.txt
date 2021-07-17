@@ -1,0 +1,8 @@
+type MySubscription {
+    onInsert(pattern: String): MyEvent!
+}
+
+type MyEvent {
+    id: ID!
+    name: String
+}

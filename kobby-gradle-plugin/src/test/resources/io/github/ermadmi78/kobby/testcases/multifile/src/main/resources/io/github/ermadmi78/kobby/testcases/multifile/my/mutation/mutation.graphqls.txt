@@ -1,0 +1,8 @@
+type MyMutation {
+    insert(data: MyInput!): Boolean!
+}
+
+input MyInput {
+    id: ID!
+    name: String
+}

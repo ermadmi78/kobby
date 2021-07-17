@@ -1,0 +1,63 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "MySubscription")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = MySubscriptionDto::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class MySubscriptionDto @JsonCreator constructor(
+  public val onInsert: MyEventDto? = null
+)
+
+public fun MySubscriptionDto(block: MySubscriptionDtoBuilder.() -> Unit): MySubscriptionDto {
+  // MySubscriptionDto builder DSL
+  return MySubscriptionDtoBuilder().apply(block).let {
+    MySubscriptionDto(
+          it.onInsert
+        )
+  }
+}
+
+public fun MySubscriptionDto.copy(block: MySubscriptionDtoBuilder.() -> Unit): MySubscriptionDto {
+  // MySubscriptionDto copy DSL
+  return MySubscriptionDtoBuilder().also {
+    it.onInsert = onInsert
+  }
+  .apply(block).let {
+    MySubscriptionDto(
+          it.onInsert
+        )
+  }
+}
+
+@GraphqlDSL
+public class MySubscriptionDtoBuilder {
+  public var onInsert: MyEventDto? = null
+}

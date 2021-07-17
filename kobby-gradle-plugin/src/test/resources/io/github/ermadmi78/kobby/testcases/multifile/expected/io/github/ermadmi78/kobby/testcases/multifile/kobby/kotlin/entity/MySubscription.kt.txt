@@ -1,0 +1,42 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlContext
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlDSL
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlSubscriber
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface MySubscription : GraphqlContext {
+  public val onInsert: MyEvent
+
+  public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery
+
+  public override suspend fun mutation(__projection: MyMutationProjection.() -> Unit): MyMutation
+
+  public override fun subscription(__projection: MySubscriptionProjection.() -> Unit):
+      GraphqlSubscriber<MySubscription>
+
+  public fun MySubscriptionProjection.__withCurrentProjection(): Unit
+}
+
+@GraphqlDSL
+public interface MySubscriptionProjection {
+  public fun onInsert(pattern: String? = null, __projection: MyEventProjection.() -> Unit): Unit
+
+  public fun __minimize(): Unit {
+  }
+}

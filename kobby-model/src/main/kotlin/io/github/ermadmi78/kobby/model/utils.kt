@@ -1,5 +1,7 @@
 package io.github.ermadmi78.kobby.model
 
+import java.io.File
+
 /**
  * Created on 18.01.2021
  *
@@ -49,3 +51,65 @@ fun String?.isIdentifier(): Boolean {
 
 internal fun <K : Any, V : Any> MutableMap<K, MutableSet<V>>.append(key: K, value: V) =
     computeIfAbsent(key) { mutableSetOf() }.add(value)
+
+object PluginUtils {
+    val File.contextName: String?
+        get() = name
+            .splitToSequence('.')
+            .filter { it.isNotBlank() }
+            .firstOrNull()
+            ?.decapitalize()
+
+    fun String.pathIterator(): Iterator<String> =
+        splitToSequence('/', '\\')
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .iterator()
+
+    fun List<Iterator<String>>.extractCommonPrefix(): Iterator<String> = iterator<String> {
+        while (true) {
+            var element: String? = null
+            for (iterator in this@extractCommonPrefix) {
+                if (!iterator.hasNext()) {
+                    return@iterator
+                }
+
+                val cur = iterator.next()
+                if (element == null) {
+                    element = cur
+                } else if (element != cur) {
+                    return@iterator
+                }
+            }
+
+            if (element == null) {
+                return@iterator
+            }
+
+            yield(element)
+        }
+    }
+
+    fun <T : Any> Iterator<T>.removePrefixOrEmpty(prefix: Iterator<T>): Iterator<T> = iterator {
+        for (prefixElement in prefix) {
+            if (!this@removePrefixOrEmpty.hasNext()) {
+                return@iterator
+            }
+            if (prefixElement != this@removePrefixOrEmpty.next()) {
+                return@iterator
+            }
+        }
+
+        for (element in this@removePrefixOrEmpty) {
+            yield(element)
+        }
+    }
+
+    fun String.forEachPackage(action: (String) -> Unit) =
+        this.splitToSequence('.')
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .forEach(action)
+
+    fun List<String>.toPackageName(): String = joinToString(".") { it }
+}

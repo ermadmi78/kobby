@@ -147,7 +147,6 @@ subprojects {
             }
             val signingKey: String? = System.getenv("GPG_SECRET")
             val signingPassword: String? = System.getenv("GPG_PASSPHRASE")
-            @Suppress("UnstableApiUsage")
             useInMemoryPgpKeys(signingKey, signingPassword)
 
             sign(publishing.publications)

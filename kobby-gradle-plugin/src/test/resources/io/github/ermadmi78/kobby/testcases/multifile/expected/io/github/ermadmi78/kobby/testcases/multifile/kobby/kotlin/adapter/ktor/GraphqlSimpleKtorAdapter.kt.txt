@@ -1,0 +1,94 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.adapter.ktor
+
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlAdapter
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyMutationDto
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyQueryDto
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlException
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMutationResult
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlQueryResult
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlRequest
+import io.ktor.client.HttpClient
+import io.ktor.client.request.post
+import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.collections.Map
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapOf
+import kotlin.let
+import kotlin.takeIf
+
+public open class GraphqlSimpleKtorAdapter(
+  protected val client: HttpClient,
+  protected val url: String? = null,
+  protected val headers: Map<String, String> = mapOf(),
+  protected val listener: (GraphqlRequest) -> Unit = {}
+) : GraphqlAdapter {
+  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
+      MyQueryDto {
+    val request = GraphqlRequest(query, variables)
+    listener(request)
+
+    val result = client.post<GraphqlQueryResult> {
+      body = request
+      contentType(ContentType.Application.Json)
+      this@GraphqlSimpleKtorAdapter.url?.also {
+        url(it)
+      }
+      for (element in this@GraphqlSimpleKtorAdapter.headers) {
+        headers[element.key] = element.value
+      }
+    }
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw GraphqlException("GraphQL query failed", request, it)
+    }
+    return result.data ?: throw GraphqlException(
+          "GraphQL query completes successfully but returns no data",
+          request
+        )
+  }
+
+  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+      MyMutationDto {
+    val request = GraphqlRequest(query, variables)
+    listener(request)
+
+    val result = client.post<GraphqlMutationResult> {
+      body = request
+      contentType(ContentType.Application.Json)
+      this@GraphqlSimpleKtorAdapter.url?.also {
+        url(it)
+      }
+      for (element in this@GraphqlSimpleKtorAdapter.headers) {
+        headers[element.key] = element.value
+      }
+    }
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw GraphqlException("GraphQL mutation failed", request, it)
+    }
+    return result.data ?: throw GraphqlException(
+          "GraphQL mutation completes successfully but returns no data",
+          request
+        )
+  }
+}

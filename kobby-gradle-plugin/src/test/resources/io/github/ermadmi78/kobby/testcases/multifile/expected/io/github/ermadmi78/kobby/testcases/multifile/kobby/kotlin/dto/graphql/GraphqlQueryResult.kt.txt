@@ -1,0 +1,26 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyQueryDto
+import kotlin.Suppress
+import kotlin.collections.List
+
+public data class GraphqlQueryResult(
+  @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+  public val `data`: MyQueryDto? = null,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val errors: List<GraphqlError>? = null
+)

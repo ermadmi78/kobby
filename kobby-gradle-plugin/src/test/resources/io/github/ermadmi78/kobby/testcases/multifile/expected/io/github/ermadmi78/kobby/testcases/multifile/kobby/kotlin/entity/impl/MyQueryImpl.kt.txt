@@ -1,0 +1,137 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlContext
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlSubscriber
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyQueryDto
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyMutation
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyMutationProjection
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyQuery
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyQueryProjection
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyResult
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyResultProjection
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MySubscription
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MySubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.listOf
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+
+internal class MyQueryImpl(
+  internal val __innerContext: GraphqlContext,
+  internal val __innerProjection: MyQueryProjectionImpl,
+  internal val __innerDto: MyQueryDto
+) : MyQuery {
+  public override val find: List<MyResult> by lazy {
+    if (__innerProjection.__innerFind0 == null) {
+      error("Property [find] is not available - add [find] projection to switch on it")
+    }
+    __innerDto.resolveFind(__innerContext, __innerProjection.__innerFind0!!)
+  }
+
+
+  public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MyMutationProjection.() -> Unit): MyMutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: MySubscriptionProjection.() -> Unit):
+      GraphqlSubscriber<MySubscription> = __innerContext.subscription(__projection)
+
+  public override fun MyQueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class MyQueryProjectionImpl : MyQueryProjection {
+  internal var __innerFind0: MyResultProjectionImpl? = null
+
+  internal var __innerFind0Pattern: String? = null
+
+  public override fun find(pattern: String, __projection: MyResultProjection.() -> Unit): Unit {
+    __innerFind0 = MyResultProjectionImpl().apply(__projection)
+    __innerFind0Pattern = pattern
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MyQueryProjection):
+      Unit {
+    if ("find" !in ignore && __innerFind0 != null) {
+      __projection.find(__innerFind0Pattern!!) {
+        this@MyQueryProjectionImpl.__innerFind0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: find
+    if ("find" !in ignore && __innerFind0 != null) {
+      body.append(' ').append("find")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: find.pattern
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFind0Pattern!!
+        body.append("pattern").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of MyResult
+      __innerFind0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun MyQueryDto.buildEntity(__innerContext: GraphqlContext,
+    __innerProjection: MyQueryProjectionImpl): MyQuery = MyQueryImpl(__innerContext,
+    __innerProjection, this)
+
+internal fun MyQueryDto.resolveFind(__innerContext: GraphqlContext,
+    __innerProjection: MyResultProjectionImpl): List<MyResult> = find?.map {
+    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

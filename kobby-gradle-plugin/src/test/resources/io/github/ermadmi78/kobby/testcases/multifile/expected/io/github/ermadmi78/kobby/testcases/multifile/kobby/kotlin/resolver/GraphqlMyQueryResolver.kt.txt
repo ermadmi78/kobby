@@ -1,0 +1,24 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.resolver
+
+import graphql.kickstart.tools.GraphQLQueryResolver
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyResultDto
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+
+public interface GraphqlMyQueryResolver : GraphQLQueryResolver {
+  public suspend fun find(pattern: String): List<MyResultDto>
+}

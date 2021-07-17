@@ -1,0 +1,70 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlDSL
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "MyEvent")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = MyEventDto::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class MyEventDto(
+  public val id: Long? = null,
+  public val name: String? = null
+)
+
+public fun MyEventDto(block: MyEventDtoBuilder.() -> Unit): MyEventDto {
+  // MyEventDto builder DSL
+  return MyEventDtoBuilder().apply(block).let {
+    MyEventDto(
+          it.id,
+          it.name
+        )
+  }
+}
+
+public fun MyEventDto.copy(block: MyEventDtoBuilder.() -> Unit): MyEventDto {
+  // MyEventDto copy DSL
+  return MyEventDtoBuilder().also {
+    it.id = id
+    it.name = name
+  }
+  .apply(block).let {
+    MyEventDto(
+          it.id,
+          it.name
+        )
+  }
+}
+
+@GraphqlDSL
+public class MyEventDtoBuilder {
+  public var id: Long? = null
+
+  public var name: String? = null
+}

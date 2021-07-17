@@ -1,0 +1,8 @@
+type MyQuery {
+    find(pattern: String!): [MyResult!]!
+}
+
+type MyResult {
+    id: ID!
+    name: String
+}

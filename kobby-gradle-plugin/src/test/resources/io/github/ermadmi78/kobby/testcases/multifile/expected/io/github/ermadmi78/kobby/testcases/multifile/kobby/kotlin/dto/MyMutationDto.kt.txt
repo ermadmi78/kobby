@@ -1,0 +1,64 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlDSL
+import kotlin.Boolean
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "MyMutation")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = MyMutationDto::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class MyMutationDto @JsonCreator constructor(
+  public val insert: Boolean? = null
+)
+
+public fun MyMutationDto(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto {
+  // MyMutationDto builder DSL
+  return MyMutationDtoBuilder().apply(block).let {
+    MyMutationDto(
+          it.insert
+        )
+  }
+}
+
+public fun MyMutationDto.copy(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto {
+  // MyMutationDto copy DSL
+  return MyMutationDtoBuilder().also {
+    it.insert = insert
+  }
+  .apply(block).let {
+    MyMutationDto(
+          it.insert
+        )
+  }
+}
+
+@GraphqlDSL
+public class MyMutationDtoBuilder {
+  public var insert: Boolean? = null
+}
