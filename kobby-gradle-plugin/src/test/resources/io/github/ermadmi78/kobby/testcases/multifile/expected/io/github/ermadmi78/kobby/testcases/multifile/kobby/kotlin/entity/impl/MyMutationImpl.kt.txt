@@ -33,6 +33,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
 
 internal class MyMutationImpl(
   internal val __innerContext: GraphqlContext,

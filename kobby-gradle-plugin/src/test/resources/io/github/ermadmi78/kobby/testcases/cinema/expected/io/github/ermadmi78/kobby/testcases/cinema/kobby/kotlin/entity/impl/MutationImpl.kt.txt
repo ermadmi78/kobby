@@ -39,11 +39,13 @@ import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
+import kotlin.apply
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
 
 internal class MutationImpl(
   internal val __innerContext: CinemaContext,

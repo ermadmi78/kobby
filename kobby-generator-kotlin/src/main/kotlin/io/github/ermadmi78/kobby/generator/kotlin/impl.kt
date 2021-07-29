@@ -92,7 +92,11 @@ private fun FileSpecBuilder.buildInterfaceOrUnionEntityBuilder(node: KobbyNode, 
                             "this)"
                 }
             }
-            addStatement("else -> error(%P)", "Invalid algorithm - unexpected dto type: \${this::class.simpleName}")
+            addStatement(
+                "else -> %T(%P)",
+                ClassName("kotlin", "error"),
+                "Invalid algorithm - unexpected dto type: \${this::class.simpleName}"
+            )
         }
     }
 }
@@ -114,19 +118,25 @@ private fun FileSpecBuilder.buildResolvers(node: KobbyNode, layout: KotlinLayout
                     "${impl.projectionPropertyName})"
 
             if (field.type.run { !nullable && list }) {
-                statement(ClassName("kotlin.collections", "listOf")) {
-                    "return " + field.type.expand(field.name, true) { builderCall } + " ?: %T()"
-                }
+                val args = mutableListOf<Any>()
+                val expand = field.type.expand(field.name, true, args) { builderCall }
+                args += ClassName("kotlin.collections", "listOf")
+                addStatement("return $expand ?: %T()", *args.toTypedArray())
             } else {
-                statement {
-                    "return " + field.type.expand(field.name, true) { builderCall } + field.notNullAssertion
-                }
+                val args = mutableListOf<Any>()
+                val expand = field.type.expand(field.name, true, args) { builderCall }
+                addStatement("return ${expand}${field.notNullAssertion}", *args.toTypedArray())
             }
         }
     }
 }
 
-private fun KobbyType.expand(receiver: String, resolveNull: Boolean, block: () -> String): String = buildString {
+private fun KobbyType.expand(
+    receiver: String,
+    resolveNull: Boolean,
+    args: MutableList<Any>,
+    block: () -> String
+): String = buildString {
     append(receiver)
     if (resolveNull) {
         append('?')
@@ -134,7 +144,8 @@ private fun KobbyType.expand(receiver: String, resolveNull: Boolean, block: () -
     append('.')
 
     nestedOrNull?.also {
-        append("map·{ ").append(it.expand("it", it.nullable, block)).append(" }")
+        args += MemberName("kotlin.collections", "map")
+        append("%M·{ ").append(it.expand("it", it.nullable, args, block)).append(" }")
     } ?: append(block())
 }
 
@@ -399,7 +410,11 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 
                 field.lambda?.also {
                     buildParameter(it)
-                    addStatement("${field.innerName} = %T().apply(${it.first})", field.innerClass)
+                    addStatement(
+                        "${field.innerName} = %T().%M(${it.first})",
+                        field.innerClass,
+                        MemberName("kotlin", "apply")
+                    )
                 } ?: addStatement("${field.innerName} = ${!field.isDefault}")
 
                 field.arguments.values.asSequence()
@@ -441,15 +456,17 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 buildParameter(entity.projection.projectionArgument, subObject.projectionLambda)
                 if (node.kind == INTERFACE) {
                     addStatement(
-                        "%T().apply(${entity.projection.projectionArgument}).${impl.repeatProjectionFunName}" +
+                        "%T().%M(${entity.projection.projectionArgument}).${impl.repeatProjectionFunName}" +
                                 "(${impl.interfaceIgnore.first}, ${subObject.innerProjectionOnName})",
-                        subObject.implProjectionClass
+                        subObject.implProjectionClass,
+                        MemberName("kotlin", "apply")
                     )
                 } else {
                     addStatement(
-                        "%T().apply(${entity.projection.projectionArgument}).${impl.repeatProjectionFunName}" +
+                        "%T().%M(${entity.projection.projectionArgument}).${impl.repeatProjectionFunName}" +
                                 "(%T(), ${subObject.innerProjectionOnName})",
                         subObject.implProjectionClass,
+                        MemberName("kotlin", "apply"),
                         ClassName("kotlin.collections", "setOf")
                     )
                 }
@@ -573,7 +590,10 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                                 }
 
                                 addStatement("")
-                                ifFlow("$header.isNotEmpty()") {
+                                ifFlow(
+                                    "$header.%M()",
+                                    MemberName("kotlin.text", "isNotEmpty")
+                                ) {
                                     buildAppendChain(header) { appendLiteral(", ") }
                                 }
                                 buildAppendChain(header) {

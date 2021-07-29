@@ -28,13 +28,16 @@ import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
+import kotlin.apply
 import kotlin.collections.List
 import kotlin.collections.MutableMap
 import kotlin.collections.MutableSet
 import kotlin.collections.Set
 import kotlin.collections.mutableSetOf
 import kotlin.collections.setOf
+import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
 
 internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
   internal val ___innerIgnore: MutableSet<String> = mutableSetOf("id")
