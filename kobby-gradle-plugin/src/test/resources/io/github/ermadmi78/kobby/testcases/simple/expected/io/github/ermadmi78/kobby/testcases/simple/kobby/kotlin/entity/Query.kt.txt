@@ -28,7 +28,7 @@ public interface Query : SimpleContext {
   /**
    *  find all
    */
-  public val all: List<Simple>
+  public val all: List<List<List<Simple>?>>?
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
 

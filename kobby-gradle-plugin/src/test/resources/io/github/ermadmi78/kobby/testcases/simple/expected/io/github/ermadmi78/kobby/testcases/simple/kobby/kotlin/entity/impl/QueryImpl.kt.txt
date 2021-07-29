@@ -33,7 +33,6 @@ import kotlin.apply
 import kotlin.collections.List
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
-import kotlin.collections.listOf
 import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
@@ -45,7 +44,7 @@ internal class QueryImpl(
   internal val __innerProjection: QueryProjectionImpl,
   internal val __innerDto: QueryDto
 ) : Query {
-  public override val all: List<Simple> by lazy {
+  public override val all: List<List<List<Simple>?>>? by lazy {
     if (__innerProjection.__innerAll0 == null) {
       error("Property [all] is not available - add [all] projection to switch on it")
     }
@@ -136,5 +135,5 @@ internal fun QueryDto.buildEntity(__innerContext: SimpleContext,
     this)
 
 internal fun QueryDto.resolveAll(__innerContext: SimpleContext,
-    __innerProjection: SimpleProjectionImpl): List<Simple> = all?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: SimpleProjectionImpl): List<List<List<Simple>?>>? = all?.map { it.map {
+    it?.map { it.buildEntity(__innerContext, __innerProjection) } } }

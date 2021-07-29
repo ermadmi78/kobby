@@ -28,7 +28,7 @@ public data class QueryDto(
   /**
    *  find all
    */
-  public val all: List<SimpleDto>? = null
+  public val all: List<List<List<SimpleDto>?>>? = null
 )
 
 public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {
@@ -60,5 +60,5 @@ public class QueryDtoBuilder {
   /**
    *  find all
    */
-  public var all: List<SimpleDto>? = null
+  public var all: List<List<List<SimpleDto>?>>? = null
 }
