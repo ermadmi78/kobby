@@ -449,7 +449,8 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 }
                 superclass(ClassName("kotlin", "RuntimeException"))
                 addSuperclassConstructorParameter(
-                    "message + (errors?.joinToString(\",\\n  \", \"\\n  \", \"\\n\")·{ it.toString() } ?: \"\")"
+                    "message + (errors?.%M(\",\\n  \", \"\\n  \", \"\\n\")·{ it.toString() } ?: \"\")",
+                    MemberName("kotlin.collections", "joinToString")
                 )
             }
         }
