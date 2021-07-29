@@ -68,6 +68,12 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
 
     if (ktor.compositeEnabled) {
         files += buildFile(ktor.packageName, ktor.compositeName) {
+            val readResponseText = MemberName("io.ktor.client.statement", "readText")
+            addAliasedImport(readResponseText, "readResponseText")
+
+            val readFrameText = MemberName("io.ktor.http.cio.websocket", "readText")
+            addAliasedImport(readFrameText, "readFrameText")
+
             buildClass(ktor.compositeName) {
                 addModifiers(OPEN)
                 addSuperinterface(context.adapterClass)
@@ -147,7 +153,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteQuery,
                     "query",
-                    dto.graphql.queryResultClass
+                    dto.graphql.queryResultClass,
+                    readResponseText
                 )
 
                 buildCompositeQueryOrMutationFun(
@@ -155,7 +162,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteMutation,
                     "mutation",
-                    dto.graphql.mutationResultClass
+                    dto.graphql.mutationResultClass,
+                    readResponseText
                 )
 
                 buildExecuteSubscriptionFun(schema, layout)
@@ -183,27 +191,15 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     returns(dto.graphql.serverMessageClass)
 
                     addStatement(
-                        "val ${ktor.compositeValContent} = (incoming.receive() as %T.Text).readFrameText()",
-                        ClassName("io.ktor.http.cio.websocket", "Frame")
+                        "val ${ktor.compositeValContent} = (incoming.receive() as %T).%M()",
+                        ClassName("io.ktor.http.cio.websocket", "Frame", "Text"),
+                        readFrameText
                     )
                     statement(dto.graphql.serverMessageClass) {
                         "return ${ktor.compositePropertyMapper}" +
                                 ".${context.mapperFunDeserialize}(${ktor.compositeValContent}, %T::class)"
                     }
                 }
-            }
-        }
-
-        files += buildFile(ktor.packageName, "utils") {
-            buildFunction("readFrameText") {
-                addModifiers(INTERNAL)
-                receiver(ClassName("io.ktor.http.cio.websocket", "Frame", "Text"))
-                returns(STRING)
-
-                addStatement(
-                    "return %T()",
-                    ClassName("io.ktor.http.cio.websocket", "readText")
-                )
             }
         }
     }
@@ -275,7 +271,8 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
     layout: KotlinLayout,
     name: String,
     operation: String,
-    graphQlResultClass: TypeName
+    graphQlResultClass: TypeName,
+    readResponseText: MemberName
 ) = with(layout) {
     buildFunction(name) {
         addModifiers(OVERRIDE)
@@ -312,7 +309,7 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
                 addStatement("headers[element.key] = element.value")
             }
         }
-        addStatement(".%T()", ClassName("io.ktor.client.statement", "readText"))
+        addStatement(".%M()", readResponseText)
         addStatement("")
 
         statement(graphQlResultClass) {
