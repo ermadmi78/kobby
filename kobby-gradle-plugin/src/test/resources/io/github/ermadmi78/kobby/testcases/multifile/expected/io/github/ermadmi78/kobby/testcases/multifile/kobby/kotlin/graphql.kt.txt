@@ -32,12 +32,15 @@ import kotlin.NotImplementedError
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
+import kotlin.apply
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import kotlin.collections.mutableMapOf
 import kotlin.collections.setOf
 import kotlin.reflect.KClass
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
 
 public fun graphqlContextOf(adapter: GraphqlAdapter): GraphqlContext = GraphqlContextImpl(adapter)
 

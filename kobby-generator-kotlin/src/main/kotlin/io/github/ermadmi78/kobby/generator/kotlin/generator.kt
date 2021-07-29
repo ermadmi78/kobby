@@ -229,8 +229,8 @@ private fun TypeSpecBuilder.buildContextFunction(
         returns(if (subscription) context.subscriberClass.parameterizedBy(node.entityClass) else node.entityClass)
 
         val projectionRef = entity.projection.projectionArgument.trim('_').decorate(null, "Ref")
-        statement(node.implProjectionClass) {
-            "val $projectionRef = %T().apply(${entity.projection.projectionArgument})"
+        statement(node.implProjectionClass, MemberName("kotlin", "apply")) {
+            "val $projectionRef = %T().%M(${entity.projection.projectionArgument})"
         }
 
         val header = buildFunArgHeader
@@ -251,11 +251,15 @@ private fun TypeSpecBuilder.buildContextFunction(
 
         addStatement("")
         controlFlow(
-            "val $operation = buildString(" +
-                    "${header.first}.length + ${body.first}.length + ${operation.length + 2})"
+            "val $operation = %M(" +
+                    "${header.first}.length + ${body.first}.length + ${operation.length + 2})",
+            MemberName("kotlin.text", "buildString")
         ) {
             buildAppendChain { appendLiteral(operation) }
-            ifFlow("${header.first}.isNotEmpty()") {
+            ifFlow(
+                "${header.first}.%M()",
+                MemberName("kotlin.text", "isNotEmpty")
+            ) {
                 buildAppendChain {
                     appendLiteral('(').appendExactly(header.first).appendLiteral(')')
                 }
