@@ -12,22 +12,41 @@ and Kotlin extension functions.
 
 ```kotlin
 plugins {
-    id("io.github.ermadmi78.kobby") version "1.0.0-beta.09"
+    id("io.github.ermadmi78.kobby") version "1.0.0-beta.10"
 }
 ```
 
+Gradle's usage example see [here](https://github.com/ermadmi78/kobby-gradle-example).
+Kotlin at least version 1.5 is required to compile generated DSL.
+
 ## Maven
 
-Maven plugin is under construction now
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>io.github.ermadmi78</groupId>
+            <artifactId>kobby-maven-plugin</artifactId>
+            <version>1.0.0-beta.10</version>
+            <executions>
+                <execution>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>generate-kotlin</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
+
+Maven usage example see [here](https://github.com/ermadmi78/kobby-maven-example).
+Kotlin at least version 1.5 is required to compile generated DSL.
 
 # License
 
 [Apache License Version 2.0](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
-
-# Usage
-
-Usage example see [here](https://github.com/ermadmi78/kobby-gradle-example).
-Kotlin at least version 1.5 is required to compile generated DSL.
 
 ## Define your GraphQL schema
 
