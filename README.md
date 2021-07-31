@@ -52,7 +52,7 @@ Kotlin at least version 1.5 is required to compile generated DSL.
 
 Put your GraphQL schema in project resources with `graphqls` extension. For example, let define
 [cinema.graphqls](https://github.com/ermadmi78/kobby-gradle-example/blob/main/cinema-api/src/main/resources/io/github/ermadmi78/kobby/cinema/api/cinema.graphqls)
-schema and put it in `resources/io/github/ermadmi78/kobby/cinema/api/`
+schema and put it in `src/main/resources/io/github/ermadmi78/kobby/cinema/api/`
 
 ## Configure Kobby Gradle plugin
 
