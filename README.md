@@ -48,6 +48,10 @@ Kotlin at least version 1.5 is required to compile generated DSL.
 
 [Apache License Version 2.0](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
 
+# Documentation
+
+Documentation see in the project [Wiki](https://github.com/ermadmi78/kobby/wiki) (is in progress now).
+
 ## Define your GraphQL schema
 
 Put your GraphQL schema in project resources with `graphqls` extension. For example, let define
