@@ -98,6 +98,9 @@ Execute `gradle build` command to generate Kotlin DSL. Entry point of DSL will b
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/cinema_api.png)
 
+More about entry point configuration see
+[here](https://github.com/ermadmi78/kobby/wiki/Gradle-DSL-entry-point-configuration).
+
 ## Configure DSL Context
 
 In `cinema.kt` will be placed `cinemaContextOf` builder function, that creates `CinemaContext` - the entry point of
