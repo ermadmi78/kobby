@@ -61,7 +61,7 @@ schema and put it in `src/main/resources/io/github/ermadmi78/kobby/cinema/api/`
 ## Configure Kobby Gradle plugin
 
 * Add Kobby plugin to your `build.gradle.kts`, to generate Kotlin DSL.
-* Configure Kotlin data types for scalars, defined in GraphQL schema (use `kobby` extension in `build.gradle.kts`).
+* Configure Kotlin data types for scalars, defined in GraphQL schema (more about scalar mapping see [here](https://github.com/ermadmi78/kobby/wiki/Gradle-GraphQL-Scalar-Mapping)).
 * Add Jackson dependency to generate Jackson annotations for DTO classes.
 * Add Kotlin plugin to your `build.gradle.kts`, to compile generated DSL.
 
