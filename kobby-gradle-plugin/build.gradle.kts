@@ -1,5 +1,4 @@
-val title = "Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema"
-description = title
+description = "Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema"
 
 dependencies {
     implementation(project(":kobby-generator-kotlin"))
@@ -15,8 +14,11 @@ gradlePlugin {
         create("KobbyPlugin") {
             id = "io.github.ermadmi78.kobby"
             implementationClass = "io.github.ermadmi78.kobby.KobbyPlugin"
-            displayName = title
-            description = title
+            displayName = "Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema"
+            description = "Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema. " +
+                    "The generated DSL supports execution of complex GraphQL queries, mutation and subscriptions " +
+                    "in Kotlin with syntax similar to native GraphQL syntax. Moreover, you can customize " +
+                    "generated DSL by means of GraphQL schema directives and Kotlin extension functions."
         }
     }
 }
@@ -24,7 +26,14 @@ gradlePlugin {
 pluginBundle {
     website = "https://github.com/ermadmi78/kobby"
     vcsUrl = "https://github.com/ermadmi78/kobby"
-    tags = listOf("graphql", "kotlin", "graphql-client", "dsl")
+    tags = listOf(
+        "graphql", "kotlin", "client", "dsl", "graphql-kotlin", "graphql-client",
+        "codegeneration", "code-generation", "codegen", "generate"
+    )
+    description = "Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema. " +
+            "The generated DSL supports execution of complex GraphQL queries, mutation and subscriptions " +
+            "in Kotlin with syntax similar to native GraphQL syntax. Moreover, you can customize " +
+            "generated DSL by means of GraphQL schema directives and Kotlin extension functions."
 }
 
 tasks {
