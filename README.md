@@ -247,6 +247,9 @@ adapter implementation for Spring Boot integration tests.
 
 ## Ok, we are ready to execute GraphQL queries by means of generated Kotlin DSL
 
+You can see more details about the generated GraphQL DSL
+[here](https://github.com/ermadmi78/kobby/wiki/Overview-of-generated-GraphQL-DSL)
+
 ### Simple query
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
