@@ -230,7 +230,7 @@ private fun TypeSpecBuilder.buildContextFunction(
 
         val projectionRef = entity.projection.projectionArgument.trim('_').decorate(null, "Ref")
         statement(node.implProjectionClass, MemberName("kotlin", "apply")) {
-            "val $projectionRef = %T().%M(${entity.projection.projectionArgument})"
+            "val·$projectionRef·=·%T().%M(${entity.projection.projectionArgument})"
         }
 
         val header = buildFunArgHeader
@@ -238,10 +238,10 @@ private fun TypeSpecBuilder.buildContextFunction(
         val arguments = buildFunArgArguments
 
         addStatement("")
-        addStatement("val ${header.first} = %T()", header.second)
-        addStatement("val ${body.first} = %T(64)", body.second)
+        addStatement("val·${header.first}·=·%T()", header.second)
+        addStatement("val·${body.first}·=·%T(64)", body.second)
         addStatement(
-            "val ${arguments.first}: %T = %T()", arguments.second,
+            "val·${arguments.first}:·%T·=·%T()", arguments.second,
             ClassName("kotlin.collections", "mutableMapOf")
         )
         addStatement(
@@ -251,8 +251,8 @@ private fun TypeSpecBuilder.buildContextFunction(
 
         addStatement("")
         controlFlow(
-            "val $operation = %M(" +
-                    "${header.first}.length + ${body.first}.length + ${operation.length + 2})",
+            "val·$operation·=·%M(" +
+                    "${header.first}.length·+·${body.first}.length·+·${operation.length + 2})",
             MemberName("kotlin.text", "buildString")
         ) {
             buildAppendChain { appendLiteral(operation) }
@@ -272,11 +272,11 @@ private fun TypeSpecBuilder.buildContextFunction(
             if (dto.decoration.isNotEmpty()) decorate(dto.decoration) else decorate(null, "Dto")
         }
         if (subscription) {
-            controlFlow("return %T", context.subscriberClass.parameterizedBy(node.entityClass)) {
+            controlFlow("return·%T", context.subscriberClass.parameterizedBy(node.entityClass)) {
                 controlFlow("${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})") {
-                    controlFlow("val receiver = %T", context.receiverClass.parameterizedBy(node.entityClass)) {
+                    controlFlow("val·receiver·=·%T", context.receiverClass.parameterizedBy(node.entityClass)) {
                         statement(node.dtoClass) {
-                            "val $dtoVal: %T = receive()"
+                            "val·$dtoVal:·%T·=·receive()"
                         }
                         statement(ClassName(impl.packageName, node.entityBuilderName), contextImplClass) {
                             "$dtoVal.%T(this@%T, $projectionRef)"
@@ -287,10 +287,10 @@ private fun TypeSpecBuilder.buildContextFunction(
             }
         } else {
             statement(node.dtoClass) {
-                "val $dtoVal: %T = ${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
+                "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
             }
             statement(ClassName(impl.packageName, node.entityBuilderName)) {
-                "return $dtoVal.%T(this, $projectionRef)"
+                "return·$dtoVal.%T(this,·$projectionRef)"
             }
         }
     }

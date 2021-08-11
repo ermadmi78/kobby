@@ -86,14 +86,14 @@ private fun FileSpecBuilder.buildInterfaceOrUnionEntityBuilder(node: KobbyNode, 
         controlFlow("return when(this)") {
             node.subObjects { subObject ->
                 statement(subObject.dtoClass, subObject.implClass) {
-                    "is %T -> %T(" +
+                    "is·%T·->·%T(" +
                             "${impl.contextPropertyName}, " +
                             "${impl.projectionPropertyName}.${subObject.innerProjectionOnName}, " +
                             "this)"
                 }
             }
             addStatement(
-                "else -> %T(%P)",
+                "else·->·%T(%P)",
                 ClassName("kotlin", "error"),
                 "Invalid algorithm - unexpected dto type: \${this::class.simpleName}"
             )
@@ -188,11 +188,11 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 buildParameter(EQUALS_ARG, ANY.nullable())
                 returns(BOOLEAN)
 
-                ifFlowStatement("this === $EQUALS_ARG") {
-                    "return true"
+                ifFlowStatement("this·===·$EQUALS_ARG") {
+                    "return·true"
                 }
-                ifFlowStatement("javaClass != $EQUALS_ARG?.javaClass") {
-                    "return false"
+                ifFlowStatement("javaClass·!=·$EQUALS_ARG?.javaClass") {
+                    "return·false"
                 }
 
                 addStatement("")
@@ -200,18 +200,18 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
                 if (node.primaryKeysCount == 1) {
                     node.firstPrimaryKey().also {
-                        addStatement("return $innerDto.${it.name} == $EQUALS_ARG.$innerDto.${it.name}")
+                        addStatement("return·$innerDto.${it.name}·==·$EQUALS_ARG.$innerDto.${it.name}")
                     }
                 } else {
                     addStatement("")
                     node.primaryKeys {
-                        ifFlowStatement("$innerDto.${it.name} != $EQUALS_ARG.$innerDto.${it.name}") {
-                            "return false"
+                        ifFlowStatement("$innerDto.${it.name}·!=·$EQUALS_ARG.$innerDto.${it.name}") {
+                            "return·false"
                         }
                     }
 
                     addStatement("")
-                    addStatement("return true")
+                    addStatement("return·true")
                 }
             }
 
@@ -221,21 +221,21 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
                 if (node.primaryKeysCount == 1) {
                     node.firstPrimaryKey().also {
-                        addStatement("return $innerDto.${it.name}?.hashCode() ?: 0")
+                        addStatement("return·$innerDto.${it.name}?.hashCode()·?:·0")
                     }
                 } else {
                     var first = true
                     node.primaryKeys {
                         if (first) {
                             first = false
-                            addStatement("var $HASH_CODE_RES = $innerDto.${it.name}?.hashCode() ?: 0")
+                            addStatement("var·$HASH_CODE_RES·=·$innerDto.${it.name}?.hashCode()·?:·0")
                         } else {
                             addStatement(
-                                "$HASH_CODE_RES = 31 * $HASH_CODE_RES + ($innerDto.${it.name}?.hashCode() ?: 0)"
+                                "$HASH_CODE_RES·=·31·*·$HASH_CODE_RES·+·($innerDto.${it.name}?.hashCode()·?:·0)"
                             )
                         }
                     }
-                    addStatement("return $HASH_CODE_RES")
+                    addStatement("return·$HASH_CODE_RES")
                 }
             }
         }
@@ -291,7 +291,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                     val projectionRef = "${impl.projectionPropertyName}.${field.innerName}"
                     buildLazyDelegate {
                         ifFlowStatement(
-                            "$projectionRef == null",
+                            "$projectionRef·==·null",
                             ClassName("kotlin", "error"),
                             field.noProjectionMessage
                         ) { "%T(%S)" }
@@ -305,14 +305,14 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                         if (!field.isRequired) {
                             val ref = "${impl.projectionPropertyName}.${field.innerName}"
                             ifFlowStatement(
-                                if (field.innerIsBoolean) "!$ref" else "$ref == null",
+                                if (field.innerIsBoolean) "!$ref" else "$ref·==·null",
                                 ClassName("kotlin", "error"),
                                 field.noProjectionMessage
                             ) { "%T(%S)" }
                         }
 
                         statement {
-                            "return $innerDto.${field.name}${field.notNullAssertion}"
+                            "return·$innerDto.${field.name}${field.notNullAssertion}"
                         }
                     }
                 }
@@ -438,7 +438,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 
                     if (node.kind == INTERFACE && !field.isDefault) {
                         addStatement("")
-                        addStatement("${impl.interfaceIgnore.first} += %S", field.name)
+                        addStatement("${impl.interfaceIgnore.first}·+=·%S", field.name)
                     }
                 }
             }
@@ -487,9 +487,9 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 
             node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
                 val condition = if (field.innerIsBoolean) "${if (field.isDefault) "!" else ""}${field.innerName}"
-                else "${field.innerName} != null"
+                else "${field.innerName}·!=·null"
 
-                ifFlow("%S !in $ignore && $condition", field.name) {
+                ifFlow("%S·!in·$ignore && $condition", field.name) {
                     var args = field.arguments.values.asSequence()
                         .filter { !field.isSelection || !it.isInitialized }
                         .joinToString {
@@ -548,9 +548,9 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             addStatement("")
             node.fields { field ->
                 val fieldCondition = when {
-                    field.isRequired -> "%S !in $ignore"
-                    field.innerIsBoolean -> "%S !in $ignore && ${field.innerName}"
-                    else -> "%S !in $ignore && ${field.innerName} != null"
+                    field.isRequired -> "%S·!in·$ignore"
+                    field.innerIsBoolean -> "%S·!in·$ignore && ${field.innerName}"
+                    else -> "%S·!in·$ignore && ${field.innerName}·!=·null"
                 }
                 addComment("Field: ${field.name}")
                 ifFlow(fieldCondition, field.name) {
@@ -558,7 +558,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 
                     // build arguments
                     if (field.arguments.isNotEmpty()) {
-                        addStatement("var counter = 0")
+                        addStatement("var·counter·=·0")
                         val addBracketsExpression: String = field.arguments.values.let { args ->
                             if (args.any { !it.isInitialized }) "true"
                             else args.asSequence()
@@ -566,9 +566,9 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                                     require(arg.isInitialized) { "Invalid algorithm" }
                                     if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
                                 }
-                                .joinToString(" || ") { "$it != null" }
+                                .joinToString(" || ") { "$it·!=·null" }
                         }
-                        addStatement("val addBrackets = $addBracketsExpression")
+                        addStatement("val·addBrackets·=·$addBracketsExpression")
                         ifFlow("addBrackets") {
                             buildAppendChain(body) { appendLiteral('(') }
                         }
@@ -576,11 +576,11 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                         field.arguments { arg ->
                             val argName = if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
                             addComment("Argument: ${field.name}.${arg.name}")
-                            ifFlow(if (arg.isInitialized) "$argName != null" else "true") {
-                                ifFlow("counter++ > 0") {
+                            ifFlow(if (arg.isInitialized) "$argName·!=·null" else "true") {
+                                ifFlow("counter++·>·0") {
                                     buildAppendChain(body) { appendLiteral(", ") }
                                 }
-                                addStatement("val arg = %S + $arguments.size", argPrefix)
+                                addStatement("val·arg·=·%S·+·$arguments.size", argPrefix)
                                 addStatement("$arguments[arg] = $argName!!")
                                 buildAppendChain(body) {
                                     appendLiteral(arg.name)
@@ -632,7 +632,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 
                 buildAppendChain(body) { spaceAppendLiteral("__typename") }
                 addStatement("")
-                addStatement("val $subBody = %T()", buildFunValSubBody.second)
+                addStatement("val·$subBody·=·%T()", buildFunValSubBody.second)
                 addStatement("")
                 node.subObjects { subObject ->
                     addComment("Qualification of: ${subObject.name}")
@@ -655,7 +655,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             ClassName("kotlin.collections", "setOf")
                         )
                     }
-                    ifFlow("$subBody.length > 4") {
+                    ifFlow("$subBody.length·>·4") {
                         buildAppendChain(body) {
                             appendLiteral(" ... on ")
                             appendLiteral(subObject.name)

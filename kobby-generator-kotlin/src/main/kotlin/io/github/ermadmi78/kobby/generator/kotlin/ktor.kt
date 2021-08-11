@@ -176,7 +176,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     buildParameter(ktor.compositePropertyMessage, dto.graphql.clientMessageClass)
 
                     addStatement(
-                        "val ${ktor.compositeValContent} = ${ktor.compositePropertyMapper}" +
+                        "val·${ktor.compositeValContent}·=·${ktor.compositePropertyMapper}" +
                                 ".${context.mapperFunSerialize}(${ktor.compositePropertyMessage})"
                     )
                     addStatement(
@@ -191,12 +191,12 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     returns(dto.graphql.serverMessageClass)
 
                     addStatement(
-                        "val ${ktor.compositeValContent} = (incoming.receive() as %T).%M()",
+                        "val·${ktor.compositeValContent}·=·(incoming.receive()·as·%T).%M()",
                         ClassName("io.ktor.http.cio.websocket", "Frame", "Text"),
                         readFrameText
                     )
                     statement(dto.graphql.serverMessageClass) {
-                        "return ${ktor.compositePropertyMapper}" +
+                        "return·${ktor.compositePropertyMapper}" +
                                 ".${context.mapperFunDeserialize}(${ktor.compositeValContent}, %T::class)"
                     }
                 }
@@ -223,13 +223,13 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
 
         val ktor = adapter.ktor
         statement(dto.graphql.requestClass) {
-            "val ${ktor.simpleValRequest} = %T(${context.adapterArgQuery.first}, ${context.adapterArgVariables.first})"
+            "val·${ktor.simpleValRequest}·=·%T(${context.adapterArgQuery.first}, ${context.adapterArgVariables.first})"
         }
         addStatement("${ktor.simplePropertyListener}(${ktor.simpleValRequest})")
         addStatement("")
 
         controlFlow(
-            "val ${ktor.simpleValResult} = ${ktor.simplePropertyClient}.%T<%T>",
+            "val·${ktor.simpleValResult}·=·${ktor.simplePropertyClient}.%T<%T>",
             ClassName("io.ktor.client.request", "post"),
             graphQlResultClass
         ) {
@@ -242,8 +242,8 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
             controlFlow("this@%T.url?.%T", ktor.simpleClass, Kotlin.also) {
                 addStatement("%T(it)", ClassName("io.ktor.client.request", "url"))
             }
-            controlFlow("for (element in this@%T.${ktor.simplePropertyHeaders})", ktor.simpleClass) {
-                addStatement("headers[element.key] = element.value")
+            controlFlow("for (element·in·this@%T.${ktor.simplePropertyHeaders})", ktor.simpleClass) {
+                addStatement("headers[element.key]·=·element.value")
             }
         }
         addStatement("")
@@ -259,7 +259,7 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
             )
         }
         addStatement(
-            "return ${ktor.simpleValResult}.data ?: throw·%T(\n⇥%S,\n${ktor.simpleValRequest}⇤\n)",
+            "return·${ktor.simpleValResult}.data ?: throw·%T(\n⇥%S,\n${ktor.simpleValRequest}⇤\n)",
             dto.graphql.exceptionClass,
             "GraphQL $operation completes successfully but returns no data"
         )
@@ -283,14 +283,14 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
 
         val ktor = adapter.ktor
         statement(dto.graphql.requestClass) {
-            "val ${ktor.compositeValRequest} = " +
+            "val·${ktor.compositeValRequest}·=·" +
                     "%T(${context.adapterArgQuery.first}, ${context.adapterArgVariables.first})"
         }
         addStatement("${ktor.compositePropertyListener}(${ktor.compositeValRequest})")
         addStatement("")
 
         controlFlow(
-            "val ${ktor.compositeValContent} = ${ktor.compositePropertyClient}.%T<%T>",
+            "val·${ktor.compositeValContent}·=·${ktor.compositePropertyClient}.%T<%T>",
             ClassName("io.ktor.client.request", "post"),
             ClassName("io.ktor.client.statement", "HttpResponse")
         ) {
@@ -305,15 +305,15 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
             statement(ClassName("io.ktor.client.request", "url")) {
                 "%T(${ktor.compositePropertyHttpUrl})"
             }
-            controlFlow("for (element in ${ktor.compositePropertyRequestHeaders})") {
-                addStatement("headers[element.key] = element.value")
+            controlFlow("for (element·in·${ktor.compositePropertyRequestHeaders})") {
+                addStatement("headers[element.key]·=·element.value")
             }
         }
         addStatement(".%M()", readResponseText)
         addStatement("")
 
         statement(graphQlResultClass) {
-            "val ${ktor.compositeValResult} = " +
+            "val·${ktor.compositeValResult}·=·" +
                     "${ktor.compositePropertyMapper}.${context.mapperFunDeserialize}(" +
                     "${ktor.compositeValContent}, %T::class)"
         }
@@ -330,7 +330,7 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
             )
         }
         addStatement(
-            "return ${ktor.compositeValResult}.data ?: throw·%T(\n⇥%S,\n${ktor.compositeValRequest}⇤\n)",
+            "return·${ktor.compositeValResult}.data ?: throw·%T(\n⇥%S,\n${ktor.compositeValRequest}⇤\n)",
             dto.graphql.exceptionClass,
             "GraphQL $operation completes successfully but returns no data"
         )
@@ -358,14 +358,14 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
             Kotlin.forEach
         ) {
             statement(MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
-                "var ${ktor.compositeValInitPayload}: %T = ${ktor.compositePropertySubscriptionPayload}"
+                "var·${ktor.compositeValInitPayload}:·%T·=·${ktor.compositePropertySubscriptionPayload}"
             }
             controlFlow(
                 "if (${ktor.compositePropertyHttpTokenHeader} " +
                         "%M ${ktor.compositePropertyRequestHeaders})",
                 Kotlin.contains
             ) {
-                controlFlow("if (${ktor.compositeValInitPayload} == null)") {
+                controlFlow("if (${ktor.compositeValInitPayload}·==·null)") {
                     addStatement("${ktor.compositeValInitPayload} = %T()", Kotlin.mapOf)
                 }
                 addStatement("")
@@ -391,7 +391,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
             addStatement("")
 
             statement(dto.graphql.requestClass) {
-                "val ${ktor.compositeValRequest} = " +
+                "val·${ktor.compositeValRequest}·=·" +
                         "%T(${context.adapterArgQuery.first}, ${context.adapterArgVariables.first})"
             }
             addStatement("${ktor.compositePropertyListener}(${ktor.compositeValRequest})")
@@ -435,24 +435,24 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
             initPayload
         }
         controlFlow("try") {
-            controlFlow("while (true)") {
-                controlFlow("when (val $reply = $receiveMessage())") {
-                    controlFlow("is %T ->", message(GQL_CONNECTION_KEEP_ALIVE)) {
+            controlFlow("while·(true)") {
+                controlFlow("when·(val·$reply·=·$receiveMessage())") {
+                    controlFlow("is·%T·->", message(GQL_CONNECTION_KEEP_ALIVE)) {
                         addStatement("continue")
                     }
-                    controlFlow("is %T ->", message(GQL_CONNECTION_ACK)) {
+                    controlFlow("is·%T·->", message(GQL_CONNECTION_ACK)) {
                         addStatement("break")
                     }
-                    controlFlow("is %T ->", message(GQL_CONNECTION_ERROR)) {
+                    controlFlow("is·%T·->", message(GQL_CONNECTION_ERROR)) {
                         addStatement(
-                            "throw %T(%P, $request)",
+                            "throw·%T(%P, $request)",
                             graphql.exceptionClass,
                             "Connection error: \${$reply.payload}"
                         )
                     }
-                    controlFlow("else ->") {
+                    controlFlow("else·->") {
                         addStatement(
-                            "throw %T(%P, $request)",
+                            "throw·%T(%P, $request)",
                             graphql.exceptionClass,
                             "Invalid protocol - unexpected reply: \$$reply"
                         )
@@ -461,20 +461,20 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
             }
 
             addStatement("")
-            addStatement("val $subscriptionId = ${ktor.compositePropertyIdGenerator}()")
+            addStatement("val·$subscriptionId·=·${ktor.compositePropertyIdGenerator}()")
             buildSendMessage(layout, GQL_START) {
                 "$subscriptionId, $request"
             }
             addStatement("")
 
-            controlFlow("val $receiver = %T<%T>", context.receiverClass, schema.subscription.dtoClass) {
-                controlFlow("while (true)") {
-                    controlFlow("when (val $reply = $receiveMessage())") {
-                        controlFlow("is %T ->", message(GQL_DATA)) {
-                            addStatement("%T($reply.id == $subscriptionId)", Kotlin.require)
+            controlFlow("val·$receiver·=·%T<%T>", context.receiverClass, schema.subscription.dtoClass) {
+                controlFlow("while·(true)") {
+                    controlFlow("when·(val·$reply·=·$receiveMessage())") {
+                        controlFlow("is·%T·->", message(GQL_DATA)) {
+                            addStatement("%T($reply.id·==·$subscriptionId)", Kotlin.require)
                             addStatement("")
 
-                            addStatement("val $result = $reply.payload")
+                            addStatement("val·$result·=·$reply.payload")
                             controlFlow(
                                 "$result.errors?.%T·{ it.%T() }?.%T",
                                 Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
@@ -486,26 +486,26 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                                 )
                             }
                             addStatement(
-                                "return@%T $result.data ?: throw·%T(\n⇥%S,\n$request⇤\n)",
+                                "return@%T·$result.data ?: throw·%T(\n⇥%S,\n$request⇤\n)",
                                 context.receiverClass,
                                 graphql.exceptionClass,
                                 "GraphQL subscription completes successfully but returns no data"
                             )
                         }
 
-                        controlFlow("is %T ->", message(GQL_ERROR)) {
-                            addStatement("%T($reply.id == $subscriptionId)", Kotlin.require)
+                        controlFlow("is·%T·->", message(GQL_ERROR)) {
+                            addStatement("%T($reply.id·==·$subscriptionId)", Kotlin.require)
                             addStatement(
-                                "throw %T(%S, $request, $reply.payload.errors)",
+                                "throw·%T(%S, $request, $reply.payload.errors)",
                                 graphql.exceptionClass,
                                 "Subscription failed"
                             )
                         }
 
-                        controlFlow("is %T ->", message(GQL_COMPLETE)) {
-                            addStatement("%T($reply.id == $subscriptionId)", Kotlin.require)
+                        controlFlow("is·%T·->", message(GQL_COMPLETE)) {
+                            addStatement("%T($reply.id·==·$subscriptionId)", Kotlin.require)
                             addStatement(
-                                "throw %T(%S)",
+                                "throw·%T(%S)",
                                 ClassName(
                                     "kotlin.coroutines.cancellation",
                                     "CancellationException"
@@ -514,13 +514,13 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                             )
                         }
 
-                        controlFlow("is %T ->", message(GQL_CONNECTION_KEEP_ALIVE)) {
+                        controlFlow("is·%T·->", message(GQL_CONNECTION_KEEP_ALIVE)) {
                             addStatement("continue")
                         }
 
-                        controlFlow("else ->") {
+                        controlFlow("else·->") {
                             addStatement(
-                                "throw %T(%P, $request)",
+                                "throw·%T(%P, $request)",
                                 graphql.exceptionClass,
                                 "Invalid protocol - unexpected reply: \$$reply"
                             )

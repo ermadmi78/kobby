@@ -57,30 +57,30 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         buildParameter(EQUALS_ARG, ANY.nullable())
                         returns(BOOLEAN)
 
-                        ifFlowStatement("this === $EQUALS_ARG") {
-                            "return true"
+                        ifFlowStatement("this·===·$EQUALS_ARG") {
+                            "return·true"
                         }
-                        ifFlowStatement("javaClass != $EQUALS_ARG?.javaClass") {
-                            "return false"
+                        ifFlowStatement("javaClass·!=·$EQUALS_ARG?.javaClass") {
+                            "return·false"
                         }
 
                         addStatement("")
-                        addStatement("$EQUALS_ARG as %T", node.dtoClass)
+                        addStatement("$EQUALS_ARG·as·%T", node.dtoClass)
 
                         if (node.primaryKeysCount == 1) {
                             node.firstPrimaryKey().also {
-                                addStatement("return ${it.name} == $EQUALS_ARG.${it.name}")
+                                addStatement("return·${it.name}·==·$EQUALS_ARG.${it.name}")
                             }
                         } else {
                             addStatement("")
                             node.primaryKeys {
-                                ifFlowStatement("${it.name} != $EQUALS_ARG.${it.name}") {
-                                    "return false"
+                                ifFlowStatement("${it.name}·!=·$EQUALS_ARG.${it.name}") {
+                                    "return·false"
                                 }
                             }
 
                             addStatement("")
-                            addStatement("return true")
+                            addStatement("return·true")
                         }
                     }
 
@@ -90,19 +90,19 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                         if (node.primaryKeysCount == 1) {
                             node.firstPrimaryKey().also {
-                                addStatement("return ${it.name}?.hashCode() ?: 0")
+                                addStatement("return·${it.name}?.hashCode()·?:·0")
                             }
                         } else {
                             var first = true
                             node.primaryKeys {
                                 if (first) {
                                     first = false
-                                    addStatement("var $HASH_CODE_RES = ${it.name}?.hashCode() ?: 0")
+                                    addStatement("var·$HASH_CODE_RES·=·${it.name}?.hashCode()·?:·0")
                                 } else {
-                                    addStatement("$HASH_CODE_RES = 31 * $HASH_CODE_RES + (${it.name}?.hashCode() ?: 0)")
+                                    addStatement("$HASH_CODE_RES·=·31·*·$HASH_CODE_RES·+·(${it.name}?.hashCode()·?:·0)")
                                 }
                             }
-                            addStatement("return $HASH_CODE_RES")
+                            addStatement("return·$HASH_CODE_RES")
                         }
                     }
                 }
@@ -117,7 +117,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                     addStatement("// ${node.dtoName} builder DSL")
                     controlFlow(
-                        "return %T().%T(block).%T",
+                        "return·%T().%T(block).%T",
                         node.builderClass,
                         ClassName("kotlin", "apply"),
                         ClassName("kotlin", "let")
@@ -135,7 +135,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                     addStatement("//·${node.dtoName}·${dto.builder.copyFun}·DSL")
                     controlFlow(
-                        "return %T().%T",
+                        "return·%T().%T",
                         node.builderClass,
                         ClassName("kotlin", "also")
                     ) {
@@ -280,7 +280,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                     addStatement("// ${node.dtoName} builder DSL")
                     controlFlow(
-                        "return %T().%T(block).%T",
+                        "return·%T().%T(block).%T",
                         node.builderClass,
                         ClassName("kotlin", "apply"),
                         ClassName("kotlin", "let")
@@ -306,7 +306,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                     addStatement("//·${node.dtoName}·${dto.builder.copyFun}·DSL")
                     controlFlow(
-                        "return %T().%T",
+                        "return·%T().%T",
                         node.builderClass,
                         ClassName("kotlin", "also")
                     ) {
