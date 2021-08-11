@@ -12,7 +12,7 @@ and Kotlin extension functions.
 
 ```kotlin
 plugins {
-    id("io.github.ermadmi78.kobby") version "1.0.0-beta.10"
+    id("io.github.ermadmi78.kobby") version "1.0.0-beta.11"
 }
 ```
 
@@ -27,7 +27,7 @@ Kotlin at least version 1.5 is required to compile generated DSL.
         <plugin>
             <groupId>io.github.ermadmi78</groupId>
             <artifactId>kobby-maven-plugin</artifactId>
-            <version>1.0.0-beta.10</version>
+            <version>1.0.0-beta.11</version>
             <executions>
                 <execution>
                     <phase>generate-sources</phase>
