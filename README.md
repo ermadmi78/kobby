@@ -262,7 +262,7 @@ You can see more details about the generated GraphQL DSL
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/subscription.png)
 
-### We can upload complex graph by means of our Kotlin DSL
+### We can download a complex graph of objects by means of our Kotlin DSL
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/complex_query.png)
 
