@@ -2,7 +2,7 @@
 [![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v1.0.0--beta.11-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
 [![Maven Central](https://img.shields.io/badge/Maven%20Central-v1.0.0--beta.11-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
 
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
+[![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)](https://github.com/ermadmi78/kobby/wiki)
 
 Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema. The generated DSL supports execution of complex
 GraphQL queries, mutations and subscriptions in Kotlin with syntax similar to native GraphQL syntax. Moreover, you can
