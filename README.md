@@ -49,10 +49,6 @@ required to compile generated DSL.
 Maven usage example see [here](https://github.com/ermadmi78/kobby-maven-example). Kotlin at least version 1.5 is
 required to compile generated DSL.
 
-### License
-
-[Apache License Version 2.0](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
-
 ### Define your GraphQL schema
 
 Put your GraphQL schema file in the project resources with `graphqls` extension. For example, let define
@@ -221,3 +217,7 @@ You can see more details about GraphQL subscriptions support
 
 You can see more details about GraphQL abstract data types support
 [here](https://github.com/ermadmi78/kobby/wiki/Support-for-GraphQL-Abstract-Data-Types)
+
+### License
+
+[Apache License Version 2.0](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
