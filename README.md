@@ -51,7 +51,7 @@ required to compile generated DSL.
 
 ### Define your GraphQL schema
 
-Put your GraphQL schema in the project resources with `graphqls` extension. For example, let define
+Put your GraphQL schema file in the project resources with `graphqls` extension. For example, let define
 [cinema.graphqls](https://github.com/ermadmi78/kobby-gradle-example/blob/main/cinema-api/src/main/resources/io/github/ermadmi78/kobby/cinema/api/cinema.graphqls)
 schema file and put it in `src/main/resources/io/github/ermadmi78/kobby/cinema/api/`
 
