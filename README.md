@@ -1,3 +1,5 @@
+[![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen)](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
+
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
 
 Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema. The generated DSL supports execution of complex
