@@ -148,9 +148,7 @@ val client = HttpClient {
     }
 }
 
-val context = cinemaContextOf(
-    CinemaSimpleKtorAdapter(client, "http://localhost:8080/graphql")
-)
+val context = cinemaContextOf(CinemaSimpleKtorAdapter(client, "http://localhost:8080/graphql"))
 ```
 
 The `CinemaCompositeKtorAdapter` is more difficult to configure, but it supports all types of GraphQL operations,
