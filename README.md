@@ -94,7 +94,7 @@ dependencies {
 Execute `gradle build` command to generate Kotlin DSL Client. The entry point of the DSL will be placed in
 the `cinema.kt` file (name of the DSL entry point file is the same as the name of GraphQL schema file):
 
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/cinema_api.png)
+[![alt text](https://github.com/ermadmi78/kobby/blob/main/images/cinema_api.png)](https://github.com/ermadmi78/kobby/wiki/Gradle-DSL-entry-point-configuration)
 
 More details about the entry point configuration see
 [here](https://github.com/ermadmi78/kobby/wiki/Gradle-DSL-entry-point-configuration).
@@ -191,29 +191,29 @@ adapter implementation for Spring Boot integration tests.
 
 #### Simple query
 
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
+[![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)](https://github.com/ermadmi78/kobby/wiki/Overview-of-generated-GraphQL-DSL)
 
 You can see more details about GraphQL queries support
 [here](https://github.com/ermadmi78/kobby/wiki/Overview-of-generated-GraphQL-DSL)
 
 #### Simple mutation
 
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/mutation.png)
+[![alt text](https://github.com/ermadmi78/kobby/blob/main/images/mutation.png)](https://github.com/ermadmi78/kobby/wiki/Overview-of-generated-GraphQL-DSL)
 
 #### Simple subscription
 
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/subscription.png)
+[![alt text](https://github.com/ermadmi78/kobby/blob/main/images/subscription.png)](https://github.com/ermadmi78/kobby/wiki/Support-for-GraphQL-subscriptions)
 
 You can see more details about GraphQL subscriptions support
 [here](https://github.com/ermadmi78/kobby/wiki/Support-for-GraphQL-subscriptions)
 
 #### We can download a complex graph of objects by means of our Kotlin DSL
 
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/complex_query.png)
+[![alt text](https://github.com/ermadmi78/kobby/blob/main/images/complex_query.png)](https://github.com/ermadmi78/kobby/wiki/Overview-of-generated-GraphQL-DSL)
 
 #### GraphQL's unions and interfaces are supported too
 
-![alt text](https://github.com/ermadmi78/kobby/blob/main/images/union_query.png)
+[![alt text](https://github.com/ermadmi78/kobby/blob/main/images/union_query.png)](https://github.com/ermadmi78/kobby/wiki/Support-for-GraphQL-Abstract-Data-Types)
 
 You can see more details about GraphQL abstract data types support
 [here](https://github.com/ermadmi78/kobby/wiki/Support-for-GraphQL-Abstract-Data-Types)
