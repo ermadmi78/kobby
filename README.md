@@ -181,10 +181,9 @@ val context = cinemaContextOf(
 )
 ```
 
-Full example of adapters configuration you can see
-[here](https://github.com/ermadmi78/kobby-gradle-example/blob/main/cinema-kotlin-client/src/main/kotlin/io/github/ermadmi78/kobby/cinema/kotlin/client/application.kt)
-. Note that you are not required to use the default adapters. You can write your own adapter implementation. For
-example,
+See [here](https://github.com/ermadmi78/kobby-gradle-example/blob/main/cinema-kotlin-client/src/main/kotlin/io/github/ermadmi78/kobby/cinema/kotlin/client/application.kt)
+full example of adapters configuration. Note that you are not required to use the default adapters. You can write your
+own adapter implementation. For example,
 see [here](https://github.com/ermadmi78/kobby-gradle-example/blob/main/cinema-server/src/test/kotlin/io/github/ermadmi78/kobby/cinema/server/CinemaTestAdapter.kt)
 adapter implementation for Spring Boot integration tests.
 
