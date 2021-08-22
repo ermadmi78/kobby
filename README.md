@@ -1,5 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen)](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
 [![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v1.0.0--beta.11-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
+[![Maven Central](https://img.shields.io/badge/Maven%20Central-v1.0.0--beta.11-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
 
 ![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)
 
