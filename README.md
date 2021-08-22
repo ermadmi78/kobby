@@ -114,8 +114,9 @@ More details about the DSL context see
 
 We have to pass instance of the `CinemaAdapter` interface to the `cinemaContextOf` function to create instance of
 the `CinemaContext` interface. By default, Kobby does not generate any adapter implementations. But we can ask Kobby to
-generate default [Ktor](https://ktor.io/) implementations of the `CinemaAdapter` interface. To do this just
-add `io.ktor:ktor-client-cio` dependency to you project:
+generate default [Ktor](https://ktor.io/) implementations of the `CinemaAdapter` interface.
+
+To do this just add `io.ktor:ktor-client-cio` dependency to you project:
 
 ```kotlin
 val jacksonVersion: String by project
