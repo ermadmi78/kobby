@@ -1,0 +1,118 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.en
+
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxDSLPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+import my.root.dto1.EPrefGenderEPost
+import my.root.dto1.EPrefGenreEPost
+
+public interface PrefEnCountryPostEn : PrefCtxContextPostCtx, PrefEnEntityPostEn {
+  public override val id: Long
+
+  public override val fields: String
+
+  public val name: String
+
+  public val film: PrefEnFilmPostEn?
+
+  public val films: List<PrefEnFilmPostEn>
+
+  public val actor: PrefEnActorPostEn?
+
+  public val actors: List<PrefEnActorPostEn>
+
+  public val native: List<PrefEnNativePostEn>
+
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+
+  public fun PrePrCountryPostPr.withCurrentProjection(): Unit
+}
+
+@PrefCtxDSLPostCtx
+public interface PrePrCountryPostPr : PrePrEntityPostPr {
+  public override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit): Unit
+
+  public fun withoutPrNameWithoutPo(): Unit
+
+  public fun withPrFilmWithPo(id: Long, projection: PrePrFilmPostPr.() -> Unit = {}): Unit
+
+  public fun withPrFilmsWithPo(query: PreQrCountryFilmsPostQr.() -> Unit = {}): Unit
+
+  public fun withPrActorWithPo(id: Long, projection: PrePrActorPostPr.() -> Unit = {}): Unit
+
+  public fun withPrActorsWithPo(query: PreQrCountryActorsPostQr.() -> Unit = {}): Unit
+
+  public fun withPrNativeWithPo(projection: PreQPNativePostQP.() -> Unit = {}): Unit
+
+  public override fun minimize(): Unit {
+    withoutPrNameWithoutPo()
+  }
+}
+
+@PrefCtxDSLPostCtx
+public interface PreSelCountryFilmsPostSel {
+  public var title: String?
+
+  public var genre: EPrefGenreEPost?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Default: 0
+   */
+  public var offset: Int?
+}
+
+@PrefCtxDSLPostCtx
+public interface PreQrCountryFilmsPostQr : PreSelCountryFilmsPostSel, PrePrFilmPostPr
+
+@PrefCtxDSLPostCtx
+public interface PreSelCountryActorsPostSel {
+  public var firstName: String?
+
+  public var lastName: String?
+
+  public var gender: EPrefGenderEPost?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Default: 0
+   */
+  public var offset: Int?
+}
+
+@PrefCtxDSLPostCtx
+public interface PreQrCountryActorsPostQr : PreSelCountryActorsPostSel, PrePrActorPostPr

@@ -1,0 +1,78 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+import kotlin.let
+import my.root.ctx.PrefCtxDSLPostCtx
+
+@JsonTypeName(value = "ActorInput")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = IPrefActorInputIPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class IPrefActorInputIPost(
+  public val firstName: String,
+  public val lastName: String? = null,
+  public val gender: EPrefGenderEPost
+)
+
+public fun IPrefActorInputIPost(block: BPrefIPrefActorInputIPostBPost.() -> Unit):
+    IPrefActorInputIPost {
+  // IPrefActorInputIPost builder DSL
+  return BPrefIPrefActorInputIPostBPost().apply(block).let {
+    IPrefActorInputIPost(
+          it.firstName ?: error("IPrefActorInputIPost: 'firstName' must not be null"),
+          it.lastName,
+          it.gender ?: error("IPrefActorInputIPost: 'gender' must not be null")
+        )
+  }
+}
+
+public fun IPrefActorInputIPost.replicate(block: BPrefIPrefActorInputIPostBPost.() -> Unit):
+    IPrefActorInputIPost {
+  // IPrefActorInputIPost replicate DSL
+  return BPrefIPrefActorInputIPostBPost().also {
+    it.firstName = firstName
+    it.lastName = lastName
+    it.gender = gender
+  }
+  .apply(block).let {
+    IPrefActorInputIPost(
+          it.firstName ?: error("IPrefActorInputIPost: 'firstName' must not be null"),
+          it.lastName,
+          it.gender ?: error("IPrefActorInputIPost: 'gender' must not be null")
+        )
+  }
+}
+
+@PrefCtxDSLPostCtx
+public class BPrefIPrefActorInputIPostBPost {
+  public var firstName: String? = null
+
+  public var lastName: String? = null
+
+  public var gender: EPrefGenderEPost? = null
+}

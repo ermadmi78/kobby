@@ -1,0 +1,78 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+import kotlin.let
+import my.root.ctx.PrefCtxDSLPostCtx
+
+@JsonTypeName(value = "FilmInput")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = IPrefFilmInputIPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class IPrefFilmInputIPost(
+  public val title: String,
+  /**
+   * Default: DRAMA
+   */
+  public val genre: EPrefGenreEPost = EPrefGenreEPost.DRAMA
+)
+
+public fun IPrefFilmInputIPost(block: BPrefIPrefFilmInputIPostBPost.() -> Unit):
+    IPrefFilmInputIPost {
+  // IPrefFilmInputIPost builder DSL
+  return BPrefIPrefFilmInputIPostBPost().apply(block).let {
+    IPrefFilmInputIPost(
+          it.title ?: error("IPrefFilmInputIPost: 'title' must not be null"),
+          it.genre
+        )
+  }
+}
+
+public fun IPrefFilmInputIPost.replicate(block: BPrefIPrefFilmInputIPostBPost.() -> Unit):
+    IPrefFilmInputIPost {
+  // IPrefFilmInputIPost replicate DSL
+  return BPrefIPrefFilmInputIPostBPost().also {
+    it.title = title
+    it.genre = genre
+  }
+  .apply(block).let {
+    IPrefFilmInputIPost(
+          it.title ?: error("IPrefFilmInputIPost: 'title' must not be null"),
+          it.genre
+        )
+  }
+}
+
+@PrefCtxDSLPostCtx
+public class BPrefIPrefFilmInputIPostBPost {
+  public var title: String? = null
+
+  /**
+   * Default: DRAMA
+   */
+  public var genre: EPrefGenreEPost = EPrefGenreEPost.DRAMA
+}

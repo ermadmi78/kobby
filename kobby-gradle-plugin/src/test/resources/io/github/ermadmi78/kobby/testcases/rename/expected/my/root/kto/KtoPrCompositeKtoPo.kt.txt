@@ -1,0 +1,249 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.kto
+
+import io.ktor.client.HttpClient
+import io.ktor.client.features.websocket.ws
+import io.ktor.client.request.post
+import io.ktor.client.request.url
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.cio.websocket.Frame
+import io.ktor.http.cio.websocket.WebSocketSession
+import io.ktor.http.cio.websocket.send
+import io.ktor.http.contentType
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.Map
+import kotlin.collections.contains
+import kotlin.collections.forEach
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapOf
+import kotlin.collections.plus
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.error
+import kotlin.let
+import kotlin.random.Random
+import kotlin.require
+import kotlin.takeIf
+import kotlin.to
+import my.root.ctx.PrefCtxAdapterPostCtx
+import my.root.ctx.PrefCtxMapperPostCtx
+import my.root.ctx.PrefCtxReceiverPostCtx
+import my.root.dto1.DPrefMyMutationDPost
+import my.root.dto1.DPrefMyQueryDPost
+import my.root.dto1.DPrefMySubscriptionDPost
+import my.root.dto1.gr_ql.GPrefClientMessageGPost
+import my.root.dto1.gr_ql.GPrefExceptionGPost
+import my.root.dto1.gr_ql.GPrefMessageCompleteGPost
+import my.root.dto1.gr_ql.GPrefMessageConnectionAckGPost
+import my.root.dto1.gr_ql.GPrefMessageConnectionErrorGPost
+import my.root.dto1.gr_ql.GPrefMessageConnectionInitGPost
+import my.root.dto1.gr_ql.GPrefMessageConnectionKeepAliveGPost
+import my.root.dto1.gr_ql.GPrefMessageConnectionTerminateGPost
+import my.root.dto1.gr_ql.GPrefMessageDataGPost
+import my.root.dto1.gr_ql.GPrefMessageErrorGPost
+import my.root.dto1.gr_ql.GPrefMessageStartGPost
+import my.root.dto1.gr_ql.GPrefMessageStopGPost
+import my.root.dto1.gr_ql.GPrefMutationResultGPost
+import my.root.dto1.gr_ql.GPrefQueryResultGPost
+import my.root.dto1.gr_ql.GPrefRequestGPost
+import my.root.dto1.gr_ql.GPrefServerMessageGPost
+import io.ktor.client.statement.readText as readResponseText
+import io.ktor.http.cio.websocket.readText as readFrameText
+
+public open class KtoPrCompositeKtoPo(
+  protected val client: HttpClient,
+  protected val httpUrl: String,
+  protected val webSocketUrl: String,
+  protected val mapper: PrefCtxMapperPostCtx,
+  protected val requestHeaders: Map<String, String> = mapOf(),
+  protected val subscriptionPayload: Map<String, Any?>? = null,
+  protected val httpAuthorizationTokenHeader: String = "Authorization",
+  protected val webSocketAuthorizationTokenHeader: String = "authToken",
+  protected val idGenerator: () -> String = { Random.nextLong().toString() },
+  protected val listener: (GPrefRequestGPost) -> Unit = {}
+) : PrefCtxAdapterPostCtx {
+  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
+      DPrefMyQueryDPost {
+    val request = GPrefRequestGPost(query, variables)
+    listener(request)
+
+    val content = client.post<HttpResponse> {
+      body = mapper.serialize(request)
+      contentType(ContentType.Application.Json)
+      url(httpUrl)
+      for (element in requestHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .readResponseText()
+
+    val result = mapper.deserialize(content, GPrefQueryResultGPost::class)
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw GPrefExceptionGPost("GraphQL query failed", request, it)
+    }
+    return result.data ?: throw GPrefExceptionGPost(
+          "GraphQL query completes successfully but returns no data",
+          request
+        )
+  }
+
+  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+      DPrefMyMutationDPost {
+    val request = GPrefRequestGPost(query, variables)
+    listener(request)
+
+    val content = client.post<HttpResponse> {
+      body = mapper.serialize(request)
+      contentType(ContentType.Application.Json)
+      url(httpUrl)
+      for (element in requestHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .readResponseText()
+
+    val result = mapper.deserialize(content, GPrefMutationResultGPost::class)
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw GPrefExceptionGPost("GraphQL mutation failed", request, it)
+    }
+    return result.data ?: throw GPrefExceptionGPost(
+          "GraphQL mutation completes successfully but returns no data",
+          request
+        )
+  }
+
+  public override suspend fun executeSubscription(
+    query: String,
+    variables: Map<String, Any?>,
+    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit
+  ): Unit {
+    client.ws(
+      webSocketUrl,
+      request = {
+        requestHeaders.forEach { (key, value) ->
+          headers[key] = value
+        }
+      }
+    ) {
+      var initPayload: Map<String, Any?>? = subscriptionPayload
+      if (httpAuthorizationTokenHeader in requestHeaders) {
+        if (initPayload == null) {
+          initPayload = mapOf()
+        }
+
+        if (webSocketAuthorizationTokenHeader !in initPayload) {
+          @Suppress("SuspiciousCollectionReassignment")
+          initPayload += mapOf(webSocketAuthorizationTokenHeader to
+              requestHeaders[httpAuthorizationTokenHeader])
+        }
+      }
+
+      val request = GPrefRequestGPost(query, variables)
+      listener(request)
+
+      executeSubscriptionImpl(initPayload, request, block)
+    }
+  }
+
+  protected open suspend fun WebSocketSession.executeSubscriptionImpl(
+    initPayload: Map<String, Any?>?,
+    request: GPrefRequestGPost,
+    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit
+  ): Unit {
+    sendMessage(GPrefMessageConnectionInitGPost(initPayload))
+    try {
+      while (true) {
+        when (val reply = receiveMessage()) {
+          is GPrefMessageConnectionKeepAliveGPost -> {
+            continue
+          }
+          is GPrefMessageConnectionAckGPost -> {
+            break
+          }
+          is GPrefMessageConnectionErrorGPost -> {
+            throw GPrefExceptionGPost("""Connection error: ${reply.payload}""", request)
+          }
+          else -> {
+            throw GPrefExceptionGPost("""Invalid protocol - unexpected reply: $reply""", request)
+          }
+        }
+      }
+
+      val subscriptionId = idGenerator()
+      sendMessage(GPrefMessageStartGPost(subscriptionId, request))
+
+      val receiver = PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost> {
+        while (true) {
+          when (val reply = receiveMessage()) {
+            is GPrefMessageDataGPost -> {
+              require(reply.id == subscriptionId)
+
+              val result = reply.payload
+              result.errors?.takeIf { it.isNotEmpty() }?.let {
+                throw GPrefExceptionGPost("GraphQL subscription failed", request, it)
+              }
+              return@PrefCtxReceiverPostCtx result.data ?: throw GPrefExceptionGPost(
+                    "GraphQL subscription completes successfully but returns no data",
+                    request
+                  )
+            }
+            is GPrefMessageErrorGPost -> {
+              require(reply.id == subscriptionId)
+              throw GPrefExceptionGPost("Subscription failed", request, reply.payload.errors)
+            }
+            is GPrefMessageCompleteGPost -> {
+              require(reply.id == subscriptionId)
+              throw CancellationException("Subscription finished")
+            }
+            is GPrefMessageConnectionKeepAliveGPost -> {
+              continue
+            }
+            else -> {
+              throw GPrefExceptionGPost("""Invalid protocol - unexpected reply: $reply""", request)
+            }
+          }
+        }
+
+        @Suppress("UNREACHABLE_CODE")
+        error("Invalid algorithm")
+      }
+
+      try {
+        block.invoke(receiver)
+      }
+      finally {
+        sendMessage(GPrefMessageStopGPost(subscriptionId))
+      }
+    }
+    finally {
+      sendMessage(GPrefMessageConnectionTerminateGPost())
+    }
+  }
+
+  protected open suspend fun WebSocketSession.sendMessage(message: GPrefClientMessageGPost): Unit {
+    val content = mapper.serialize(message)
+    send(content)
+  }
+
+  protected open suspend fun WebSocketSession.receiveMessage(): GPrefServerMessageGPost {
+    val content = (incoming.receive() as Frame.Text).readFrameText()
+    return mapper.deserialize(content, GPrefServerMessageGPost::class)
+  }
+}

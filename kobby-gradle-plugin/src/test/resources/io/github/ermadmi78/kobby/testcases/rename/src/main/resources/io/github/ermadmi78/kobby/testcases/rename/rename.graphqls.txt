@@ -1,0 +1,165 @@
+directive @myPrimaryKey on FIELD_DEFINITION
+directive @myRequired on FIELD_DEFINITION
+directive @myDefault on FIELD_DEFINITION
+directive @mySelection on FIELD_DEFINITION
+directive @myResolve on FIELD_DEFINITION
+
+schema {
+    query: MyQuery
+    mutation: MyMutation
+    subscription: MySubscription
+}
+
+type MyQuery {
+    country(id: ID!): Country
+    countries(
+        name: String,
+        limit: Int! = 10,
+    ): [Country!]!
+
+    film(id: ID!): Film
+    films(
+        title: String,
+        genre: Genre,
+        limit: Int! = 10,
+        offset: Int! = 0
+    ): [Film!]! @mySelection
+
+    actor(id: ID!): Actor
+    actors(
+        firstName: String,
+        lastName: String,
+        gender: Gender,
+        limit: Int! = 10,
+    ): [Actor!]! @mySelection
+}
+
+type MyMutation {
+    createCountry(
+        name: String!
+    ): Country!
+
+    createFilm(
+        countryId: ID!,
+        film: FilmInput!
+    ): Film!
+
+    createActor(
+        countryId: ID!,
+        actor: ActorInput!
+    ): Actor!
+
+    associate(
+        filmId: ID!,
+        actorId: ID!
+    ): Boolean!
+
+    tagFilm(
+        filmId: ID!,
+        tagValue: String!
+    ): Boolean!
+
+    tagActor(
+        actorId: ID!,
+        tagValue: String!
+    ): Boolean!
+}
+
+type MySubscription {
+    countryCreated: Country!
+    filmCreated(countryId: ID): Film!
+    actorCreated(countryId: ID): Actor!
+}
+
+interface Entity {
+    id: ID! @myPrimaryKey
+    fields(keys: [String!]): String! @mySelection
+}
+
+type Country implements Entity {
+    id: ID!
+    fields(keys: [String!]): String!
+    name: String! @myDefault
+
+    film(id: ID!): Film
+    films(
+        title: String,
+        genre: Genre,
+        limit: Int! = 10,
+        offset: Int! = 0
+    ): [Film!]! @mySelection
+
+    actor(id: ID!): Actor
+
+    actors(
+        firstName: String,
+        lastName: String,
+        gender: Gender,
+        limit: Int! = 10,
+        offset: Int! = 0
+    ): [Actor!]! @mySelection
+
+    native: [Native!]! @myResolve
+}
+
+type Film implements Entity {
+    id: ID!
+    fields(keys: [String!]): String!
+
+    title: String! @myDefault
+    genre: Genre!
+    countryId: ID! @myRequired
+    country: Country! @myResolve
+
+    actors(
+        firstName: String,
+        lastName: String,
+        gender: Gender,
+        limit: Int! = 10,
+        offset: Int! = 0
+    ): [Actor!]! @mySelection
+}
+
+enum Genre {
+    DRAMA
+    COMEDY
+    THRILLER
+    HORROR
+}
+
+input FilmInput {
+    title: String!
+    genre: Genre! = DRAMA
+}
+
+type Actor implements Entity {
+    id: ID!
+    fields(keys: [String!]): String!
+
+    firstName: String! @myDefault
+    lastName: String @myDefault
+    gender: Gender!
+
+    countryId: ID! @myPrimaryKey
+    country: Country! @myResolve
+
+    films(
+        title: String,
+        genre: Genre,
+        limit: Int! = 10,
+        offset: Int! = 0
+    ): [Film!]! @mySelection
+}
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+input ActorInput {
+    firstName: String!
+    lastName: String
+    gender: Gender!
+}
+
+union Native = Actor | Film

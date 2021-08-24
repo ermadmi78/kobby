@@ -1,0 +1,33 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1.gr_ql
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+
+public data class GPrefErrorGPost(
+  public val message: String,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val locations: List<GPrefErrorSourceLocationGPost>? = null,
+  @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+  public val errorType: GPrefErrorTypeGPost? = null,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val path: List<Any>? = null,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val extensions: Map<String, Any?>? = null
+)

@@ -1,0 +1,512 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.im
+
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+import my.root.dto1.DPrefMyMutationDPost
+import my.root.dto1.IPrefActorInputIPost
+import my.root.dto1.IPrefFilmInputIPost
+import my.root.en.PrePrActorPostPr
+import my.root.en.PrePrCountryPostPr
+import my.root.en.PrePrFilmPostPr
+import my.root.en.PrePrMyMutationPostPr
+import my.root.en.PrePrMyQueryPostPr
+import my.root.en.PrePrMySubscriptionPostPr
+import my.root.en.PrefEnActorPostEn
+import my.root.en.PrefEnCountryPostEn
+import my.root.en.PrefEnFilmPostEn
+import my.root.en.PrefEnMyMutationPostEn
+import my.root.en.PrefEnMyQueryPostEn
+import my.root.en.PrefEnMySubscriptionPostEn
+
+public class PreImMyMutationPostIm(
+  public val innerContextPin: PrefCtxContextPostCtx,
+  public val innerProjectionPin: PreImPrePrMyMutationPostPrPostIm,
+  public val innerDtoPin: DPrefMyMutationDPost
+) : PrefEnMyMutationPostEn {
+  public override val createCountry: PrefEnCountryPostEn by lazy {
+    if (innerProjectionPin.innerCreateCountry0Pin == null) {
+      error("Property [createCountry] is not available - add [withPrCreateCountryWithPo] projection to switch on it")
+    }
+    innerDtoPin.resolveCreateCountry(innerContextPin, innerProjectionPin.innerCreateCountry0Pin!!)
+  }
+
+
+  public override val createFilm: PrefEnFilmPostEn by lazy {
+    if (innerProjectionPin.innerCreateFilm1Pin == null) {
+      error("Property [createFilm] is not available - add [withPrCreateFilmWithPo] projection to switch on it")
+    }
+    innerDtoPin.resolveCreateFilm(innerContextPin, innerProjectionPin.innerCreateFilm1Pin!!)
+  }
+
+
+  public override val createActor: PrefEnActorPostEn by lazy {
+    if (innerProjectionPin.innerCreateActor2Pin == null) {
+      error("Property [createActor] is not available - add [withPrCreateActorWithPo] projection to switch on it")
+    }
+    innerDtoPin.resolveCreateActor(innerContextPin, innerProjectionPin.innerCreateActor2Pin!!)
+  }
+
+
+  public override val associate: Boolean
+    get() {
+      if (!innerProjectionPin.innerAssociate3Pin) {
+        error("Property [associate] is not available - add [withPrAssociateWithPo] projection to switch on it")
+      }
+      return innerDtoPin.associate!!
+    }
+
+  public override val tagFilm: Boolean
+    get() {
+      if (!innerProjectionPin.innerTagFilm4Pin) {
+        error("Property [tagFilm] is not available - add [withPrTagFilmWithPo] projection to switch on it")
+      }
+      return innerDtoPin.tagFilm!!
+    }
+
+  public override val tagActor: Boolean
+    get() {
+      if (!innerProjectionPin.innerTagActor5Pin) {
+        error("Property [tagActor] is not available - add [withPrTagActorWithPo] projection to switch on it")
+      }
+      return innerDtoPin.tagActor!!
+    }
+
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn = innerContextPin.myQuery(projection)
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn = innerContextPin.myMutation(projection)
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> =
+      innerContextPin.mySubscription(projection)
+
+  public override fun PrePrMyMutationPostPr.withCurrentProjection(): Unit {
+    innerProjectionPin._innerRepeatProjectionPin(setOf(), this)
+  }
+}
+
+public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
+  public var innerCreateCountry0Pin: PreImPrePrCountryPostPrPostIm? = null
+
+  public var innerCreateCountry0NamePin: String? = null
+
+  public var innerCreateFilm1Pin: PreImPrePrFilmPostPrPostIm? = null
+
+  public var innerCreateFilm1CountryIdPin: Long? = null
+
+  public var innerCreateFilm1FilmPin: IPrefFilmInputIPost? = null
+
+  public var innerCreateActor2Pin: PreImPrePrActorPostPrPostIm? = null
+
+  public var innerCreateActor2CountryIdPin: Long? = null
+
+  public var innerCreateActor2ActorPin: IPrefActorInputIPost? = null
+
+  public var innerAssociate3Pin: Boolean = false
+
+  public var innerAssociate3FilmIdPin: Long? = null
+
+  public var innerAssociate3ActorIdPin: Long? = null
+
+  public var innerTagFilm4Pin: Boolean = false
+
+  public var innerTagFilm4FilmIdPin: Long? = null
+
+  public var innerTagFilm4TagValuePin: String? = null
+
+  public var innerTagActor5Pin: Boolean = false
+
+  public var innerTagActor5ActorIdPin: Long? = null
+
+  public var innerTagActor5TagValuePin: String? = null
+
+  public override fun withPrCreateCountryWithPo(name: String, projection: PrePrCountryPostPr.() ->
+      Unit): Unit {
+    innerCreateCountry0Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
+    innerCreateCountry0NamePin = name
+  }
+
+  public override fun withPrCreateFilmWithPo(
+    countryId: Long,
+    film: IPrefFilmInputIPost,
+    projection: PrePrFilmPostPr.() -> Unit
+  ): Unit {
+    innerCreateFilm1Pin = PreImPrePrFilmPostPrPostIm().apply(projection)
+    innerCreateFilm1CountryIdPin = countryId
+    innerCreateFilm1FilmPin = film
+  }
+
+  public override fun withPrCreateActorWithPo(
+    countryId: Long,
+    actor: IPrefActorInputIPost,
+    projection: PrePrActorPostPr.() -> Unit
+  ): Unit {
+    innerCreateActor2Pin = PreImPrePrActorPostPrPostIm().apply(projection)
+    innerCreateActor2CountryIdPin = countryId
+    innerCreateActor2ActorPin = actor
+  }
+
+  public override fun withPrAssociateWithPo(filmId: Long, actorId: Long): Unit {
+    innerAssociate3Pin = true
+    innerAssociate3FilmIdPin = filmId
+    innerAssociate3ActorIdPin = actorId
+  }
+
+  public override fun withPrTagFilmWithPo(filmId: Long, tagValue: String): Unit {
+    innerTagFilm4Pin = true
+    innerTagFilm4FilmIdPin = filmId
+    innerTagFilm4TagValuePin = tagValue
+  }
+
+  public override fun withPrTagActorWithPo(actorId: Long, tagValue: String): Unit {
+    innerTagActor5Pin = true
+    innerTagActor5ActorIdPin = actorId
+    innerTagActor5TagValuePin = tagValue
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMyMutationPostPr):
+      Unit {
+    if ("createCountry" !in ignore && innerCreateCountry0Pin != null) {
+      projection.withPrCreateCountryWithPo(innerCreateCountry0NamePin!!) {
+        this@PreImPrePrMyMutationPostPrPostIm.innerCreateCountry0Pin!!._innerRepeatProjectionPin(setOf(),
+            this)
+      }
+    }
+    if ("createFilm" !in ignore && innerCreateFilm1Pin != null) {
+      projection.withPrCreateFilmWithPo(innerCreateFilm1CountryIdPin!!, innerCreateFilm1FilmPin!!) {
+        this@PreImPrePrMyMutationPostPrPostIm.innerCreateFilm1Pin!!._innerRepeatProjectionPin(setOf(),
+            this)
+      }
+    }
+    if ("createActor" !in ignore && innerCreateActor2Pin != null) {
+      projection.withPrCreateActorWithPo(innerCreateActor2CountryIdPin!!,
+          innerCreateActor2ActorPin!!) {
+        this@PreImPrePrMyMutationPostPrPostIm.innerCreateActor2Pin!!._innerRepeatProjectionPin(setOf(),
+            this)
+      }
+    }
+    if ("associate" !in ignore && innerAssociate3Pin) {
+      projection.withPrAssociateWithPo(innerAssociate3FilmIdPin!!, innerAssociate3ActorIdPin!!)
+    }
+    if ("tagFilm" !in ignore && innerTagFilm4Pin) {
+      projection.withPrTagFilmWithPo(innerTagFilm4FilmIdPin!!, innerTagFilm4TagValuePin!!)
+    }
+    if ("tagActor" !in ignore && innerTagActor5Pin) {
+      projection.withPrTagActorWithPo(innerTagActor5ActorIdPin!!, innerTagActor5TagValuePin!!)
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public fun _innerBuildPin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: createCountry
+    if ("createCountry" !in ignore && innerCreateCountry0Pin != null) {
+      body.append(' ').append("createCountry")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createCountry.name
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerCreateCountry0NamePin!!
+        body.append("name").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Country
+      innerCreateCountry0Pin!!._innerBuildPin(setOf(), header, body, arguments)
+    }
+
+    // Field: createFilm
+    if ("createFilm" !in ignore && innerCreateFilm1Pin != null) {
+      body.append(' ').append("createFilm")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createFilm.countryId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerCreateFilm1CountryIdPin!!
+        body.append("countryId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: createFilm.film
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerCreateFilm1FilmPin!!
+        body.append("film").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("FilmInput!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Film
+      innerCreateFilm1Pin!!._innerBuildPin(setOf(), header, body, arguments)
+    }
+
+    // Field: createActor
+    if ("createActor" !in ignore && innerCreateActor2Pin != null) {
+      body.append(' ').append("createActor")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createActor.countryId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerCreateActor2CountryIdPin!!
+        body.append("countryId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: createActor.actor
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerCreateActor2ActorPin!!
+        body.append("actor").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ActorInput!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Actor
+      innerCreateActor2Pin!!._innerBuildPin(setOf(), header, body, arguments)
+    }
+
+    // Field: associate
+    if ("associate" !in ignore && innerAssociate3Pin) {
+      body.append(' ').append("associate")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: associate.filmId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerAssociate3FilmIdPin!!
+        body.append("filmId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: associate.actorId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerAssociate3ActorIdPin!!
+        body.append("actorId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+
+    // Field: tagFilm
+    if ("tagFilm" !in ignore && innerTagFilm4Pin) {
+      body.append(' ').append("tagFilm")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: tagFilm.filmId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerTagFilm4FilmIdPin!!
+        body.append("filmId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: tagFilm.tagValue
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerTagFilm4TagValuePin!!
+        body.append("tagValue").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+
+    // Field: tagActor
+    if ("tagActor" !in ignore && innerTagActor5Pin) {
+      body.append(' ').append("tagActor")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: tagActor.actorId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerTagActor5ActorIdPin!!
+        body.append("actorId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: tagActor.tagValue
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerTagActor5TagValuePin!!
+        body.append("tagValue").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+public fun DPrefMyMutationDPost.buildEntity(innerContextPin: PrefCtxContextPostCtx,
+    innerProjectionPin: PreImPrePrMyMutationPostPrPostIm): PrefEnMyMutationPostEn =
+    PreImMyMutationPostIm(innerContextPin, innerProjectionPin, this)
+
+public fun DPrefMyMutationDPost.resolveCreateCountry(innerContextPin: PrefCtxContextPostCtx,
+    innerProjectionPin: PreImPrePrCountryPostPrPostIm): PrefEnCountryPostEn =
+    createCountry?.buildEntity(innerContextPin, innerProjectionPin)!!
+
+public fun DPrefMyMutationDPost.resolveCreateFilm(innerContextPin: PrefCtxContextPostCtx,
+    innerProjectionPin: PreImPrePrFilmPostPrPostIm): PrefEnFilmPostEn =
+    createFilm?.buildEntity(innerContextPin, innerProjectionPin)!!
+
+public fun DPrefMyMutationDPost.resolveCreateActor(innerContextPin: PrefCtxContextPostCtx,
+    innerProjectionPin: PreImPrePrActorPostPrPostIm): PrefEnActorPostEn =
+    createActor?.buildEntity(innerContextPin, innerProjectionPin)!!

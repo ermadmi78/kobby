@@ -1,0 +1,125 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.let
+import my.root.ctx.PrefCtxDSLPostCtx
+
+@JsonTypeName(value = "Country")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = DPrefCountryDPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class DPrefCountryDPost(
+  public override val id: Long? = null,
+  public override val fields: String? = null,
+  public val name: String? = null,
+  public val film: DPrefFilmDPost? = null,
+  public val films: List<DPrefFilmDPost>? = null,
+  public val actor: DPrefActorDPost? = null,
+  public val actors: List<DPrefActorDPost>? = null,
+  public val native: List<DPrefNativeDPost>? = null
+) : DPrefEntityDPost {
+  public override fun equals(other: Any?): Boolean {
+    if (this === other) {
+      return true
+    }
+    if (javaClass != other?.javaClass) {
+      return false
+    }
+
+    other as DPrefCountryDPost
+    return id == other.id
+  }
+
+  public override fun hashCode(): Int = id?.hashCode() ?: 0
+}
+
+public fun DPrefCountryDPost(block: BPrefDPrefCountryDPostBPost.() -> Unit): DPrefCountryDPost {
+  // DPrefCountryDPost builder DSL
+  return BPrefDPrefCountryDPostBPost().apply(block).let {
+    DPrefCountryDPost(
+          it.id,
+          it.fields,
+          it.name,
+          it.film,
+          it.films,
+          it.actor,
+          it.actors,
+          it.native
+        )
+  }
+}
+
+public fun DPrefCountryDPost.replicate(block: BPrefDPrefCountryDPostBPost.() -> Unit):
+    DPrefCountryDPost {
+  // DPrefCountryDPost replicate DSL
+  return BPrefDPrefCountryDPostBPost().also {
+    it.id = id
+    it.fields = fields
+    it.name = name
+    it.film = film
+    it.films = films
+    it.actor = actor
+    it.actors = actors
+    it.native = native
+  }
+  .apply(block).let {
+    DPrefCountryDPost(
+          it.id,
+          it.fields,
+          it.name,
+          it.film,
+          it.films,
+          it.actor,
+          it.actors,
+          it.native
+        )
+  }
+}
+
+@PrefCtxDSLPostCtx
+public class BPrefDPrefCountryDPostBPost {
+  public var id: Long? = null
+
+  public var fields: String? = null
+
+  public var name: String? = null
+
+  public var film: DPrefFilmDPost? = null
+
+  public var films: List<DPrefFilmDPost>? = null
+
+  public var actor: DPrefActorDPost? = null
+
+  public var actors: List<DPrefActorDPost>? = null
+
+  public var native: List<DPrefNativeDPost>? = null
+}

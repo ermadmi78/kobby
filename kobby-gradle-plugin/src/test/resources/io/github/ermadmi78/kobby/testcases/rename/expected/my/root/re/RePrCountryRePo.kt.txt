@@ -1,0 +1,55 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.re
+
+import graphql.kickstart.tools.GraphQLResolver
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.TODO
+import kotlin.collections.List
+import my.root.dto1.DPrefActorDPost
+import my.root.dto1.DPrefCountryDPost
+import my.root.dto1.DPrefFilmDPost
+import my.root.dto1.DPrefNativeDPost
+import my.root.dto1.EPrefGenderEPost
+import my.root.dto1.EPrefGenreEPost
+
+public interface RePrCountryRePo : GraphQLResolver<DPrefCountryDPost> {
+  public suspend fun fields(bean: DPrefCountryDPost, keys: List<String>?): String = TODO("ToDo")
+
+  public suspend fun film(bean: DPrefCountryDPost, id: Long): DPrefFilmDPost? = TODO("ToDo")
+
+  public suspend fun films(
+    bean: DPrefCountryDPost,
+    title: String?,
+    genre: EPrefGenreEPost?,
+    limit: Int,
+    offset: Int
+  ): List<DPrefFilmDPost> = TODO("ToDo")
+
+  public suspend fun actor(bean: DPrefCountryDPost, id: Long): DPrefActorDPost? = TODO("ToDo")
+
+  public suspend fun actors(
+    bean: DPrefCountryDPost,
+    firstName: String?,
+    lastName: String?,
+    gender: EPrefGenderEPost?,
+    limit: Int,
+    offset: Int
+  ): List<DPrefActorDPost> = TODO("ToDo")
+
+  public suspend fun native(bean: DPrefCountryDPost): List<DPrefNativeDPost> = TODO("ToDo")
+}

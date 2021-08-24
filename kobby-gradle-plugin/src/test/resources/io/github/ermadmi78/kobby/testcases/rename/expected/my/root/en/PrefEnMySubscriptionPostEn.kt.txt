@@ -1,0 +1,54 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.en
+
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxDSLPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+
+public interface PrefEnMySubscriptionPostEn : PrefCtxContextPostCtx {
+  public val countryCreated: PrefEnCountryPostEn
+
+  public val filmCreated: PrefEnFilmPostEn
+
+  public val actorCreated: PrefEnActorPostEn
+
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+
+  public fun PrePrMySubscriptionPostPr.withCurrentProjection(): Unit
+}
+
+@PrefCtxDSLPostCtx
+public interface PrePrMySubscriptionPostPr {
+  public fun withPrCountryCreatedWithPo(projection: PrePrCountryPostPr.() -> Unit = {}): Unit
+
+  public fun withPrFilmCreatedWithPo(countryId: Long? = null, projection: PrePrFilmPostPr.() -> Unit
+      = {}): Unit
+
+  public fun withPrActorCreatedWithPo(countryId: Long? = null, projection: PrePrActorPostPr.() ->
+      Unit = {}): Unit
+
+  public fun minimize(): Unit {
+  }
+}

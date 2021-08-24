@@ -1,0 +1,237 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.im
+
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+import my.root.dto1.DPrefMySubscriptionDPost
+import my.root.en.PrePrActorPostPr
+import my.root.en.PrePrCountryPostPr
+import my.root.en.PrePrFilmPostPr
+import my.root.en.PrePrMyMutationPostPr
+import my.root.en.PrePrMyQueryPostPr
+import my.root.en.PrePrMySubscriptionPostPr
+import my.root.en.PrefEnActorPostEn
+import my.root.en.PrefEnCountryPostEn
+import my.root.en.PrefEnFilmPostEn
+import my.root.en.PrefEnMyMutationPostEn
+import my.root.en.PrefEnMyQueryPostEn
+import my.root.en.PrefEnMySubscriptionPostEn
+
+public class PreImMySubscriptionPostIm(
+  public val innerContextPin: PrefCtxContextPostCtx,
+  public val innerProjectionPin: PreImPrePrMySubscriptionPostPrPostIm,
+  public val innerDtoPin: DPrefMySubscriptionDPost
+) : PrefEnMySubscriptionPostEn {
+  public override val countryCreated: PrefEnCountryPostEn by lazy {
+    if (innerProjectionPin.innerCountryCreated0Pin == null) {
+      error("Property [countryCreated] is not available - add [withPrCountryCreatedWithPo] projection to switch on it")
+    }
+    innerDtoPin.resolveCountryCreated(innerContextPin, innerProjectionPin.innerCountryCreated0Pin!!)
+  }
+
+
+  public override val filmCreated: PrefEnFilmPostEn by lazy {
+    if (innerProjectionPin.innerFilmCreated1Pin == null) {
+      error("Property [filmCreated] is not available - add [withPrFilmCreatedWithPo] projection to switch on it")
+    }
+    innerDtoPin.resolveFilmCreated(innerContextPin, innerProjectionPin.innerFilmCreated1Pin!!)
+  }
+
+
+  public override val actorCreated: PrefEnActorPostEn by lazy {
+    if (innerProjectionPin.innerActorCreated2Pin == null) {
+      error("Property [actorCreated] is not available - add [withPrActorCreatedWithPo] projection to switch on it")
+    }
+    innerDtoPin.resolveActorCreated(innerContextPin, innerProjectionPin.innerActorCreated2Pin!!)
+  }
+
+
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn = innerContextPin.myQuery(projection)
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn = innerContextPin.myMutation(projection)
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> =
+      innerContextPin.mySubscription(projection)
+
+  public override fun PrePrMySubscriptionPostPr.withCurrentProjection(): Unit {
+    innerProjectionPin._innerRepeatProjectionPin(setOf(), this)
+  }
+}
+
+public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPostPr {
+  public var innerCountryCreated0Pin: PreImPrePrCountryPostPrPostIm? = null
+
+  public var innerFilmCreated1Pin: PreImPrePrFilmPostPrPostIm? = null
+
+  public var innerFilmCreated1CountryIdPin: Long? = null
+
+  public var innerActorCreated2Pin: PreImPrePrActorPostPrPostIm? = null
+
+  public var innerActorCreated2CountryIdPin: Long? = null
+
+  public override fun withPrCountryCreatedWithPo(projection: PrePrCountryPostPr.() -> Unit): Unit {
+    innerCountryCreated0Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
+  }
+
+  public override fun withPrFilmCreatedWithPo(countryId: Long?, projection: PrePrFilmPostPr.() ->
+      Unit): Unit {
+    innerFilmCreated1Pin = PreImPrePrFilmPostPrPostIm().apply(projection)
+    innerFilmCreated1CountryIdPin = countryId
+  }
+
+  public override fun withPrActorCreatedWithPo(countryId: Long?, projection: PrePrActorPostPr.() ->
+      Unit): Unit {
+    innerActorCreated2Pin = PreImPrePrActorPostPrPostIm().apply(projection)
+    innerActorCreated2CountryIdPin = countryId
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMySubscriptionPostPr):
+      Unit {
+    if ("countryCreated" !in ignore && innerCountryCreated0Pin != null) {
+      projection.withPrCountryCreatedWithPo {
+        this@PreImPrePrMySubscriptionPostPrPostIm.innerCountryCreated0Pin!!._innerRepeatProjectionPin(setOf(),
+            this)
+      }
+    }
+    if ("filmCreated" !in ignore && innerFilmCreated1Pin != null) {
+      projection.withPrFilmCreatedWithPo(innerFilmCreated1CountryIdPin) {
+        this@PreImPrePrMySubscriptionPostPrPostIm.innerFilmCreated1Pin!!._innerRepeatProjectionPin(setOf(),
+            this)
+      }
+    }
+    if ("actorCreated" !in ignore && innerActorCreated2Pin != null) {
+      projection.withPrActorCreatedWithPo(innerActorCreated2CountryIdPin) {
+        this@PreImPrePrMySubscriptionPostPrPostIm.innerActorCreated2Pin!!._innerRepeatProjectionPin(setOf(),
+            this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public fun _innerBuildPin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: countryCreated
+    if ("countryCreated" !in ignore && innerCountryCreated0Pin != null) {
+      body.append(' ').append("countryCreated")
+
+      // Build nested projection of Country
+      innerCountryCreated0Pin!!._innerBuildPin(setOf(), header, body, arguments)
+    }
+
+    // Field: filmCreated
+    if ("filmCreated" !in ignore && innerFilmCreated1Pin != null) {
+      body.append(' ').append("filmCreated")
+      var counter = 0
+      val addBrackets = innerFilmCreated1CountryIdPin != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: filmCreated.countryId
+      if (innerFilmCreated1CountryIdPin != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerFilmCreated1CountryIdPin!!
+        body.append("countryId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Film
+      innerFilmCreated1Pin!!._innerBuildPin(setOf(), header, body, arguments)
+    }
+
+    // Field: actorCreated
+    if ("actorCreated" !in ignore && innerActorCreated2Pin != null) {
+      body.append(' ').append("actorCreated")
+      var counter = 0
+      val addBrackets = innerActorCreated2CountryIdPin != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: actorCreated.countryId
+      if (innerActorCreated2CountryIdPin != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = innerActorCreated2CountryIdPin!!
+        body.append("countryId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Actor
+      innerActorCreated2Pin!!._innerBuildPin(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+public fun DPrefMySubscriptionDPost.buildEntity(innerContextPin: PrefCtxContextPostCtx,
+    innerProjectionPin: PreImPrePrMySubscriptionPostPrPostIm): PrefEnMySubscriptionPostEn =
+    PreImMySubscriptionPostIm(innerContextPin, innerProjectionPin, this)
+
+public fun DPrefMySubscriptionDPost.resolveCountryCreated(innerContextPin: PrefCtxContextPostCtx,
+    innerProjectionPin: PreImPrePrCountryPostPrPostIm): PrefEnCountryPostEn =
+    countryCreated?.buildEntity(innerContextPin, innerProjectionPin)!!
+
+public fun DPrefMySubscriptionDPost.resolveFilmCreated(innerContextPin: PrefCtxContextPostCtx,
+    innerProjectionPin: PreImPrePrFilmPostPrPostIm): PrefEnFilmPostEn =
+    filmCreated?.buildEntity(innerContextPin, innerProjectionPin)!!
+
+public fun DPrefMySubscriptionDPost.resolveActorCreated(innerContextPin: PrefCtxContextPostCtx,
+    innerProjectionPin: PreImPrePrActorPostPrPostIm): PrefEnActorPostEn =
+    actorCreated?.buildEntity(innerContextPin, innerProjectionPin)!!

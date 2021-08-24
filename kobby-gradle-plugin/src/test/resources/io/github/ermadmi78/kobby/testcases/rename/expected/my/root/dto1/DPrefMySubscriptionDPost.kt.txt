@@ -1,0 +1,76 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+import my.root.ctx.PrefCtxDSLPostCtx
+
+@JsonTypeName(value = "MySubscription")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = DPrefMySubscriptionDPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class DPrefMySubscriptionDPost(
+  public val countryCreated: DPrefCountryDPost? = null,
+  public val filmCreated: DPrefFilmDPost? = null,
+  public val actorCreated: DPrefActorDPost? = null
+)
+
+public fun DPrefMySubscriptionDPost(block: BPrefDPrefMySubscriptionDPostBPost.() -> Unit):
+    DPrefMySubscriptionDPost {
+  // DPrefMySubscriptionDPost builder DSL
+  return BPrefDPrefMySubscriptionDPostBPost().apply(block).let {
+    DPrefMySubscriptionDPost(
+          it.countryCreated,
+          it.filmCreated,
+          it.actorCreated
+        )
+  }
+}
+
+public fun DPrefMySubscriptionDPost.replicate(block: BPrefDPrefMySubscriptionDPostBPost.() -> Unit):
+    DPrefMySubscriptionDPost {
+  // DPrefMySubscriptionDPost replicate DSL
+  return BPrefDPrefMySubscriptionDPostBPost().also {
+    it.countryCreated = countryCreated
+    it.filmCreated = filmCreated
+    it.actorCreated = actorCreated
+  }
+  .apply(block).let {
+    DPrefMySubscriptionDPost(
+          it.countryCreated,
+          it.filmCreated,
+          it.actorCreated
+        )
+  }
+}
+
+@PrefCtxDSLPostCtx
+public class BPrefDPrefMySubscriptionDPostBPost {
+  public var countryCreated: DPrefCountryDPost? = null
+
+  public var filmCreated: DPrefFilmDPost? = null
+
+  public var actorCreated: DPrefActorDPost? = null
+}

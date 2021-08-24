@@ -1,0 +1,77 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.en
+
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxDSLPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+import my.root.dto1.IPrefActorInputIPost
+import my.root.dto1.IPrefFilmInputIPost
+
+public interface PrefEnMyMutationPostEn : PrefCtxContextPostCtx {
+  public val createCountry: PrefEnCountryPostEn
+
+  public val createFilm: PrefEnFilmPostEn
+
+  public val createActor: PrefEnActorPostEn
+
+  public val associate: Boolean
+
+  public val tagFilm: Boolean
+
+  public val tagActor: Boolean
+
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+
+  public fun PrePrMyMutationPostPr.withCurrentProjection(): Unit
+}
+
+@PrefCtxDSLPostCtx
+public interface PrePrMyMutationPostPr {
+  public fun withPrCreateCountryWithPo(name: String, projection: PrePrCountryPostPr.() -> Unit =
+      {}): Unit
+
+  public fun withPrCreateFilmWithPo(
+    countryId: Long,
+    film: IPrefFilmInputIPost,
+    projection: PrePrFilmPostPr.() -> Unit = {}
+  ): Unit
+
+  public fun withPrCreateActorWithPo(
+    countryId: Long,
+    actor: IPrefActorInputIPost,
+    projection: PrePrActorPostPr.() -> Unit = {}
+  ): Unit
+
+  public fun withPrAssociateWithPo(filmId: Long, actorId: Long): Unit
+
+  public fun withPrTagFilmWithPo(filmId: Long, tagValue: String): Unit
+
+  public fun withPrTagActorWithPo(actorId: Long, tagValue: String): Unit
+
+  public fun minimize(): Unit {
+  }
+}

@@ -1,0 +1,26 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1.gr_ql
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import kotlin.Suppress
+import kotlin.collections.List
+import my.root.dto1.DPrefMySubscriptionDPost
+
+public data class GPrefSubscriptionResultGPost(
+  @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+  public val `data`: DPrefMySubscriptionDPost? = null,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val errors: List<GPrefErrorGPost>? = null
+)

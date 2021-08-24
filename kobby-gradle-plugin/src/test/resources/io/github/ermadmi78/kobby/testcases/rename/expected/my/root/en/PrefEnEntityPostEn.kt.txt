@@ -1,0 +1,63 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.en
+
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxDSLPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+
+public interface PrefEnEntityPostEn : PrefCtxContextPostCtx {
+  public val id: Long
+
+  public val fields: String
+
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+}
+
+@PrefCtxDSLPostCtx
+public interface PrePrEntityPostPr {
+  public fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit = {}): Unit
+
+  public fun minimize(): Unit {
+  }
+}
+
+@PrefCtxDSLPostCtx
+public interface PreQalEntityPostQal {
+  public fun onPrCountryOnPo(projection: PrePrCountryPostPr.() -> Unit = {}): Unit
+
+  public fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit = {}): Unit
+
+  public fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit = {}): Unit
+}
+
+@PrefCtxDSLPostCtx
+public interface PreQPEntityPostQP : PrePrEntityPostPr, PreQalEntityPostQal
+
+@PrefCtxDSLPostCtx
+public interface PreSelEntityFieldsPostSel {
+  public var keys: List<String>?
+}

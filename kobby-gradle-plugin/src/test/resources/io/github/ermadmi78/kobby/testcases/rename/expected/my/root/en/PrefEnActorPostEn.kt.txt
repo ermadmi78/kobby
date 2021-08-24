@@ -1,0 +1,95 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.en
+
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxDSLPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+import my.root.dto1.EPrefGenderEPost
+import my.root.dto1.EPrefGenreEPost
+
+public interface PrefEnActorPostEn : PrefCtxContextPostCtx, PrefEnEntityPostEn, PrefEnNativePostEn {
+  public override val id: Long
+
+  public override val fields: String
+
+  public val firstName: String
+
+  public val lastName: String?
+
+  public val gender: EPrefGenderEPost
+
+  public val countryId: Long
+
+  public val country: PrefEnCountryPostEn
+
+  public val films: List<PrefEnFilmPostEn>
+
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+
+  public fun PrePrActorPostPr.withCurrentProjection(): Unit
+}
+
+@PrefCtxDSLPostCtx
+public interface PrePrActorPostPr : PrePrEntityPostPr, PrePrNativePostPr {
+  public override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit): Unit
+
+  public fun withoutPrFirstNameWithoutPo(): Unit
+
+  public fun withoutPrLastNameWithoutPo(): Unit
+
+  public fun withPrGenderWithPo(): Unit
+
+  public fun withPrCountryWithPo(projection: PrePrCountryPostPr.() -> Unit = {}): Unit
+
+  public fun withPrFilmsWithPo(query: PreQrActorFilmsPostQr.() -> Unit = {}): Unit
+
+  public override fun minimize(): Unit {
+    withoutPrFirstNameWithoutPo()
+    withoutPrLastNameWithoutPo()
+  }
+}
+
+@PrefCtxDSLPostCtx
+public interface PreSelActorFilmsPostSel {
+  public var title: String?
+
+  public var genre: EPrefGenreEPost?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Default: 0
+   */
+  public var offset: Int?
+}
+
+@PrefCtxDSLPostCtx
+public interface PreQrActorFilmsPostQr : PreSelActorFilmsPostSel, PrePrFilmPostPr

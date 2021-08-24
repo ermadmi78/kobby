@@ -1,0 +1,244 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1.gr_ql
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonSubTypes
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = GPrefMessageConnectionInitGPost::class, name = "connection_init"),
+  JsonSubTypes.Type(value = GPrefMessageStartGPost::class, name = "start"),
+  JsonSubTypes.Type(value = GPrefMessageStopGPost::class, name = "stop"),
+  JsonSubTypes.Type(value = GPrefMessageConnectionTerminateGPost::class, name =
+        "connection_terminate"),
+  JsonSubTypes.Type(value = GPrefMessageConnectionErrorGPost::class, name = "connection_error"),
+  JsonSubTypes.Type(value = GPrefMessageConnectionAckGPost::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = GPrefMessageDataGPost::class, name = "data"),
+  JsonSubTypes.Type(value = GPrefMessageErrorGPost::class, name = "error"),
+  JsonSubTypes.Type(value = GPrefMessageCompleteGPost::class, name = "complete"),
+  JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka")
+)
+public interface GPrefMessageGPost
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = GPrefMessageConnectionInitGPost::class, name = "connection_init"),
+  JsonSubTypes.Type(value = GPrefMessageStartGPost::class, name = "start"),
+  JsonSubTypes.Type(value = GPrefMessageStopGPost::class, name = "stop"),
+  JsonSubTypes.Type(value = GPrefMessageConnectionTerminateGPost::class, name =
+        "connection_terminate")
+)
+public interface GPrefClientMessageGPost
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = GPrefMessageConnectionErrorGPost::class, name = "connection_error"),
+  JsonSubTypes.Type(value = GPrefMessageConnectionAckGPost::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = GPrefMessageDataGPost::class, name = "data"),
+  JsonSubTypes.Type(value = GPrefMessageErrorGPost::class, name = "error"),
+  JsonSubTypes.Type(value = GPrefMessageCompleteGPost::class, name = "complete"),
+  JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka")
+)
+public interface GPrefServerMessageGPost
+
+/**
+ * See GQL_CONNECTION_INIT
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_init")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageConnectionInitGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefMessageConnectionInitGPost @JsonCreator constructor(
+  public val payload: Map<String, Any?>? = null
+) : GPrefMessageGPost, GPrefClientMessageGPost
+
+/**
+ * See GQL_START
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "start")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageStartGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefMessageStartGPost(
+  public val id: String,
+  public val payload: GPrefRequestGPost
+) : GPrefMessageGPost, GPrefClientMessageGPost
+
+/**
+ * See GQL_STOP
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "stop")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageStopGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefMessageStopGPost @JsonCreator constructor(
+  public val id: String
+) : GPrefMessageGPost, GPrefClientMessageGPost
+
+/**
+ * See GQL_CONNECTION_TERMINATE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_terminate")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageConnectionTerminateGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public class GPrefMessageConnectionTerminateGPost : GPrefMessageGPost, GPrefClientMessageGPost
+
+/**
+ * See GQL_CONNECTION_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_error")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageConnectionErrorGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefMessageConnectionErrorGPost @JsonCreator constructor(
+  public val payload: Any? = null
+) : GPrefMessageGPost, GPrefServerMessageGPost
+
+/**
+ * See GQL_CONNECTION_ACK
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_ack")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageConnectionAckGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefMessageConnectionAckGPost @JsonCreator constructor(
+  public val payload: Any? = null
+) : GPrefMessageGPost, GPrefServerMessageGPost
+
+/**
+ * See GQL_DATA
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "data")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageDataGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefMessageDataGPost(
+  public val id: String,
+  public val payload: GPrefSubscriptionResultGPost
+) : GPrefMessageGPost, GPrefServerMessageGPost
+
+/**
+ * See GQL_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "error")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageErrorGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefMessageErrorGPost(
+  public val id: String,
+  public val payload: GPrefErrorResultGPost
+) : GPrefMessageGPost, GPrefServerMessageGPost
+
+/**
+ * See GQL_COMPLETE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "complete")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageCompleteGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefMessageCompleteGPost @JsonCreator constructor(
+  public val id: String
+) : GPrefMessageGPost, GPrefServerMessageGPost
+
+/**
+ * See GQL_CONNECTION_KEEP_ALIVE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ka")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefMessageConnectionKeepAliveGPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public class GPrefMessageConnectionKeepAliveGPost : GPrefMessageGPost, GPrefServerMessageGPost

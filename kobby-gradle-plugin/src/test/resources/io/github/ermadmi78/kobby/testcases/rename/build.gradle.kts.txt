@@ -1,0 +1,151 @@
+import io.github.ermadmi78.kobby.kobby
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    kotlin("jvm") version "testKotlinVersion"
+    id("io.github.ermadmi78.kobby")
+}
+
+kobby {
+    schema {
+        directive {
+            primaryKey = "myPrimaryKey"
+            required = "myRequired"
+            default = "myDefault"
+            selection = "mySelection"
+            resolve = "myResolve"
+        }
+    }
+
+    kotlin {
+        relativePackage = false
+        packageName = "my.root"
+
+        context {
+            packageName = "ctx"
+            name = "myCtx"
+            prefix = "PrefCtx"
+            postfix = "PostCtx"
+            query = "myQuery"
+            mutation = "myMutation"
+            subscription = "mySubscription"
+        }
+
+        dto {
+            packageName = "dto1"
+            prefix = "DPref"
+            postfix = "DPost"
+            enumPrefix = "EPref"
+            enumPostfix = "EPost"
+            inputPrefix = "IPref"
+            inputPostfix = "IPost"
+            applyPrimaryKeys = true
+
+            builder {
+                prefix = "BPref"
+                postfix = "BPost"
+                copyFun = "replicate"
+            }
+
+            graphQL {
+                packageName = "gr_ql"
+                prefix = "GPref"
+                postfix = "GPost"
+            }
+        }
+
+        entity {
+            packageName = "en"
+            prefix = "PrefEn"
+            postfix = "PostEn"
+            withCurrentProjectionFun = "withCurrentProjection"
+
+            projection {
+                projectionPrefix = "PrePr"
+                projectionPostfix = "PostPr"
+                projectionArgument = "projection"
+                withPrefix = "withPr"
+                withPostfix = "WithPo"
+                withoutPrefix = "withoutPr"
+                withoutPostfix = "WithoutPo"
+                minimizeFun = "minimize"
+                qualificationPrefix = "PreQal"
+                qualificationPostfix = "PostQal"
+                qualifiedProjectionPrefix = "PreQP"
+                qualifiedProjectionPostfix = "PostQP"
+                onPrefix = "onPr"
+                onPostfix = "OnPo"
+            }
+
+            selection {
+                selectionPrefix = "PreSel"
+                selectionPostfix = "PostSel"
+                selectionArgument = "selection"
+                queryPrefix = "PreQr"
+                queryPostfix = "PostQr"
+                queryArgument = "query"
+            }
+        }
+
+        impl {
+            packageName = "im"
+            prefix = "PreIm"
+            postfix = "PostIm"
+            internal = false
+            innerPrefix = "inner"
+            innerPostfix = "Pin"
+        }
+
+        adapter {
+            ktor {
+                packageName = "kto"
+                prefix = "KtoPr"
+                postfix = "KtoPo"
+            }
+        }
+
+        resolver {
+            packageName = "re"
+            prefix = "RePr"
+            postfix = "RePo"
+            argument = "bean"
+            toDoMessage = "ToDo"
+        }
+    }
+}
+
+dependencies {
+    // Add this dependency to enable Jackson annotation generation in DTO classes by Kobby
+    compileOnly("com.fasterxml.jackson.core:jackson-annotations:testJacksonVersion")
+
+    // Add this dependency to enable default Ktor adapters generation
+    compileOnly("io.ktor:ktor-client-cio:testKtorVersion")
+
+    // Add this dependency to enable graphql-java-kickstart resolvers generation by Kobby
+    compileOnly("com.graphql-java-kickstart:graphql-java-tools:testKickstartGraphqlJavaToolsVersion")
+
+    // Add this dependency to enable subscription resolver publisher generation
+    compileOnly("org.reactivestreams:reactive-streams:testReactiveStreamsVersion")
+
+    // Add this dependencies to remove warning "Runtime JAR files in the classpath should have the same version"
+    compileOnly(kotlin("stdlib"))
+    compileOnly(kotlin("stdlib-jdk7"))
+    compileOnly(kotlin("reflect"))
+}
+
+tasks {
+    jar {
+        enabled = false
+    }
+}

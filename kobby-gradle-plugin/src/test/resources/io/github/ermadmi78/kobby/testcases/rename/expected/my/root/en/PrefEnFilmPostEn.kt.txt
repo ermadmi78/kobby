@@ -1,0 +1,92 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.en
+
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxDSLPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+import my.root.dto1.EPrefGenderEPost
+import my.root.dto1.EPrefGenreEPost
+
+public interface PrefEnFilmPostEn : PrefCtxContextPostCtx, PrefEnEntityPostEn, PrefEnNativePostEn {
+  public override val id: Long
+
+  public override val fields: String
+
+  public val title: String
+
+  public val genre: EPrefGenreEPost
+
+  public val countryId: Long
+
+  public val country: PrefEnCountryPostEn
+
+  public val actors: List<PrefEnActorPostEn>
+
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+
+  public fun PrePrFilmPostPr.withCurrentProjection(): Unit
+}
+
+@PrefCtxDSLPostCtx
+public interface PrePrFilmPostPr : PrePrEntityPostPr, PrePrNativePostPr {
+  public override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit): Unit
+
+  public fun withoutPrTitleWithoutPo(): Unit
+
+  public fun withPrGenreWithPo(): Unit
+
+  public fun withPrCountryWithPo(projection: PrePrCountryPostPr.() -> Unit = {}): Unit
+
+  public fun withPrActorsWithPo(query: PreQrFilmActorsPostQr.() -> Unit = {}): Unit
+
+  public override fun minimize(): Unit {
+    withoutPrTitleWithoutPo()
+  }
+}
+
+@PrefCtxDSLPostCtx
+public interface PreSelFilmActorsPostSel {
+  public var firstName: String?
+
+  public var lastName: String?
+
+  public var gender: EPrefGenderEPost?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Default: 0
+   */
+  public var offset: Int?
+}
+
+@PrefCtxDSLPostCtx
+public interface PreQrFilmActorsPostQr : PreSelFilmActorsPostSel, PrePrActorPostPr

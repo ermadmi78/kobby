@@ -1,0 +1,94 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.kto
+
+import io.ktor.client.HttpClient
+import io.ktor.client.request.post
+import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.collections.Map
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapOf
+import kotlin.let
+import kotlin.takeIf
+import my.root.ctx.PrefCtxAdapterPostCtx
+import my.root.dto1.DPrefMyMutationDPost
+import my.root.dto1.DPrefMyQueryDPost
+import my.root.dto1.gr_ql.GPrefExceptionGPost
+import my.root.dto1.gr_ql.GPrefMutationResultGPost
+import my.root.dto1.gr_ql.GPrefQueryResultGPost
+import my.root.dto1.gr_ql.GPrefRequestGPost
+
+public open class KtoPrSimpleKtoPo(
+  protected val client: HttpClient,
+  protected val url: String? = null,
+  protected val headers: Map<String, String> = mapOf(),
+  protected val listener: (GPrefRequestGPost) -> Unit = {}
+) : PrefCtxAdapterPostCtx {
+  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
+      DPrefMyQueryDPost {
+    val request = GPrefRequestGPost(query, variables)
+    listener(request)
+
+    val result = client.post<GPrefQueryResultGPost> {
+      body = request
+      contentType(ContentType.Application.Json)
+      this@KtoPrSimpleKtoPo.url?.also {
+        url(it)
+      }
+      for (element in this@KtoPrSimpleKtoPo.headers) {
+        headers[element.key] = element.value
+      }
+    }
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw GPrefExceptionGPost("GraphQL query failed", request, it)
+    }
+    return result.data ?: throw GPrefExceptionGPost(
+          "GraphQL query completes successfully but returns no data",
+          request
+        )
+  }
+
+  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+      DPrefMyMutationDPost {
+    val request = GPrefRequestGPost(query, variables)
+    listener(request)
+
+    val result = client.post<GPrefMutationResultGPost> {
+      body = request
+      contentType(ContentType.Application.Json)
+      this@KtoPrSimpleKtoPo.url?.also {
+        url(it)
+      }
+      for (element in this@KtoPrSimpleKtoPo.headers) {
+        headers[element.key] = element.value
+      }
+    }
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw GPrefExceptionGPost("GraphQL mutation failed", request, it)
+    }
+    return result.data ?: throw GPrefExceptionGPost(
+          "GraphQL mutation completes successfully but returns no data",
+          request
+        )
+  }
+}

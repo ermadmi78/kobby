@@ -1,0 +1,47 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.en
+
+import kotlin.Suppress
+import kotlin.Unit
+import my.root.ctx.PrefCtxContextPostCtx
+import my.root.ctx.PrefCtxDSLPostCtx
+import my.root.ctx.PrefCtxSubscriberPostCtx
+
+public interface PrefEnNativePostEn : PrefCtxContextPostCtx {
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn
+
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+}
+
+@PrefCtxDSLPostCtx
+public interface PrePrNativePostPr {
+  public fun minimize(): Unit {
+  }
+}
+
+@PrefCtxDSLPostCtx
+public interface PreQalNativePostQal {
+  public fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit = {}): Unit
+
+  public fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit = {}): Unit
+}
+
+@PrefCtxDSLPostCtx
+public interface PreQPNativePostQP : PrePrNativePostPr, PreQalNativePostQal

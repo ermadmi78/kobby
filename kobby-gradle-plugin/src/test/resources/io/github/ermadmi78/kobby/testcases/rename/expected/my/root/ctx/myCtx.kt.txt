@@ -1,0 +1,174 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.ctx
+
+import kotlin.Any
+import kotlin.DslMarker
+import kotlin.NotImplementedError
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.mutableMapOf
+import kotlin.collections.setOf
+import kotlin.reflect.KClass
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+import my.root.dto1.DPrefMyMutationDPost
+import my.root.dto1.DPrefMyQueryDPost
+import my.root.dto1.DPrefMySubscriptionDPost
+import my.root.en.PrePrMyMutationPostPr
+import my.root.en.PrePrMyQueryPostPr
+import my.root.en.PrePrMySubscriptionPostPr
+import my.root.en.PrefEnMyMutationPostEn
+import my.root.en.PrefEnMyQueryPostEn
+import my.root.en.PrefEnMySubscriptionPostEn
+import my.root.im.PreImPrePrMyMutationPostPrPostIm
+import my.root.im.PreImPrePrMyQueryPostPrPostIm
+import my.root.im.PreImPrePrMySubscriptionPostPrPostIm
+import my.root.im.buildEntity
+
+public fun prefCtxContextPostCtxOf(adapter: PrefCtxAdapterPostCtx): PrefCtxContextPostCtx =
+    PreImPrefCtxContextPostCtxPostIm(adapter)
+
+public interface PrefCtxContextPostCtx {
+  public suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit): PrefEnMyQueryPostEn
+
+  public suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn
+
+  public fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+}
+
+public fun interface PrefCtxSubscriberPostCtx<T> {
+  public suspend fun subscribe(block: suspend PrefCtxReceiverPostCtx<T>.() -> Unit): Unit
+}
+
+@PrefCtxDSLPostCtx
+public fun interface PrefCtxReceiverPostCtx<out T> {
+  public suspend fun receive(): T
+}
+
+public interface PrefCtxAdapterPostCtx {
+  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): DPrefMyQueryDPost =
+      throw NotImplementedError("Adapter function executeQuery is not implemented")
+
+  public suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+      DPrefMyMutationDPost = throw
+      NotImplementedError("Adapter function executeMutation is not implemented")
+
+  public suspend fun executeSubscription(
+    query: String,
+    variables: Map<String, Any?>,
+    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit
+  ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
+}
+
+private class PreImPrefCtxContextPostCtxPostIm(
+  private val adapter: PrefCtxAdapterPostCtx
+) : PrefCtxContextPostCtx {
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn {
+    val projectionRef = PreImPrePrMyQueryPostPrPostIm().apply(projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef._innerBuildPin(setOf(), header, body, arguments)
+
+    val query = buildString(header.length + body.length + 7) {
+      append("query")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    val DPrefQueryDPost: DPrefMyQueryDPost = adapter.executeQuery(query, arguments)
+    return DPrefQueryDPost.buildEntity(this, projectionRef)
+  }
+
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn {
+    val projectionRef = PreImPrePrMyMutationPostPrPostIm().apply(projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef._innerBuildPin(setOf(), header, body, arguments)
+
+    val mutation = buildString(header.length + body.length + 10) {
+      append("mutation")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    val DPrefMutationDPost: DPrefMyMutationDPost = adapter.executeMutation(mutation, arguments)
+    return DPrefMutationDPost.buildEntity(this, projectionRef)
+  }
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> {
+    val projectionRef = PreImPrePrMySubscriptionPostPrPostIm().apply(projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef._innerBuildPin(setOf(), header, body, arguments)
+
+    val subscription = buildString(header.length + body.length + 14) {
+      append("subscription")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    return PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> {
+      adapter.executeSubscription(subscription, arguments) {
+        val receiver = PrefCtxReceiverPostCtx<PrefEnMySubscriptionPostEn> {
+          val DPrefSubscriptionDPost: DPrefMySubscriptionDPost = receive()
+          DPrefSubscriptionDPost.buildEntity(this@PreImPrefCtxContextPostCtxPostIm, projectionRef)
+        }
+        it.invoke(receiver)
+      }
+    }
+  }
+}
+
+/**
+ * Helper interface for default adapter implementations
+ */
+public interface PrefCtxMapperPostCtx {
+  public fun serialize(`value`: Any): String
+
+  public fun <T : Any> deserialize(content: String, contentType: KClass<T>): T
+}
+
+@DslMarker
+public annotation class PrefCtxDSLPostCtx

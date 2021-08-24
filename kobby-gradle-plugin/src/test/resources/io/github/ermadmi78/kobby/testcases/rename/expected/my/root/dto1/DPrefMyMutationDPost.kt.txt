@@ -1,0 +1,95 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.Boolean
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+import my.root.ctx.PrefCtxDSLPostCtx
+
+@JsonTypeName(value = "MyMutation")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = DPrefMyMutationDPost::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class DPrefMyMutationDPost(
+  public val createCountry: DPrefCountryDPost? = null,
+  public val createFilm: DPrefFilmDPost? = null,
+  public val createActor: DPrefActorDPost? = null,
+  public val associate: Boolean? = null,
+  public val tagFilm: Boolean? = null,
+  public val tagActor: Boolean? = null
+)
+
+public fun DPrefMyMutationDPost(block: BPrefDPrefMyMutationDPostBPost.() -> Unit):
+    DPrefMyMutationDPost {
+  // DPrefMyMutationDPost builder DSL
+  return BPrefDPrefMyMutationDPostBPost().apply(block).let {
+    DPrefMyMutationDPost(
+          it.createCountry,
+          it.createFilm,
+          it.createActor,
+          it.associate,
+          it.tagFilm,
+          it.tagActor
+        )
+  }
+}
+
+public fun DPrefMyMutationDPost.replicate(block: BPrefDPrefMyMutationDPostBPost.() -> Unit):
+    DPrefMyMutationDPost {
+  // DPrefMyMutationDPost replicate DSL
+  return BPrefDPrefMyMutationDPostBPost().also {
+    it.createCountry = createCountry
+    it.createFilm = createFilm
+    it.createActor = createActor
+    it.associate = associate
+    it.tagFilm = tagFilm
+    it.tagActor = tagActor
+  }
+  .apply(block).let {
+    DPrefMyMutationDPost(
+          it.createCountry,
+          it.createFilm,
+          it.createActor,
+          it.associate,
+          it.tagFilm,
+          it.tagActor
+        )
+  }
+}
+
+@PrefCtxDSLPostCtx
+public class BPrefDPrefMyMutationDPostBPost {
+  public var createCountry: DPrefCountryDPost? = null
+
+  public var createFilm: DPrefFilmDPost? = null
+
+  public var createActor: DPrefActorDPost? = null
+
+  public var associate: Boolean? = null
+
+  public var tagFilm: Boolean? = null
+
+  public var tagActor: Boolean? = null
+}

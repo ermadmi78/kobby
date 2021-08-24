@@ -1,0 +1,36 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.dto1
+
+import com.fasterxml.jackson.`annotation`.JsonSubTypes
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = DPrefCountryDPost::class, name = "Country"),
+  JsonSubTypes.Type(value = DPrefFilmDPost::class, name = "Film"),
+  JsonSubTypes.Type(value = DPrefActorDPost::class, name = "Actor")
+)
+public interface DPrefEntityDPost {
+  public val id: Long?
+
+  public val fields: String?
+}

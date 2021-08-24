@@ -1,0 +1,31 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package my.root.re
+
+import graphql.kickstart.tools.GraphQLSubscriptionResolver
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.TODO
+import my.root.dto1.DPrefActorDPost
+import my.root.dto1.DPrefCountryDPost
+import my.root.dto1.DPrefFilmDPost
+import org.reactivestreams.Publisher
+
+public interface RePrMySubscriptionRePo : GraphQLSubscriptionResolver {
+  public suspend fun countryCreated(): Publisher<DPrefCountryDPost> = TODO("ToDo")
+
+  public suspend fun filmCreated(countryId: Long?): Publisher<DPrefFilmDPost> = TODO("ToDo")
+
+  public suspend fun actorCreated(countryId: Long?): Publisher<DPrefActorDPost> = TODO("ToDo")
+}
