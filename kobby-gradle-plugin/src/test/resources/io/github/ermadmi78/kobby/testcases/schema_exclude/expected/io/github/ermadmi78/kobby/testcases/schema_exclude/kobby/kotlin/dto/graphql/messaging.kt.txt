@@ -1,0 +1,116 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.dto.graphql
+
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface GraphqlMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface GraphqlClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface GraphqlServerMessage
+
+/**
+ * See GQL_CONNECTION_INIT
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlMessageConnectionInit(
+  public val payload: Map<String, Any?>? = null
+) : GraphqlMessage, GraphqlClientMessage
+
+/**
+ * See GQL_START
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlMessageStart(
+  public val id: String,
+  public val payload: GraphqlRequest
+) : GraphqlMessage, GraphqlClientMessage
+
+/**
+ * See GQL_STOP
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlMessageStop(
+  public val id: String
+) : GraphqlMessage, GraphqlClientMessage
+
+/**
+ * See GQL_CONNECTION_TERMINATE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public class GraphqlMessageConnectionTerminate : GraphqlMessage, GraphqlClientMessage
+
+/**
+ * See GQL_CONNECTION_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlMessageConnectionError(
+  public val payload: Any? = null
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_CONNECTION_ACK
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlMessageConnectionAck(
+  public val payload: Any? = null
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_DATA
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlMessageData(
+  public val id: String,
+  public val payload: GraphqlSubscriptionResult
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlMessageError(
+  public val id: String,
+  public val payload: GraphqlErrorResult
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_COMPLETE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlMessageComplete(
+  public val id: String
+) : GraphqlMessage, GraphqlServerMessage
+
+/**
+ * See GQL_CONNECTION_KEEP_ALIVE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public class GraphqlMessageConnectionKeepAlive : GraphqlMessage, GraphqlServerMessage
