@@ -1,0 +1,47 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.CountryDSL
+import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.CountrySubscriber
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Country : CountryContext {
+  public val id: Long
+
+  public val name: String
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CountrySubscriber<Subscription>
+
+  public fun CountryProjection.__withCurrentProjection(): Unit
+}
+
+@CountryDSL
+public interface CountryProjection {
+  public fun id(): Unit
+
+  public fun name(): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
