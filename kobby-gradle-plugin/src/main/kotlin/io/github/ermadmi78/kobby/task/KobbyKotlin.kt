@@ -10,6 +10,7 @@ import io.github.ermadmi78.kobby.model.PluginUtils.forEachPackage
 import io.github.ermadmi78.kobby.model.PluginUtils.pathIterator
 import io.github.ermadmi78.kobby.model.PluginUtils.removePrefixOrEmpty
 import io.github.ermadmi78.kobby.model.PluginUtils.toPackageName
+import io.github.ermadmi78.kobby.model._capitalize
 import io.github.ermadmi78.kobby.model.parseSchema
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
@@ -776,7 +777,7 @@ open class KobbyKotlin : DefaultTask() {
             ?.filter { it.isJavaIdentifierPart() }
             ?.takeIf { it.firstOrNull()?.isJavaIdentifierStart() ?: false }
             ?: "graphql"
-        val capitalizedContextName = contextName.capitalize()
+        val capitalizedContextName = contextName._capitalize()
 
         val rootPackage: List<String> = mutableListOf<String>().also { list ->
             if (relativePackage.get()) {

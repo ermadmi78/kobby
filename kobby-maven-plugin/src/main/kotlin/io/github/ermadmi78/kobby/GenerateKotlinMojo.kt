@@ -10,6 +10,7 @@ import io.github.ermadmi78.kobby.model.PluginUtils.forEachPackage
 import io.github.ermadmi78.kobby.model.PluginUtils.pathIterator
 import io.github.ermadmi78.kobby.model.PluginUtils.removePrefixOrEmpty
 import io.github.ermadmi78.kobby.model.PluginUtils.toPackageName
+import io.github.ermadmi78.kobby.model._capitalize
 import io.github.ermadmi78.kobby.model.parseSchema
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.LifecyclePhase
@@ -146,7 +147,7 @@ class GenerateKotlinMojo : AbstractMojo() {
             ?.filter { it.isJavaIdentifierPart() }
             ?.takeIf { it.firstOrNull()?.isJavaIdentifierStart() ?: false }
             ?: "graphql"
-        val capitalizedContextName = contextName.capitalize()
+        val capitalizedContextName = contextName._capitalize()
 
         val rootPackage: List<String> = mutableListOf<String>().also { list ->
             if (kotlin.relativePackage) {

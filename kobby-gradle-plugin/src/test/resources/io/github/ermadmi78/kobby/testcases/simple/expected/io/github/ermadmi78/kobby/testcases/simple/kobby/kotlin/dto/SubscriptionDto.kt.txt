@@ -15,4 +15,4 @@ package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto
 
 import kotlin.Suppress
 
-public class SubscriptionDto
+public class SubscriptionDto()

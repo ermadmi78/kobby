@@ -248,7 +248,7 @@ data class KotlinLayout(
 
     internal val KobbyField.selectionName: String
         get() = overriddenField?.selectionName
-            ?: "${node.name}${name.capitalize()}".decorate(entity.selection.selectionDecoration)
+            ?: "${node.name}${name._capitalize()}".decorate(entity.selection.selectionDecoration)
 
     internal val KobbyField.selectionClass: ClassName
         get() = overriddenField?.selectionClass
@@ -256,7 +256,7 @@ data class KotlinLayout(
 
     internal val KobbyField.queryName: String
         get() = overriddenField?.queryName
-            ?: "${node.name}${name.capitalize()}".decorate(entity.selection.queryDecoration)
+            ?: "${node.name}${name._capitalize()}".decorate(entity.selection.queryDecoration)
 
     internal val KobbyField.queryClass: ClassName
         get() = overriddenField?.queryClass
@@ -351,7 +351,7 @@ data class KotlinLayout(
                 "${if (isDefault) "remove" else "add"} [$projectionFieldName] projection to switch on it"
 
     internal val KobbyArgument.innerName: String
-        get() = (field.name + field.number + name.capitalize())
+        get() = (field.name + field.number + name._capitalize())
             .decorate(impl.innerDecoration)
 
     // *****************************************************************************************************************
@@ -372,7 +372,7 @@ data class KotlinLayout(
         get() = name.decorate(resolver.decoration)
 
     internal val KobbyField.resolverArgument: String
-        get() = (resolver.argument ?: node.name.decapitalize()).let {
+        get() = (resolver.argument ?: node.name._decapitalize()).let {
             if (it in arguments) it.decorate(impl.innerDecoration) else it
         }
 

@@ -154,10 +154,9 @@ subprojects {
     }
 
     dependencies {
-        implementation(kotlin("stdlib", kotlinVersion))
-        implementation(kotlin("reflect", kotlinVersion))
-        testImplementation(kotlin("test", kotlinVersion))
-        testImplementation(kotlin("test-junit5", kotlinVersion))
+        implementation(kotlin("stdlib"))
+        implementation(kotlin("reflect"))
+        testImplementation(kotlin("test-junit5"))
 
         testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
         testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")

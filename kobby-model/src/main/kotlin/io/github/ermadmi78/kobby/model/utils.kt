@@ -1,6 +1,7 @@
 package io.github.ermadmi78.kobby.model
 
 import java.io.File
+import java.util.*
 
 /**
  * Created on 18.01.2021
@@ -13,6 +14,14 @@ fun Decoration.isEmpty(): Boolean = prefix.isNullOrEmpty() && postfix.isNullOrEm
 
 fun Decoration.isNotEmpty(): Boolean = !isEmpty()
 
+fun String._capitalize(): String =
+    if (isEmpty() || this[0].isUpperCase()) this
+    else replaceFirstChar { it.titlecase(Locale.getDefault()) }
+
+fun String._decapitalize(): String =
+    if (isEmpty() || this[0].isLowerCase()) this
+    else replaceFirstChar { it.lowercase(Locale.getDefault()) }
+
 fun String.decorate(decoration: Decoration): String =
     decorate(decoration.prefix, decoration.postfix)
 
@@ -22,9 +31,9 @@ fun String.decorate(prefix: String?, postfix: String?): String {
     } else if (prefix.isNullOrBlank()) {
         this + postfix!!.trim()
     } else if (postfix.isNullOrBlank()) {
-        prefix.trim() + this.capitalize()
+        prefix.trim() + this._capitalize()
     } else {
-        prefix.trim() + this.capitalize() + postfix.trim()
+        prefix.trim() + this._capitalize() + postfix.trim()
     }
 }
 
@@ -58,7 +67,7 @@ object PluginUtils {
             .splitToSequence('.')
             .filter { it.isNotBlank() }
             .firstOrNull()
-            ?.decapitalize()
+            ?._decapitalize()
 
     fun String.pathIterator(): Iterator<String> =
         splitToSequence('/', '\\')

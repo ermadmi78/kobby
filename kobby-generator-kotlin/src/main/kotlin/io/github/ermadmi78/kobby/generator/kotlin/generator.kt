@@ -4,10 +4,7 @@ import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.KModifier.*
 import com.squareup.kotlinpoet.KModifier.ANNOTATION
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import io.github.ermadmi78.kobby.model.KobbyNode
-import io.github.ermadmi78.kobby.model.KobbySchema
-import io.github.ermadmi78.kobby.model.decorate
-import io.github.ermadmi78.kobby.model.isNotEmpty
+import io.github.ermadmi78.kobby.model.*
 
 /**
  * Created on 12.11.2020
@@ -20,7 +17,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
     files += buildFile(context.packageName, context.name) {
         if (entity.enabled) {
             //Build context builder
-            buildFunction(context.contextName.decapitalize() + "Of") {
+            buildFunction(context.contextName._decapitalize() + "Of") {
                 buildParameter(Const.ADAPTER, context.adapterClass)
                 returns(context.contextClass)
                 addStatement("return %T(${Const.ADAPTER})", layout.contextImplClass)

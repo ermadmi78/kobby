@@ -93,7 +93,7 @@ class KobbyNode internal constructor(
     }
 
     override fun toString(): String {
-        return "${kind.name.toLowerCase()} $name"
+        return "${kind.name.lowercase()} $name"
     }
 }
 
