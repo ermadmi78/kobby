@@ -1,0 +1,111 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.CountrySubscriber
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+
+internal class QueryImpl(
+  internal val __innerContext: CountryContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto
+) : Query {
+  public override val countries: List<Country> by lazy {
+    if (__innerProjection.__innerCountries0 == null) {
+      error("Property [countries] is not available - add [countries] projection to switch on it")
+    }
+    __innerDto.resolveCountries(__innerContext, __innerProjection.__innerCountries0!!)
+  }
+
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CountrySubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun QueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerCountries0: CountryProjectionImpl? = null
+
+  public override fun countries(__projection: CountryProjection.() -> Unit): Unit {
+    __innerCountries0 = CountryProjectionImpl().apply(__projection)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+    if ("countries" !in ignore && __innerCountries0 != null) {
+      __projection.countries {
+        this@QueryProjectionImpl.__innerCountries0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: countries
+    if ("countries" !in ignore && __innerCountries0 != null) {
+      body.append(' ').append("countries")
+
+      // Build nested projection of Country
+      __innerCountries0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: CountryContext,
+    __innerProjection: QueryProjectionImpl): Query = QueryImpl(__innerContext, __innerProjection,
+    this)
+
+internal fun QueryDto.resolveCountries(__innerContext: CountryContext,
+    __innerProjection: CountryProjectionImpl): List<Country> = countries?.map {
+    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
