@@ -1,0 +1,35 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    kotlin("jvm") version "testKotlinVersion"
+    id("io.github.ermadmi78.kobby")
+}
+
+kobby {
+    schema {
+        files = files(
+            "src/main/resources/io/github/ermadmi78/kobby/testcases/schema_files/query.graphqls",
+            "src/main/resources/io/github/ermadmi78/kobby/testcases/schema_files/mutation.graphqls"
+        )
+    }
+}
+
+dependencies {
+    implementation(kotlin("stdlib"))
+}
+
+tasks {
+    jar {
+        enabled = false
+    }
+}

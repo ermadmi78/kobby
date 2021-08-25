@@ -1,0 +1,23 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.dto.MutationDto
+import kotlin.Suppress
+import kotlin.collections.List
+
+public data class GraphqlMutationResult(
+  public val `data`: MutationDto? = null,
+  public val errors: List<GraphqlError>? = null
+)

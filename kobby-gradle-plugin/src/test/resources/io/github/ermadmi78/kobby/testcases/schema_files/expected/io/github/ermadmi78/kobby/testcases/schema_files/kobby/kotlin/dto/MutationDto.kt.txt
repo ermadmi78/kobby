@@ -1,0 +1,51 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.GraphqlDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+public data class MutationDto(
+  public val createCountry: CountryDto? = null
+)
+
+public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {
+  // MutationDto builder DSL
+  return MutationDtoBuilder().apply(block).let {
+    MutationDto(
+          it.createCountry
+        )
+  }
+}
+
+public fun MutationDto.copy(block: MutationDtoBuilder.() -> Unit): MutationDto {
+  // MutationDto copy DSL
+  return MutationDtoBuilder().also {
+    it.createCountry = createCountry
+  }
+  .apply(block).let {
+    MutationDto(
+          it.createCountry
+        )
+  }
+}
+
+@GraphqlDSL
+public class MutationDtoBuilder {
+  public var createCountry: CountryDto? = null
+}
