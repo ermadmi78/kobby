@@ -1,0 +1,24 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_ktor_composite.kobby.kotlin.dto.graphql
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import kotlin.Suppress
+import kotlin.collections.List
+
+public data class CountryErrorResult @JsonCreator constructor(
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val errors: List<CountryError>? = null
+)
