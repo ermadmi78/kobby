@@ -1,0 +1,22 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.resolver
+
+import graphql.kickstart.tools.GraphQLSubscriptionResolver
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.dto.CountryDto
+import kotlin.Suppress
+
+public interface CountrySubscriptionResolver : GraphQLSubscriptionResolver {
+  public suspend fun countryCreated(): CountryDto
+}

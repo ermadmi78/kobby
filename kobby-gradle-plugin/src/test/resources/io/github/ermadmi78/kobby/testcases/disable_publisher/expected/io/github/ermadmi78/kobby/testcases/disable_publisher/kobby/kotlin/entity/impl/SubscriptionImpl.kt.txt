@@ -1,0 +1,110 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.CountrySubscriber
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+
+internal class SubscriptionImpl(
+  internal val __innerContext: CountryContext,
+  internal val __innerProjection: SubscriptionProjectionImpl,
+  internal val __innerDto: SubscriptionDto
+) : Subscription {
+  public override val countryCreated: Country by lazy {
+    if (__innerProjection.__innerCountryCreated0 == null) {
+      error("Property [countryCreated] is not available - add [countryCreated] projection to switch on it")
+    }
+    __innerDto.resolveCountryCreated(__innerContext, __innerProjection.__innerCountryCreated0!!)
+  }
+
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CountrySubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun SubscriptionProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class SubscriptionProjectionImpl : SubscriptionProjection {
+  internal var __innerCountryCreated0: CountryProjectionImpl? = null
+
+  public override fun countryCreated(__projection: CountryProjection.() -> Unit): Unit {
+    __innerCountryCreated0 = CountryProjectionImpl().apply(__projection)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection):
+      Unit {
+    if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
+      __projection.countryCreated {
+        this@SubscriptionProjectionImpl.__innerCountryCreated0!!.___innerRepeatProjection(setOf(),
+            this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: countryCreated
+    if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
+      body.append(' ').append("countryCreated")
+
+      // Build nested projection of Country
+      __innerCountryCreated0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun SubscriptionDto.buildEntity(__innerContext: CountryContext,
+    __innerProjection: SubscriptionProjectionImpl): Subscription = SubscriptionImpl(__innerContext,
+    __innerProjection, this)
+
+internal fun SubscriptionDto.resolveCountryCreated(__innerContext: CountryContext,
+    __innerProjection: CountryProjectionImpl): Country = countryCreated?.buildEntity(__innerContext,
+    __innerProjection)!!
