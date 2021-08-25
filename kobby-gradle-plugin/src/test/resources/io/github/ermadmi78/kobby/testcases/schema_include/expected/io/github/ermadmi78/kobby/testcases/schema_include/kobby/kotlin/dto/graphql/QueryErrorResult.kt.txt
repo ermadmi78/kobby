@@ -1,0 +1,21 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.dto.graphql
+
+import kotlin.Suppress
+import kotlin.collections.List
+
+public data class QueryErrorResult(
+  public val errors: List<QueryError>? = null
+)

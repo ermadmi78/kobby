@@ -1,0 +1,59 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.QueryDSL
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+public data class CountryDto(
+  public val id: Long? = null,
+  public val name: String? = null
+)
+
+public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto {
+  // CountryDto builder DSL
+  return CountryDtoBuilder().apply(block).let {
+    CountryDto(
+          it.id,
+          it.name
+        )
+  }
+}
+
+public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto {
+  // CountryDto copy DSL
+  return CountryDtoBuilder().also {
+    it.id = id
+    it.name = name
+  }
+  .apply(block).let {
+    CountryDto(
+          it.id,
+          it.name
+        )
+  }
+}
+
+@QueryDSL
+public class CountryDtoBuilder {
+  public var id: Long? = null
+
+  public var name: String? = null
+}
