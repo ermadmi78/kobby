@@ -1,0 +1,116 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql
+
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface CountryMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface CountryClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface CountryServerMessage
+
+/**
+ * See GQL_CONNECTION_INIT
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryMessageConnectionInit(
+  public val payload: Map<String, Any?>? = null
+) : CountryMessage, CountryClientMessage
+
+/**
+ * See GQL_START
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryMessageStart(
+  public val id: String,
+  public val payload: CountryRequest
+) : CountryMessage, CountryClientMessage
+
+/**
+ * See GQL_STOP
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryMessageStop(
+  public val id: String
+) : CountryMessage, CountryClientMessage
+
+/**
+ * See GQL_CONNECTION_TERMINATE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMessage
+
+/**
+ * See GQL_CONNECTION_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryMessageConnectionError(
+  public val payload: Any? = null
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_CONNECTION_ACK
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryMessageConnectionAck(
+  public val payload: Any? = null
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_DATA
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryMessageData(
+  public val id: String,
+  public val payload: CountrySubscriptionResult
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryMessageError(
+  public val id: String,
+  public val payload: CountryErrorResult
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_COMPLETE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryMessageComplete(
+  public val id: String
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_CONNECTION_KEEP_ALIVE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public class CountryMessageConnectionKeepAlive : CountryMessage, CountryServerMessage

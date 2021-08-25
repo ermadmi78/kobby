@@ -1,0 +1,138 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountrySubscriber
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
+
+internal class MutationImpl(
+  internal val __innerContext: CountryContext,
+  internal val __innerProjection: MutationProjectionImpl,
+  internal val __innerDto: MutationDto
+) : Mutation {
+  public override val createCountry: Country by lazy {
+    if (__innerProjection.__innerCreateCountry0 == null) {
+      error("Property [createCountry] is not available - add [createCountry] projection to switch on it")
+    }
+    __innerDto.resolveCreateCountry(__innerContext, __innerProjection.__innerCreateCountry0!!)
+  }
+
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CountrySubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun MutationProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class MutationProjectionImpl : MutationProjection {
+  internal var __innerCreateCountry0: CountryProjectionImpl? = null
+
+  internal var __innerCreateCountry0Name: String? = null
+
+  public override fun createCountry(name: String, __projection: CountryProjection.() -> Unit):
+      Unit {
+    __innerCreateCountry0 = CountryProjectionImpl().apply(__projection)
+    __innerCreateCountry0Name = name
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection):
+      Unit {
+    if ("createCountry" !in ignore && __innerCreateCountry0 != null) {
+      __projection.createCountry(__innerCreateCountry0Name!!) {
+        this@MutationProjectionImpl.__innerCreateCountry0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: createCountry
+    if ("createCountry" !in ignore && __innerCreateCountry0 != null) {
+      body.append(' ').append("createCountry")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createCountry.name
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateCountry0Name!!
+        body.append("name").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Country
+      __innerCreateCountry0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun MutationDto.buildEntity(__innerContext: CountryContext,
+    __innerProjection: MutationProjectionImpl): Mutation = MutationImpl(__innerContext,
+    __innerProjection, this)
+
+internal fun MutationDto.resolveCreateCountry(__innerContext: CountryContext,
+    __innerProjection: CountryProjectionImpl): Country = createCountry?.buildEntity(__innerContext,
+    __innerProjection)!!

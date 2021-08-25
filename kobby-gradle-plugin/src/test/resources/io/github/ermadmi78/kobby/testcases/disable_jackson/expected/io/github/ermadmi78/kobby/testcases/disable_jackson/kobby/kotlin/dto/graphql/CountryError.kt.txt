@@ -1,0 +1,28 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql
+
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+
+public data class CountryError(
+  public val message: String,
+  public val locations: List<CountryErrorSourceLocation>? = null,
+  public val errorType: CountryErrorType? = null,
+  public val path: List<Any>? = null,
+  public val extensions: Map<String, Any?>? = null
+)

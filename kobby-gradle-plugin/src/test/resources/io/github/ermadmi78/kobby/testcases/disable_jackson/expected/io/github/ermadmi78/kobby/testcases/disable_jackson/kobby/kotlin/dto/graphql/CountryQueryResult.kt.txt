@@ -1,0 +1,23 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.QueryDto
+import kotlin.Suppress
+import kotlin.collections.List
+
+public data class CountryQueryResult(
+  public val `data`: QueryDto? = null,
+  public val errors: List<CountryError>? = null
+)
