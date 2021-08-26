@@ -295,7 +295,7 @@ type Country implements Entity {
 Film entity.
 The film belongs to one country and can be played by several actors.
 """
-type Film implements Entity, Taggable {
+type Film implements Entity & Taggable {
     id: ID!
     fields(keys: [String!]): JSON!
     tags: [Tag!]!
@@ -371,7 +371,7 @@ input FilmInput {
 Actor entity.
 The actor belongs to one country and can play in several films.
 """
-type Actor implements Entity, Taggable {
+type Actor implements Entity & Taggable {
     """Unique identifier of actor"""
     id: ID!
     fields(keys: [String!]): JSON!
