@@ -42,20 +42,19 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "schemaScanDir",
-        description = "path to directory relative to project basedir, " +
-                "where to look for schema files (default \"src/main/resources\")"
+        description = "Root directory to scan schema files (default \"src/main/resources\")"
     )
     val schemaScanDir: Property<String> = project.objects.property(String::class.java)
 
     /**
-     * ANT style include patterns to look for schema files (default `**`/`*`.graphqls)
+     * ANT style include patterns to scan schema files (default `**`/`*`.graphqls)
      */
     @Input
     @Optional
     val schemaScanIncludes: ListProperty<String> = project.objects.listProperty(String::class.java)
 
     /**
-     * ANT style exclude patterns to look for schema files (default empty)
+     * ANT style exclude patterns to scan schema files (default empty)
      */
     @Input
     @Optional
@@ -65,7 +64,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "schemaDirectivePrimaryKey",
-        description = "name of directive \"primaryKey\" (default \"primaryKey\")"
+        description = "Name of \"primaryKey\" directive (default \"primaryKey\")"
     )
     val schemaDirectivePrimaryKey: Property<String> = project.objects.property(String::class.java)
 
@@ -73,7 +72,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "schemaDirectiveRequired",
-        description = "name of directive \"required\" (default \"required\")"
+        description = "Name of \"required\" directive (default \"required\")"
     )
     val schemaDirectiveRequired: Property<String> = project.objects.property(String::class.java)
 
@@ -81,7 +80,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "schemaDirectiveDefault",
-        description = "name of directive \"default\" (default \"default\")"
+        description = "Name of \"default\" directive (default \"default\")"
     )
     val schemaDirectiveDefault: Property<String> = project.objects.property(String::class.java)
 
@@ -89,7 +88,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "schemaDirectiveSelection",
-        description = "name of directive \"selection\" (default \"selection\")"
+        description = "Name of \"selection\" directive (default \"selection\")"
     )
     val schemaDirectiveSelection: Property<String> = project.objects.property(String::class.java)
 
@@ -97,7 +96,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "schemaDirectiveResolve",
-        description = "name of directive \"resolve\" (default \"resolve\")"
+        description = "Name of \"resolve\" directive (default \"resolve\")"
     )
     val schemaDirectiveResolve: Property<String> = project.objects.property(String::class.java)
 
@@ -111,7 +110,8 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "relativePackage",
-        description = "generate root package name relative to schema package name (default true)"
+        description = "Is root package name for generated DSL " +
+                "should be relative to GraphQL schema directory (default true)"
     )
     val relativePackage: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -119,8 +119,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "rootPackageName",
-        description = "root package name relative to schema package name (if relativePackage option is true) " +
-                "for generated classes (default \"kobby.kotlin\")"
+        description = "Root package name for generated DSL (default \"kobby.kotlin\")"
     )
     val rootPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -128,7 +127,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "contextPackageName",
-        description = "package name relative to root package name for generated context classes (default null)"
+        description = "Context package name relative to root package name (default null)"
     )
     val contextPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -136,7 +135,8 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "contextName",
-        description = "name of context (default \"<GraphQL schema name>\")"
+        description = "Name of generated DSL context By default is name of GraphQL schema file " +
+                "or \"graphql\" if there are multiple schema files"
     )
     val contextName: Property<String> = project.objects.property(String::class.java)
 
@@ -144,7 +144,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "contextPrefix",
-        description = "prefix for generated context classes (default \"<Context name>\")"
+        description = "Prefix of generated \"Context\" interface. By default is capitalized context name."
     )
     val contextPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -152,7 +152,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "contextPostfix",
-        description = "postfix for generated context classes (default null)"
+        description = "Postfix of generated \"Context\" interface (default null)"
     )
     val contextPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -160,7 +160,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "contextQuery",
-        description = "name of context query function (default \"query\")"
+        description = "Name of \"query\" function in \"Context\" interface (default \"query\")"
     )
     val contextQuery: Property<String> = project.objects.property(String::class.java)
 
@@ -168,7 +168,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "contextMutation",
-        description = "name of context mutation function (default \"mutation\")"
+        description = "Name of \"mutation\" function in \"Context\" interface (default \"mutation\")"
     )
     val contextMutation: Property<String> = project.objects.property(String::class.java)
 
@@ -176,7 +176,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "contextSubscription",
-        description = "name of context subscription function (default \"subscription\")"
+        description = "Name of \"subscription\" function in \"Context\" interface (default \"subscription\")"
     )
     val contextSubscription: Property<String> = project.objects.property(String::class.java)
 
@@ -184,7 +184,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoPackageName",
-        description = "package name relative to root package name for generated DTO classes (default \"dto\")"
+        description = "Package name for DTO classes relative to root package name (default \"dto\")"
     )
     val dtoPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -192,7 +192,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoPrefix",
-        description = "prefix for generated DTO classes (default null)"
+        description = "Prefix of DTO classes generated from GraphQL objects, interfaces and unions (default null)"
     )
     val dtoPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -200,7 +200,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoPostfix",
-        description = "postfix for generated DTO classes (default \"Dto\")"
+        description = "Postfix of DTO classes generated from GraphQL objects, interfaces and unions (default \"Dto\")"
     )
     val dtoPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -208,7 +208,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoEnumPrefix",
-        description = "prefix for generated DTO enums (default null)"
+        description = "Prefix of DTO classes generated from GraphQL enums (default null)"
     )
     val dtoEnumPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -216,7 +216,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoEnumPostfix",
-        description = "postfix for generated DTO enums (default null)"
+        description = "Postfix of DTO classes generated from GraphQL enums (default null)"
     )
     val dtoEnumPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -224,7 +224,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoInputPrefix",
-        description = "prefix for generated DTO input objects (default null)"
+        description = "Prefix of DTO classes generated from GraphQL inputs (default null)"
     )
     val dtoInputPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -232,7 +232,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoInputPostfix",
-        description = "postfix for generated DTO input objects (default null)"
+        description = "Postfix of DTO classes generated from GraphQL inputs (default null)"
     )
     val dtoInputPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -248,7 +248,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoJacksonEnabled",
-        description = "add Jackson annotations for generated DTO classes (default true)"
+        description = "Add Jackson annotations for generated DTO classes (default true)"
     )
     val dtoJacksonEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -256,7 +256,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoBuilderEnabled",
-        description = "generate DTO builders is enabled (default true)"
+        description = "Is DTO builders generation enabled (default true)"
     )
     val dtoBuilderEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -264,7 +264,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoBuilderPrefix",
-        description = "prefix for generated DTO Builder classes (default null)"
+        description = "Prefix of DTO builder classes (default null)"
     )
     val dtoBuilderPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -272,7 +272,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoBuilderPostfix",
-        description = "postfix for generated DTO Builder classes (default \"Dto\")"
+        description = "Postfix of DTO builder classes (default \"Dto\")"
     )
     val dtoBuilderPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -280,7 +280,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoBuilderCopyFun",
-        description = "name of copy function for DTO classes (default \"copy\")"
+        description = "Name of builder based \"copy\" function for DTO classes (default \"copy\")"
     )
     val dtoBuilderCopyFun: Property<String> = project.objects.property(String::class.java)
 
@@ -288,7 +288,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoGraphQLEnabled",
-        description = "generate GraphQL DTO classes (default true)"
+        description = "Is helper DTO classes generation enabled (default true)"
     )
     val dtoGraphQLEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -296,7 +296,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoGraphQLPackageName",
-        description = "package name for GraphQL DTO classes relative to DTO package name (default \"graphql\")"
+        description = "Package name for helper DTO classes relative to DTO package name (default \"graphql\")"
     )
     val dtoGraphQLPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -304,7 +304,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoGraphQLPrefix",
-        description = "prefix for generated GraphQL DTO classes (default \"<Context name>\")"
+        description = "Prefix for helper DTO classes (default \"<Context name>\")"
     )
     val dtoGraphQLPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -312,7 +312,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "dtoGraphQLPostfix",
-        description = "postfix for generated GraphQL DTO classes (default null)"
+        description = "Postfix for helper DTO classes (default null)"
     )
     val dtoGraphQLPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -320,7 +320,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityEnabled",
-        description = "generate Entity classes (default true)"
+        description = "Is entities interfaces generation enabled (default true)"
     )
     val entityEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -328,7 +328,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityPackageName",
-        description = "package name relative to root package name for generated Entity classes (default \"entity\")"
+        description = "Package name for entities interfaces relative to root package name (default \"entity\")"
     )
     val entityPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -336,7 +336,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityPrefix",
-        description = "prefix for generated entity classes (default null)"
+        description = "Prefix for entities interfaces (default null)"
     )
     val entityPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -344,7 +344,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityPostfix",
-        description = "postfix for generated entity classes (default null)"
+        description = "Postfix for entities interfaces (default null)"
     )
     val entityPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -352,7 +352,8 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityWithCurrentProjectionFun",
-        description = "name of entity 'withCurrentProjection' function (default \"__withCurrentProjection\")"
+        description = "Name of \"withCurrentProjection\" function in entity interface " +
+                "(default \"__withCurrentProjection\")"
     )
     val entityWithCurrentProjectionFun: Property<String> = project.objects.property(String::class.java)
 
@@ -360,7 +361,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityProjectionPrefix",
-        description = "prefix for generated projection classes (default null)"
+        description = "Prefix for projection interfaces (default null)"
     )
     val entityProjectionPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -368,7 +369,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityProjectionPostfix",
-        description = "postfix for generated projection classes (default \"Projection\")"
+        description = "Postfix for projection interfaces (default \"Projection\")"
     )
     val entityProjectionPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -376,7 +377,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityProjectionArgument",
-        description = "name of projection lambda argument (default \"__projection\")"
+        description = "Name of projection argument in field functions (default \"__projection\")"
     )
     val entityProjectionArgument: Property<String> = project.objects.property(String::class.java)
 
@@ -384,7 +385,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityWithPrefix",
-        description = "prefix of projection 'with' method (default null)"
+        description = "Prefix for projection fields that are not marked with the directive \"@default\" (default null)"
     )
     val entityWithPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -392,7 +393,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityWithPostfix",
-        description = "postfix of projection 'with' method (default null)"
+        description = "Postfix for projection fields that are not marked with the directive \"@default\" (default null)"
     )
     val entityWithPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -400,7 +401,8 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityWithoutPrefix",
-        description = "prefix of projection 'with' method (default \"__without\")"
+        description = "Prefix for default projection fields - marked with the directive \"@default\"" +
+                " (default \"__without\")"
     )
     val entityWithoutPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -408,7 +410,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityWithoutPostfix",
-        description = "postfix of projection 'with' method (default null)"
+        description = "Postfix for default projection fields (marked with the directive \"@default\") (default null)"
     )
     val entityWithoutPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -416,7 +418,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityMinimizeFun",
-        description = "name of projection 'minimize' function (default \"__minimize\")"
+        description = "Name of \"minimize\" function in projection interface (default \"__minimize\")"
     )
     val entityMinimizeFun: Property<String> = project.objects.property(String::class.java)
 
@@ -424,7 +426,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityQualificationPrefix",
-        description = "prefix for generated qualification classes (default null)"
+        description = "Prefix for qualification interfaces (default null)"
     )
     val entityQualificationPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -432,7 +434,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityQualificationPostfix",
-        description = "postfix for generated qualification classes (default \"Qualification\")"
+        description = "Postfix for qualification interfaces (default \"Qualification\")"
     )
     val entityQualificationPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -440,7 +442,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityQualifiedProjectionPrefix",
-        description = "prefix for generated qualification classes (default null)"
+        description = "Prefix for qualified projection interface (default null)"
     )
     val entityQualifiedProjectionPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -448,7 +450,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityQualifiedProjectionPostfix",
-        description = "postfix for generated qualification classes (default \"QualifiedProjection\")"
+        description = "Postfix for qualified projection interface (default \"QualifiedProjection\")"
     )
     val entityQualifiedProjectionPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -456,7 +458,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityOnPrefix",
-        description = "prefix of qualification 'on' method (default \"__on\")"
+        description = "Prefix for qualification functions (default \"__on\")"
     )
     val entityOnPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -464,7 +466,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityOnPostfix",
-        description = "postfix of qualification 'on' method (default null)"
+        description = "Postfix for qualification functions (default null)"
     )
     val entityOnPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -472,7 +474,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entitySelectionPrefix",
-        description = "prefix for generated selection classes (default null)"
+        description = "Prefix for selection interfaces (default null)"
     )
     val entitySelectionPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -480,7 +482,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entitySelectionPostfix",
-        description = "postfix for generated selection classes (default \"Selection\")"
+        description = "Postfix for selection interfaces (default \"Selection\")"
     )
     val entitySelectionPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -488,7 +490,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entitySelectionArgument",
-        description = "name of selection lambda argument (default \"__selection\")"
+        description = "Name of selection argument in field functions (default \"__selection\")"
     )
     val entitySelectionArgument: Property<String> = project.objects.property(String::class.java)
 
@@ -496,7 +498,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityQueryPrefix",
-        description = "prefix for generated query classes (default null)"
+        description = "Prefix for query interfaces (default null)"
     )
     val entityQueryPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -504,7 +506,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityQueryPostfix",
-        description = "postfix for generated query classes (default \"Query\")"
+        description = "Postfix for query interfaces (default \"Query\")"
     )
     val entityQueryPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -512,7 +514,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityQueryArgument",
-        description = "name of query lambda argument (default \"__query\")"
+        description = "Name of query argument in field functions (default \"__query\")"
     )
     val entityQueryArgument: Property<String> = project.objects.property(String::class.java)
 
@@ -520,8 +522,8 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "implPackageName",
-        description = "package name relative to root package name " +
-                "for generated implementation classes (default \"impl\")"
+        description = "Package name for entities implementation classes " +
+                "relative to root package name (default \"impl\")"
     )
     val implPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -529,7 +531,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "implPrefix",
-        description = "prefix for generated implementation classes (default null)"
+        description = "Prefix for entities implementation classes (default null)"
     )
     val implPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -537,7 +539,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "implPostfix",
-        description = "postfix for generated implementation classes (default \"Impl\")"
+        description = "Postfix for entities implementation classes (default \"Impl\")"
     )
     val implPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -545,7 +547,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "implInternal",
-        description = "make generated implementation classes internal (default true)"
+        description = "Is implementation classes should be internal (default true)"
     )
     val implInternal: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -553,7 +555,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "implInnerPrefix",
-        description = "prefix for generated implementation service properties (default \"__inner\")"
+        description = "Prefix for inner fields in implementation classes (default \"__inner\")"
     )
     val implInnerPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -561,7 +563,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "implInnerPostfix",
-        description = "postfix for generated implementation service properties (default \"Impl\")"
+        description = "Postfix for inner fields in implementation classes (default \"Impl\")"
     )
     val implInnerPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -569,7 +571,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "adapterKtorSimpleEnabled",
-        description = "generate default SimpleKtorAdapter (default false)"
+        description = "Is simple Ktor adapter generation enabled (default false)"
     )
     val adapterKtorSimpleEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -577,7 +579,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "adapterKtorCompositeEnabled",
-        description = "generate default CompositeKtorAdapter (default false)"
+        description = "Is composite Ktor adapter generation enabled (default false)"
     )
     val adapterKtorCompositeEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -585,8 +587,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "adapterKtorPackageName",
-        description = "package name relative to root package name " +
-                "for generated Ktor adapters (default \"adapter.ktor\")"
+        description = "Package name for Ktor adapter classes relative to root package name (default \"adapter.ktor\")"
     )
     val adapterKtorPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -594,7 +595,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "adapterKtorPrefix",
-        description = "prefix for generated Ktor adapters (default \"<Context name>\")"
+        description = "Prefix for Ktor adapter classes (default \"<Context name>\")"
     )
     val adapterKtorPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -602,7 +603,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "adapterKtorPostfix",
-        description = "postfix for generated Ktor adapters (default \"KtorAdapter\")"
+        description = "Postfix for Ktor adapter classes (default \"KtorAdapter\")"
     )
     val adapterKtorPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -610,7 +611,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "resolverEnabled",
-        description = "generate graphql-java-kickstart resolvers (default false)"
+        description = "Is resolver interfaces generation enabled (default false)"
     )
     val resolverEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -618,7 +619,8 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "resolverPublisherEnabled",
-        description = "generate publishers for subscription resolvers (default false)"
+        description = "Is wrap subscription resolver functions result in \"org.reactivestreams.Publisher\"" +
+                " (default false)"
     )
     val resolverPublisherEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -626,8 +628,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "resolverPackageName",
-        description = "package name relative to root package name " +
-                "for generated graphql-java-kickstart resolvers (default \"resolver\")"
+        description = "Package name for resolver interfaces relative to root package name (default \"resolver\")"
     )
     val resolverPackageName: Property<String> = project.objects.property(String::class.java)
 
@@ -635,7 +636,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "resolverPrefix",
-        description = "prefix for generated graphql-java-kickstart resolvers (default \"<Context name>\")"
+        description = "Prefix for resolver interfaces (default \"<Context name>\")"
     )
     val resolverPrefix: Property<String> = project.objects.property(String::class.java)
 
@@ -643,7 +644,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "resolverPostfix",
-        description = "postfix for generated graphql-java-kickstart resolvers (default \"Resolver\")"
+        description = "Postfix for resolver interfaces (default \"Resolver\")"
     )
     val resolverPostfix: Property<String> = project.objects.property(String::class.java)
 
@@ -651,7 +652,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "resolverArgument",
-        description = "name of resolver bean argument. null - generate argument name from bean name (default null)"
+        description = "Name for parent object argument. By default is de-capitalized name of parent object type."
     )
     val resolverArgument: Property<String> = project.objects.property(String::class.java)
 
@@ -659,7 +660,8 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "resolverToDoMessage",
-        description = "error message for generated graphql-java-kickstart resolvers (default null)"
+        description = "If not null, Kobby will generate default implementation for functions in resolver interfaces " +
+                "that looks like: TODO(\"\$toDoMessage\") (default null)"
     )
     val resolverToDoMessage: Property<String> = project.objects.property(String::class.java)
 
