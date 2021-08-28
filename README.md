@@ -12,6 +12,10 @@ customize generated DSL by means of GraphQL schema directives and Kotlin extensi
 
 See documentation in the [project wiki](https://github.com/ermadmi78/kobby/wiki)
 
+### Requirements
+
+Kotlin at least version 1.5 is required to compile generated client DSL.
+
 ### Gradle
 
 ```kotlin
@@ -20,8 +24,7 @@ plugins {
 }
 ```
 
-Gradle's usage example see [here](https://github.com/ermadmi78/kobby-gradle-example). Kotlin at least version 1.5 is
-required to compile generated DSL.
+Gradle's usage example see [here](https://github.com/ermadmi78/kobby-gradle-example).
 
 ### Maven
 
@@ -46,8 +49,7 @@ required to compile generated DSL.
 </build>
 ```
 
-Maven usage example see [here](https://github.com/ermadmi78/kobby-maven-example). Kotlin at least version 1.5 is
-required to compile generated DSL.
+Maven usage example see [here](https://github.com/ermadmi78/kobby-maven-example).
 
 ### Define your GraphQL schema
 
