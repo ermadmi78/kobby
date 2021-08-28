@@ -31,7 +31,6 @@ allprojects {
 
 subprojects {
     val kotlinJvmVersion: String by project
-    val kotlinVersion: String by project
     val junitVersion: String by project
 
     val currentProject = this

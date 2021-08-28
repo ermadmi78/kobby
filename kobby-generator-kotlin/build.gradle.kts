@@ -7,3 +7,9 @@ dependencies {
     api(project(":kobby-model"))
     implementation("com.squareup:kotlinpoet:$kotlinPoetVersion")
 }
+
+tasks {
+    test {
+        dependsOn(":resolveIntegrationTestDependencies")
+    }
+}

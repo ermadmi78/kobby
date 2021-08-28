@@ -65,7 +65,7 @@ class KobbyNodeType(
     override val nullable: Boolean
 ) : KobbyType() {
     override val node: KobbyNode by lazy {
-        schema.all[nodeName]!!
+        schema.all[nodeName] ?: invalidSchema("Unknown type \"$nodeName\"")
     }
     override val list: Boolean get() = false
     override val sourceName: String

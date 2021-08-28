@@ -8,6 +8,9 @@ import java.util.*
  *
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
+
+fun invalidSchema(message: String): Nothing = throw KobbyInvalidSchemaException(message)
+
 data class Decoration(val prefix: String?, val postfix: String?)
 
 fun Decoration.isEmpty(): Boolean = prefix.isNullOrEmpty() && postfix.isNullOrEmpty()

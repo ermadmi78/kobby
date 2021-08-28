@@ -1,0 +1,7 @@
+type Query {
+    temp: Film
+}
+
+type Film {
+    title: String!
+}

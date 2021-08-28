@@ -20,8 +20,7 @@ class KobbyNode internal constructor(
 ) {
     val implements: Map<String, KobbyNode> by lazy {
         _implements.asSequence()
-            .map { schema.interfaces[it] ?: schema.unions[it] }
-            .filterNotNull()
+            .map { schema.interfaces[it] ?: schema.unions[it] ?: invalidSchema("Unknown type \"$it\"") }
             .map { it.name to it }
             .toMap()
     }
