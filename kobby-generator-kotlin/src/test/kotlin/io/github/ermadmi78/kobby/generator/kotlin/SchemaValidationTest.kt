@@ -9,6 +9,7 @@ import io.github.ermadmi78.kobby.model.parseSchema
 import org.junit.jupiter.api.Test
 import java.io.InputStreamReader
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlin.test.fail
 
 /**
@@ -19,7 +20,7 @@ import kotlin.test.fail
 class SchemaValidationTest {
     private val layout = KotlinLayout(
         KotlinTypes.PREDEFINED_SCALARS + mapOf(
-            "DateTime" to KotlinType("java.time", "OffsetDateTime"),
+            "Date" to KotlinType("java.time", "LocalDate"),
             "JSON" to MAP.parameterize(STRING, ANY.nullable())
         ),
         KotlinContextLayout(
@@ -100,6 +101,11 @@ class SchemaValidationTest {
             emptyMap(),
             InputStreamReader(this.javaClass.getResourceAsStream("kobby.graphqls")!!)
         )
+
+        schema.validate().forEach {
+            println(it)
+        }
+
         val files = generateKotlin(schema, layout)
 
         files.forEach {
@@ -115,6 +121,8 @@ class SchemaValidationTest {
             emptyMap(),
             InputStreamReader(this.javaClass.getResourceAsStream("unknown_scalar.graphqls.txt")!!)
         )
+
+        assertTrue(schema.validate().isEmpty())
 
         val expected = "Kotlin data type for scalar 'DummyScalar' not found. " +
                 "Please, configure it by means of 'kobby' extension. https://github.com/ermadmi78/kobby"
@@ -133,6 +141,8 @@ class SchemaValidationTest {
             InputStreamReader(this.javaClass.getResourceAsStream("unknown_type.graphqls.txt")!!)
         )
 
+        assertTrue(schema.validate().isEmpty())
+
         val expected = "Unknown type \"DummyType\""
         try {
             generateKotlin(schema, layout)
@@ -148,6 +158,8 @@ class SchemaValidationTest {
             emptyMap(),
             InputStreamReader(this.javaClass.getResourceAsStream("unknown_arg_type.graphqls.txt")!!)
         )
+
+        assertTrue(schema.validate().isEmpty())
 
         val expected = "Unknown type \"DummyArg\""
         try {
@@ -165,9 +177,27 @@ class SchemaValidationTest {
             InputStreamReader(this.javaClass.getResourceAsStream("unknown_parent.graphqls.txt")!!)
         )
 
+        assertTrue(schema.validate().isEmpty())
+
         val expected = "Unknown type \"DummyParent\""
         try {
             generateKotlin(schema, layout)
+            fail("Must throw: $expected")
+        } catch (e: KobbyInvalidSchemaException) {
+            assertEquals(expected, e.message)
+        }
+    }
+
+    @Test
+    fun testUnknownParentWithDefault() {
+        val schema = parseSchema(
+            emptyMap(),
+            InputStreamReader(this.javaClass.getResourceAsStream("unknown_parent_with_default.graphqls.txt")!!)
+        )
+
+        val expected = "Unknown type \"DummyParentWithDefault\""
+        try {
+            schema.validate()
             fail("Must throw: $expected")
         } catch (e: KobbyInvalidSchemaException) {
             assertEquals(expected, e.message)

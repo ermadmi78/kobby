@@ -62,6 +62,85 @@ class KobbyField internal constructor(
         node.isOperation || (overriddenField?.isResolve ?: (resolve || arguments.isNotEmpty()))
     }
 
+    internal fun validate(warnings: MutableList<String>) {
+        if (!primaryKey && !required && !default && !selection && !resolve) {
+            return
+        }
+        val topOverriddenField = findTopOverriddenField(node)
+
+        var counter = 0
+        if (primaryKey) {
+            counter++
+            warnings.addPropertyWarning(KobbyDirective.PRIMARY_KEY)
+            topOverriddenField?.takeIf { !it.primaryKey }?.also {
+                warnings.addOverriddenWarning(KobbyDirective.PRIMARY_KEY, it)
+            }
+        }
+
+        if (required) {
+            counter++
+            warnings.addPropertyWarning(KobbyDirective.REQUIRED)
+            topOverriddenField?.takeIf { !it.required }?.also {
+                warnings.addOverriddenWarning(KobbyDirective.REQUIRED, it)
+            }
+        }
+
+        if (default) {
+            counter++
+            warnings.addPropertyWarning(KobbyDirective.DEFAULT)
+            topOverriddenField?.takeIf { !it.default }?.also {
+                warnings.addOverriddenWarning(KobbyDirective.DEFAULT, it)
+            }
+        }
+
+        if (counter > 1) {
+            warnings += "Restriction violated [${node.name}.$name]: " +
+                    "The field is marked with several directives at once - " +
+                    "@${KobbyDirective.DEFAULT}, @${KobbyDirective.REQUIRED}, @${KobbyDirective.PRIMARY_KEY}, " +
+                    "the behavior of the Kobby Plugin is undefined!"
+        }
+
+        if (selection) {
+            if (!arguments.values.any { it.isInitialized }) {
+                warnings += "Restriction violated [${node.name}.$name]: " +
+                        "The @${KobbyDirective.SELECTION} directive can only be applied to a field that " +
+                        "contains optional arguments - nullable arguments or arguments with default value."
+            }
+            topOverriddenField?.takeIf { !it.selection }?.also {
+                warnings.addOverriddenWarning(KobbyDirective.SELECTION, it)
+            }
+        }
+
+        if (resolve && !node.isOperation) {
+            topOverriddenField?.takeIf { !it.resolve }?.also {
+                warnings.addOverriddenWarning(KobbyDirective.RESOLVE, it)
+            }
+        }
+    }
+
+    private fun findTopOverriddenField(startNode: KobbyNode): KobbyField? =
+        overriddenField?.takeIf { it.node != startNode }?.let {
+            it.findTopOverriddenField(startNode) ?: it
+        }
+
+    private fun MutableList<String>.addPropertyWarning(directive: String) {
+        if (arguments.isNotEmpty()) {
+            this += "Restriction violated [${node.name}.$name]: " +
+                    "The [@$directive] directive can only be applied to a field with no arguments."
+        }
+
+        if (type.node.kind != SCALAR && type.node.kind != ENUM) {
+            this += "Restriction violated [${node.name}.$name]: " +
+                    "The [@$directive] directive can only be applied to a field that returns a scalar or enum type."
+        }
+    }
+
+    private fun MutableList<String>.addOverriddenWarning(directive: String, topField: KobbyField) {
+        this += "Restriction violated [${node.name}.$name]: " +
+                "The [@$directive] directive cannot be applied to overridden fields. " +
+                "Please, apply [@$directive] directive to [${topField.node.name}.${topField.name}] field."
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true

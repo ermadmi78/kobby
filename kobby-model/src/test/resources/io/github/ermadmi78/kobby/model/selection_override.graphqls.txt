@@ -1,0 +1,14 @@
+directive @selection on FIELD_DEFINITION
+
+type Query {
+    countries: [Country!]!
+}
+
+interface Base {
+    base(arg0: Int!, arg1: String! = "test"): String @selection
+}
+
+type Country implements Base{
+    id: ID!
+    base(arg0: Int!, arg1: String! = "test"): String
+}

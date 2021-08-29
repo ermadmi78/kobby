@@ -36,6 +36,24 @@ class KobbySchema internal constructor(
     fun unions(action: (KobbyNode) -> Unit) = unions.values.forEach(action)
     fun enums(action: (KobbyNode) -> Unit) = enums.values.forEach(action)
     fun inputs(action: (KobbyNode) -> Unit) = inputs.values.forEach(action)
+
+    fun validate(): List<String> {
+        val warnings = mutableListOf<String>()
+
+        interfaces { node ->
+            node.fields { field ->
+                field.validate(warnings)
+            }
+        }
+
+        objects { node ->
+            node.fields { field ->
+                field.validate(warnings)
+            }
+        }
+
+        return warnings
+    }
 }
 
 fun KobbySchema(block: KobbySchemaScope.() -> Unit): KobbySchema =

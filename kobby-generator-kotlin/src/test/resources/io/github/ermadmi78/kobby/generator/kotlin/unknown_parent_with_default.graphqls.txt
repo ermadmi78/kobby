@@ -1,0 +1,9 @@
+directive @default on FIELD_DEFINITION
+
+type Query {
+    temp: Film
+}
+
+type Film implements DummyParentWithDefault {
+    title: String! @default
+}

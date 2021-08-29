@@ -1,0 +1,15 @@
+directive @primaryKey on FIELD_DEFINITION
+directive @required on FIELD_DEFINITION
+directive @default on FIELD_DEFINITION
+
+type Query {
+    first: [MyEnum!]! @primaryKey
+    second: MyEnum! @required
+    third: MyEnum @default
+}
+
+enum MyEnum {
+    FIRST,
+    SECOND,
+    THIRD
+}

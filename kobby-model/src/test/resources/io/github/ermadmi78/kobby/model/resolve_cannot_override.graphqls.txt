@@ -1,0 +1,14 @@
+directive @resolve on FIELD_DEFINITION
+
+type Query {
+    countries: [Country!]!
+}
+
+interface Base {
+    base: String
+}
+
+type Country implements Base{
+    id: ID! @resolve
+    base: String @resolve
+}

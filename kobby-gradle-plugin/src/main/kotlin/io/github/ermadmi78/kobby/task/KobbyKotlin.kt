@@ -924,6 +924,14 @@ open class KobbyKotlin : DefaultTask() {
             "Schema parsing failed.".throwIt(e)
         }
 
+        try {
+            schema.validate().forEach { warning ->
+                logger.warn(warning)
+            }
+        } catch (e: Exception) {
+            "Schema validation failed.".throwIt(e)
+        }
+
         val output = try {
             generateKotlin(schema, layout)
         } catch (e: Exception) {

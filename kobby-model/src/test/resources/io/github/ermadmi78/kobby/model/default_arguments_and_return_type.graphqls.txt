@@ -1,0 +1,14 @@
+directive @primaryKey on FIELD_DEFINITION
+directive @required on FIELD_DEFINITION
+directive @default on FIELD_DEFINITION
+
+type Query {
+    first(arg: Int): [Country!]! @primaryKey
+    second(arg: Boolean! = false): Country! @required
+    third(arg: String!): Country @default
+}
+
+type Country {
+    id: ID!
+    name: String!
+}

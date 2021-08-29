@@ -34,4 +34,8 @@ tasks {
         minimize()
         configurations = listOf(shadowImplementation)
     }
+
+    test {
+        dependsOn(":resolveIntegrationTestDependencies")
+    }
 }

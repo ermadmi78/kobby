@@ -1,0 +1,11 @@
+directive @selection on FIELD_DEFINITION
+
+type Query {
+    first: Int! @selection
+    second(arg0: Int!, arg1: String!): String! @selection
+    fourth(arg0: Int!, arg1: String!): Country! @selection
+}
+
+type Country {
+    id: ID!
+}
