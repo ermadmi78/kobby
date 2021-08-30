@@ -50,7 +50,7 @@ class KobbyField internal constructor(
 
     val isPrimaryKey: Boolean get() = isProperty && (overriddenField?.isPrimaryKey ?: primaryKey)
 
-    val isRequired: Boolean get() = isProperty && (overriddenField?.isRequired ?: primaryKey || required)
+    val isRequired: Boolean get() = isProperty && (overriddenField?.isRequired ?: (primaryKey || required))
 
     val isDefault: Boolean get() = isProperty && (overriddenField?.isDefault ?: default)
 

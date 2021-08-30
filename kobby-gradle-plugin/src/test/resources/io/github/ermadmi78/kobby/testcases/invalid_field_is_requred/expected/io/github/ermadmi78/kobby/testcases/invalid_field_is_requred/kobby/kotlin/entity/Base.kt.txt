@@ -1,0 +1,57 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.InvalidFieldIsRequredContext
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.InvalidFieldIsRequredDSL
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.InvalidFieldIsRequredSubscriber
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Base : InvalidFieldIsRequredContext {
+  public val id: Long
+
+  public val name: String
+
+  public val description: String?
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      InvalidFieldIsRequredSubscriber<Subscription>
+}
+
+@InvalidFieldIsRequredDSL
+public interface BaseProjection {
+  public fun id(): Unit
+
+  public fun name(): Unit
+
+  public fun description(): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
+
+@InvalidFieldIsRequredDSL
+public interface BaseQualification {
+  public fun __onCountry(__projection: CountryProjection.() -> Unit): Unit
+}
+
+@InvalidFieldIsRequredDSL
+public interface BaseQualifiedProjection : BaseProjection, BaseQualification

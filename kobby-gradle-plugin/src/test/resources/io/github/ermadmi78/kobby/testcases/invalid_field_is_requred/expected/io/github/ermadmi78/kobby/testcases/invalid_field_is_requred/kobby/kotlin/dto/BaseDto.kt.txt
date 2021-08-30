@@ -1,0 +1,26 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.dto
+
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+
+public interface BaseDto {
+  public val id: Long?
+
+  public val name: String?
+
+  public val description: String?
+}

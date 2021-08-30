@@ -1,0 +1,136 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.InvalidFieldIsRequredContext
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.dto.BaseDto
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.dto.CountryDto
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.entity.Base
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.entity.BaseQualifiedProjection
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.entity.CountryProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.MutableSet
+import kotlin.collections.Set
+import kotlin.collections.mutableSetOf
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+
+internal open class BaseQualifiedProjectionImpl : BaseQualifiedProjection {
+  internal val ___innerIgnore: MutableSet<String> = mutableSetOf()
+
+  internal var __innerId0: Boolean = false
+
+  internal var __innerName1: Boolean = false
+
+  internal var __innerDescription2: Boolean = false
+
+  internal val ___inner__onCountry: CountryProjectionImpl = CountryProjectionImpl()
+
+  public override fun id(): Unit {
+    __innerId0 = true
+
+    ___inner__onCountry.__innerId0 = __innerId0
+
+    ___innerIgnore += "id"
+  }
+
+  public override fun name(): Unit {
+    __innerName1 = true
+
+    ___inner__onCountry.__innerName1 = __innerName1
+
+    ___innerIgnore += "name"
+  }
+
+  public override fun description(): Unit {
+    __innerDescription2 = true
+
+    ___inner__onCountry.__innerDescription2 = __innerDescription2
+
+    ___innerIgnore += "description"
+  }
+
+  public override fun __onCountry(__projection: CountryProjection.() -> Unit): Unit {
+    CountryProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
+        ___inner__onCountry)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: BaseQualifiedProjection):
+      Unit {
+    if ("id" !in ignore && __innerId0) {
+      __projection.id()
+    }
+    if ("name" !in ignore && __innerName1) {
+      __projection.name()
+    }
+    if ("description" !in ignore && __innerDescription2) {
+      __projection.description()
+    }
+    __projection.__onCountry {
+      this@BaseQualifiedProjectionImpl.___inner__onCountry.___innerRepeatProjection(setOf(), this)
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore && __innerId0) {
+      body.append(' ').append("id")
+    }
+
+    // Field: name
+    if ("name" !in ignore && __innerName1) {
+      body.append(' ').append("name")
+    }
+
+    // Field: description
+    if ("description" !in ignore && __innerDescription2) {
+      body.append(' ').append("description")
+    }
+
+    body.append(' ').append("__typename")
+
+    val subBody = StringBuilder()
+
+    // Qualification of: Country
+    subBody.clear()
+    ___inner__onCountry.___innerBuild(___innerIgnore, header, subBody, arguments)
+    if (subBody.length > 4) {
+      body.append(" ... on ").append("Country").append(subBody)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun BaseDto.buildEntity(__innerContext: InvalidFieldIsRequredContext,
+    __innerProjection: BaseQualifiedProjectionImpl): Base = when(this) {
+  is CountryDto -> CountryImpl(__innerContext, __innerProjection.___inner__onCountry, this)
+  else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
+}

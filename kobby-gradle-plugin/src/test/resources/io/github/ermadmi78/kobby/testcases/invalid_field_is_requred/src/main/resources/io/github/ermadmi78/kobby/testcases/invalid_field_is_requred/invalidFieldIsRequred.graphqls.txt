@@ -1,0 +1,19 @@
+directive @primaryKey on FIELD_DEFINITION
+directive @required on FIELD_DEFINITION
+directive @default on FIELD_DEFINITION
+
+type Query {
+    countries: [Country!]!
+}
+
+interface Base {
+    id: ID!
+    name: String!
+    description: String
+}
+
+type Country implements Base {
+    id: ID! @primaryKey
+    name: String! @required
+    description: String @default
+}
