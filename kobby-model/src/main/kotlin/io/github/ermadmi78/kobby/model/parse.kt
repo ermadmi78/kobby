@@ -237,23 +237,23 @@ private class RegistryScope(
     }
 
     fun FieldDefinition.isPrimaryKey(): Boolean = directives.firstOrNull {
-        it.name == directiveLayout[KobbyDirective.PRIMARY_KEY] ?: KobbyDirective.PRIMARY_KEY
+        it.name == (directiveLayout[KobbyDirective.PRIMARY_KEY] ?: KobbyDirective.PRIMARY_KEY)
     } != null
 
     fun FieldDefinition.isRequired(): Boolean = directives.firstOrNull {
-        it.name == directiveLayout[KobbyDirective.REQUIRED] ?: KobbyDirective.REQUIRED
+        it.name == (directiveLayout[KobbyDirective.REQUIRED] ?: KobbyDirective.REQUIRED)
     } != null
 
     fun FieldDefinition.isDefault(): Boolean = directives.firstOrNull {
-        it.name == directiveLayout[KobbyDirective.DEFAULT] ?: KobbyDirective.DEFAULT
+        it.name == (directiveLayout[KobbyDirective.DEFAULT] ?: KobbyDirective.DEFAULT)
     } != null
 
     fun FieldDefinition.isSelection(): Boolean = directives.firstOrNull {
-        it.name == directiveLayout[KobbyDirective.SELECTION] ?: KobbyDirective.SELECTION
+        it.name == (directiveLayout[KobbyDirective.SELECTION] ?: KobbyDirective.SELECTION)
     } != null
 
     fun FieldDefinition.isResolve(): Boolean = directives.firstOrNull {
-        it.name == directiveLayout[KobbyDirective.RESOLVE] ?: KobbyDirective.RESOLVE
+        it.name == (directiveLayout[KobbyDirective.RESOLVE] ?: KobbyDirective.RESOLVE)
     } != null
 }
 
