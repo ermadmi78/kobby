@@ -8,86 +8,117 @@ import org.gradle.api.file.FileCollection
 annotation class Kobby
 
 /**
- * Kobby Kotlin Gradle Plugin project extension
+ * Kobby Plugin Configuration
  */
 fun Project.kobby(configure: KobbyExtension.() -> Unit) =
     extensions.configure(KobbyExtension::class.java, configure)
 
 /**
- * Created on 20.12.2020
- *
- * @author Dmitry Ermakov (ermadmi78@gmail.com)
+ * Kobby Plugin Configuration
  */
 @Kobby
 open class KobbyExtension {
     internal val schemaExtension = lazy { KobbySchemaExtension() }
     internal val kotlinExtension = lazy { KobbyKotlinExtension() }
 
-    /** DSL schema configuration */
+    /** Schema location and parsing rules configuration */
     fun schema(action: Action<KobbySchemaExtension>) {
         action.execute(schemaExtension.value)
     }
 
-    /** Kotlin DSL generator configuration */
+    /** Configuration of Kotlin DSL generation */
     fun kotlin(action: Action<KobbyKotlinExtension>) {
         action.execute(kotlinExtension.value)
     }
-
-    override fun toString(): String {
-        return "KobbyExtension(schemaExtension=$schemaExtension, kotlinExtension=$kotlinExtension)"
-    }
 }
 
+/**
+ * Schema location and parsing rules configuration
+ */
 @Kobby
 open class KobbySchemaExtension {
+    /**
+     * GraphQL schema files to generate Kobby DSL.
+     *
+     * By default, all "`**`/`*`.graphqls" files in "src/main/resources"
+     */
     var files: FileCollection? = null
+
     internal var scanExtension = lazy { KobbySchemaScanExtension() }
     internal var directiveExtension = lazy { KobbySchemaDirectiveExtension() }
 
+    /** Configuration of schema files location scanning */
     fun scan(action: Action<KobbySchemaScanExtension>) {
         action.execute(scanExtension.value)
     }
 
+    /** Configuration of Kobby GraphQL directives parsing */
     fun directive(action: Action<KobbySchemaDirectiveExtension>) {
         action.execute(directiveExtension.value)
     }
-
-    override fun toString(): String {
-        return "KobbySchemaExtension(" +
-                "files=$files, " +
-                "scanExtension=$scanExtension, " +
-                "directiveExtension=$directiveExtension" +
-                ")"
-    }
 }
 
+/**
+ * Configuration of schema files location scanning
+ */
 @Kobby
 open class KobbySchemaScanExtension {
+    /**
+     * Root directory to scan schema files
+     *
+     * Default: "src/main/resources"
+     */
     var dir: String? = null
-    var includes: Iterable<String>? = null
-    var excludes: Iterable<String>? = null
 
-    override fun toString(): String {
-        return "KobbySchemaScanExtension(dir=$dir, includes=$includes, excludes=$excludes)"
-    }
+    /**
+     * ANT style include patterns to scan schema files
+     *
+     * Default: listOf("`**`/`*`.graphqls")
+     */
+    var includes: Iterable<String>? = null
+
+    /** ANT style exclude patterns to scan schema files */
+    var excludes: Iterable<String>? = null
 }
 
+/**
+ * Configuration of Kobby GraphQL directives parsing
+ */
 @Kobby
 open class KobbySchemaDirectiveExtension {
+    /**
+     * Name of "primaryKey" directive
+     *
+     * Default: "primaryKey"
+     */
     var primaryKey: String? = null
-    var required: String? = null
-    var default: String? = null
-    var selection: String? = null
-    var resolve: String? = null
 
-    override fun toString(): String {
-        return "KobbySchemaDirectiveExtension(" +
-                "primaryKey=$primaryKey, " +
-                "required=$required, " +
-                "default=$default, " +
-                "selection=$selection, " +
-                "resolve=$resolve" +
-                ")"
-    }
+    /**
+     * Name of "required" directive
+     *
+     * Default: "required"
+     */
+    var required: String? = null
+
+    /**
+     * Name of "default" directive
+     *
+     * Default: "default"
+     */
+    var default: String? = null
+
+    /**
+     * Name of "selection" directive
+     *
+     * Default: "selection"
+     */
+    var selection: String? = null
+
+    /**
+     * Name of "resolve" directive
+     *
+     * Default: "resolve"
+     */
+    var resolve: String? = null
 }
 
