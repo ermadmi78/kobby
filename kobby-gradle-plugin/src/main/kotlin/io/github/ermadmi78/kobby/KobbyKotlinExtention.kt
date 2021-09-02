@@ -684,7 +684,11 @@ open class KobbyKotlinResolverExtension {
      */
     var packageName: String? = null
 
-    /** Prefix for resolver interfaces */
+    /**
+     * Prefix for resolver interfaces
+     *
+     * By default, is capitalized context name
+     */
     var prefix: String? = null
 
     /**
