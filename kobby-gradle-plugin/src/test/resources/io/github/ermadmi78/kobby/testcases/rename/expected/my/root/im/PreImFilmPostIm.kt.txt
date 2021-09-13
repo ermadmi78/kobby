@@ -29,6 +29,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxSubscriberPostCtx
@@ -114,6 +115,64 @@ public class PreImFilmPostIm(
   }
 
   public override fun hashCode(): Int = innerDtoPin.id?.hashCode() ?: 0
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Film").append('(')
+
+    var counter = 0
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (innerProjectionPin.innerFields1Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("fields").append('=').append(fields)
+    }
+
+    if (innerProjectionPin.innerTitle2Pin) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("title").append('=').append(title)
+    }
+
+    if (innerProjectionPin.innerGenre3Pin) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("genre").append('=').append(genre)
+    }
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countryId").append('=').append(countryId)
+    }
+
+    if (innerProjectionPin.innerCountry5Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("country").append('=').append(country)
+    }
+
+    if (innerProjectionPin.innerActors6Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("actors").append('=').append(actors)
+    }
+
+    append(')')
+  }
 
   public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
       PrefEnMyQueryPostEn = innerContextPin.myQuery(projection)

@@ -33,6 +33,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class MyMutationImpl(
@@ -47,6 +48,22 @@ internal class MyMutationImpl(
       }
       return __innerDto.insert!!
     }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("MyMutation").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerInsert0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("insert").append('=').append(insert)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery =
       __innerContext.query(__projection)

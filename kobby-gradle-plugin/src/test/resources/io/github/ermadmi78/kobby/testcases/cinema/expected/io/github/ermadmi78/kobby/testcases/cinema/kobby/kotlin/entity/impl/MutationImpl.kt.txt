@@ -45,6 +45,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class MutationImpl(
@@ -99,6 +100,57 @@ internal class MutationImpl(
       }
       return __innerDto.tagActor!!
     }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Mutation").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCreateCountry0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createCountry").append('=').append(createCountry)
+    }
+
+    if (__innerProjection.__innerCreateFilm1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createFilm").append('=').append(createFilm)
+    }
+
+    if (__innerProjection.__innerCreateActor2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createActor").append('=').append(createActor)
+    }
+
+    if (__innerProjection.__innerAssociate3) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("associate").append('=').append(associate)
+    }
+
+    if (__innerProjection.__innerTagFilm4) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tagFilm").append('=').append(tagFilm)
+    }
+
+    if (__innerProjection.__innerTagActor5) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tagActor").append('=').append(tagActor)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

@@ -52,6 +52,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class ActorImpl(
@@ -148,6 +149,85 @@ internal class ActorImpl(
     var result = __innerDto.id?.hashCode() ?: 0
     result = 31 * result + (__innerDto.countryId?.hashCode() ?: 0)
     return result
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Actor").append('(')
+
+    var counter = 0
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerFields1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("fields").append('=').append(fields)
+    }
+
+    if (__innerProjection.__innerTags2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tags").append('=').append(tags)
+    }
+
+    if (__innerProjection.__innerFirstName3) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("firstName").append('=').append(firstName)
+    }
+
+    if (__innerProjection.__innerLastName4) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("lastName").append('=').append(lastName)
+    }
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("birthday").append('=').append(birthday)
+    }
+
+    if (__innerProjection.__innerGender6) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("gender").append('=').append(gender)
+    }
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countryId").append('=').append(countryId)
+    }
+
+    if (__innerProjection.__innerCountry8 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("country").append('=').append(country)
+    }
+
+    if (__innerProjection.__innerFilms9 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("films").append('=').append(films)
+    }
+
+    append(')')
   }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =

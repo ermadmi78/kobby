@@ -34,6 +34,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class MutationImpl(
@@ -48,6 +49,22 @@ internal class MutationImpl(
     __innerDto.resolveCreateCountry(__innerContext, __innerProjection.__innerCreateCountry0!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Mutation").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCreateCountry0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createCountry").append('=').append(createCountry)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

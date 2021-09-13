@@ -37,6 +37,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 
 internal class QueryImpl(
   internal val __innerContext: CountryContext,
@@ -50,6 +51,22 @@ internal class QueryImpl(
     __innerDto.resolveCountries(__innerContext, __innerProjection.__innerCountries0!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCountries0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countries").append('=').append(countries)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

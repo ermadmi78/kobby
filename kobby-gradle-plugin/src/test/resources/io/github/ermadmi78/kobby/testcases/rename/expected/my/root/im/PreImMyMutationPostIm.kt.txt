@@ -25,6 +25,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxSubscriberPostCtx
@@ -96,6 +97,57 @@ public class PreImMyMutationPostIm(
       }
       return innerDtoPin.tagActor!!
     }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("MyMutation").append('(')
+
+    var counter = 0
+
+    if (innerProjectionPin.innerCreateCountry0Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createCountry").append('=').append(createCountry)
+    }
+
+    if (innerProjectionPin.innerCreateFilm1Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createFilm").append('=').append(createFilm)
+    }
+
+    if (innerProjectionPin.innerCreateActor2Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createActor").append('=').append(createActor)
+    }
+
+    if (innerProjectionPin.innerAssociate3Pin) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("associate").append('=').append(associate)
+    }
+
+    if (innerProjectionPin.innerTagFilm4Pin) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tagFilm").append('=').append(tagFilm)
+    }
+
+    if (innerProjectionPin.innerTagActor5Pin) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tagActor").append('=').append(tagActor)
+    }
+
+    append(')')
+  }
 
   public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
       PrefEnMyQueryPostEn = innerContextPin.myQuery(projection)

@@ -52,6 +52,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class QueryImpl(
@@ -114,6 +115,64 @@ internal class QueryImpl(
     __innerDto.resolveTaggable(__innerContext, __innerProjection.__innerTaggable6!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCountry0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("country").append('=').append(country)
+    }
+
+    if (__innerProjection.__innerCountries1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countries").append('=').append(countries)
+    }
+
+    if (__innerProjection.__innerFilm2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("film").append('=').append(film)
+    }
+
+    if (__innerProjection.__innerFilms3 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("films").append('=').append(films)
+    }
+
+    if (__innerProjection.__innerActor4 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("actor").append('=').append(actor)
+    }
+
+    if (__innerProjection.__innerActors5 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("actors").append('=').append(actors)
+    }
+
+    if (__innerProjection.__innerTaggable6 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("taggable").append('=').append(taggable)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

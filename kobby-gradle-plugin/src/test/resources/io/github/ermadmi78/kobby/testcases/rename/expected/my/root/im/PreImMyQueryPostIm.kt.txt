@@ -28,6 +28,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxSubscriberPostCtx
@@ -103,6 +104,57 @@ public class PreImMyQueryPostIm(
     innerDtoPin.resolveActors(innerContextPin, innerProjectionPin.innerActors5Pin!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("MyQuery").append('(')
+
+    var counter = 0
+
+    if (innerProjectionPin.innerCountry0Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("country").append('=').append(country)
+    }
+
+    if (innerProjectionPin.innerCountries1Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countries").append('=').append(countries)
+    }
+
+    if (innerProjectionPin.innerFilm2Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("film").append('=').append(film)
+    }
+
+    if (innerProjectionPin.innerFilms3Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("films").append('=').append(films)
+    }
+
+    if (innerProjectionPin.innerActor4Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("actor").append('=').append(actor)
+    }
+
+    if (innerProjectionPin.innerActors5Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("actors").append('=').append(actors)
+    }
+
+    append(')')
+  }
 
   public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
       PrefEnMyQueryPostEn = innerContextPin.myQuery(projection)

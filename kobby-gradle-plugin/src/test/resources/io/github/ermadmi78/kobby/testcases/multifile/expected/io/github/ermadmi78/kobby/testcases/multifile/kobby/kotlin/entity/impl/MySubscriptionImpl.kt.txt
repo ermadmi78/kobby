@@ -34,6 +34,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class MySubscriptionImpl(
@@ -48,6 +49,22 @@ internal class MySubscriptionImpl(
     __innerDto.resolveOnInsert(__innerContext, __innerProjection.__innerOnInsert0!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("MySubscription").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerOnInsert0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("onInsert").append('=').append(onInsert)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery =
       __innerContext.query(__projection)

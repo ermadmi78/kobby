@@ -52,6 +52,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class FilmImpl(
@@ -126,6 +127,71 @@ internal class FilmImpl(
   }
 
   public override fun hashCode(): Int = __innerDto.id?.hashCode() ?: 0
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Film").append('(')
+
+    var counter = 0
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerFields1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("fields").append('=').append(fields)
+    }
+
+    if (__innerProjection.__innerTags2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tags").append('=').append(tags)
+    }
+
+    if (__innerProjection.__innerTitle3) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("title").append('=').append(title)
+    }
+
+    if (__innerProjection.__innerGenre4) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("genre").append('=').append(genre)
+    }
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countryId").append('=').append(countryId)
+    }
+
+    if (__innerProjection.__innerCountry6 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("country").append('=').append(country)
+    }
+
+    if (__innerProjection.__innerActors7 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("actors").append('=').append(actors)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

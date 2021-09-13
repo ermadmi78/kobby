@@ -24,6 +24,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxSubscriberPostCtx
@@ -69,6 +70,36 @@ public class PreImMySubscriptionPostIm(
     innerDtoPin.resolveActorCreated(innerContextPin, innerProjectionPin.innerActorCreated2Pin!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("MySubscription").append('(')
+
+    var counter = 0
+
+    if (innerProjectionPin.innerCountryCreated0Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countryCreated").append('=').append(countryCreated)
+    }
+
+    if (innerProjectionPin.innerFilmCreated1Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("filmCreated").append('=').append(filmCreated)
+    }
+
+    if (innerProjectionPin.innerActorCreated2Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("actorCreated").append('=').append(actorCreated)
+    }
+
+    append(')')
+  }
 
   public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
       PrefEnMyQueryPostEn = innerContextPin.myQuery(projection)

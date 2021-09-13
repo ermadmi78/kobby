@@ -35,6 +35,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 
 internal class CountryImpl(
   internal val __innerContext: GraphqlContext,
@@ -56,6 +57,29 @@ internal class CountryImpl(
       }
       return __innerDto.name!!
     }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Country").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerId0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerName1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("name").append('=').append(name)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

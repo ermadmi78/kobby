@@ -34,6 +34,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 
 internal class SubscriptionImpl(
   internal val __innerContext: GraphqlContext,
@@ -47,6 +48,22 @@ internal class SubscriptionImpl(
     __innerDto.resolveCountryCreated(__innerContext, __innerProjection.__innerCountryCreated0!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Subscription").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCountryCreated0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countryCreated").append('=').append(countryCreated)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

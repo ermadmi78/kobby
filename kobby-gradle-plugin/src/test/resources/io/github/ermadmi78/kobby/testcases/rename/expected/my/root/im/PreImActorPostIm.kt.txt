@@ -29,6 +29,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxSubscriberPostCtx
@@ -133,6 +134,71 @@ public class PreImActorPostIm(
     var result = innerDtoPin.id?.hashCode() ?: 0
     result = 31 * result + (innerDtoPin.countryId?.hashCode() ?: 0)
     return result
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Actor").append('(')
+
+    var counter = 0
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (innerProjectionPin.innerFields1Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("fields").append('=').append(fields)
+    }
+
+    if (innerProjectionPin.innerFirstName2Pin) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("firstName").append('=').append(firstName)
+    }
+
+    if (innerProjectionPin.innerLastName3Pin) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("lastName").append('=').append(lastName)
+    }
+
+    if (innerProjectionPin.innerGender4Pin) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("gender").append('=').append(gender)
+    }
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countryId").append('=').append(countryId)
+    }
+
+    if (innerProjectionPin.innerCountry6Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("country").append('=').append(country)
+    }
+
+    if (innerProjectionPin.innerFilms7Pin != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("films").append('=').append(films)
+    }
+
+    append(')')
   }
 
   public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):

@@ -37,6 +37,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class QueryImpl(
@@ -51,6 +52,22 @@ internal class QueryImpl(
     __innerDto.resolveAll(__innerContext, __innerProjection.__innerAll0!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerAll0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("all").append('=').append(all)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

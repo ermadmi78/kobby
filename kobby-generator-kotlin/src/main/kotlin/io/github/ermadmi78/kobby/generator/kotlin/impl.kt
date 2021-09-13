@@ -240,6 +240,43 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             }
         }
 
+        buildFunction(TO_STRING_FUN) {
+            suppressUnused()
+            addModifiers(OVERRIDE)
+            returns(STRING)
+
+            controlFlow("return·%M", MemberName("kotlin.text", "buildString")) {
+                buildAppendChain {
+                    appendLiteral(node.name)
+                    appendLiteral('(')
+                }
+
+                addStatement("")
+                addStatement("var·counter·=·0")
+                addStatement("")
+                node.fields { field ->
+                    val fieldCondition = when {
+                        field.isRequired -> "true"
+                        field.innerIsBoolean -> "${impl.projectionPropertyName}.${field.innerName}"
+                        else -> "${impl.projectionPropertyName}.${field.innerName}·!=·null"
+                    }
+                    ifFlow(fieldCondition) {
+                        ifFlow("counter++·>·0") {
+                            buildAppendChain { appendLiteral(", ") }
+                        }
+                        buildAppendChain {
+                            appendLiteral(field.name)
+                            appendLiteral('=')
+                            appendExactly(field.name)
+                        }
+                    }
+                    addStatement("")
+                }
+
+                buildAppendChain { appendLiteral(')') }
+            }
+        }
+
         // context query
         buildFunction(context.query) {
             addModifiers(OVERRIDE, SUSPEND)

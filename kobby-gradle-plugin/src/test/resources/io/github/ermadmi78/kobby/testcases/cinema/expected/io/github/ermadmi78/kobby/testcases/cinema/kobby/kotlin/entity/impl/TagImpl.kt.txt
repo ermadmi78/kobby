@@ -34,6 +34,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 
 internal class TagImpl(
   internal val __innerContext: CinemaContext,
@@ -47,6 +48,22 @@ internal class TagImpl(
       }
       return __innerDto.value!!
     }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Tag").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerValue0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("value").append('=').append(value)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
       __innerContext.query(__projection)

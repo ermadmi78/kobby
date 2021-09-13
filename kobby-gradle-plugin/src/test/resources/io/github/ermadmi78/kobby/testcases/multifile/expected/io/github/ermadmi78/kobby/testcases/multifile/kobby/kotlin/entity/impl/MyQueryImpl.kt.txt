@@ -37,6 +37,7 @@ import kotlin.collections.map
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
+import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 
 internal class MyQueryImpl(
@@ -51,6 +52,22 @@ internal class MyQueryImpl(
     __innerDto.resolveFind(__innerContext, __innerProjection.__innerFind0!!)
   }
 
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("MyQuery").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerFind0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("find").append('=').append(find)
+    }
+
+    append(')')
+  }
 
   public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery =
       __innerContext.query(__projection)

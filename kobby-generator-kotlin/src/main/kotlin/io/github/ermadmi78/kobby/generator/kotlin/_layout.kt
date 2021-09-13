@@ -19,6 +19,7 @@ const val EQUALS_FUN = "equals"
 const val EQUALS_ARG = "other"
 const val HASH_CODE_FUN = "hashCode"
 const val HASH_CODE_RES = "result"
+const val TO_STRING_FUN = "toString"
 
 //******************************************************************************************************************
 //                                   KotlinFile
