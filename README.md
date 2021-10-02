@@ -19,6 +19,10 @@ See documentation in the [project wiki](https://github.com/ermadmi78/kobby/wiki)
 * Maven at least version 3.6.3 is required.
 * Kotlin at least version 1.5 is required to compile generated client DSL.
 
+### Contributing
+
+Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+
 ### Gradle
 
 ```kotlin
