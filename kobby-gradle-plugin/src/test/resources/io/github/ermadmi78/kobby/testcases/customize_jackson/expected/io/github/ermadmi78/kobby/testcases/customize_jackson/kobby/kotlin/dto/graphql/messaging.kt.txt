@@ -1,0 +1,243 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.dto.graphql
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonSubTypes
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = CountryMessageConnectionInit::class, name = "connection_init"),
+  JsonSubTypes.Type(value = CountryMessageStart::class, name = "start"),
+  JsonSubTypes.Type(value = CountryMessageStop::class, name = "stop"),
+  JsonSubTypes.Type(value = CountryMessageConnectionTerminate::class, name =
+        "connection_terminate"),
+  JsonSubTypes.Type(value = CountryMessageConnectionError::class, name = "connection_error"),
+  JsonSubTypes.Type(value = CountryMessageConnectionAck::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = CountryMessageData::class, name = "data"),
+  JsonSubTypes.Type(value = CountryMessageError::class, name = "error"),
+  JsonSubTypes.Type(value = CountryMessageComplete::class, name = "complete"),
+  JsonSubTypes.Type(value = CountryMessageConnectionKeepAlive::class, name = "ka")
+)
+public interface CountryMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = CountryMessageConnectionInit::class, name = "connection_init"),
+  JsonSubTypes.Type(value = CountryMessageStart::class, name = "start"),
+  JsonSubTypes.Type(value = CountryMessageStop::class, name = "stop"),
+  JsonSubTypes.Type(value = CountryMessageConnectionTerminate::class, name = "connection_terminate")
+)
+public interface CountryClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type"
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = CountryMessageConnectionError::class, name = "connection_error"),
+  JsonSubTypes.Type(value = CountryMessageConnectionAck::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = CountryMessageData::class, name = "data"),
+  JsonSubTypes.Type(value = CountryMessageError::class, name = "error"),
+  JsonSubTypes.Type(value = CountryMessageComplete::class, name = "complete"),
+  JsonSubTypes.Type(value = CountryMessageConnectionKeepAlive::class, name = "ka")
+)
+public interface CountryServerMessage
+
+/**
+ * See GQL_CONNECTION_INIT
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_init")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageConnectionInit::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryMessageConnectionInit @JsonCreator constructor(
+  public val payload: Map<String, Any?>? = null
+) : CountryMessage, CountryClientMessage
+
+/**
+ * See GQL_START
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "start")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageStart::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryMessageStart(
+  public val id: String,
+  public val payload: CountryRequest
+) : CountryMessage, CountryClientMessage
+
+/**
+ * See GQL_STOP
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "stop")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageStop::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryMessageStop @JsonCreator constructor(
+  public val id: String
+) : CountryMessage, CountryClientMessage
+
+/**
+ * See GQL_CONNECTION_TERMINATE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_terminate")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageConnectionTerminate::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMessage
+
+/**
+ * See GQL_CONNECTION_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_error")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageConnectionError::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryMessageConnectionError @JsonCreator constructor(
+  public val payload: Any? = null
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_CONNECTION_ACK
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_ack")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageConnectionAck::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryMessageConnectionAck @JsonCreator constructor(
+  public val payload: Any? = null
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_DATA
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "data")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageData::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryMessageData(
+  public val id: String,
+  public val payload: CountrySubscriptionResult
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "error")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageError::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryMessageError(
+  public val id: String,
+  public val payload: CountryErrorResult
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_COMPLETE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "complete")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageComplete::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryMessageComplete @JsonCreator constructor(
+  public val id: String
+) : CountryMessage, CountryServerMessage
+
+/**
+ * See GQL_CONNECTION_KEEP_ALIVE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ka")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CountryMessageConnectionKeepAlive::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public class CountryMessageConnectionKeepAlive : CountryMessage, CountryServerMessage

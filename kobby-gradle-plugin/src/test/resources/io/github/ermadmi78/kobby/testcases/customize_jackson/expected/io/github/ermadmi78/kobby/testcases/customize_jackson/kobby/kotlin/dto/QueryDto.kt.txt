@@ -1,0 +1,64 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.CountryDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.let
+
+@JsonTypeName(value = "Query")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NONE,
+  include = JsonTypeInfo.As.EXISTING_PROPERTY,
+  property = "_name",
+  defaultImpl = QueryDto::class
+)
+@JsonInclude(value = JsonInclude.Include.ALWAYS)
+public data class QueryDto @JsonCreator constructor(
+  public val countries: List<CountryDto>? = null
+)
+
+public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {
+  // QueryDto builder DSL
+  return QueryDtoBuilder().apply(block).let {
+    QueryDto(
+          it.countries
+        )
+  }
+}
+
+public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto {
+  // QueryDto copy DSL
+  return QueryDtoBuilder().also {
+    it.countries = countries
+  }
+  .apply(block).let {
+    QueryDto(
+          it.countries
+        )
+  }
+}
+
+@CountryDSL
+public class QueryDtoBuilder {
+  public var countries: List<CountryDto>? = null
+}

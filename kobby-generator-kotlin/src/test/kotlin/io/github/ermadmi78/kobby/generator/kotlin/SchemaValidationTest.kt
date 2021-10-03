@@ -37,7 +37,13 @@ class SchemaValidationTest {
             Decoration(null, null),
             Decoration(null, null),
             true,
-            KotlinDtoJacksonLayout(true),
+            KotlinDtoJacksonLayout(
+                true,
+                "NAME",
+                "PROPERTY",
+                "__typename",
+                "NON_ABSENT"
+            ),
             KotlinDtoBuilderLayout(
                 true,
                 Decoration(null, "Builder"),

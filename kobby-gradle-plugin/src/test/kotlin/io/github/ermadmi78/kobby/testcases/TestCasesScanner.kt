@@ -7,6 +7,7 @@ import org.junit.jupiter.api.io.TempDir
 import org.springframework.core.io.Resource
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.core.io.support.ResourcePatternResolver
+import java.io.File
 import java.nio.file.*
 import java.nio.file.attribute.BasicFileAttributes
 import java.time.Duration
@@ -37,7 +38,7 @@ class TestCasesScanner {
         val effectiveTempDir: Path = System.getenv("KOBBY_KOTLIN_TEMP_DIR")?.let { Path.of(it) } ?: tempDir
 
         val resourceResolver: ResourcePatternResolver = PathMatchingResourcePatternResolver()
-        val resourceScanRoot: String = javaClass.packageName.replace('.', '/') + '/'
+        val resourceScanRoot: String = javaClass.packageName.replace('.', File.separatorChar) + File.separatorChar
         val failedTestCases = mutableListOf<String>()
 
         val testCases = resourceResolver.getResources(

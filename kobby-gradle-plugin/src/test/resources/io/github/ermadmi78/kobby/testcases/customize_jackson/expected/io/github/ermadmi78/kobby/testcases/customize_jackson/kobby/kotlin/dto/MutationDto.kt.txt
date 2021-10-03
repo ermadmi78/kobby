@@ -1,0 +1,63 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.CountryDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "Mutation")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NONE,
+  include = JsonTypeInfo.As.EXISTING_PROPERTY,
+  property = "_name",
+  defaultImpl = MutationDto::class
+)
+@JsonInclude(value = JsonInclude.Include.ALWAYS)
+public data class MutationDto @JsonCreator constructor(
+  public val createCountry: CountryDto? = null
+)
+
+public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {
+  // MutationDto builder DSL
+  return MutationDtoBuilder().apply(block).let {
+    MutationDto(
+          it.createCountry
+        )
+  }
+}
+
+public fun MutationDto.copy(block: MutationDtoBuilder.() -> Unit): MutationDto {
+  // MutationDto copy DSL
+  return MutationDtoBuilder().also {
+    it.createCountry = createCountry
+  }
+  .apply(block).let {
+    MutationDto(
+          it.createCountry
+        )
+  }
+}
+
+@CountryDSL
+public class MutationDtoBuilder {
+  public var createCountry: CountryDto? = null
+}

@@ -348,6 +348,34 @@ open class KobbyKotlinDtoJacksonExtension {
      * By default, "true" if "com.fasterxml.jackson.core:jackson-annotations" artifact is in the project dependencies.
      */
     var enabled: Boolean? = null
+
+    /**
+     * Customize the @JsonTypeInfo annotation's `use` property.
+     *
+     * Default: "NAME"
+     */
+    var typeInfoUse: String? = null
+
+    /**
+     * Customize the @JsonTypeInfo annotation's `include` property.
+     *
+     * Default: "PROPERTY"
+     */
+    var typeInfoInclude: String? = null
+
+    /**
+     * Customize the @JsonTypeInfo annotation's `property` property.
+     *
+     * Default: "__typename"
+     */
+    var typeInfoProperty: String? = null
+
+    /**
+     * Customize the @JsonInclude annotation's `value` property.
+     *
+     * Default: "NON_ABSENT"
+     */
+    var jsonInclude: String? = null
 }
 
 /**

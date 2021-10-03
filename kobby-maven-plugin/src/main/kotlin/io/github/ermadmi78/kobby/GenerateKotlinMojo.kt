@@ -213,7 +213,13 @@ class GenerateKotlinMojo : AbstractMojo() {
                 Decoration(dto.enumPrefix, dto.enumPostfix),
                 Decoration(dto.inputPrefix, dto.inputPostfix),
                 dto.applyPrimaryKeys,
-                KotlinDtoJacksonLayout(dto.jackson.enabled!!),
+                KotlinDtoJacksonLayout(
+                    dto.jackson.enabled!!,
+                    dto.jackson.typeInfoUse,
+                    dto.jackson.typeInfoInclude,
+                    dto.jackson.typeInfoProperty,
+                    dto.jackson.jsonInclude
+                ),
                 KotlinDtoBuilderLayout(
                     dto.builder.enabled,
                     Decoration(dto.builder.prefix, dto.builder.postfix),
