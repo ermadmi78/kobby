@@ -226,9 +226,25 @@ class KotlinDtoJacksonConfig {
     @Parameter
     var enabled: Boolean? = null
 
+    @Parameter
+    var typeInfoUse: String = "NAME"
+
+    @Parameter
+    var typeInfoInclude: String = "PROPERTY"
+
+    @Parameter
+    var typeInfoProperty: String = "__typename"
+
+    @Parameter
+    var jsonInclude: String = "NON_ABSENT"
+
     override fun toString(): String {
         return "KotlinDtoJacksonConfig(" +
-                "\n        enabled=$enabled" +
+                "\n        enabled=$enabled," +
+                "\n        typeInfoUse=$typeInfoUse," +
+                "\n        typeInfoInclude=$typeInfoInclude," +
+                "\n        typeInfoProperty=$typeInfoProperty" +
+                "\n        jsonInclude=$jsonInclude" +
                 "\n      )"
     }
 }

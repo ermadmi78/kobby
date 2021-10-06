@@ -255,6 +255,38 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoJacksonTypeInfoUse",
+        description = "Customize the @JsonTypeInfo annotation's `use` property (default \"NAME\")"
+    )
+    val dtoJacksonTypeInfoUse: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoJacksonTypeInfoInclude",
+        description = "Customize the @JsonTypeInfo annotation's `include` property (default \"PROPERTY\")"
+    )
+    val dtoJacksonTypeInfoInclude: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoJacksonTypeInfoProperty",
+        description = "Customize the @JsonTypeInfo annotation's `property` property (default \"__typename\")"
+    )
+    val dtoJacksonTypeInfoProperty: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoJacksonJsonInclude",
+        description = "Customize the @JsonInclude annotation's `value` property (default \"NON_ABSENT\")"
+    )
+    val dtoJacksonJsonInclude: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoBuilderEnabled",
         description = "Is DTO builders generation enabled (default true)"
     )
@@ -706,6 +738,10 @@ open class KobbyKotlin : DefaultTask() {
         dtoJacksonEnabled.convention(project.provider {
             project.hasDependency("com.fasterxml.jackson.core", "jackson-annotations")
         })
+        dtoJacksonTypeInfoUse.convention("NAME")
+        dtoJacksonTypeInfoInclude.convention("PROPERTY")
+        dtoJacksonTypeInfoProperty.convention("__typename")
+        dtoJacksonJsonInclude.convention("NON_ABSENT")
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
         dtoBuilderCopyFun.convention("copy")
@@ -845,7 +881,13 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(dtoEnumPrefix.orNull, dtoEnumPostfix.orNull),
                 Decoration(dtoInputPrefix.orNull, dtoInputPostfix.orNull),
                 dtoApplyPrimaryKeys.get(),
-                KotlinDtoJacksonLayout(dtoJacksonEnabled.get()),
+                KotlinDtoJacksonLayout(
+                    dtoJacksonEnabled.get(),
+                    dtoJacksonTypeInfoUse.get(),
+                    dtoJacksonTypeInfoInclude.get(),
+                    dtoJacksonTypeInfoProperty.get(),
+                    dtoJacksonJsonInclude.get()
+                ),
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),
                     Decoration(dtoBuilderPrefix.orNull, dtoBuilderPostfix.orNull),

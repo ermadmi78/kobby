@@ -1,0 +1,63 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.CountryDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "Subscription")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NONE,
+  include = JsonTypeInfo.As.EXISTING_PROPERTY,
+  property = "_name",
+  defaultImpl = SubscriptionDto::class
+)
+@JsonInclude(value = JsonInclude.Include.ALWAYS)
+public data class SubscriptionDto @JsonCreator constructor(
+  public val countryCreated: CountryDto? = null
+)
+
+public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {
+  // SubscriptionDto builder DSL
+  return SubscriptionDtoBuilder().apply(block).let {
+    SubscriptionDto(
+          it.countryCreated
+        )
+  }
+}
+
+public fun SubscriptionDto.copy(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {
+  // SubscriptionDto copy DSL
+  return SubscriptionDtoBuilder().also {
+    it.countryCreated = countryCreated
+  }
+  .apply(block).let {
+    SubscriptionDto(
+          it.countryCreated
+        )
+  }
+}
+
+@CountryDSL
+public class SubscriptionDtoBuilder {
+  public var countryCreated: CountryDto? = null
+}

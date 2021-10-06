@@ -390,14 +390,14 @@ data class KotlinLayout(
         }
 
         buildAnnotation(JSON_TYPE_INFO) {
-            addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
-            addMember("include = %T.As.PROPERTY", JSON_TYPE_INFO)
-            addMember("property = %S", "__typename")
+            addMember("use = %T.Id.${dto.jackson.typeInfoUse}", JSON_TYPE_INFO)
+            addMember("include = %T.As.${dto.jackson.typeInfoInclude}", JSON_TYPE_INFO)
+            addMember("property = %S", dto.jackson.typeInfoProperty)
             addMember("defaultImpl = %T::class", node.dtoClass)
         }
 
         buildAnnotation(JSON_INCLUDE) {
-            addMember("value = %T.Include.NON_ABSENT", JSON_INCLUDE)
+            addMember("value = %T.Include.${dto.jackson.jsonInclude}", JSON_INCLUDE)
         }
 
         return this
@@ -475,7 +475,11 @@ class KotlinDtoLayout(
 }
 
 data class KotlinDtoJacksonLayout(
-    val enabled: Boolean
+    val enabled: Boolean,
+    val typeInfoUse: String,
+    val typeInfoInclude: String,
+    val typeInfoProperty: String,
+    val jsonInclude: String
 )
 
 data class KotlinDtoBuilderLayout(

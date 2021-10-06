@@ -137,6 +137,18 @@ class KobbyPlugin : Plugin<Project> {
                         enabled?.also {
                             kotlinTask.dtoJacksonEnabled.convention(it)
                         }
+                        typeInfoUse?.also {
+                            kotlinTask.dtoJacksonTypeInfoUse.convention(it)
+                        }
+                        typeInfoInclude?.also {
+                            kotlinTask.dtoJacksonTypeInfoInclude.convention(it)
+                        }
+                        typeInfoProperty?.also {
+                            kotlinTask.dtoJacksonTypeInfoProperty.convention(it)
+                        }
+                        jsonInclude?.also {
+                            kotlinTask.dtoJacksonJsonInclude.convention(it)
+                        }
                     }
                     builderExtension.valueOrNull?.apply {
                         enabled?.also {
