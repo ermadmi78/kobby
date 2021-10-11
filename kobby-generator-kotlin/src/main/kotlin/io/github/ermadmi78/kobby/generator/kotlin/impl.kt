@@ -251,9 +251,11 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                     appendLiteral('(')
                 }
 
-                addStatement("")
-                addStatement("var·counter·=·0")
-                addStatement("")
+                if (node.fields.isNotEmpty()) {
+                    addStatement("")
+                    addStatement("var·counter·=·0")
+                    addStatement("")
+                }
                 node.fields { field ->
                     val fieldCondition = when {
                         field.isRequired -> "true"
