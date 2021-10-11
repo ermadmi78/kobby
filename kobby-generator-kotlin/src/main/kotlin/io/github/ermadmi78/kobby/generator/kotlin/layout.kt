@@ -385,15 +385,17 @@ data class KotlinLayout(
             return this
         }
 
-        buildAnnotation(JSON_TYPE_NAME) {
-            addMember("value = %S", node.name)
-        }
+        if (node.kind != INPUT) {
+            buildAnnotation(JSON_TYPE_NAME) {
+                addMember("value = %S", node.name)
+            }
 
-        buildAnnotation(JSON_TYPE_INFO) {
-            addMember("use = %T.Id.${dto.jackson.typeInfoUse}", JSON_TYPE_INFO)
-            addMember("include = %T.As.${dto.jackson.typeInfoInclude}", JSON_TYPE_INFO)
-            addMember("property = %S", dto.jackson.typeInfoProperty)
-            addMember("defaultImpl = %T::class", node.dtoClass)
+            buildAnnotation(JSON_TYPE_INFO) {
+                addMember("use = %T.Id.${dto.jackson.typeInfoUse}", JSON_TYPE_INFO)
+                addMember("include = %T.As.${dto.jackson.typeInfoInclude}", JSON_TYPE_INFO)
+                addMember("property = %S", dto.jackson.typeInfoProperty)
+                addMember("defaultImpl = %T::class", node.dtoClass)
+            }
         }
 
         buildAnnotation(JSON_INCLUDE) {

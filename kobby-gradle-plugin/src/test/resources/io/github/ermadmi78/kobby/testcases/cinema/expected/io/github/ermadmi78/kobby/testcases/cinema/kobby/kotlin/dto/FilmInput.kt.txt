@@ -14,8 +14,6 @@
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
 
 import com.fasterxml.jackson.`annotation`.JsonInclude
-import com.fasterxml.jackson.`annotation`.JsonTypeInfo
-import com.fasterxml.jackson.`annotation`.JsonTypeName
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
 import kotlin.String
 import kotlin.Suppress
@@ -28,13 +26,6 @@ import kotlin.let
 /**
  * Film input data
  */
-@JsonTypeName(value = "FilmInput")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "__typename",
-  defaultImpl = FilmInput::class
-)
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class FilmInput(
   /**
