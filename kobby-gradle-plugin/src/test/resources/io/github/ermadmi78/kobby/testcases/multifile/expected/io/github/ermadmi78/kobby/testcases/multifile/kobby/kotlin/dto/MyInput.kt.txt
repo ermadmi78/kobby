@@ -14,8 +14,6 @@
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto
 
 import com.fasterxml.jackson.`annotation`.JsonInclude
-import com.fasterxml.jackson.`annotation`.JsonTypeInfo
-import com.fasterxml.jackson.`annotation`.JsonTypeName
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlDSL
 import kotlin.Long
 import kotlin.String
@@ -26,13 +24,6 @@ import kotlin.apply
 import kotlin.error
 import kotlin.let
 
-@JsonTypeName(value = "MyInput")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "__typename",
-  defaultImpl = MyInput::class
-)
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class MyInput(
   public val id: Long,

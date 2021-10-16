@@ -14,8 +14,6 @@
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
 
 import com.fasterxml.jackson.`annotation`.JsonInclude
-import com.fasterxml.jackson.`annotation`.JsonTypeInfo
-import com.fasterxml.jackson.`annotation`.JsonTypeName
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
 import java.time.LocalDate
 import kotlin.String
@@ -29,13 +27,6 @@ import kotlin.let
 /**
  * Actor input data
  */
-@JsonTypeName(value = "ActorInput")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "__typename",
-  defaultImpl = ActorInput::class
-)
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class ActorInput(
   /**

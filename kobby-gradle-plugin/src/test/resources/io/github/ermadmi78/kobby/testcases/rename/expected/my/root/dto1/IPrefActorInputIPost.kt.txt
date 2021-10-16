@@ -14,8 +14,6 @@
 package my.root.dto1
 
 import com.fasterxml.jackson.`annotation`.JsonInclude
-import com.fasterxml.jackson.`annotation`.JsonTypeInfo
-import com.fasterxml.jackson.`annotation`.JsonTypeName
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -25,13 +23,6 @@ import kotlin.error
 import kotlin.let
 import my.root.ctx.PrefCtxDSLPostCtx
 
-@JsonTypeName(value = "ActorInput")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "__typename",
-  defaultImpl = IPrefActorInputIPost::class
-)
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class IPrefActorInputIPost(
   public val firstName: String,

@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen)](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
-[![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v1.1.0-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
-[![Maven Central](https://img.shields.io/badge/Maven%20Central-v1.1.0-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
+[![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v1.2.0-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
+[![Maven Central](https://img.shields.io/badge/Maven%20Central-v1.2.0-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
 [![Discussions](https://img.shields.io/badge/Discussions-On%20GitHub-blue)](https://github.com/ermadmi78/kobby/discussions)
 
 [![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)](https://github.com/ermadmi78/kobby/wiki)
@@ -27,7 +27,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ```kotlin
 plugins {
-    id("io.github.ermadmi78.kobby") version "1.1.0"
+    id("io.github.ermadmi78.kobby") version "1.2.0"
 }
 ```
 
@@ -42,7 +42,7 @@ Gradle's usage example see [here](https://github.com/ermadmi78/kobby-gradle-exam
         <plugin>
             <groupId>io.github.ermadmi78</groupId>
             <artifactId>kobby-maven-plugin</artifactId>
-            <version>1.1.0</version>
+            <version>1.2.0</version>
             <executions>
                 <execution>
                     <phase>generate-sources</phase>

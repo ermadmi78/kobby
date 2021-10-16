@@ -40,9 +40,6 @@ internal class SubscriptionImpl(
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
   public override fun toString(): String = buildString {
     append("Subscription").append('(')
-
-    var counter = 0
-
     append(')')
   }
 
