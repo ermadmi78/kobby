@@ -16,7 +16,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
 
     files += buildFile(context.packageName, context.name) {
         if (entity.enabled) {
-            //Build context builder
+            // Build context builder
             buildFunction(context.contextName._decapitalize() + "Of") {
                 buildParameter(Const.ADAPTER, context.adapterClass)
                 returns(context.contextClass)
@@ -41,6 +41,36 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                     addModifiers(ABSTRACT)
                     buildParameter(entity.projection.projectionArgument, schema.subscription.projectionLambda)
                     returns(context.subscriberClass.parameterizedBy(schema.subscription.entityClass))
+                }
+            }
+
+            // Build builder builder
+            buildFunction(context.builderName._decapitalize() + "Of") {
+                returns(context.builderClass)
+                addStatement("return %T()", layout.builderImplClass)
+            }
+
+            // Build builder interface
+            buildInterface(context.builderName) {
+                buildFunction(context.builderFunBuildQuery) {
+                    addModifiers(ABSTRACT)
+                    buildParameter(entity.projection.projectionArgument, schema.query.projectionLambda)
+                    returns(ClassName("kotlin", "Pair")
+                        .parameterizedBy(STRING, MAP.parameterizedBy(STRING, ANY)))
+                }
+
+                buildFunction(context.builderFunBuildMutation) {
+                    addModifiers(ABSTRACT)
+                    buildParameter(entity.projection.projectionArgument, schema.mutation.projectionLambda)
+                    returns(ClassName("kotlin", "Pair")
+                        .parameterizedBy(STRING, MAP.parameterizedBy(STRING, ANY)))
+                }
+
+                buildFunction(context.builderFunBuildSubscription) {
+                    addModifiers(ABSTRACT)
+                    buildParameter(entity.projection.projectionArgument, schema.subscription.projectionLambda)
+                    returns(ClassName("kotlin", "Pair")
+                        .parameterizedBy(STRING, MAP.parameterizedBy(STRING, ANY)))
                 }
             }
 
@@ -112,6 +142,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                 }
             }
 
+            buildBuilderImplementation(schema, layout)
             buildContextImplementation(schema, layout)
 
             // Build mapper interface
@@ -169,6 +200,11 @@ private fun FileSpecBuilder.buildContextImplementation(schema: KobbySchema, layo
             buildProperty(Const.ADAPTER, context.adapterClass) {
                 addModifiers(PRIVATE)
             }
+
+            val defaultBuilderValue: CodeBlock? = CodeBlock.of("%T()", layout.builderImplClass)
+            buildPropertyWithDefault(Const.BUILDER, context.builderClass, defaultBuilderValue) {
+                addModifiers(PRIVATE)
+            }
         }
 
         // query
@@ -177,6 +213,7 @@ private fun FileSpecBuilder.buildContextImplementation(schema: KobbySchema, layo
             layout,
             context.query,
             "query",
+            context.builderFunBuildQuery,
             context.adapterFunExecuteQuery,
             false
         )
@@ -187,6 +224,7 @@ private fun FileSpecBuilder.buildContextImplementation(schema: KobbySchema, layo
             layout,
             context.mutation,
             "mutation",
+            context.builderFunBuildMutation,
             context.adapterFunExecuteMutation,
             false
         )
@@ -197,33 +235,54 @@ private fun FileSpecBuilder.buildContextImplementation(schema: KobbySchema, layo
             layout,
             context.subscription,
             "subscription",
+            context.builderFunBuildSubscription,
             context.adapterFunExecuteSubscription,
             true
         )
     }
 }
 
-private fun TypeSpecBuilder.buildContextFunction(
+private fun FileSpecBuilder.buildBuilderImplementation(schema: KobbySchema, layout: KotlinLayout) = with(layout) {
+    buildClass(builderImplName) {
+        addModifiers(PRIVATE)
+        addSuperinterface(context.builderClass)
+
+        // query
+        buildBuilderFunction(
+            schema.query,
+            layout,
+            context.builderFunBuildQuery,
+            "query"
+        )
+
+        // mutation
+        buildBuilderFunction(
+            schema.mutation,
+            layout,
+            context.builderFunBuildMutation,
+            "mutation"
+        )
+
+        // subscription
+        buildBuilderFunction(
+            schema.subscription,
+            layout,
+            context.builderFunBuildSubscription,
+            "subscription"
+        )
+    }
+}
+
+private fun TypeSpecBuilder.buildBuilderFunction(
     node: KobbyNode,
     layout: KotlinLayout,
     name: String,
-    operation: String,
-    adapterFun: String,
-    subscription: Boolean
+    operation: String
 ) = with(layout) {
     buildFunction(name) {
         addModifiers(OVERRIDE)
-        if (!subscription) {
-            addModifiers(SUSPEND)
-        }
         buildParameter(entity.projection.projectionArgument, node.projectionLambda)
-
-        if (!subscription) {
-            addKdoc("https://youtrack.jetbrains.com/issue/KTIJ-844")
-            suppressBlocking()
-        }
-
-        returns(if (subscription) context.subscriberClass.parameterizedBy(node.entityClass) else node.entityClass)
+        returns(ClassName("kotlin", "Pair").parameterizedBy(STRING, MAP.parameterizedBy(STRING, ANY)))
 
         val projectionRef = entity.projection.projectionArgument.trim('_').decorate(null, "Ref")
         statement(node.implProjectionClass, MemberName("kotlin", "apply")) {
@@ -263,7 +322,44 @@ private fun TypeSpecBuilder.buildContextFunction(
             }
             buildAppendChain { appendExactly(body.first) }
         }
+
         addStatement("")
+        addStatement(
+            "return $operation %T ${arguments.first}",
+            ClassName("kotlin", "to"))
+    }
+}
+
+private fun TypeSpecBuilder.buildContextFunction(
+    node: KobbyNode,
+    layout: KotlinLayout,
+    name: String,
+    operation: String,
+    builderFun: String,
+    adapterFun: String,
+    subscription: Boolean
+) = with(layout) {
+    buildFunction(name) {
+        addModifiers(OVERRIDE)
+        if (!subscription) {
+            addModifiers(SUSPEND)
+        }
+        buildParameter(entity.projection.projectionArgument, node.projectionLambda)
+
+        if (!subscription) {
+            addKdoc("https://youtrack.jetbrains.com/issue/KTIJ-844")
+            suppressBlocking()
+        }
+
+        returns(if (subscription) context.subscriberClass.parameterizedBy(node.entityClass) else node.entityClass)
+
+        val projectionRef = entity.projection.projectionArgument.trim('_').decorate(null, "Ref")
+        statement(node.implProjectionClass, MemberName("kotlin", "apply")) {
+            "val·$projectionRef·=·%T().%M(${entity.projection.projectionArgument})"
+        }
+
+        val arguments = buildFunArgArguments
+        addStatement("val·($operation,·${arguments.first})·=·${Const.BUILDER}.$builderFun(${entity.projection.projectionArgument})")
 
         val dtoVal = operation.run {
             if (dto.decoration.isNotEmpty()) decorate(dto.decoration) else decorate(null, "Dto")
@@ -295,4 +391,5 @@ private fun TypeSpecBuilder.buildContextFunction(
 
 private object Const {
     const val ADAPTER = "adapter"
+    const val BUILDER = "builder"
 }

@@ -206,6 +206,20 @@ internal val KotlinLayout.contextImplName: String
 internal val KotlinLayout.contextImplClass: ClassName
     get() = ClassName(context.packageName, contextImplName)
 
+internal val KotlinContextLayout.builderName: String
+    get() = "Builder".decorate(decoration)
+
+internal val KotlinContextLayout.builderClass: ClassName
+    get() = ClassName(packageName, builderName)
+
+internal val KotlinLayout.builderImplName: String
+    get() = context.builderName.run {
+        if (impl.decoration.isNotEmpty()) decorate(impl.decoration) else decorate(null, "Impl")
+    }
+
+internal val KotlinLayout.builderImplClass: ClassName
+    get() = ClassName(context.packageName, builderImplName)
+
 internal val KotlinContextLayout.subscriberName: String
     get() = "Subscriber".decorate(decoration)
 
@@ -229,6 +243,15 @@ internal val KotlinContextLayout.adapterName: String
 
 internal val KotlinContextLayout.adapterClass: ClassName
     get() = ClassName(packageName, adapterName)
+
+internal val KotlinContextLayout.builderFunBuildQuery: String
+    get() = "buildQuery"
+
+internal val KotlinContextLayout.builderFunBuildMutation: String
+    get() = "buildMutation"
+
+internal val KotlinContextLayout.builderFunBuildSubscription: String
+    get() = "buildSubscription"
 
 internal val KotlinContextLayout.adapterFunExecuteQuery: String
     get() = "executeQuery"
@@ -282,6 +305,9 @@ internal val KotlinContextLayout.mapperFunDeserialize: String
 
 internal val KotlinImplLayout.contextPropertyName: String
     get() = "context".decorate(innerDecoration)
+
+internal val KotlinImplLayout.builderPropertyName: String
+    get() = "builder".decorate(innerDecoration)
 
 internal val KotlinImplLayout.projectionPropertyName: String
     get() = "projection".decorate(innerDecoration)
