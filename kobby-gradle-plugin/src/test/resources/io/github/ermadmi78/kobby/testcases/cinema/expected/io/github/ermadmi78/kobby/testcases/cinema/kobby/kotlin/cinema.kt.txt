@@ -90,48 +90,6 @@ public interface CinemaAdapter {
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
-private class CinemaContextImpl(
-  private val adapter: CinemaAdapter,
-  private val builder: CinemaBuilder = CinemaBuilderImpl()
-) : CinemaContext {
-  /**
-   * https://youtrack.jetbrains.com/issue/KTIJ-844
-   */
-  @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
-    val projectionRef = QueryProjectionImpl().apply(__projection)
-    val (query, arguments) = builder.buildQuery(__projection)
-    val queryDto: QueryDto = adapter.executeQuery(query, arguments)
-    return queryDto.buildEntity(this, projectionRef)
-  }
-
-  /**
-   * https://youtrack.jetbrains.com/issue/KTIJ-844
-   */
-  @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
-    val projectionRef = MutationProjectionImpl().apply(__projection)
-    val (mutation, arguments) = builder.buildMutation(__projection)
-    val mutationDto: MutationDto = adapter.executeMutation(mutation, arguments)
-    return mutationDto.buildEntity(this, projectionRef)
-  }
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription> {
-    val projectionRef = SubscriptionProjectionImpl().apply(__projection)
-    val (subscription, arguments) = builder.buildSubscription(__projection)
-    return CinemaSubscriber<Subscription> {
-      adapter.executeSubscription(subscription, arguments) {
-        val receiver = CinemaReceiver<Subscription> {
-          val subscriptionDto: SubscriptionDto = receive()
-          subscriptionDto.buildEntity(this@CinemaContextImpl, projectionRef)
-        }
-        it.invoke(receiver)
-      }
-    }
-  }
-}
-
 private class CinemaBuilderImpl : CinemaBuilder {
   public override fun buildQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String,
       Any>> {
@@ -191,6 +149,48 @@ private class CinemaBuilderImpl : CinemaBuilder {
     }
 
     return subscription to arguments
+  }
+}
+
+private class CinemaContextImpl(
+  private val adapter: CinemaAdapter,
+  private val builder: CinemaBuilder = CinemaBuilderImpl()
+) : CinemaContext {
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+    val projectionRef = QueryProjectionImpl().apply(__projection)
+    val (query, arguments) = builder.buildQuery(__projection)
+    val queryDto: QueryDto = adapter.executeQuery(query, arguments)
+    return queryDto.buildEntity(this, projectionRef)
+  }
+
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+    val projectionRef = MutationProjectionImpl().apply(__projection)
+    val (mutation, arguments) = builder.buildMutation(__projection)
+    val mutationDto: MutationDto = adapter.executeMutation(mutation, arguments)
+    return mutationDto.buildEntity(this, projectionRef)
+  }
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CinemaSubscriber<Subscription> {
+    val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+    val (subscription, arguments) = builder.buildSubscription(__projection)
+    return CinemaSubscriber<Subscription> {
+      adapter.executeSubscription(subscription, arguments) {
+        val receiver = CinemaReceiver<Subscription> {
+          val subscriptionDto: SubscriptionDto = receive()
+          subscriptionDto.buildEntity(this@CinemaContextImpl, projectionRef)
+        }
+        it.invoke(receiver)
+      }
+    }
   }
 }
 

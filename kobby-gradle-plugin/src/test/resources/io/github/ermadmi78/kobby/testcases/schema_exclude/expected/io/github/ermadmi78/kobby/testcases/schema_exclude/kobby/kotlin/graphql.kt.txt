@@ -29,6 +29,7 @@ import io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.entity.im
 import kotlin.Any
 import kotlin.DslMarker
 import kotlin.NotImplementedError
+import kotlin.Pair
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -41,6 +42,7 @@ import kotlin.reflect.KClass
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
+import kotlin.to
 
 public fun graphqlContextOf(adapter: GraphqlAdapter): GraphqlContext = GraphqlContextImpl(adapter)
 
@@ -51,6 +53,18 @@ public interface GraphqlContext {
 
   public fun subscription(__projection: SubscriptionProjection.() -> Unit):
       GraphqlSubscriber<Subscription>
+}
+
+public fun graphqlBuilderOf(): GraphqlBuilder = GraphqlBuilderImpl()
+
+public interface GraphqlBuilder {
+  public fun buildQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String, Any>>
+
+  public fun buildMutation(__projection: MutationProjection.() -> Unit): Pair<String, Map<String,
+      Any>>
+
+  public fun buildSubscription(__projection: SubscriptionProjection.() -> Unit): Pair<String,
+      Map<String, Any>>
 }
 
 public fun interface GraphqlSubscriber<T> {
@@ -76,14 +90,9 @@ public interface GraphqlAdapter {
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
-private class GraphqlContextImpl(
-  private val adapter: GraphqlAdapter
-) : GraphqlContext {
-  /**
-   * https://youtrack.jetbrains.com/issue/KTIJ-844
-   */
-  @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+private class GraphqlBuilderImpl : GraphqlBuilder {
+  public override fun buildQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String,
+      Any>> {
     val projectionRef = QueryProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -99,15 +108,11 @@ private class GraphqlContextImpl(
       append(body)
     }
 
-    val queryDto: QueryDto = adapter.executeQuery(query, arguments)
-    return queryDto.buildEntity(this, projectionRef)
+    return query to arguments
   }
 
-  /**
-   * https://youtrack.jetbrains.com/issue/KTIJ-844
-   */
-  @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+  public override fun buildMutation(__projection: MutationProjection.() -> Unit): Pair<String,
+      Map<String, Any>> {
     val projectionRef = MutationProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -123,12 +128,11 @@ private class GraphqlContextImpl(
       append(body)
     }
 
-    val mutationDto: MutationDto = adapter.executeMutation(mutation, arguments)
-    return mutationDto.buildEntity(this, projectionRef)
+    return mutation to arguments
   }
 
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      GraphqlSubscriber<Subscription> {
+  public override fun buildSubscription(__projection: SubscriptionProjection.() -> Unit):
+      Pair<String, Map<String, Any>> {
     val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -144,6 +148,40 @@ private class GraphqlContextImpl(
       append(body)
     }
 
+    return subscription to arguments
+  }
+}
+
+private class GraphqlContextImpl(
+  private val adapter: GraphqlAdapter,
+  private val builder: GraphqlBuilder = GraphqlBuilderImpl()
+) : GraphqlContext {
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+    val projectionRef = QueryProjectionImpl().apply(__projection)
+    val (query, arguments) = builder.buildQuery(__projection)
+    val queryDto: QueryDto = adapter.executeQuery(query, arguments)
+    return queryDto.buildEntity(this, projectionRef)
+  }
+
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+    val projectionRef = MutationProjectionImpl().apply(__projection)
+    val (mutation, arguments) = builder.buildMutation(__projection)
+    val mutationDto: MutationDto = adapter.executeMutation(mutation, arguments)
+    return mutationDto.buildEntity(this, projectionRef)
+  }
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      GraphqlSubscriber<Subscription> {
+    val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+    val (subscription, arguments) = builder.buildSubscription(__projection)
     return GraphqlSubscriber<Subscription> {
       adapter.executeSubscription(subscription, arguments) {
         val receiver = GraphqlReceiver<Subscription> {

@@ -16,6 +16,7 @@ package my.root.ctx
 import kotlin.Any
 import kotlin.DslMarker
 import kotlin.NotImplementedError
+import kotlin.Pair
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -28,6 +29,7 @@ import kotlin.reflect.KClass
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
+import kotlin.to
 import my.root.dto1.DPrefMyMutationDPost
 import my.root.dto1.DPrefMyQueryDPost
 import my.root.dto1.DPrefMySubscriptionDPost
@@ -55,6 +57,18 @@ public interface PrefCtxContextPostCtx {
       PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
 }
 
+public fun prefCtxBuilderPostCtxOf(): PrefCtxBuilderPostCtx = PreImPrefCtxBuilderPostCtxPostIm()
+
+public interface PrefCtxBuilderPostCtx {
+  public fun buildQuery(projection: PrePrMyQueryPostPr.() -> Unit): Pair<String, Map<String, Any>>
+
+  public fun buildMutation(projection: PrePrMyMutationPostPr.() -> Unit): Pair<String, Map<String,
+      Any>>
+
+  public fun buildSubscription(projection: PrePrMySubscriptionPostPr.() -> Unit): Pair<String,
+      Map<String, Any>>
+}
+
 public fun interface PrefCtxSubscriberPostCtx<T> {
   public suspend fun subscribe(block: suspend PrefCtxReceiverPostCtx<T>.() -> Unit): Unit
 }
@@ -79,15 +93,9 @@ public interface PrefCtxAdapterPostCtx {
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
-private class PreImPrefCtxContextPostCtxPostIm(
-  private val adapter: PrefCtxAdapterPostCtx
-) : PrefCtxContextPostCtx {
-  /**
-   * https://youtrack.jetbrains.com/issue/KTIJ-844
-   */
-  @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
-      PrefEnMyQueryPostEn {
+private class PreImPrefCtxBuilderPostCtxPostIm : PrefCtxBuilderPostCtx {
+  public override fun buildQuery(projection: PrePrMyQueryPostPr.() -> Unit): Pair<String,
+      Map<String, Any>> {
     val projectionRef = PreImPrePrMyQueryPostPrPostIm().apply(projection)
 
     val header = StringBuilder()
@@ -103,16 +111,11 @@ private class PreImPrefCtxContextPostCtxPostIm(
       append(body)
     }
 
-    val DPrefQueryDPost: DPrefMyQueryDPost = adapter.executeQuery(query, arguments)
-    return DPrefQueryDPost.buildEntity(this, projectionRef)
+    return query to arguments
   }
 
-  /**
-   * https://youtrack.jetbrains.com/issue/KTIJ-844
-   */
-  @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
-      PrefEnMyMutationPostEn {
+  public override fun buildMutation(projection: PrePrMyMutationPostPr.() -> Unit): Pair<String,
+      Map<String, Any>> {
     val projectionRef = PreImPrePrMyMutationPostPrPostIm().apply(projection)
 
     val header = StringBuilder()
@@ -128,12 +131,11 @@ private class PreImPrefCtxContextPostCtxPostIm(
       append(body)
     }
 
-    val DPrefMutationDPost: DPrefMyMutationDPost = adapter.executeMutation(mutation, arguments)
-    return DPrefMutationDPost.buildEntity(this, projectionRef)
+    return mutation to arguments
   }
 
-  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
-      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> {
+  public override fun buildSubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      Pair<String, Map<String, Any>> {
     val projectionRef = PreImPrePrMySubscriptionPostPrPostIm().apply(projection)
 
     val header = StringBuilder()
@@ -149,6 +151,42 @@ private class PreImPrefCtxContextPostCtxPostIm(
       append(body)
     }
 
+    return subscription to arguments
+  }
+}
+
+private class PreImPrefCtxContextPostCtxPostIm(
+  private val adapter: PrefCtxAdapterPostCtx,
+  private val builder: PrefCtxBuilderPostCtx = PreImPrefCtxBuilderPostCtxPostIm()
+) : PrefCtxContextPostCtx {
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+      PrefEnMyQueryPostEn {
+    val projectionRef = PreImPrePrMyQueryPostPrPostIm().apply(projection)
+    val (query, arguments) = builder.buildQuery(projection)
+    val DPrefQueryDPost: DPrefMyQueryDPost = adapter.executeQuery(query, arguments)
+    return DPrefQueryDPost.buildEntity(this, projectionRef)
+  }
+
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+      PrefEnMyMutationPostEn {
+    val projectionRef = PreImPrePrMyMutationPostPrPostIm().apply(projection)
+    val (mutation, arguments) = builder.buildMutation(projection)
+    val DPrefMutationDPost: DPrefMyMutationDPost = adapter.executeMutation(mutation, arguments)
+    return DPrefMutationDPost.buildEntity(this, projectionRef)
+  }
+
+  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> {
+    val projectionRef = PreImPrePrMySubscriptionPostPrPostIm().apply(projection)
+    val (subscription, arguments) = builder.buildSubscription(projection)
     return PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> {
       adapter.executeSubscription(subscription, arguments) {
         val receiver = PrefCtxReceiverPostCtx<PrefEnMySubscriptionPostEn> {
