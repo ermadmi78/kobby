@@ -19,7 +19,7 @@ Please follow the steps below in order to make the changes:
 
 1. Clone the repository
 1. Set the local java version to 11
-1. Checkout **develop** branch.
+1. Create a new developing branch for an issue.
 1. Open repository in your favourite IDE.
 1. Make code changes to the Kobby Plugin.
 1. Build and install the Kobby Plugin locally.
