@@ -11,7 +11,12 @@ customize generated DSL by means of GraphQL schema directives and Kotlin extensi
 
 ### Documentation
 
-See documentation in the [project wiki](https://github.com/ermadmi78/kobby/wiki)
+* [Kobby Documentation](https://github.com/ermadmi78/kobby/wiki)
+
+### Tutorials
+
+* [Kobby Gradle Tutorial](https://github.com/ermadmi78/kobby-gradle-tutorial)
+* [Kobby Maven Tutorial](https://github.com/ermadmi78/kobby-maven-tutorial)
 
 ### Requirements
 
@@ -30,8 +35,6 @@ plugins {
     id("io.github.ermadmi78.kobby") version "1.2.0"
 }
 ```
-
-Gradle's usage example see [here](https://github.com/ermadmi78/kobby-gradle-example).
 
 ### Maven
 
@@ -55,8 +58,6 @@ Gradle's usage example see [here](https://github.com/ermadmi78/kobby-gradle-exam
     </plugins>
 </build>
 ```
-
-Maven usage example see [here](https://github.com/ermadmi78/kobby-maven-example).
 
 ### Define your GraphQL schema
 
