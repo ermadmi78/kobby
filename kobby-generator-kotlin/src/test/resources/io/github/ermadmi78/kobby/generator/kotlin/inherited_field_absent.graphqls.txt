@@ -1,0 +1,8 @@
+interface Bug {
+    bug: Int
+}
+
+type Country implements Bug {
+    id: ID!
+    name: String!
+}

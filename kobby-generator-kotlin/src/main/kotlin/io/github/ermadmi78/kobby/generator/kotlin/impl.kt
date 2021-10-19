@@ -8,6 +8,7 @@ import io.github.ermadmi78.kobby.model.KobbyNodeKind.INTERFACE
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.UNION
 import io.github.ermadmi78.kobby.model.KobbySchema
 import io.github.ermadmi78.kobby.model.KobbyType
+import io.github.ermadmi78.kobby.model.invalidSchema
 
 /**
  * Created on 27.01.2021
@@ -466,7 +467,10 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     node.subObjects { subObject ->
                         addStatement("")
 
-                        val subField = subObject.fields[field.name]!!
+                        val subField = subObject.fields[field.name] ?: invalidSchema(
+                            "The object type '${subObject.name}' does not have a field '${field.name}' " +
+                                    "required via interface '${node.name}'"
+                        )
                         addStatement("${subObject.innerProjectionOnName}.${subField.innerName} = ${field.innerName}")
                         subField.arguments.values.asSequence()
                             .filter { !subField.isSelection || !it.isInitialized }

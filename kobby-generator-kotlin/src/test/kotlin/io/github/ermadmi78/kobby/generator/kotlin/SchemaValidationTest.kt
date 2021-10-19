@@ -209,4 +209,22 @@ class SchemaValidationTest {
             assertEquals(expected, e.message)
         }
     }
+
+    @Test
+    fun textInheritedFieldAbsent() {
+        val schema = parseSchema(
+            emptyMap(),
+            InputStreamReader(this.javaClass.getResourceAsStream("inherited_field_absent.graphqls.txt")!!)
+        )
+
+        assertTrue(schema.validate().isEmpty())
+
+        val expected = "The object type 'Country' does not have a field 'bug' required via interface 'Bug'"
+        try {
+            generateKotlin(schema, layout)
+            fail("Must throw: $expected")
+        } catch (e: KobbyInvalidSchemaException) {
+            assertEquals(expected, e.message)
+        }
+    }
 }
