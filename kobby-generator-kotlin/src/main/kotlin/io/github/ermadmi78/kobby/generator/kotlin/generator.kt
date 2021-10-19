@@ -16,12 +16,36 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
 
     files += buildFile(context.packageName, context.name) {
         if (entity.enabled) {
-            //Build context builder
+            // Build context builder
             buildFunction(context.contextName._decapitalize() + "Of") {
                 buildParameter(Const.ADAPTER, context.adapterClass)
                 returns(context.contextClass)
                 addStatement("return %T(${Const.ADAPTER})", layout.contextImplClass)
             }
+
+            // Static query builder function
+            buildBuilderFunction(
+                schema.query,
+                layout,
+                context.buildQueryFun,
+                "query"
+            )
+
+            // Static mutation builder function
+            buildBuilderFunction(
+                schema.mutation,
+                layout,
+                context.buildMutationFun,
+                "mutation"
+            )
+
+            // Static subscription builder function
+            buildBuilderFunction(
+                schema.subscription,
+                layout,
+                context.buildSubscriptionFun,
+                "subscription"
+            )
 
             // Build context interface
             buildInterface(context.contextName) {
@@ -290,6 +314,62 @@ private fun TypeSpecBuilder.buildContextFunction(
                 "return·$dtoVal.%T(this,·$projectionRef)"
             }
         }
+    }
+}
+
+private fun FileSpecBuilder.buildBuilderFunction(
+    node: KobbyNode,
+    layout: KotlinLayout,
+    name: String,
+    operation: String
+) = with(layout) {
+    buildFunction(name) {
+        buildParameter(entity.projection.projectionArgument, node.projectionLambda)
+        returns(ClassName("kotlin", "Pair").parameterizedBy(STRING, MAP.parameterizedBy(STRING, ANY)))
+
+        val projectionRef = entity.projection.projectionArgument.trim('_').decorate(null, "Ref")
+        statement(node.implProjectionClass, MemberName("kotlin", "apply")) {
+            "val·$projectionRef·=·%T().%M(${entity.projection.projectionArgument})"
+        }
+
+        val header = buildFunArgHeader
+        val body = buildFunArgBody
+        val arguments = buildFunArgArguments
+
+        addStatement("")
+        addStatement("val·${header.first}·=·%T()", header.second)
+        addStatement("val·${body.first}·=·%T(64)", body.second)
+        addStatement(
+            "val·${arguments.first}:·%T·=·%T()", arguments.second,
+            ClassName("kotlin.collections", "mutableMapOf")
+        )
+        addStatement(
+            "$projectionRef.${impl.buildFunName}(%T(), ${header.first}, ${body.first}, ${arguments.first})",
+            ClassName("kotlin.collections", "setOf")
+        )
+
+        addStatement("")
+        controlFlow(
+            "val·$operation·=·%M(" +
+                    "${header.first}.length·+·${body.first}.length·+·${operation.length + 2})",
+            MemberName("kotlin.text", "buildString")
+        ) {
+            buildAppendChain { appendLiteral(operation) }
+            ifFlow(
+                "${header.first}.%M()",
+                MemberName("kotlin.text", "isNotEmpty")
+            ) {
+                buildAppendChain {
+                    appendLiteral('(').appendExactly(header.first).appendLiteral(')')
+                }
+            }
+            buildAppendChain { appendExactly(body.first) }
+        }
+
+        addStatement("")
+        addStatement(
+            "return $operation %T ${arguments.first}",
+            ClassName("kotlin", "to"))
     }
 }
 

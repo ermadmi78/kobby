@@ -16,6 +16,7 @@ package my.root.ctx
 import kotlin.Any
 import kotlin.DslMarker
 import kotlin.NotImplementedError
+import kotlin.Pair
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -28,6 +29,7 @@ import kotlin.reflect.KClass
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
+import kotlin.to
 import my.root.dto1.DPrefMyMutationDPost
 import my.root.dto1.DPrefMyQueryDPost
 import my.root.dto1.DPrefMySubscriptionDPost
@@ -44,6 +46,66 @@ import my.root.im.buildEntity
 
 public fun prefCtxContextPostCtxOf(adapter: PrefCtxAdapterPostCtx): PrefCtxContextPostCtx =
     PreImPrefCtxContextPostCtxPostIm(adapter)
+
+public fun buildMyCtxQuery(projection: PrePrMyQueryPostPr.() -> Unit): Pair<String, Map<String,
+    Any>> {
+  val projectionRef = PreImPrePrMyQueryPostPrPostIm().apply(projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef._innerBuildPin(setOf(), header, body, arguments)
+
+  val query = buildString(header.length + body.length + 7) {
+    append("query")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return query to arguments
+}
+
+public fun buildMyCtxMutation(projection: PrePrMyMutationPostPr.() -> Unit): Pair<String,
+    Map<String, Any>> {
+  val projectionRef = PreImPrePrMyMutationPostPrPostIm().apply(projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef._innerBuildPin(setOf(), header, body, arguments)
+
+  val mutation = buildString(header.length + body.length + 10) {
+    append("mutation")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return mutation to arguments
+}
+
+public fun buildMyCtxSubscription(projection: PrePrMySubscriptionPostPr.() -> Unit): Pair<String,
+    Map<String, Any>> {
+  val projectionRef = PreImPrePrMySubscriptionPostPrPostIm().apply(projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef._innerBuildPin(setOf(), header, body, arguments)
+
+  val subscription = buildString(header.length + body.length + 14) {
+    append("subscription")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return subscription to arguments
+}
 
 public interface PrefCtxContextPostCtx {
   public suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit): PrefEnMyQueryPostEn

@@ -230,6 +230,15 @@ internal val KotlinContextLayout.adapterName: String
 internal val KotlinContextLayout.adapterClass: ClassName
     get() = ClassName(packageName, adapterName)
 
+internal val KotlinContextLayout.buildQueryFun: String
+    get() = name.decorate("build", "Query")
+
+internal val KotlinContextLayout.buildMutationFun: String
+    get() = name.decorate("build", "Mutation")
+
+internal val KotlinContextLayout.buildSubscriptionFun: String
+    get() = name.decorate("build", "Subscription")
+
 internal val KotlinContextLayout.adapterFunExecuteQuery: String
     get() = "executeQuery"
 
