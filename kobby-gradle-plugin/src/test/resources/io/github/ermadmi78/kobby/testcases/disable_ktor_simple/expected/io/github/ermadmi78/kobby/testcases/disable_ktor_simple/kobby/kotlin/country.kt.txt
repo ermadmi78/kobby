@@ -29,6 +29,7 @@ import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.enti
 import kotlin.Any
 import kotlin.DslMarker
 import kotlin.NotImplementedError
+import kotlin.Pair
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -41,8 +42,69 @@ import kotlin.reflect.KClass
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
+import kotlin.to
 
 public fun countryContextOf(adapter: CountryAdapter): CountryContext = CountryContextImpl(adapter)
+
+public fun buildCountryQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String,
+    Any>> {
+  val projectionRef = QueryProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val query = buildString(header.length + body.length + 7) {
+    append("query")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return query to arguments
+}
+
+public fun buildCountryMutation(__projection: MutationProjection.() -> Unit): Pair<String,
+    Map<String, Any>> {
+  val projectionRef = MutationProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val mutation = buildString(header.length + body.length + 10) {
+    append("mutation")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return mutation to arguments
+}
+
+public fun buildCountrySubscription(__projection: SubscriptionProjection.() -> Unit): Pair<String,
+    Map<String, Any>> {
+  val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val subscription = buildString(header.length + body.length + 14) {
+    append("subscription")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return subscription to arguments
+}
 
 public interface CountryContext {
   public suspend fun query(__projection: QueryProjection.() -> Unit): Query
