@@ -60,12 +60,12 @@ public fun DPrefMyMutationDPost.replicate(block: BPrefDPrefMyMutationDPostBPost.
     DPrefMyMutationDPost {
   // DPrefMyMutationDPost replicate DSL
   return BPrefDPrefMyMutationDPostBPost().also {
-    it.createCountry = createCountry
-    it.createFilm = createFilm
-    it.createActor = createActor
-    it.associate = associate
-    it.tagFilm = tagFilm
-    it.tagActor = tagActor
+    it.createCountry = this.createCountry
+    it.createFilm = this.createFilm
+    it.createActor = this.createActor
+    it.associate = this.associate
+    it.tagFilm = this.tagFilm
+    it.tagActor = this.tagActor
   }
   .apply(block).let {
     DPrefMyMutationDPost(

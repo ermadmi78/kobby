@@ -60,9 +60,9 @@ public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): Subscripti
 public fun SubscriptionDto.copy(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {
   // SubscriptionDto copy DSL
   return SubscriptionDtoBuilder().also {
-    it.countryCreated = countryCreated
-    it.filmCreated = filmCreated
-    it.actorCreated = actorCreated
+    it.countryCreated = this.countryCreated
+    it.filmCreated = this.filmCreated
+    it.actorCreated = this.actorCreated
   }
   .apply(block).let {
     SubscriptionDto(

@@ -60,7 +60,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         ifFlowStatement("this·===·$EQUALS_ARG") {
                             "return·true"
                         }
-                        ifFlowStatement("javaClass·!=·$EQUALS_ARG?.javaClass") {
+                        ifFlowStatement("this.javaClass·!=·$EQUALS_ARG?.javaClass") {
                             "return·false"
                         }
 
@@ -69,12 +69,12 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                         if (node.primaryKeysCount == 1) {
                             node.firstPrimaryKey().also {
-                                addStatement("return·${it.name}·==·$EQUALS_ARG.${it.name}")
+                                addStatement("return·this.${it.name.escape()}·==·$EQUALS_ARG.${it.name.escape()}")
                             }
                         } else {
                             addStatement("")
                             node.primaryKeys {
-                                ifFlowStatement("${it.name}·!=·$EQUALS_ARG.${it.name}") {
+                                ifFlowStatement("this.${it.name.escape()}·!=·$EQUALS_ARG.${it.name.escape()}") {
                                     "return·false"
                                 }
                             }
@@ -90,16 +90,16 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                         if (node.primaryKeysCount == 1) {
                             node.firstPrimaryKey().also {
-                                addStatement("return·${it.name}?.hashCode()·?:·0")
+                                addStatement("return·this.${it.name.escape()}?.hashCode()·?:·0")
                             }
                         } else {
                             var first = true
                             node.primaryKeys {
                                 if (first) {
                                     first = false
-                                    addStatement("var·$HASH_CODE_RES·=·${it.name}?.hashCode()·?:·0")
+                                    addStatement("var·$HASH_CODE_RES·=·this.${it.name.escape()}?.hashCode()·?:·0")
                                 } else {
-                                    addStatement("$HASH_CODE_RES·=·31·*·$HASH_CODE_RES·+·(${it.name}?.hashCode()·?:·0)")
+                                    addStatement("$HASH_CODE_RES·=·31·*·$HASH_CODE_RES·+·(this.${it.name.escape()}?.hashCode()·?:·0)")
                                 }
                             }
                             addStatement("return·$HASH_CODE_RES")
@@ -122,7 +122,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         ClassName("kotlin", "apply"),
                         ClassName("kotlin", "let")
                     ) {
-                        val arguments = node.fields.values.joinToString(",\n") { "it.${it.name}" }
+                        val arguments = node.fields.values.joinToString(",\n") { "it.${it.name.escape()}" }
                         addStatement("%T(\n⇥$arguments⇤\n)", node.dtoClass)
                     }
                 }
@@ -140,7 +140,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         ClassName("kotlin", "also")
                     ) {
                         node.fields { field ->
-                            addStatement("it.${field.name} = ${field.name}")
+                            addStatement("it.${field.name.escape()} = this.${field.name.escape()}")
                         }
                     }
                     controlFlow(
@@ -148,7 +148,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         ClassName("kotlin", "apply"),
                         ClassName("kotlin", "let")
                     ) {
-                        val arguments = node.fields.values.joinToString(",\n") { "it.${it.name}" }
+                        val arguments = node.fields.values.joinToString(",\n") { "it.${it.name.escape()}" }
                         addStatement("%T(\n⇥$arguments⇤\n)", node.dtoClass)
                     }
                 }
@@ -288,10 +288,10 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         val types: MutableList<ClassName> = mutableListOf(node.dtoClass)
                         val arguments = node.fields.values.joinToString(",\n") {
                             if (it.type.nullable || it.hasDefaultValue) {
-                                "it.${it.name}"
+                                "it.${it.name.escape()}"
                             } else {
                                 types += ClassName("kotlin", "error")
-                                "it.${it.name}·?:·%T(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
+                                "it.${it.name.escape()}·?:·%T(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
                             }
                         }
                         addStatement("%T(\n⇥$arguments⇤\n)", *types.toTypedArray())
@@ -311,7 +311,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         ClassName("kotlin", "also")
                     ) {
                         node.fields { field ->
-                            addStatement("it.${field.name} = ${field.name}")
+                            addStatement("it.${field.name.escape()} = this.${field.name.escape()}")
                         }
                     }
                     controlFlow(
@@ -322,10 +322,10 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         val types: MutableList<ClassName> = mutableListOf(node.dtoClass)
                         val arguments = node.fields.values.joinToString(",\n") {
                             if (it.type.nullable || it.hasDefaultValue) {
-                                "it.${it.name}"
+                                "it.${it.name.escape()}"
                             } else {
                                 types += ClassName("kotlin", "error")
-                                "it.${it.name}·?:·%T(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
+                                "it.${it.name.escape()}·?:·%T(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
                             }
                         }
                         addStatement("%T(\n⇥$arguments⇤\n)", *types.toTypedArray())

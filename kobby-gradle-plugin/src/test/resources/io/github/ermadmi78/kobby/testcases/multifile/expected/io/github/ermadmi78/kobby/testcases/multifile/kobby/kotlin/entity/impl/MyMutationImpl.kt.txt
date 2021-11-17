@@ -86,7 +86,7 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
 
   public override fun insert(`data`: MyInput): Unit {
     __innerInsert0 = true
-    __innerInsert0Data = data
+    __innerInsert0Data = `data`
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")

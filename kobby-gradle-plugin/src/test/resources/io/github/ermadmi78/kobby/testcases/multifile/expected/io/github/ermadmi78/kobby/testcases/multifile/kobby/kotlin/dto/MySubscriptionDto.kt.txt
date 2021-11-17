@@ -48,7 +48,7 @@ public fun MySubscriptionDto(block: MySubscriptionDtoBuilder.() -> Unit): MySubs
 public fun MySubscriptionDto.copy(block: MySubscriptionDtoBuilder.() -> Unit): MySubscriptionDto {
   // MySubscriptionDto copy DSL
   return MySubscriptionDtoBuilder().also {
-    it.onInsert = onInsert
+    it.onInsert = this.onInsert
   }
   .apply(block).let {
     MySubscriptionDto(

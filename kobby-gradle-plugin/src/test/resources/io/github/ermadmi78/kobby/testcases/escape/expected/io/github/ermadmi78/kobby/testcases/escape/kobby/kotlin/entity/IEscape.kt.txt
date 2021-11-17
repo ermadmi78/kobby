@@ -1,0 +1,64 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeDSL
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeSubscriber
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface IEscape : EscapeContext {
+  public val `is`: String
+
+  public val `for`: Int?
+
+  public val points: List<Point>
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      EscapeSubscriber<Subscription>
+}
+
+@EscapeDSL
+public interface IEscapeProjection {
+  public fun `is`(): Unit
+
+  /**
+   * @param do Default: 0
+   * @param by Default: 100
+   */
+  public fun points(
+    `do`: Int? = null,
+    `by`: Int? = null,
+    __projection: PointProjection.() -> Unit
+  ): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
+
+@EscapeDSL
+public interface IEscapeQualification {
+  public fun __onEscape(__projection: EscapeProjection.() -> Unit = {}): Unit
+}
+
+@EscapeDSL
+public interface IEscapeQualifiedProjection : IEscapeProjection, IEscapeQualification

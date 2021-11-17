@@ -36,7 +36,7 @@ public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): Subscripti
 public fun SubscriptionDto.copy(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {
   // SubscriptionDto copy DSL
   return SubscriptionDtoBuilder().also {
-    it.countryCreated = countryCreated
+    it.countryCreated = this.countryCreated
   }
   .apply(block).let {
     SubscriptionDto(

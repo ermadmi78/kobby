@@ -1,0 +1,75 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeDSL
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeSubscriber
+import kotlin.Int
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Query : EscapeContext {
+  public val escapes: List<Escape>
+
+  public val escapesSelection: List<Escape>
+
+  public val severalPrimaryKeys: SeveralPrimaryKeys?
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      EscapeSubscriber<Subscription>
+
+  public fun QueryProjection.__withCurrentProjection(): Unit
+}
+
+@EscapeDSL
+public interface QueryProjection {
+  /**
+   * @param do Default: 0
+   * @param by Default: 100
+   */
+  public fun escapes(
+    `do`: Int? = null,
+    `by`: Int? = null,
+    __projection: EscapeProjection.() -> Unit = {}
+  ): Unit
+
+  public fun escapesSelection(__query: QueryEscapesSelectionQuery.() -> Unit = {}): Unit
+
+  public fun severalPrimaryKeys(__projection: SeveralPrimaryKeysProjection.() -> Unit = {}): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
+
+@EscapeDSL
+public interface QueryEscapesSelectionSelection {
+  /**
+   * Default: 0
+   */
+  public var `do`: Int?
+
+  /**
+   * Default: 100
+   */
+  public var `by`: Int?
+}
+
+@EscapeDSL
+public interface QueryEscapesSelectionQuery : QueryEscapesSelectionSelection, EscapeProjection

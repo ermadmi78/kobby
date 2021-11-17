@@ -96,14 +96,14 @@ public fun FilmDto(block: FilmDtoBuilder.() -> Unit): FilmDto {
 public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto {
   // FilmDto copy DSL
   return FilmDtoBuilder().also {
-    it.id = id
-    it.fields = fields
-    it.tags = tags
-    it.title = title
-    it.genre = genre
-    it.countryId = countryId
-    it.country = country
-    it.actors = actors
+    it.id = this.id
+    it.fields = this.fields
+    it.tags = this.tags
+    it.title = this.title
+    it.genre = this.genre
+    it.countryId = this.countryId
+    it.country = this.country
+    it.actors = this.actors
   }
   .apply(block).let {
     FilmDto(

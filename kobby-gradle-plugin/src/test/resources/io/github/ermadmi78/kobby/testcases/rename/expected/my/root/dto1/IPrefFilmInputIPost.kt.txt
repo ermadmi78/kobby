@@ -47,8 +47,8 @@ public fun IPrefFilmInputIPost.replicate(block: BPrefIPrefFilmInputIPostBPost.()
     IPrefFilmInputIPost {
   // IPrefFilmInputIPost replicate DSL
   return BPrefIPrefFilmInputIPostBPost().also {
-    it.title = title
-    it.genre = genre
+    it.title = this.title
+    it.genre = this.genre
   }
   .apply(block).let {
     IPrefFilmInputIPost(

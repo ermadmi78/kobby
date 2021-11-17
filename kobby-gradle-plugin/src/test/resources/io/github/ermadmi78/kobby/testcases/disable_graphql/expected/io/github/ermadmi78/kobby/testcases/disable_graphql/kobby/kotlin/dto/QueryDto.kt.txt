@@ -49,7 +49,7 @@ public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {
 public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto {
   // QueryDto copy DSL
   return QueryDtoBuilder().also {
-    it.countries = countries
+    it.countries = this.countries
   }
   .apply(block).let {
     QueryDto(

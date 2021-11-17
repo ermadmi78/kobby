@@ -40,8 +40,8 @@ public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto {
 public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto {
   // CountryDto copy DSL
   return CountryDtoBuilder().also {
-    it.id = id
-    it.name = name
+    it.id = this.id
+    it.name = this.name
   }
   .apply(block).let {
     CountryDto(

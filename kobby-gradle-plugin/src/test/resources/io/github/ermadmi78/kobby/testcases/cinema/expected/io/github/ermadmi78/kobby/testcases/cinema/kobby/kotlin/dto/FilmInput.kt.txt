@@ -52,8 +52,8 @@ public fun FilmInput(block: FilmInputBuilder.() -> Unit): FilmInput {
 public fun FilmInput.copy(block: FilmInputBuilder.() -> Unit): FilmInput {
   // FilmInput copy DSL
   return FilmInputBuilder().also {
-    it.title = title
-    it.genre = genre
+    it.title = this.title
+    it.genre = this.genre
   }
   .apply(block).let {
     FilmInput(

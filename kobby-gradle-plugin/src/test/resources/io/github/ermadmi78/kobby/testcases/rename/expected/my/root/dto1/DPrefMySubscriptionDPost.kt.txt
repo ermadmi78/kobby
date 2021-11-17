@@ -53,9 +53,9 @@ public fun DPrefMySubscriptionDPost.replicate(block: BPrefDPrefMySubscriptionDPo
     DPrefMySubscriptionDPost {
   // DPrefMySubscriptionDPost replicate DSL
   return BPrefDPrefMySubscriptionDPostBPost().also {
-    it.countryCreated = countryCreated
-    it.filmCreated = filmCreated
-    it.actorCreated = actorCreated
+    it.countryCreated = this.countryCreated
+    it.filmCreated = this.filmCreated
+    it.actorCreated = this.actorCreated
   }
   .apply(block).let {
     DPrefMySubscriptionDPost(

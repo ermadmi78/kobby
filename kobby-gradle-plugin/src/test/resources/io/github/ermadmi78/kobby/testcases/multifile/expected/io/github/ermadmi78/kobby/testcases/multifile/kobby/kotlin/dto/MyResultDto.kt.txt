@@ -51,8 +51,8 @@ public fun MyResultDto(block: MyResultDtoBuilder.() -> Unit): MyResultDto {
 public fun MyResultDto.copy(block: MyResultDtoBuilder.() -> Unit): MyResultDto {
   // MyResultDto copy DSL
   return MyResultDtoBuilder().also {
-    it.id = id
-    it.name = name
+    it.id = this.id
+    it.name = this.name
   }
   .apply(block).let {
     MyResultDto(

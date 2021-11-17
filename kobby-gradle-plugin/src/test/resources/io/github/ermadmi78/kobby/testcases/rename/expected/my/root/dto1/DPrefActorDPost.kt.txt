@@ -51,16 +51,16 @@ public data class DPrefActorDPost(
     if (this === other) {
       return true
     }
-    if (javaClass != other?.javaClass) {
+    if (this.javaClass != other?.javaClass) {
       return false
     }
 
     other as DPrefActorDPost
 
-    if (id != other.id) {
+    if (this.id != other.id) {
       return false
     }
-    if (countryId != other.countryId) {
+    if (this.countryId != other.countryId) {
       return false
     }
 
@@ -68,8 +68,8 @@ public data class DPrefActorDPost(
   }
 
   public override fun hashCode(): Int {
-    var result = id?.hashCode() ?: 0
-    result = 31 * result + (countryId?.hashCode() ?: 0)
+    var result = this.id?.hashCode() ?: 0
+    result = 31 * result + (this.countryId?.hashCode() ?: 0)
     return result
   }
 }
@@ -93,14 +93,14 @@ public fun DPrefActorDPost(block: BPrefDPrefActorDPostBPost.() -> Unit): DPrefAc
 public fun DPrefActorDPost.replicate(block: BPrefDPrefActorDPostBPost.() -> Unit): DPrefActorDPost {
   // DPrefActorDPost replicate DSL
   return BPrefDPrefActorDPostBPost().also {
-    it.id = id
-    it.fields = fields
-    it.firstName = firstName
-    it.lastName = lastName
-    it.gender = gender
-    it.countryId = countryId
-    it.country = country
-    it.films = films
+    it.id = this.id
+    it.fields = this.fields
+    it.firstName = this.firstName
+    it.lastName = this.lastName
+    it.gender = this.gender
+    it.countryId = this.countryId
+    it.country = this.country
+    it.films = this.films
   }
   .apply(block).let {
     DPrefActorDPost(

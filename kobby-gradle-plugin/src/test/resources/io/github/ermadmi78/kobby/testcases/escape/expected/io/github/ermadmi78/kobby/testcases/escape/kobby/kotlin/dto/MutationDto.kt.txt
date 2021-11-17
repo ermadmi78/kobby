@@ -1,0 +1,63 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "Mutation")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = MutationDto::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class MutationDto @JsonCreator constructor(
+  public val `by`: EscapeDto? = null
+)
+
+public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {
+  // MutationDto builder DSL
+  return MutationDtoBuilder().apply(block).let {
+    MutationDto(
+          it.`by`
+        )
+  }
+}
+
+public fun MutationDto.copy(block: MutationDtoBuilder.() -> Unit): MutationDto {
+  // MutationDto copy DSL
+  return MutationDtoBuilder().also {
+    it.`by` = this.`by`
+  }
+  .apply(block).let {
+    MutationDto(
+          it.`by`
+        )
+  }
+}
+
+@EscapeDSL
+public class MutationDtoBuilder {
+  public var `by`: EscapeDto? = null
+}

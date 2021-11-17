@@ -49,8 +49,8 @@ public fun SimpleDto(block: SimpleDtoBuilder.() -> Unit): SimpleDto {
 public fun SimpleDto.copy(block: SimpleDtoBuilder.() -> Unit): SimpleDto {
   // SimpleDto copy DSL
   return SimpleDtoBuilder().also {
-    it.id = id
-    it.name = name
+    it.id = this.id
+    it.name = this.name
   }
   .apply(block).let {
     SimpleDto(

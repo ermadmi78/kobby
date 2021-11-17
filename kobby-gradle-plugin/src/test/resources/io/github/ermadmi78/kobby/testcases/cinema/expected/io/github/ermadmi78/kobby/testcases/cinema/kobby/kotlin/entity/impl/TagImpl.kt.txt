@@ -46,7 +46,7 @@ internal class TagImpl(
       if (!__innerProjection.__innerValue0) {
         error("Property [value] is not available - add [value] projection to switch on it")
       }
-      return __innerDto.value!!
+      return __innerDto.`value`!!
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
@@ -59,7 +59,7 @@ internal class TagImpl(
       if (counter++ > 0) {
         append(", ")
       }
-      append("value").append('=').append(value)
+      append("value").append('=').append(`value`)
     }
 
     append(')')
@@ -89,7 +89,7 @@ internal open class TagProjectionImpl : TagProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: TagProjection): Unit {
     if ("value" !in ignore && __innerValue0) {
-      __projection.value()
+      __projection.`value`()
     }
   }
 

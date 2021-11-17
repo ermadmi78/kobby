@@ -1,0 +1,182 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto.EscapeDto
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto.IEscapeDto
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.EscapeProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.IEscape
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.IEscapeQualifiedProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.PointProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.MutableSet
+import kotlin.collections.Set
+import kotlin.collections.mutableSetOf
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
+
+internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection {
+  internal val ___innerIgnore: MutableSet<String> = mutableSetOf("for")
+
+  internal var __innerIs0: Boolean = false
+
+  internal var __innerPoints2: PointProjectionImpl? = null
+
+  internal var __innerPoints2Do: Int? = null
+
+  internal var __innerPoints2By: Int? = null
+
+  internal val ___inner__onEscape: EscapeProjectionImpl = EscapeProjectionImpl()
+
+  public override fun `is`(): Unit {
+    __innerIs0 = true
+
+    ___inner__onEscape.__innerIs1 = __innerIs0
+
+    ___innerIgnore += "is"
+  }
+
+  public override fun points(
+    `do`: Int?,
+    `by`: Int?,
+    __projection: PointProjection.() -> Unit
+  ): Unit {
+    __innerPoints2 = PointProjectionImpl().apply(__projection)
+    __innerPoints2Do = `do`
+    __innerPoints2By = `by`
+
+    ___inner__onEscape.__innerPoints3 = __innerPoints2
+    ___inner__onEscape.__innerPoints3Do = `do`
+    ___inner__onEscape.__innerPoints3By = `by`
+
+    ___innerIgnore += "points"
+  }
+
+  public override fun __onEscape(__projection: EscapeProjection.() -> Unit): Unit {
+    EscapeProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
+        ___inner__onEscape)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>,
+      __projection: IEscapeQualifiedProjection): Unit {
+    if ("is" !in ignore && __innerIs0) {
+      __projection.`is`()
+    }
+    if ("points" !in ignore && __innerPoints2 != null) {
+      __projection.points(__innerPoints2Do, __innerPoints2By) {
+        this@IEscapeQualifiedProjectionImpl.__innerPoints2!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    __projection.__onEscape {
+      this@IEscapeQualifiedProjectionImpl.___inner__onEscape.___innerRepeatProjection(setOf(), this)
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: is
+    if ("is" !in ignore && __innerIs0) {
+      body.append(' ').append("is")
+    }
+
+    // Field: for
+    if ("for" !in ignore) {
+      body.append(' ').append("for")
+    }
+
+    // Field: points
+    if ("points" !in ignore && __innerPoints2 != null) {
+      body.append(' ').append("points")
+      var counter = 0
+      val addBrackets = __innerPoints2Do != null || __innerPoints2By != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: points.do
+      if (__innerPoints2Do != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerPoints2Do!!
+        body.append("do").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int!")
+      }
+
+      // Argument: points.by
+      if (__innerPoints2By != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerPoints2By!!
+        body.append("by").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Point
+      __innerPoints2!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append("__typename")
+
+    val subBody = StringBuilder()
+
+    // Qualification of: Escape
+    subBody.clear()
+    ___inner__onEscape.___innerBuild(___innerIgnore, header, subBody, arguments)
+    if (subBody.length > 4) {
+      body.append(" ... on ").append("Escape").append(subBody)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun IEscapeDto.buildEntity(__innerContext: EscapeContext,
+    __innerProjection: IEscapeQualifiedProjectionImpl): IEscape = when(this) {
+  is EscapeDto -> EscapeImpl(__innerContext, __innerProjection.___inner__onEscape, this)
+  else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
+}

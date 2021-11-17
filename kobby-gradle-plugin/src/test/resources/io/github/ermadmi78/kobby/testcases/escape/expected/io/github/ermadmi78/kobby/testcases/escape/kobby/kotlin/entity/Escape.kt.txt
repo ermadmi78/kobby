@@ -1,0 +1,82 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeDSL
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeSubscriber
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Escape : EscapeContext, IEscape {
+  public val `if`: Long
+
+  public override val `is`: String
+
+  public override val `for`: Int?
+
+  public override val points: List<Point>
+
+  public val it: String
+
+  public val `in`: String?
+
+  public val `val`: Point?
+
+  public val `var`: List<Point?>?
+
+  public val `while`: List<Point>
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      EscapeSubscriber<Subscription>
+
+  public fun EscapeProjection.__withCurrentProjection(): Unit
+}
+
+@EscapeDSL
+public interface EscapeProjection : IEscapeProjection {
+  public override fun `is`(): Unit
+
+  /**
+   * @param do Default: 0
+   * @param by Default: 100
+   */
+  public override fun points(
+    `do`: Int?,
+    `by`: Int?,
+    __projection: PointProjection.() -> Unit
+  ): Unit
+
+  public fun it(): Unit
+
+  public fun __withoutIn(): Unit
+
+  public fun `val`(__projection: PointProjection.() -> Unit): Unit
+
+  public fun `var`(__projection: PointProjection.() -> Unit): Unit
+
+  public fun `while`(__projection: PointProjection.() -> Unit): Unit
+
+  public override fun __minimize(): Unit {
+    __withoutIn()
+  }
+}

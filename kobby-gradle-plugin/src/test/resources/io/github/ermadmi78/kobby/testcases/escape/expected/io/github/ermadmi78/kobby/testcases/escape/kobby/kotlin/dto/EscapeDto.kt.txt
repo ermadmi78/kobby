@@ -1,0 +1,130 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeDSL
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.let
+
+@JsonTypeName(value = "Escape")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = EscapeDto::class
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class EscapeDto(
+  public val `if`: Long? = null,
+  public override val `is`: String? = null,
+  public override val `for`: Int? = null,
+  public override val points: List<PointDto>? = null,
+  public val it: String? = null,
+  public val `in`: String? = null,
+  public val `val`: PointDto? = null,
+  public val `var`: List<PointDto?>? = null,
+  public val `while`: List<PointDto>? = null
+) : IEscapeDto {
+  public override fun equals(other: Any?): Boolean {
+    if (this === other) {
+      return true
+    }
+    if (this.javaClass != other?.javaClass) {
+      return false
+    }
+
+    other as EscapeDto
+    return this.`if` == other.`if`
+  }
+
+  public override fun hashCode(): Int = this.`if`?.hashCode() ?: 0
+}
+
+public fun EscapeDto(block: EscapeDtoBuilder.() -> Unit): EscapeDto {
+  // EscapeDto builder DSL
+  return EscapeDtoBuilder().apply(block).let {
+    EscapeDto(
+          it.`if`,
+          it.`is`,
+          it.`for`,
+          it.points,
+          it.it,
+          it.`in`,
+          it.`val`,
+          it.`var`,
+          it.`while`
+        )
+  }
+}
+
+public fun EscapeDto.copy(block: EscapeDtoBuilder.() -> Unit): EscapeDto {
+  // EscapeDto copy DSL
+  return EscapeDtoBuilder().also {
+    it.`if` = this.`if`
+    it.`is` = this.`is`
+    it.`for` = this.`for`
+    it.points = this.points
+    it.it = this.it
+    it.`in` = this.`in`
+    it.`val` = this.`val`
+    it.`var` = this.`var`
+    it.`while` = this.`while`
+  }
+  .apply(block).let {
+    EscapeDto(
+          it.`if`,
+          it.`is`,
+          it.`for`,
+          it.points,
+          it.it,
+          it.`in`,
+          it.`val`,
+          it.`var`,
+          it.`while`
+        )
+  }
+}
+
+@EscapeDSL
+public class EscapeDtoBuilder {
+  public var `if`: Long? = null
+
+  public var `is`: String? = null
+
+  public var `for`: Int? = null
+
+  public var points: List<PointDto>? = null
+
+  public var it: String? = null
+
+  public var `in`: String? = null
+
+  public var `val`: PointDto? = null
+
+  public var `var`: List<PointDto?>? = null
+
+  public var `while`: List<PointDto>? = null
+}

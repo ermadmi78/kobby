@@ -49,7 +49,7 @@ public fun MyQueryDto(block: MyQueryDtoBuilder.() -> Unit): MyQueryDto {
 public fun MyQueryDto.copy(block: MyQueryDtoBuilder.() -> Unit): MyQueryDto {
   // MyQueryDto copy DSL
   return MyQueryDtoBuilder().also {
-    it.find = find
+    it.find = this.find
   }
   .apply(block).let {
     MyQueryDto(

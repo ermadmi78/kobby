@@ -87,13 +87,13 @@ public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {
 public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto {
   // QueryDto copy DSL
   return QueryDtoBuilder().also {
-    it.country = country
-    it.countries = countries
-    it.film = film
-    it.films = films
-    it.actor = actor
-    it.actors = actors
-    it.taggable = taggable
+    it.country = this.country
+    it.countries = this.countries
+    it.film = this.film
+    it.films = this.films
+    it.actor = this.actor
+    it.actors = this.actors
+    it.taggable = this.taggable
   }
   .apply(block).let {
     QueryDto(

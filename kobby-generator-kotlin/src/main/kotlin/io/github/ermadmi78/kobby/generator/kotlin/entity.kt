@@ -160,7 +160,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 addModifiers(OVERRIDE)
             }
             node.fields.values.asSequence().filter { !it.isRequired && it.isDefault }.forEach { field ->
-                addStatement("${field.projectionFieldName}()")
+                addStatement("${field.projectionFieldName.escape()}()")
             }
         }
     }

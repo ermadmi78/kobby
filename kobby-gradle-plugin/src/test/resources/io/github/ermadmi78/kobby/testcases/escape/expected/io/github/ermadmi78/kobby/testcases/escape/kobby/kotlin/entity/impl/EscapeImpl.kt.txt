@@ -1,0 +1,428 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeSubscriber
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto.EscapeDto
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Escape
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.EscapeProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Point
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.PointProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class EscapeImpl(
+  internal val __innerContext: EscapeContext,
+  internal val __innerProjection: EscapeProjectionImpl,
+  internal val __innerDto: EscapeDto
+) : Escape {
+  public override val `if`: Long
+    get() = __innerDto.`if`!!
+
+  public override val `is`: String
+    get() {
+      if (!__innerProjection.__innerIs1) {
+        error("Property [is] is not available - add [is] projection to switch on it")
+      }
+      return __innerDto.`is`!!
+    }
+
+  public override val `for`: Int?
+    get() = __innerDto.`for`
+
+  public override val points: List<Point> by lazy {
+    if (__innerProjection.__innerPoints3 == null) {
+      error("Property [points] is not available - add [points] projection to switch on it")
+    }
+    __innerDto.resolvePoints(__innerContext, __innerProjection.__innerPoints3!!)
+  }
+
+
+  public override val it: String
+    get() {
+      if (!__innerProjection.__innerIt4) {
+        error("Property [it] is not available - add [it] projection to switch on it")
+      }
+      return __innerDto.it!!
+    }
+
+  public override val `in`: String?
+    get() {
+      if (!__innerProjection.__innerIn5) {
+        error("Property [in] is not available - remove [__withoutIn] projection to switch on it")
+      }
+      return __innerDto.`in`
+    }
+
+  public override val `val`: Point? by lazy {
+    if (__innerProjection.__innerVal6 == null) {
+      error("Property [val] is not available - add [val] projection to switch on it")
+    }
+    __innerDto.resolveVal(__innerContext, __innerProjection.__innerVal6!!)
+  }
+
+
+  public override val `var`: List<Point?>? by lazy {
+    if (__innerProjection.__innerVar7 == null) {
+      error("Property [var] is not available - add [var] projection to switch on it")
+    }
+    __innerDto.resolveVar(__innerContext, __innerProjection.__innerVar7!!)
+  }
+
+
+  public override val `while`: List<Point> by lazy {
+    if (__innerProjection.__innerWhile8 == null) {
+      error("Property [while] is not available - add [while] projection to switch on it")
+    }
+    __innerDto.resolveWhile(__innerContext, __innerProjection.__innerWhile8!!)
+  }
+
+
+  public override fun equals(other: Any?): Boolean {
+    if (this === other) {
+      return true
+    }
+    if (this.javaClass != other?.javaClass) {
+      return false
+    }
+
+    other as EscapeImpl
+    return __innerDto.`if` == other.__innerDto.`if`
+  }
+
+  public override fun hashCode(): Int = __innerDto.`if`?.hashCode() ?: 0
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Escape").append('(')
+
+    var counter = 0
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("if").append('=').append(`if`)
+    }
+
+    if (__innerProjection.__innerIs1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("is").append('=').append(`is`)
+    }
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("for").append('=').append(`for`)
+    }
+
+    if (__innerProjection.__innerPoints3 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("points").append('=').append(points)
+    }
+
+    if (__innerProjection.__innerIt4) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("it").append('=').append(it)
+    }
+
+    if (__innerProjection.__innerIn5) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("in").append('=').append(`in`)
+    }
+
+    if (__innerProjection.__innerVal6 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("val").append('=').append(`val`)
+    }
+
+    if (__innerProjection.__innerVar7 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("var").append('=').append(`var`)
+    }
+
+    if (__innerProjection.__innerWhile8 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("while").append('=').append(`while`)
+    }
+
+    append(')')
+  }
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      EscapeSubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun EscapeProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class EscapeProjectionImpl : EscapeProjection {
+  internal var __innerIs1: Boolean = false
+
+  internal var __innerPoints3: PointProjectionImpl? = null
+
+  internal var __innerPoints3Do: Int? = null
+
+  internal var __innerPoints3By: Int? = null
+
+  internal var __innerIt4: Boolean = false
+
+  internal var __innerIn5: Boolean = true
+
+  internal var __innerVal6: PointProjectionImpl? = null
+
+  internal var __innerVar7: PointProjectionImpl? = null
+
+  internal var __innerWhile8: PointProjectionImpl? = null
+
+  public override fun `is`(): Unit {
+    __innerIs1 = true
+  }
+
+  public override fun points(
+    `do`: Int?,
+    `by`: Int?,
+    __projection: PointProjection.() -> Unit
+  ): Unit {
+    __innerPoints3 = PointProjectionImpl().apply(__projection)
+    __innerPoints3Do = `do`
+    __innerPoints3By = `by`
+  }
+
+  public override fun it(): Unit {
+    __innerIt4 = true
+  }
+
+  public override fun __withoutIn(): Unit {
+    __innerIn5 = false
+  }
+
+  public override fun `val`(__projection: PointProjection.() -> Unit): Unit {
+    __innerVal6 = PointProjectionImpl().apply(__projection)
+  }
+
+  public override fun `var`(__projection: PointProjection.() -> Unit): Unit {
+    __innerVar7 = PointProjectionImpl().apply(__projection)
+  }
+
+  public override fun `while`(__projection: PointProjection.() -> Unit): Unit {
+    __innerWhile8 = PointProjectionImpl().apply(__projection)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: EscapeProjection): Unit {
+    if ("is" !in ignore && __innerIs1) {
+      __projection.`is`()
+    }
+    if ("points" !in ignore && __innerPoints3 != null) {
+      __projection.points(__innerPoints3Do, __innerPoints3By) {
+        this@EscapeProjectionImpl.__innerPoints3!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("it" !in ignore && __innerIt4) {
+      __projection.it()
+    }
+    if ("in" !in ignore && !__innerIn5) {
+      __projection.__withoutIn()
+    }
+    if ("val" !in ignore && __innerVal6 != null) {
+      __projection.`val` {
+        this@EscapeProjectionImpl.__innerVal6!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("var" !in ignore && __innerVar7 != null) {
+      __projection.`var` {
+        this@EscapeProjectionImpl.__innerVar7!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("while" !in ignore && __innerWhile8 != null) {
+      __projection.`while` {
+        this@EscapeProjectionImpl.__innerWhile8!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: if
+    if ("if" !in ignore) {
+      body.append(' ').append("if")
+    }
+
+    // Field: is
+    if ("is" !in ignore && __innerIs1) {
+      body.append(' ').append("is")
+    }
+
+    // Field: for
+    if ("for" !in ignore) {
+      body.append(' ').append("for")
+    }
+
+    // Field: points
+    if ("points" !in ignore && __innerPoints3 != null) {
+      body.append(' ').append("points")
+      var counter = 0
+      val addBrackets = __innerPoints3Do != null || __innerPoints3By != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: points.do
+      if (__innerPoints3Do != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerPoints3Do!!
+        body.append("do").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int!")
+      }
+
+      // Argument: points.by
+      if (__innerPoints3By != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerPoints3By!!
+        body.append("by").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Point
+      __innerPoints3!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: it
+    if ("it" !in ignore && __innerIt4) {
+      body.append(' ').append("it")
+    }
+
+    // Field: in
+    if ("in" !in ignore && __innerIn5) {
+      body.append(' ').append("in")
+    }
+
+    // Field: val
+    if ("val" !in ignore && __innerVal6 != null) {
+      body.append(' ').append("val")
+
+      // Build nested projection of Point
+      __innerVal6!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: var
+    if ("var" !in ignore && __innerVar7 != null) {
+      body.append(' ').append("var")
+
+      // Build nested projection of Point
+      __innerVar7!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: while
+    if ("while" !in ignore && __innerWhile8 != null) {
+      body.append(' ').append("while")
+
+      // Build nested projection of Point
+      __innerWhile8!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun EscapeDto.buildEntity(__innerContext: EscapeContext,
+    __innerProjection: EscapeProjectionImpl): Escape = EscapeImpl(__innerContext, __innerProjection,
+    this)
+
+internal fun EscapeDto.resolvePoints(__innerContext: EscapeContext,
+    __innerProjection: PointProjectionImpl): List<Point> = points?.map {
+    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+
+internal fun EscapeDto.resolveVal(__innerContext: EscapeContext,
+    __innerProjection: PointProjectionImpl): Point? = `val`?.buildEntity(__innerContext,
+    __innerProjection)
+
+internal fun EscapeDto.resolveVar(__innerContext: EscapeContext,
+    __innerProjection: PointProjectionImpl): List<Point?>? = `var`?.map {
+    it?.buildEntity(__innerContext, __innerProjection) }
+
+internal fun EscapeDto.resolveWhile(__innerContext: EscapeContext,
+    __innerProjection: PointProjectionImpl): List<Point> = `while`?.map {
+    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

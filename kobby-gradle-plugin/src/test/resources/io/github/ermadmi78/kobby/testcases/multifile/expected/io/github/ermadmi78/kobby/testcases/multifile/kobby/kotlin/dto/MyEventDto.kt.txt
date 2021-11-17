@@ -51,8 +51,8 @@ public fun MyEventDto(block: MyEventDtoBuilder.() -> Unit): MyEventDto {
 public fun MyEventDto.copy(block: MyEventDtoBuilder.() -> Unit): MyEventDto {
   // MyEventDto copy DSL
   return MyEventDtoBuilder().also {
-    it.id = id
-    it.name = name
+    it.id = this.id
+    it.name = this.name
   }
   .apply(block).let {
     MyEventDto(

@@ -50,15 +50,15 @@ public data class DPrefFilmDPost(
     if (this === other) {
       return true
     }
-    if (javaClass != other?.javaClass) {
+    if (this.javaClass != other?.javaClass) {
       return false
     }
 
     other as DPrefFilmDPost
-    return id == other.id
+    return this.id == other.id
   }
 
-  public override fun hashCode(): Int = id?.hashCode() ?: 0
+  public override fun hashCode(): Int = this.id?.hashCode() ?: 0
 }
 
 public fun DPrefFilmDPost(block: BPrefDPrefFilmDPostBPost.() -> Unit): DPrefFilmDPost {
@@ -79,13 +79,13 @@ public fun DPrefFilmDPost(block: BPrefDPrefFilmDPostBPost.() -> Unit): DPrefFilm
 public fun DPrefFilmDPost.replicate(block: BPrefDPrefFilmDPostBPost.() -> Unit): DPrefFilmDPost {
   // DPrefFilmDPost replicate DSL
   return BPrefDPrefFilmDPostBPost().also {
-    it.id = id
-    it.fields = fields
-    it.title = title
-    it.genre = genre
-    it.countryId = countryId
-    it.country = country
-    it.actors = actors
+    it.id = this.id
+    it.fields = this.fields
+    it.title = this.title
+    it.genre = this.genre
+    it.countryId = this.countryId
+    it.country = this.country
+    it.actors = this.actors
   }
   .apply(block).let {
     DPrefFilmDPost(

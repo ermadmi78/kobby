@@ -43,8 +43,8 @@ public fun MyInput(block: MyInputBuilder.() -> Unit): MyInput {
 public fun MyInput.copy(block: MyInputBuilder.() -> Unit): MyInput {
   // MyInput copy DSL
   return MyInputBuilder().also {
-    it.id = id
-    it.name = name
+    it.id = this.id
+    it.name = this.name
   }
   .apply(block).let {
     MyInput(

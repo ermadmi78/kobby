@@ -1,0 +1,61 @@
+directive @primaryKey on FIELD_DEFINITION
+directive @required on FIELD_DEFINITION
+directive @default on FIELD_DEFINITION
+directive @selection on FIELD_DEFINITION
+
+type Query {
+    escapes(do: Int! = 0, by: Int! = 100): [Escape!]!
+
+    escapesSelection(do: Int! = 0, by: Int! = 100): [Escape!]! @selection
+
+    severalPrimaryKeys: SeveralPrimaryKeys
+}
+
+type Mutation {
+    by(while: EscapeInput): Escape
+}
+
+type Subscription {
+    by(in: Int): Escape
+}
+
+interface IEscape {
+    is: String!
+    for: Int @required
+    points(do: Int! = 0, by: Int! = 100): [Point!]!
+}
+
+type Escape implements IEscape {
+    if: ID! @primaryKey
+
+    is: String!
+    for: Int
+    points(do: Int! = 0, by: Int! = 100): [Point!]!
+    it: String!
+    in : String @default
+    val: Point
+    var: [Point]
+    while: [Point!]!
+}
+
+type Point {
+    x: Int!
+    y: Int!
+}
+
+input EscapeInput {
+    is: String!
+    it: String!
+    in : String
+}
+
+type SeveralPrimaryKeys {
+    if: ID! @primaryKey
+    do: String @primaryKey
+    while: Int! @primaryKey
+
+    it: String @primaryKey
+    other: String @primaryKey
+    result: Int! @primaryKey
+    block: String @primaryKey
+}

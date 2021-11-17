@@ -36,7 +36,7 @@ public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {
 public fun MutationDto.copy(block: MutationDtoBuilder.() -> Unit): MutationDto {
   // MutationDto copy DSL
   return MutationDtoBuilder().also {
-    it.createCountry = createCountry
+    it.createCountry = this.createCountry
   }
   .apply(block).let {
     MutationDto(

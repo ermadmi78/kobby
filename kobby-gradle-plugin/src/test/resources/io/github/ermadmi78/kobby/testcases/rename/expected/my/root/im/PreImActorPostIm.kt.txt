@@ -114,7 +114,7 @@ public class PreImActorPostIm(
     if (this === other) {
       return true
     }
-    if (javaClass != other?.javaClass) {
+    if (this.javaClass != other?.javaClass) {
       return false
     }
 

@@ -104,15 +104,15 @@ public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto {
 public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto {
   // CountryDto copy DSL
   return CountryDtoBuilder().also {
-    it.id = id
-    it.fields = fields
-    it.name = name
-    it.film = film
-    it.films = films
-    it.actor = actor
-    it.actors = actors
-    it.taggable = taggable
-    it.native = native
+    it.id = this.id
+    it.fields = this.fields
+    it.name = this.name
+    it.film = this.film
+    it.films = this.films
+    it.actor = this.actor
+    it.actors = this.actors
+    it.taggable = this.taggable
+    it.native = this.native
   }
   .apply(block).let {
     CountryDto(

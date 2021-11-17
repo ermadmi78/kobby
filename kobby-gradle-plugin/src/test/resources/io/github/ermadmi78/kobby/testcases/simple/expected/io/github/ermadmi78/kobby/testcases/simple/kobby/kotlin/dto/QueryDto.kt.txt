@@ -43,7 +43,7 @@ public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {
 public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto {
   // QueryDto copy DSL
   return QueryDtoBuilder().also {
-    it.all = all
+    it.all = this.all
   }
   .apply(block).let {
     QueryDto(

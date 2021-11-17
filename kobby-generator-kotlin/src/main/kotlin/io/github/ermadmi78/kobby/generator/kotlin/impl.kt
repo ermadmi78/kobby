@@ -120,12 +120,12 @@ private fun FileSpecBuilder.buildResolvers(node: KobbyNode, layout: KotlinLayout
 
             if (field.type.run { !nullable && list }) {
                 val args = mutableListOf<Any>()
-                val expand = field.type.expand(field.name, true, args) { builderCall }
+                val expand = field.type.expand(field.name.escape(), true, args) { builderCall }
                 args += ClassName("kotlin.collections", "listOf")
                 addStatement("return $expand ?: %T()", *args.toTypedArray())
             } else {
                 val args = mutableListOf<Any>()
-                val expand = field.type.expand(field.name, true, args) { builderCall }
+                val expand = field.type.expand(field.name.escape(), true, args) { builderCall }
                 addStatement("return ${expand}${field.notNullAssertion}", *args.toTypedArray())
             }
         }
@@ -192,7 +192,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 ifFlowStatement("this·===·$EQUALS_ARG") {
                     "return·true"
                 }
-                ifFlowStatement("javaClass·!=·$EQUALS_ARG?.javaClass") {
+                ifFlowStatement("this.javaClass·!=·$EQUALS_ARG?.javaClass") {
                     "return·false"
                 }
 
@@ -201,12 +201,12 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
                 if (node.primaryKeysCount == 1) {
                     node.firstPrimaryKey().also {
-                        addStatement("return·$innerDto.${it.name}·==·$EQUALS_ARG.$innerDto.${it.name}")
+                        addStatement("return·$innerDto.${it.name.escape()}·==·$EQUALS_ARG.$innerDto.${it.name.escape()}")
                     }
                 } else {
                     addStatement("")
                     node.primaryKeys {
-                        ifFlowStatement("$innerDto.${it.name}·!=·$EQUALS_ARG.$innerDto.${it.name}") {
+                        ifFlowStatement("$innerDto.${it.name.escape()}·!=·$EQUALS_ARG.$innerDto.${it.name.escape()}") {
                             "return·false"
                         }
                     }
@@ -222,17 +222,17 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
                 if (node.primaryKeysCount == 1) {
                     node.firstPrimaryKey().also {
-                        addStatement("return·$innerDto.${it.name}?.hashCode()·?:·0")
+                        addStatement("return·$innerDto.${it.name.escape()}?.hashCode()·?:·0")
                     }
                 } else {
                     var first = true
                     node.primaryKeys {
                         if (first) {
                             first = false
-                            addStatement("var·$HASH_CODE_RES·=·$innerDto.${it.name}?.hashCode()·?:·0")
+                            addStatement("var·$HASH_CODE_RES·=·$innerDto.${it.name.escape()}?.hashCode()·?:·0")
                         } else {
                             addStatement(
-                                "$HASH_CODE_RES·=·31·*·$HASH_CODE_RES·+·($innerDto.${it.name}?.hashCode()·?:·0)"
+                                "$HASH_CODE_RES·=·31·*·$HASH_CODE_RES·+·($innerDto.${it.name.escape()}?.hashCode()·?:·0)"
                             )
                         }
                     }
@@ -270,7 +270,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                         buildAppendChain {
                             appendLiteral(field.name)
                             appendLiteral('=')
-                            appendExactly(field.name)
+                            appendExactly(field.name.escape())
                         }
                     }
                     addStatement("")
@@ -352,7 +352,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                         }
 
                         statement {
-                            "return·$innerDto.${field.name}${field.notNullAssertion}"
+                            "return·$innerDto.${field.name.escape()}${field.notNullAssertion}"
                         }
                     }
                 }
@@ -388,7 +388,7 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
                 val repeat = entity.selection.selectionArgument
                 buildParameter(repeat, field.selectionClass)
                 field.arguments.values.asSequence().filter { it.isInitialized }.forEach { arg ->
-                    addStatement("$repeat.${arg.name} = ${arg.name}")
+                    addStatement("$repeat.${arg.name.escape()} = ${arg.name.escape()}")
                 }
             }
         }
@@ -460,7 +460,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 field.arguments.values.asSequence()
                     .filter { !field.isSelection || !it.isInitialized }
                     .forEach { arg ->
-                        addStatement("${arg.innerName} = ${arg.name}")
+                        addStatement("${arg.innerName} = ${arg.name.escape()}")
                     }
 
                 if (node.kind == INTERFACE || node.kind == UNION) {
@@ -475,7 +475,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                         subField.arguments.values.asSequence()
                             .filter { !subField.isSelection || !it.isInitialized }
                             .forEach { subArg ->
-                                addStatement("${subObject.innerProjectionOnName}.${subArg.innerName} = ${subArg.name}")
+                                addStatement("${subObject.innerProjectionOnName}.${subArg.innerName} = ${subArg.name.escape()}")
                             }
                     }
 
@@ -542,7 +542,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                         if (args.isNotEmpty()) {
                             args = "($args)"
                         }
-                        controlFlow("$repeat.${field.projectionFieldName}$args") {
+                        controlFlow("$repeat.${field.projectionFieldName.escape()}$args") {
                             if (field.type.hasProjection) {
                                 statement(ClassName("kotlin.collections", "setOf")) {
                                     "this@${node.implProjectionName}" +
@@ -555,7 +555,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             }
                         }
                     } else {
-                        addStatement("$repeat.${field.projectionFieldName}($args)")
+                        addStatement("$repeat.${field.projectionFieldName.escape()}($args)")
                     }
                 }
 
@@ -607,7 +607,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             else args.asSequence()
                                 .map { arg ->
                                     require(arg.isInitialized) { "Invalid algorithm" }
-                                    if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
+                                    if (arg.isSelection) "${field.innerName}!!.${arg.name.escape()}" else arg.innerName
                                 }
                                 .joinToString(" || ") { "$it·!=·null" }
                         }
@@ -617,7 +617,8 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                         }
                         addStatement("")
                         field.arguments { arg ->
-                            val argName = if (arg.isSelection) "${field.innerName}!!.${arg.name}" else arg.innerName
+                            val argName =
+                                if (arg.isSelection) "${field.innerName}!!.${arg.name.escape()}" else arg.innerName
                             addComment("Argument: ${field.name}.${arg.name}")
                             ifFlow(if (arg.isInitialized) "$argName·!=·null" else "true") {
                                 ifFlow("counter++·>·0") {

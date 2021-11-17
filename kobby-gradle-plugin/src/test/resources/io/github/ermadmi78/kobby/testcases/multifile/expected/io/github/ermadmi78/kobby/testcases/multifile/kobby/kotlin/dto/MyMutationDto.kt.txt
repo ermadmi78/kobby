@@ -49,7 +49,7 @@ public fun MyMutationDto(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto 
 public fun MyMutationDto.copy(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto {
   // MyMutationDto copy DSL
   return MyMutationDtoBuilder().also {
-    it.insert = insert
+    it.insert = this.insert
   }
   .apply(block).let {
     MyMutationDto(

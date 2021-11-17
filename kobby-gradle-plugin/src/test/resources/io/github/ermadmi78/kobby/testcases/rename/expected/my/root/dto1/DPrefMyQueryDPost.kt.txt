@@ -59,12 +59,12 @@ public fun DPrefMyQueryDPost.replicate(block: BPrefDPrefMyQueryDPostBPost.() -> 
     DPrefMyQueryDPost {
   // DPrefMyQueryDPost replicate DSL
   return BPrefDPrefMyQueryDPostBPost().also {
-    it.country = country
-    it.countries = countries
-    it.film = film
-    it.films = films
-    it.actor = actor
-    it.actors = actors
+    it.country = this.country
+    it.countries = this.countries
+    it.film = this.film
+    it.films = this.films
+    it.actor = this.actor
+    it.actors = this.actors
   }
   .apply(block).let {
     DPrefMyQueryDPost(

@@ -48,7 +48,7 @@ public fun TagDto(block: TagDtoBuilder.() -> Unit): TagDto {
   // TagDto builder DSL
   return TagDtoBuilder().apply(block).let {
     TagDto(
-          it.value
+          it.`value`
         )
   }
 }
@@ -56,11 +56,11 @@ public fun TagDto(block: TagDtoBuilder.() -> Unit): TagDto {
 public fun TagDto.copy(block: TagDtoBuilder.() -> Unit): TagDto {
   // TagDto copy DSL
   return TagDtoBuilder().also {
-    it.value = value
+    it.`value` = this.`value`
   }
   .apply(block).let {
     TagDto(
-          it.value
+          it.`value`
         )
   }
 }

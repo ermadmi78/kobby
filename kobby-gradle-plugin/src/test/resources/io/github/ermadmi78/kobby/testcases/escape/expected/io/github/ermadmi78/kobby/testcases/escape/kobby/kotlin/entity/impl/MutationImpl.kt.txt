@@ -1,0 +1,155 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeSubscriber
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto.EscapeInput
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Escape
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.EscapeProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class MutationImpl(
+  internal val __innerContext: EscapeContext,
+  internal val __innerProjection: MutationProjectionImpl,
+  internal val __innerDto: MutationDto
+) : Mutation {
+  public override val `by`: Escape? by lazy {
+    if (__innerProjection.__innerBy0 == null) {
+      error("Property [by] is not available - add [by] projection to switch on it")
+    }
+    __innerDto.resolveBy(__innerContext, __innerProjection.__innerBy0!!)
+  }
+
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Mutation").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerBy0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("by").append('=').append(`by`)
+    }
+
+    append(')')
+  }
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      EscapeSubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun MutationProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class MutationProjectionImpl : MutationProjection {
+  internal var __innerBy0: EscapeProjectionImpl? = null
+
+  internal var __innerBy0While: EscapeInput? = null
+
+  public override fun `by`(`while`: EscapeInput?, __projection: EscapeProjection.() -> Unit): Unit {
+    __innerBy0 = EscapeProjectionImpl().apply(__projection)
+    __innerBy0While = `while`
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection):
+      Unit {
+    if ("by" !in ignore && __innerBy0 != null) {
+      __projection.`by`(__innerBy0While) {
+        this@MutationProjectionImpl.__innerBy0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: by
+    if ("by" !in ignore && __innerBy0 != null) {
+      body.append(' ').append("by")
+      var counter = 0
+      val addBrackets = __innerBy0While != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: by.while
+      if (__innerBy0While != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerBy0While!!
+        body.append("while").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("EscapeInput")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Escape
+      __innerBy0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun MutationDto.buildEntity(__innerContext: EscapeContext,
+    __innerProjection: MutationProjectionImpl): Mutation = MutationImpl(__innerContext,
+    __innerProjection, this)
+
+internal fun MutationDto.resolveBy(__innerContext: EscapeContext,
+    __innerProjection: EscapeProjectionImpl): Escape? = `by`?.buildEntity(__innerContext,
+    __innerProjection)

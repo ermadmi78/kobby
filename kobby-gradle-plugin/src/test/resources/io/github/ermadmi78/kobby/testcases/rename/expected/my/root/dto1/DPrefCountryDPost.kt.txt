@@ -51,15 +51,15 @@ public data class DPrefCountryDPost(
     if (this === other) {
       return true
     }
-    if (javaClass != other?.javaClass) {
+    if (this.javaClass != other?.javaClass) {
       return false
     }
 
     other as DPrefCountryDPost
-    return id == other.id
+    return this.id == other.id
   }
 
-  public override fun hashCode(): Int = id?.hashCode() ?: 0
+  public override fun hashCode(): Int = this.id?.hashCode() ?: 0
 }
 
 public fun DPrefCountryDPost(block: BPrefDPrefCountryDPostBPost.() -> Unit): DPrefCountryDPost {
@@ -82,14 +82,14 @@ public fun DPrefCountryDPost.replicate(block: BPrefDPrefCountryDPostBPost.() -> 
     DPrefCountryDPost {
   // DPrefCountryDPost replicate DSL
   return BPrefDPrefCountryDPostBPost().also {
-    it.id = id
-    it.fields = fields
-    it.name = name
-    it.film = film
-    it.films = films
-    it.actor = actor
-    it.actors = actors
-    it.native = native
+    it.id = this.id
+    it.fields = this.fields
+    it.name = this.name
+    it.film = this.film
+    it.films = this.films
+    it.actor = this.actor
+    it.actors = this.actors
+    it.native = this.native
   }
   .apply(block).let {
     DPrefCountryDPost(

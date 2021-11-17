@@ -40,7 +40,7 @@ public fun TagInput(block: TagInputBuilder.() -> Unit): TagInput {
   // TagInput builder DSL
   return TagInputBuilder().apply(block).let {
     TagInput(
-          it.value ?: error("TagInput: 'value' must not be null")
+          it.`value` ?: error("TagInput: 'value' must not be null")
         )
   }
 }
@@ -48,11 +48,11 @@ public fun TagInput(block: TagInputBuilder.() -> Unit): TagInput {
 public fun TagInput.copy(block: TagInputBuilder.() -> Unit): TagInput {
   // TagInput copy DSL
   return TagInputBuilder().also {
-    it.value = value
+    it.`value` = this.`value`
   }
   .apply(block).let {
     TagInput(
-          it.value ?: error("TagInput: 'value' must not be null")
+          it.`value` ?: error("TagInput: 'value' must not be null")
         )
   }
 }
