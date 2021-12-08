@@ -1,0 +1,158 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.ContextInheritanceAndFunContext
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.ContextInheritanceAndFunSubscriber
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.Simple
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.SimpleProjection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.map
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class QueryImpl(
+  internal val __innerContext: ContextInheritanceAndFunContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto
+) : Query {
+  public override val all: List<List<List<Simple>?>>? by lazy {
+    if (__innerProjection.__innerAll0 == null) {
+      error("Property [all] is not available - add [all] projection to switch on it")
+    }
+    __innerDto.resolveAll(__innerContext, __innerProjection.__innerAll0!!)
+  }
+
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerAll0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("all").append('=').append(all)
+    }
+
+    append(')')
+  }
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextInheritanceAndFunSubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun myContext(): ContextInheritanceAndFunContext = __innerContext
+
+  public override fun QueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerAll0: SimpleProjectionImpl? = null
+
+  internal var __innerAll0Limit: Int? = null
+
+  public override fun all(limit: Int?, __projection: SimpleProjection.() -> Unit): Unit {
+    __innerAll0 = SimpleProjectionImpl().apply(__projection)
+    __innerAll0Limit = limit
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+    if ("all" !in ignore && __innerAll0 != null) {
+      __projection.all(__innerAll0Limit) {
+        this@QueryProjectionImpl.__innerAll0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: all
+    if ("all" !in ignore && __innerAll0 != null) {
+      body.append(' ').append("all")
+      var counter = 0
+      val addBrackets = __innerAll0Limit != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: all.limit
+      if (__innerAll0Limit != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerAll0Limit!!
+        body.append("limit").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Simple
+      __innerAll0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: ContextInheritanceAndFunContext,
+    __innerProjection: QueryProjectionImpl): Query = QueryImpl(__innerContext, __innerProjection,
+    this)
+
+internal fun QueryDto.resolveAll(__innerContext: ContextInheritanceAndFunContext,
+    __innerProjection: SimpleProjectionImpl): List<List<List<Simple>?>>? = all?.map { it.map {
+    it?.map { it.buildEntity(__innerContext, __innerProjection) } } }

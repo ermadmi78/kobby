@@ -1,0 +1,63 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+public data class SubscriptionDto(
+  public val countryCreated: CountryDto? = null,
+  public val filmCreated: FilmDto? = null,
+  public val actorCreated: ActorDto? = null
+)
+
+public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {
+  // SubscriptionDto builder DSL
+  return SubscriptionDtoBuilder().apply(block).let {
+    SubscriptionDto(
+          it.countryCreated,
+          it.filmCreated,
+          it.actorCreated
+        )
+  }
+}
+
+public fun SubscriptionDto.copy(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {
+  // SubscriptionDto copy DSL
+  return SubscriptionDtoBuilder().also {
+    it.countryCreated = this.countryCreated
+    it.filmCreated = this.filmCreated
+    it.actorCreated = this.actorCreated
+  }
+  .apply(block).let {
+    SubscriptionDto(
+          it.countryCreated,
+          it.filmCreated,
+          it.actorCreated
+        )
+  }
+}
+
+@ContextFunOnlyDSL
+public class SubscriptionDtoBuilder {
+  public var countryCreated: CountryDto? = null
+
+  public var filmCreated: FilmDto? = null
+
+  public var actorCreated: ActorDto? = null
+}

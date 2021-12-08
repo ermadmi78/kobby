@@ -1,0 +1,109 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyDSL
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.Gender
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.Genre
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Query {
+  public val country: Country?
+
+  public val countries: List<Country>
+
+  public val film: Film?
+
+  public val films: List<Film>
+
+  public val actor: Actor?
+
+  public val actors: List<Actor>
+
+  public val taggable: List<Taggable>
+
+  public fun __context(): ContextFunOnlyContext
+
+  public fun QueryProjection.__withCurrentProjection(): Unit
+}
+
+@ContextFunOnlyDSL
+public interface QueryProjection {
+  public fun country(id: Long, __projection: CountryProjection.() -> Unit = {}): Unit
+
+  /**
+   * @param limit Default: 10
+   * @param offset Default: 0
+   */
+  public fun countries(
+    name: String? = null,
+    limit: Int? = null,
+    offset: Int? = null,
+    __projection: CountryProjection.() -> Unit = {}
+  ): Unit
+
+  public fun film(id: Long, __projection: FilmProjection.() -> Unit = {}): Unit
+
+  public fun films(__query: QueryFilmsQuery.() -> Unit = {}): Unit
+
+  public fun actor(id: Long, __projection: ActorProjection.() -> Unit = {}): Unit
+
+  public fun actors(__query: QueryActorsQuery.() -> Unit = {}): Unit
+
+  public fun taggable(tag: String, __projection: TaggableQualifiedProjection.() -> Unit = {}): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
+
+@ContextFunOnlyDSL
+public interface QueryFilmsSelection {
+  public var title: String?
+
+  public var genre: Genre?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+}
+
+@ContextFunOnlyDSL
+public interface QueryFilmsQuery : QueryFilmsSelection, FilmProjection
+
+@ContextFunOnlyDSL
+public interface QueryActorsSelection {
+  public var firstName: String?
+
+  public var gender: Gender?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Default: 0
+   */
+  public var offset: Int?
+}
+
+@ContextFunOnlyDSL
+public interface QueryActorsQuery : QueryActorsSelection, ActorProjection

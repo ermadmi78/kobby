@@ -280,37 +280,48 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             }
         }
 
-        // context query
-        buildFunction(context.query) {
-            addModifiers(OVERRIDE, SUSPEND)
-            buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
-            returns(node.schema.query.entityClass)
+        if (entity.contextInheritanceEnabled) {
+            // context query
+            buildFunction(context.query) {
+                addModifiers(OVERRIDE, SUSPEND)
+                buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
+                returns(node.schema.query.entityClass)
 
-            addStatement(
-                "return ${impl.contextPropertyName}.${context.query}(${entity.projection.projectionArgument})"
-            )
+                addStatement(
+                    "return ${impl.contextPropertyName}.${context.query}(${entity.projection.projectionArgument})"
+                )
+            }
+
+            // context mutation
+            buildFunction(context.mutation) {
+                addModifiers(OVERRIDE, SUSPEND)
+                buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
+                returns(node.schema.mutation.entityClass)
+
+                addStatement(
+                    "return ${impl.contextPropertyName}.${context.mutation}(${entity.projection.projectionArgument})"
+                )
+            }
+
+            // context subscription
+            buildFunction(context.subscription) {
+                addModifiers(OVERRIDE)
+                buildParameter(entity.projection.projectionArgument, node.schema.subscription.projectionLambda)
+                returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
+
+                addStatement(
+                    "return ${impl.contextPropertyName}.${context.subscription}(${entity.projection.projectionArgument})"
+                )
+            }
         }
 
-        // context mutation
-        buildFunction(context.mutation) {
-            addModifiers(OVERRIDE, SUSPEND)
-            buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
-            returns(node.schema.mutation.entityClass)
+        if (entity.contextFunEnabled) {
+            buildFunction(entity.contextFunName) {
+                addModifiers(OVERRIDE)
+                returns(context.contextClass)
 
-            addStatement(
-                "return ${impl.contextPropertyName}.${context.mutation}(${entity.projection.projectionArgument})"
-            )
-        }
-
-        // context subscription
-        buildFunction(context.subscription) {
-            addModifiers(OVERRIDE)
-            buildParameter(entity.projection.projectionArgument, node.schema.subscription.projectionLambda)
-            returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
-
-            addStatement(
-                "return ${impl.contextPropertyName}.${context.subscription}(${entity.projection.projectionArgument})"
-            )
+                addStatement("return ${impl.contextPropertyName}")
+            }
         }
 
         // withCurrentProjection

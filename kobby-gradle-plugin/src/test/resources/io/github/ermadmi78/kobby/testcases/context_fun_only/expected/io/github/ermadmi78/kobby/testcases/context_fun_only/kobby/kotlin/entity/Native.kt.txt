@@ -1,0 +1,39 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyDSL
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Native {
+  public fun __context(): ContextFunOnlyContext
+}
+
+@ContextFunOnlyDSL
+public interface NativeProjection {
+  public fun __minimize(): Unit {
+  }
+}
+
+@ContextFunOnlyDSL
+public interface NativeQualification {
+  public fun __onFilm(__projection: FilmProjection.() -> Unit = {}): Unit
+
+  public fun __onActor(__projection: ActorProjection.() -> Unit = {}): Unit
+}
+
+@ContextFunOnlyDSL
+public interface NativeQualifiedProjection : NativeProjection, NativeQualification

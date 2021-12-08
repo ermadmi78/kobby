@@ -1,0 +1,46 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyDSL
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Subscription {
+  public val countryCreated: Country
+
+  public val filmCreated: Film
+
+  public val actorCreated: Actor
+
+  public fun __context(): ContextFunOnlyContext
+
+  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+}
+
+@ContextFunOnlyDSL
+public interface SubscriptionProjection {
+  public fun countryCreated(__projection: CountryProjection.() -> Unit = {}): Unit
+
+  public fun filmCreated(countryId: Long? = null, __projection: FilmProjection.() -> Unit = {}):
+      Unit
+
+  public fun actorCreated(countryId: Long? = null, __projection: ActorProjection.() -> Unit = {}):
+      Unit
+
+  public fun __minimize(): Unit {
+  }
+}

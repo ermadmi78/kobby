@@ -192,6 +192,15 @@ class KobbyPlugin : Plugin<Project> {
                     postfix?.also {
                         kotlinTask.entityPostfix.convention(it)
                     }
+                    contextInheritanceEnabled?.also {
+                        kotlinTask.entityContextInheritanceEnabled.convention(it)
+                    }
+                    contextFunEnabled?.also {
+                        kotlinTask.entityContextFunEnabled.convention(it)
+                    }
+                    contextFunName?.also {
+                        kotlinTask.entityContextFunName.convention(it)
+                    }
                     withCurrentProjectionFun?.also {
                         kotlinTask.entityWithCurrentProjectionFun.convention(it)
                     }

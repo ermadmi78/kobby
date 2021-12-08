@@ -1,0 +1,87 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyDSL
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.Gender
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.Genre
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Actor : Entity, Taggable, Native {
+  public override val id: Long
+
+  public override val tags: List<Tag>
+
+  public val firstName: String
+
+  public val lastName: String?
+
+  public val gender: Gender
+
+  public val countryId: Long
+
+  public val country: Country
+
+  public val films: List<Film>
+
+  public override fun __context(): ContextFunOnlyContext
+
+  public fun ActorProjection.__withCurrentProjection(): Unit
+}
+
+@ContextFunOnlyDSL
+public interface ActorProjection : EntityProjection, TaggableProjection, NativeProjection {
+  public override fun tags(__projection: TagProjection.() -> Unit): Unit
+
+  public fun __withoutFirstName(): Unit
+
+  public fun __withoutLastName(): Unit
+
+  public fun gender(): Unit
+
+  public fun country(__projection: CountryProjection.() -> Unit = {}): Unit
+
+  public fun films(__query: ActorFilmsQuery.() -> Unit = {}): Unit
+
+  public override fun __minimize(): Unit {
+    __withoutFirstName()
+    __withoutLastName()
+  }
+}
+
+@ContextFunOnlyDSL
+public interface ActorFilmsSelection {
+  public var title: String?
+
+  public var genre: Genre?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Default: 0
+   */
+  public var offset: Int?
+}
+
+@ContextFunOnlyDSL
+public interface ActorFilmsQuery : ActorFilmsSelection, FilmProjection

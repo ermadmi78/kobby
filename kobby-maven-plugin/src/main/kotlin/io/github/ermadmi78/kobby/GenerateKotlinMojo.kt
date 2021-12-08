@@ -238,6 +238,9 @@ class GenerateKotlinMojo : AbstractMojo() {
                 entity.enabled,
                 entityPackage.toPackageName(),
                 Decoration(entity.prefix, entity.postfix),
+                entity.contextInheritanceEnabled,
+                entity.contextFunEnabled,
+                entity.contextFunName,
                 entity.withCurrentProjectionFun,
                 KotlinEntityProjectionLayout(
                     Decoration(entity.projection.projectionPrefix, entity.projection.projectionPostfix),

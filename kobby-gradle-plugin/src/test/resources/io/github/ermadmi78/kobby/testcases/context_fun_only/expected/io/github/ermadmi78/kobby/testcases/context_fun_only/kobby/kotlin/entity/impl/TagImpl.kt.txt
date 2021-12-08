@@ -1,0 +1,101 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.TagDto
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.Tag
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.TagProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class TagImpl(
+  internal val __innerContext: ContextFunOnlyContext,
+  internal val __innerProjection: TagProjectionImpl,
+  internal val __innerDto: TagDto
+) : Tag {
+  public override val `value`: String
+    get() {
+      if (!__innerProjection.__innerValue0) {
+        error("Property [value] is not available - add [value] projection to switch on it")
+      }
+      return __innerDto.`value`!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Tag").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerValue0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("value").append('=').append(`value`)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): ContextFunOnlyContext = __innerContext
+
+  public override fun TagProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class TagProjectionImpl : TagProjection {
+  internal var __innerValue0: Boolean = false
+
+  public override fun `value`(): Unit {
+    __innerValue0 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: TagProjection): Unit {
+    if ("value" !in ignore && __innerValue0) {
+      __projection.`value`()
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: value
+    if ("value" !in ignore && __innerValue0) {
+      body.append(' ').append("value")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun TagDto.buildEntity(__innerContext: ContextFunOnlyContext,
+    __innerProjection: TagProjectionImpl): Tag = TagImpl(__innerContext, __innerProjection, this)

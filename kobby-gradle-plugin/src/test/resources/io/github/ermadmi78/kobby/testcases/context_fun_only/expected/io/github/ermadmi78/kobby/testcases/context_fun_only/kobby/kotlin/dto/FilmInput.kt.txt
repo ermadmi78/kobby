@@ -1,0 +1,65 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+import kotlin.let
+
+public data class FilmInput(
+  public val title: String,
+  /**
+   * Default: DRAMA
+   */
+  public val genre: Genre = Genre.DRAMA
+)
+
+public fun FilmInput(block: FilmInputBuilder.() -> Unit): FilmInput {
+  // FilmInput builder DSL
+  return FilmInputBuilder().apply(block).let {
+    FilmInput(
+          it.title ?: error("FilmInput: 'title' must not be null"),
+          it.genre
+        )
+  }
+}
+
+public fun FilmInput.copy(block: FilmInputBuilder.() -> Unit): FilmInput {
+  // FilmInput copy DSL
+  return FilmInputBuilder().also {
+    it.title = this.title
+    it.genre = this.genre
+  }
+  .apply(block).let {
+    FilmInput(
+          it.title ?: error("FilmInput: 'title' must not be null"),
+          it.genre
+        )
+  }
+}
+
+@ContextFunOnlyDSL
+public class FilmInputBuilder {
+  public var title: String? = null
+
+  /**
+   * Default: DRAMA
+   */
+  public var genre: Genre = Genre.DRAMA
+}

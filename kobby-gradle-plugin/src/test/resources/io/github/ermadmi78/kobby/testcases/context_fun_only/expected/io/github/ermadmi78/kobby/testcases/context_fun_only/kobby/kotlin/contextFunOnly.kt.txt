@@ -1,0 +1,232 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.SubscriptionProjection
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl.MutationProjectionImpl
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl.QueryProjectionImpl
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl.SubscriptionProjectionImpl
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl.buildEntity
+import kotlin.Any
+import kotlin.DslMarker
+import kotlin.NotImplementedError
+import kotlin.Pair
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.mutableMapOf
+import kotlin.collections.setOf
+import kotlin.reflect.KClass
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+import kotlin.to
+
+public fun contextFunOnlyContextOf(adapter: ContextFunOnlyAdapter): ContextFunOnlyContext =
+    ContextFunOnlyContextImpl(adapter)
+
+public fun buildContextFunOnlyQuery(__projection: QueryProjection.() -> Unit): Pair<String,
+    Map<String, Any>> {
+  val projectionRef = QueryProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val query = buildString(header.length + body.length + 7) {
+    append("query")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return query to arguments
+}
+
+public fun buildContextFunOnlyMutation(__projection: MutationProjection.() -> Unit): Pair<String,
+    Map<String, Any>> {
+  val projectionRef = MutationProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val mutation = buildString(header.length + body.length + 10) {
+    append("mutation")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return mutation to arguments
+}
+
+public fun buildContextFunOnlySubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
+  val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val subscription = buildString(header.length + body.length + 14) {
+    append("subscription")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return subscription to arguments
+}
+
+public interface ContextFunOnlyContext {
+  public suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextFunOnlySubscriber<Subscription>
+}
+
+public fun interface ContextFunOnlySubscriber<T> {
+  public suspend fun subscribe(block: suspend ContextFunOnlyReceiver<T>.() -> Unit): Unit
+}
+
+@ContextFunOnlyDSL
+public fun interface ContextFunOnlyReceiver<out T> {
+  public suspend fun receive(): T
+}
+
+public interface ContextFunOnlyAdapter {
+  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto = throw
+      NotImplementedError("Adapter function executeQuery is not implemented")
+
+  public suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto =
+      throw NotImplementedError("Adapter function executeMutation is not implemented")
+
+  public suspend fun executeSubscription(
+    query: String,
+    variables: Map<String, Any?>,
+    block: suspend ContextFunOnlyReceiver<SubscriptionDto>.() -> Unit
+  ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
+}
+
+private class ContextFunOnlyContextImpl(
+  private val adapter: ContextFunOnlyAdapter
+) : ContextFunOnlyContext {
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+    val projectionRef = QueryProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val query = buildString(header.length + body.length + 7) {
+      append("query")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    val queryDto: QueryDto = adapter.executeQuery(query, arguments)
+    return queryDto.buildEntity(this, projectionRef)
+  }
+
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+    val projectionRef = MutationProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val mutation = buildString(header.length + body.length + 10) {
+      append("mutation")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    val mutationDto: MutationDto = adapter.executeMutation(mutation, arguments)
+    return mutationDto.buildEntity(this, projectionRef)
+  }
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextFunOnlySubscriber<Subscription> {
+    val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val subscription = buildString(header.length + body.length + 14) {
+      append("subscription")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    return ContextFunOnlySubscriber<Subscription> {
+      adapter.executeSubscription(subscription, arguments) {
+        val receiver = ContextFunOnlyReceiver<Subscription> {
+          val subscriptionDto: SubscriptionDto = receive()
+          subscriptionDto.buildEntity(this@ContextFunOnlyContextImpl, projectionRef)
+        }
+        it.invoke(receiver)
+      }
+    }
+  }
+}
+
+/**
+ * Helper interface for default adapter implementations
+ */
+public interface ContextFunOnlyMapper {
+  public fun serialize(`value`: Any): String
+
+  public fun <T : Any> deserialize(content: String, contentType: KClass<T>): T
+}
+
+@DslMarker
+public annotation class ContextFunOnlyDSL

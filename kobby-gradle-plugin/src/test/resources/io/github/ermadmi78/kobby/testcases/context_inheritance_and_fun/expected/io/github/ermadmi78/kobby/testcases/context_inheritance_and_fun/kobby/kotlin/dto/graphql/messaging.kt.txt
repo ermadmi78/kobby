@@ -1,0 +1,118 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.dto.graphql
+
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface ContextInheritanceAndFunMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface ContextInheritanceAndFunClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public interface ContextInheritanceAndFunServerMessage
+
+/**
+ * See GQL_CONNECTION_INIT
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class ContextInheritanceAndFunMessageConnectionInit(
+  public val payload: Map<String, Any?>? = null
+) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
+
+/**
+ * See GQL_START
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class ContextInheritanceAndFunMessageStart(
+  public val id: String,
+  public val payload: ContextInheritanceAndFunRequest
+) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
+
+/**
+ * See GQL_STOP
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class ContextInheritanceAndFunMessageStop(
+  public val id: String
+) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
+
+/**
+ * See GQL_CONNECTION_TERMINATE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public class ContextInheritanceAndFunMessageConnectionTerminate : ContextInheritanceAndFunMessage,
+    ContextInheritanceAndFunClientMessage
+
+/**
+ * See GQL_CONNECTION_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class ContextInheritanceAndFunMessageConnectionError(
+  public val payload: Any? = null
+) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+
+/**
+ * See GQL_CONNECTION_ACK
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class ContextInheritanceAndFunMessageConnectionAck(
+  public val payload: Any? = null
+) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+
+/**
+ * See GQL_DATA
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class ContextInheritanceAndFunMessageData(
+  public val id: String,
+  public val payload: ContextInheritanceAndFunSubscriptionResult
+) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+
+/**
+ * See GQL_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class ContextInheritanceAndFunMessageError(
+  public val id: String,
+  public val payload: ContextInheritanceAndFunErrorResult
+) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+
+/**
+ * See GQL_COMPLETE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public data class ContextInheritanceAndFunMessageComplete(
+  public val id: String
+) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+
+/**
+ * See GQL_CONNECTION_KEEP_ALIVE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+public class ContextInheritanceAndFunMessageConnectionKeepAlive : ContextInheritanceAndFunMessage,
+    ContextInheritanceAndFunServerMessage

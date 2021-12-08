@@ -460,6 +460,30 @@ open class KobbyKotlinEntityExtension {
     var postfix: String? = null
 
     /**
+     * Inherit context interface in entity interface.
+     * [More details](https://github.com/ermadmi78/kobby/issues/20)
+     *
+     * Default: true
+     */
+    var contextInheritanceEnabled: Boolean? = null
+
+    /**
+     * Generate context access function in entity interface.
+     * [More details](https://github.com/ermadmi78/kobby/issues/20)
+     *
+     * Default: false
+     */
+    var contextFunEnabled: Boolean? = null
+
+    /**
+     * Context access function name in entity interface.
+     * [More details](https://github.com/ermadmi78/kobby/issues/20)
+     *
+     * Default: "__context"
+     */
+    var contextFunName: String? = null
+
+    /**
      * Name of "withCurrentProjection" function in entity interface
      *
      * Default: "__withCurrentProjection"

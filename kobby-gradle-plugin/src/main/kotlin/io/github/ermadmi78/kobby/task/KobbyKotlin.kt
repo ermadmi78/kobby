@@ -383,6 +383,30 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "entityContextInheritanceEnabled",
+        description = "Inherit context interface in entity interface (default true)"
+    )
+    val entityContextInheritanceEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityContextFunEnabled",
+        description = "Generate context access function in entity interface (default false)"
+    )
+    val entityContextFunEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityContextFunName",
+        description = "Context access function name in entity interface (default \"__context\")"
+    )
+    val entityContextFunName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "entityWithCurrentProjectionFun",
         description = "Name of \"withCurrentProjection\" function in entity interface " +
                 "(default \"__withCurrentProjection\")"
@@ -750,6 +774,9 @@ open class KobbyKotlin : DefaultTask() {
 
         entityEnabled.convention(true)
         entityPackageName.convention("entity")
+        entityContextInheritanceEnabled.convention(true)
+        entityContextFunEnabled.convention(false)
+        entityContextFunName.convention("__context")
         entityWithCurrentProjectionFun.convention("__withCurrentProjection")
         entityProjectionPostfix.convention("Projection")
         entityProjectionArgument.convention("__projection")
@@ -906,6 +933,9 @@ open class KobbyKotlin : DefaultTask() {
                 entityEnabled.get(),
                 entityPackage.toPackageName(),
                 Decoration(entityPrefix.orNull, entityPostfix.orNull),
+                entityContextInheritanceEnabled.get(),
+                entityContextFunEnabled.get(),
+                entityContextFunName.get(),
                 entityWithCurrentProjectionFun.get(),
                 KotlinEntityProjectionLayout(
                     Decoration(entityProjectionPrefix.orNull, entityProjectionPostfix.orNull),

@@ -1,0 +1,90 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.ContextFunOnlyDSL
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.let
+
+public data class FilmDto(
+  public override val id: Long? = null,
+  public override val tags: List<TagDto>? = null,
+  public val title: String? = null,
+  public val genre: Genre? = null,
+  public val countryId: Long? = null,
+  public val country: CountryDto? = null,
+  public val actors: List<ActorDto>? = null
+) : EntityDto, TaggableDto, NativeDto
+
+public fun FilmDto(block: FilmDtoBuilder.() -> Unit): FilmDto {
+  // FilmDto builder DSL
+  return FilmDtoBuilder().apply(block).let {
+    FilmDto(
+          it.id,
+          it.tags,
+          it.title,
+          it.genre,
+          it.countryId,
+          it.country,
+          it.actors
+        )
+  }
+}
+
+public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto {
+  // FilmDto copy DSL
+  return FilmDtoBuilder().also {
+    it.id = this.id
+    it.tags = this.tags
+    it.title = this.title
+    it.genre = this.genre
+    it.countryId = this.countryId
+    it.country = this.country
+    it.actors = this.actors
+  }
+  .apply(block).let {
+    FilmDto(
+          it.id,
+          it.tags,
+          it.title,
+          it.genre,
+          it.countryId,
+          it.country,
+          it.actors
+        )
+  }
+}
+
+@ContextFunOnlyDSL
+public class FilmDtoBuilder {
+  public var id: Long? = null
+
+  public var tags: List<TagDto>? = null
+
+  public var title: String? = null
+
+  public var genre: Genre? = null
+
+  public var countryId: Long? = null
+
+  public var country: CountryDto? = null
+
+  public var actors: List<ActorDto>? = null
+}

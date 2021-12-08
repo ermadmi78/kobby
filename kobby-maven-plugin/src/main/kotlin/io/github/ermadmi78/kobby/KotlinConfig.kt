@@ -313,6 +313,15 @@ class KotlinEntityConfig {
     var postfix: String? = null
 
     @Parameter
+    var contextInheritanceEnabled: Boolean = true
+
+    @Parameter
+    var contextFunEnabled: Boolean = false
+
+    @Parameter
+    var contextFunName: String = "__context"
+
+    @Parameter
     var withCurrentProjectionFun: String = "__withCurrentProjection"
 
     @Parameter
@@ -327,6 +336,9 @@ class KotlinEntityConfig {
                 "\n      packageName=$packageName, " +
                 "\n      prefix=$prefix, " +
                 "\n      postfix=$postfix, " +
+                "\n      contextInheritanceEnabled=$contextInheritanceEnabled, " +
+                "\n      contextFunEnabled=$contextFunEnabled, " +
+                "\n      contextFunName=$contextFunName, " +
                 "\n      withCurrentProjectionFun=$withCurrentProjectionFun, " +
                 "\n      projection=$projection, " +
                 "\n      selection=$selection" +

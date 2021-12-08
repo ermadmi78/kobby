@@ -1,0 +1,23 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.QueryDto
+import kotlin.Suppress
+import kotlin.collections.List
+
+public data class ContextFunOnlyQueryResult(
+  public val `data`: QueryDto? = null,
+  public val errors: List<ContextFunOnlyError>? = null
+)

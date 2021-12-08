@@ -57,7 +57,9 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
 
 private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) = with(layout) {
     buildInterface(node.entityName) {
-        addSuperinterface(context.contextClass)
+        if (entity.contextInheritanceEnabled) {
+            addSuperinterface(context.contextClass)
+        }
         node.implements {
             addSuperinterface(it.entityClass)
         }
@@ -65,25 +67,38 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             addKdoc(it)
         }
 
-        // context query
-        buildFunction(context.query) {
-            addModifiers(OVERRIDE, SUSPEND, ABSTRACT)
-            buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
-            returns(node.schema.query.entityClass)
+        if (entity.contextInheritanceEnabled) {
+            // context query
+            buildFunction(context.query) {
+                addModifiers(OVERRIDE, SUSPEND, ABSTRACT)
+                buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
+                returns(node.schema.query.entityClass)
+            }
+
+            // context mutation
+            buildFunction(context.mutation) {
+                addModifiers(OVERRIDE, SUSPEND, ABSTRACT)
+                buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
+                returns(node.schema.mutation.entityClass)
+            }
+
+            // context subscription
+            buildFunction(context.subscription) {
+                addModifiers(OVERRIDE, ABSTRACT)
+                buildParameter(entity.projection.projectionArgument, node.schema.subscription.projectionLambda)
+                returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
+            }
         }
 
-        // context mutation
-        buildFunction(context.mutation) {
-            addModifiers(OVERRIDE, SUSPEND, ABSTRACT)
-            buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
-            returns(node.schema.mutation.entityClass)
-        }
-
-        // context subscription
-        buildFunction(context.subscription) {
-            addModifiers(OVERRIDE, ABSTRACT)
-            buildParameter(entity.projection.projectionArgument, node.schema.subscription.projectionLambda)
-            returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
+        if (entity.contextFunEnabled) {
+            // context access function
+            buildFunction(entity.contextFunName) {
+                addModifiers(ABSTRACT)
+                if (node.implements.isNotEmpty()) {
+                    addModifiers(OVERRIDE)
+                }
+                returns(context.contextClass)
+            }
         }
 
         // withCurrentProjection

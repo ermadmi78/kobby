@@ -1,0 +1,114 @@
+directive @primaryKey on FIELD_DEFINITION
+directive @required on FIELD_DEFINITION
+directive @default on FIELD_DEFINITION
+directive @selection on FIELD_DEFINITION
+
+schema {
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
+}
+
+type Query {
+    country(id: ID!): Country
+    countries(name: String, limit: Int! = 10, offset: Int! = 0): [Country!]!
+
+    film(id: ID!): Film
+    films(title: String, genre: Genre, limit: Int! = 10): [Film!]! @selection
+
+    actor(id: ID!): Actor
+    actors(firstName: String, gender: Gender, limit: Int! = 10, offset: Int! = 0): [Actor!]! @selection
+
+    taggable(tag: String!): [Taggable!]!
+}
+
+type Mutation {
+    createCountry(name: String!): Country!
+    createFilm(countryId: ID!, film: FilmInput!, tags: TagInput): Film! @selection
+    createActor(countryId: ID!, actor: ActorInput!, tags: TagInput): Actor! @selection
+}
+
+type Subscription {
+    countryCreated: Country!
+    filmCreated(countryId: ID): Film!
+    actorCreated(countryId: ID): Actor!
+}
+
+interface Entity {
+    id: ID! @primaryKey
+}
+
+interface Taggable implements Entity {
+    id: ID!
+    tags: [Tag!]!
+}
+
+type Country implements Entity {
+    id: ID!
+    name: String! @default
+
+    film(id: ID!): Film
+    films(title: String, genre: Genre, limit: Int! = 10, offset: Int! = 0): [Film!]! @selection
+
+    actor(id: ID!): Actor
+    actors(firstName: String, gender: Gender, limit: Int! = 10, offset: Int! = 0): [Actor!]! @selection
+
+    taggable(tag: String!): [Taggable!]!
+    native: [Native!]!
+}
+
+type Film implements Entity & Taggable {
+    id: ID!
+    tags: [Tag!]!
+
+    title: String! @default
+    genre: Genre!
+    countryId: ID! @required
+    country: Country!
+    actors(firstName: String, gender: Gender, limit: Int! = 10,): [Actor!]! @selection
+}
+
+enum Genre {
+    DRAMA
+    COMEDY
+    THRILLER
+    HORROR
+}
+
+input FilmInput {
+    title: String!
+    genre: Genre! = DRAMA
+}
+
+type Actor implements Entity & Taggable {
+    id: ID!
+    tags: [Tag!]!
+    firstName: String! @default
+    lastName: String @default
+    gender: Gender!
+    countryId: ID! @primaryKey
+    country: Country!
+
+    films(title: String, genre: Genre, limit: Int! = 10, offset: Int! = 0): [Film!]! @selection
+}
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+input ActorInput {
+    firstName: String!
+    lastName: String
+    gender: Gender!
+}
+
+type Tag {
+    value: String!
+}
+
+input TagInput {
+    value: String!
+}
+
+union Native = Actor | Film

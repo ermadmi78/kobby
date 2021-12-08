@@ -1,0 +1,59 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.ContextInheritanceAndFunContext
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.ContextInheritanceAndFunDSL
+import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.ContextInheritanceAndFunSubscriber
+import kotlin.Int
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+/**
+ *  Query type
+ */
+public interface Query : ContextInheritanceAndFunContext {
+  /**
+   *  find all
+   */
+  public val all: List<List<List<Simple>?>>?
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextInheritanceAndFunSubscriber<Subscription>
+
+  public fun myContext(): ContextInheritanceAndFunContext
+
+  public fun QueryProjection.__withCurrentProjection(): Unit
+}
+
+/**
+ *  Query type
+ */
+@ContextInheritanceAndFunDSL
+public interface QueryProjection {
+  /**
+   *  find all
+   *
+   * @param limit  limit result list
+   */
+  public fun all(limit: Int? = null, __projection: SimpleProjection.() -> Unit): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
