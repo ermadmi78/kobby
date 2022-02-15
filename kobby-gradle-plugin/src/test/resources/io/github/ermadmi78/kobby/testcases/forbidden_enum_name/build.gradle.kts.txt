@@ -1,0 +1,39 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    kotlin("jvm") version "testKotlinVersion"
+    id("io.github.ermadmi78.kobby")
+}
+
+kobby {
+    kotlin {
+        dto {
+            graphQL {
+                enabled = false
+            }
+        }
+    }
+}
+
+dependencies {
+    // Add this dependency to enable Jackson annotation generation in DTO classes by Kobby
+    compileOnly("com.fasterxml.jackson.core:jackson-annotations:testJacksonVersion")
+
+    implementation(kotlin("stdlib"))
+}
+
+tasks {
+    jar {
+        enabled = false
+    }
+}

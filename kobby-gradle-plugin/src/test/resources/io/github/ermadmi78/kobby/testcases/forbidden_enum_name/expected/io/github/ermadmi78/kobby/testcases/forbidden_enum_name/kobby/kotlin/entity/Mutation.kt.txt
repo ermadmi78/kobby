@@ -1,0 +1,37 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameContext
+import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameDSL
+import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameSubscriber
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Mutation : ForbiddenEnumNameContext {
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ForbiddenEnumNameSubscriber<Subscription>
+
+  public fun MutationProjection.__withCurrentProjection(): Unit
+}
+
+@ForbiddenEnumNameDSL
+public interface MutationProjection {
+  public fun __minimize(): Unit {
+  }
+}

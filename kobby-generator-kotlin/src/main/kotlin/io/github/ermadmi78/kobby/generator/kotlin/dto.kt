@@ -3,6 +3,7 @@ package io.github.ermadmi78.kobby.generator.kotlin
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_INCLUDE
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_PROPERTY
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES_TYPE
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_INFO
@@ -224,9 +225,27 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     addKdoc(it)
                 }
                 node.enumValues { enumValue ->
-                    buildEnumConstant(enumValue.name) {
-                        enumValue.comments {
-                            addKdoc(it)
+                    if (enumValue.name in FORBIDDEN_ENUM_NAMES) {
+                        buildEnumConstant(enumValue.name.rename(node.enumValues.keys)) {
+                            if (dto.jackson.enabled) {
+                                buildAnnotation(JSON_PROPERTY) {
+                                    addMember("%S", enumValue.name)
+                                }
+                            }
+                            enumValue.comments {
+                                addKdoc(it)
+                            }
+
+                            if (enumValue.comments.isNotEmpty()) {
+                                addKdoc("  \n> ")
+                            }
+                            addKdoc("see https://github.com/ermadmi78/kobby/issues/21")
+                        }
+                    } else {
+                        buildEnumConstant(enumValue.name) {
+                            enumValue.comments {
+                                addKdoc(it)
+                            }
                         }
                     }
                 }

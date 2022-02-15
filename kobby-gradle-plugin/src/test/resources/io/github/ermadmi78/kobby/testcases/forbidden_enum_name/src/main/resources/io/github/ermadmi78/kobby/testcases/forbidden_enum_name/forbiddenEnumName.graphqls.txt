@@ -1,0 +1,31 @@
+type Query {
+    user(id: ID!): user_update_column
+}
+
+type User {
+    id: ID!
+    update_column: user_update_column!
+    mischievous: mischievous
+}
+
+# update columns of table "user"
+enum user_update_column {
+    # column name
+    email
+
+    # column name
+    id
+
+    # column name
+    name
+
+    ordinal
+}
+
+enum mischievous {
+    name
+    __name
+
+    ordinal
+    __ordinal
+}

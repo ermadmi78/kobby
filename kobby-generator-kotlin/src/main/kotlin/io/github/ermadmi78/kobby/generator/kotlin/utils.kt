@@ -93,3 +93,16 @@ private val KEYWORDS = setOf(
     "value",
     "vararg",
 )
+
+internal val FORBIDDEN_ENUM_NAMES = setOf("name", "ordinal")
+
+internal fun String.rename(occupied: Set<String>): String {
+    for (i in 2..100) {
+        val renamed = "_".repeat(i) + this
+        if (renamed !in occupied) {
+            return renamed
+        }
+    }
+
+    error("Cannot rename '$this' to avoid conflict with $occupied")
+}

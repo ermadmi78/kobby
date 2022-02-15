@@ -1,0 +1,42 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonProperty
+import kotlin.Suppress
+
+/**
+ *  update columns of table "user"
+ */
+public enum class user_update_column {
+  /**
+   *  column name
+   */
+  email,
+  /**
+   *  column name
+   */
+  id,
+  /**
+   *  column name  
+   * > see https://github.com/ermadmi78/kobby/issues/21
+   */
+  @JsonProperty("name")
+  __name,
+  /**
+   * see https://github.com/ermadmi78/kobby/issues/21
+   */
+  @JsonProperty("ordinal")
+  __ordinal,
+}
