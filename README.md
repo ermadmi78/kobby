@@ -21,7 +21,7 @@ customize generated DSL by means of GraphQL schema directives and Kotlin extensi
 
 ### Requirements
 
-* Gradle at least version 7.0 (preferred is 7.2) is required.
+* Gradle at least version 7.0 is required.
 * Maven at least version 3.6.3 is required.
 * Kotlin at least version 1.5 is required to compile generated client DSL.
 
