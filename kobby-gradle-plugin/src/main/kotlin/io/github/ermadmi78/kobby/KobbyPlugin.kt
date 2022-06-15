@@ -306,6 +306,9 @@ class KobbyPlugin : Plugin<Project> {
                         postfix?.also {
                             kotlinTask.adapterKtorPostfix.convention(it)
                         }
+                        receiveTimeoutMillis?.also {
+                            kotlinTask.adapterKtorReceiveTimeoutMillis.convention(it)
+                        }
                     }
                 }
                 kotlinExtension.resolverExtension.valueOrNull?.apply {

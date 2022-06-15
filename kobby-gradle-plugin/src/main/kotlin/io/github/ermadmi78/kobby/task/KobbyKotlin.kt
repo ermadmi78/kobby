@@ -666,6 +666,15 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "adapterKtorReceiveTimeoutMillis",
+        description = "Default receive message timeout in milliseconds for subscriptions " +
+                "in Ktor composite adapter (default null)"
+    )
+    val adapterKtorReceiveTimeoutMillis: Property<Long> = project.objects.property(Long::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "resolverEnabled",
         description = "Is resolver interfaces generation enabled (default false)"
     )
@@ -968,7 +977,8 @@ open class KobbyKotlin : DefaultTask() {
                     Decoration(
                         adapterKtorPrefix.orNull?.trim() ?: capitalizedContextName,
                         adapterKtorPostfix.orNull
-                    )
+                    ),
+                    adapterKtorReceiveTimeoutMillis.orNull
                 )
             ),
             KotlinResolverLayout(

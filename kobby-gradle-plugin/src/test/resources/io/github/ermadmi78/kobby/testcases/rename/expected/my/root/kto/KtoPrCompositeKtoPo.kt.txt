@@ -24,6 +24,7 @@ import io.ktor.http.cio.websocket.WebSocketSession
 import io.ktor.http.cio.websocket.send
 import io.ktor.http.contentType
 import kotlin.Any
+import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -40,6 +41,7 @@ import kotlin.random.Random
 import kotlin.require
 import kotlin.takeIf
 import kotlin.to
+import kotlinx.coroutines.withTimeout
 import my.root.ctx.PrefCtxAdapterPostCtx
 import my.root.ctx.PrefCtxMapperPostCtx
 import my.root.ctx.PrefCtxReceiverPostCtx
@@ -72,6 +74,7 @@ public open class KtoPrCompositeKtoPo(
   protected val mapper: PrefCtxMapperPostCtx,
   protected val requestHeaders: Map<String, String> = mapOf(),
   protected val subscriptionPayload: Map<String, Any?>? = null,
+  protected val subscriptionReceiveTimeoutMillis: Long? = null,
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
@@ -243,7 +246,16 @@ public open class KtoPrCompositeKtoPo(
   }
 
   protected open suspend fun WebSocketSession.receiveMessage(): GPrefServerMessageGPost {
-    val content = (incoming.receive() as Frame.Text).readFrameText()
+    val message = if (subscriptionReceiveTimeoutMillis == null) {
+      incoming.receive()
+    }
+    else {
+      withTimeout(subscriptionReceiveTimeoutMillis) {
+        incoming.receive()
+      }
+    }
+
+    val content = (message as Frame.Text).readFrameText()
     return mapper.deserialize(content, GPrefServerMessageGPost::class)
   }
 }

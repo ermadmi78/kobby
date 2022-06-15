@@ -91,7 +91,8 @@ class SchemaValidationTest {
                 true,
                 true,
                 "kobby.adapter.ktor",
-                Decoration("Kobby", "Adapter")
+                Decoration("Kobby", "Adapter"),
+                null
             )
         ),
         KotlinResolverLayout(

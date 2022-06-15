@@ -506,13 +506,17 @@ class KotlinAdapterKtorConfig {
     @Parameter
     var postfix: String? = "KtorAdapter"
 
+    @Parameter
+    var receiveTimeoutMillis: Long? = null
+
     override fun toString(): String {
         return "KotlinAdapterKtorConfig(" +
                 "\n        simpleEnabled=$simpleEnabled, " +
                 "\n        compositeEnabled=$compositeEnabled, " +
                 "\n        packageName=$packageName, " +
                 "\n        prefix=$prefix, " +
-                "\n        postfix=$postfix" +
+                "\n        postfix=$postfix," +
+                "\n        receiveTimeoutMillis=$receiveTimeoutMillis" +
                 "\n      )"
     }
 }

@@ -276,7 +276,8 @@ class GenerateKotlinMojo : AbstractMojo() {
                     Decoration(
                         ktor.prefix?.trim() ?: capitalizedContextName,
                         ktor.postfix
-                    )
+                    ),
+                    ktor.receiveTimeoutMillis
                 )
             ),
             KotlinResolverLayout(

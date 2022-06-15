@@ -24,6 +24,7 @@ customize generated DSL by means of GraphQL schema directives and Kotlin extensi
 * Gradle at least version 7.0 is required.
 * Maven at least version 3.6.3 is required.
 * Kotlin at least version 1.5 is required to compile generated client DSL.
+* 1.5.0 <= Ktor version < 2.0.0 is required to generate default adapters.
 
 ### Contributing
 

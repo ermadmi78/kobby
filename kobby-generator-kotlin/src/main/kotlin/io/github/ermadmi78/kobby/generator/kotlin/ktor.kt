@@ -116,6 +116,13 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                         addModifiers(PROTECTED)
                     }
                     buildPropertyWithDefault(
+                        ktor.compositePropertySubscriptionReceiveTimeoutMillis,
+                        LONG.nullable(),
+                        ktor.receiveTimeoutMillis?.let { CodeBlock.of("%L", it) }
+                    ) {
+                        addModifiers(PROTECTED)
+                    }
+                    buildPropertyWithDefault(
                         ktor.compositePropertyHttpTokenHeader,
                         STRING,
                         CodeBlock.of("%S", "Authorization")
@@ -190,8 +197,24 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     receiver(ClassName("io.ktor.http.cio.websocket", "WebSocketSession"))
                     returns(dto.graphql.serverMessageClass)
 
+                    controlFlow(
+                        "val·${ktor.compositeValMessage}·=·" +
+                                "if·(${ktor.compositePropertySubscriptionReceiveTimeoutMillis}·==·null)"
+                    ) {
+                        addStatement("incoming.receive()")
+                    }
+                    controlFlow("else") {
+                        controlFlow(
+                            "%T(${ktor.compositePropertySubscriptionReceiveTimeoutMillis})",
+                            ClassName("kotlinx.coroutines", "withTimeout")
+                        ) {
+                            addStatement("incoming.receive()")
+                        }
+                    }
+
+                    addStatement("")
                     addStatement(
-                        "val·${ktor.compositeValContent}·=·(incoming.receive()·as·%T).%M()",
+                        "val·${ktor.compositeValContent}·=·(${ktor.compositeValMessage}·as·%T).%M()",
                         ClassName("io.ktor.http.cio.websocket", "Frame", "Text"),
                         readFrameText
                     )

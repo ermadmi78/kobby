@@ -358,6 +358,8 @@ internal val KotlinAdapterKtorLayout.compositePropertyWebSocketUrl: String get()
 internal val KotlinAdapterKtorLayout.compositePropertyMapper: String get() = "mapper"
 internal val KotlinAdapterKtorLayout.compositePropertyRequestHeaders: String get() = "requestHeaders"
 internal val KotlinAdapterKtorLayout.compositePropertySubscriptionPayload: String get() = "subscriptionPayload"
+internal val KotlinAdapterKtorLayout.compositePropertySubscriptionReceiveTimeoutMillis: String
+    get() = "subscriptionReceiveTimeoutMillis"
 internal val KotlinAdapterKtorLayout.compositePropertyHttpTokenHeader: String
     get() = "httpAuthorizationTokenHeader"
 internal val KotlinAdapterKtorLayout.compositePropertyWebSocketTokenHeader: String
@@ -365,6 +367,7 @@ internal val KotlinAdapterKtorLayout.compositePropertyWebSocketTokenHeader: Stri
 internal val KotlinAdapterKtorLayout.compositePropertyIdGenerator: String get() = "idGenerator"
 internal val KotlinAdapterKtorLayout.compositePropertyListener: String get() = "listener"
 internal val KotlinAdapterKtorLayout.compositeValRequest: String get() = "request"
+internal val KotlinAdapterKtorLayout.compositeValMessage: String get() = "message"
 internal val KotlinAdapterKtorLayout.compositeValContent: String get() = "content"
 internal val KotlinAdapterKtorLayout.compositeValResult: String get() = "result"
 internal val KotlinAdapterKtorLayout.compositeValInitPayload: String get() = "initPayload"

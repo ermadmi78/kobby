@@ -708,6 +708,13 @@ open class KobbyKotlinAdapterKtorExtension {
      * Default: "KtorAdapter"
      */
     var postfix: String? = null
+
+    /**
+     * Default receive message timeout in milliseconds for subscriptions in Ktor composite adapter
+     *
+     * Default: null
+     */
+    var receiveTimeoutMillis: Long? = null
 }
 
 /**

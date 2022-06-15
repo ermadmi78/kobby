@@ -1,0 +1,147 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments"
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.CountrySubscriber
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.dto.CountryDto
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class CountryImpl(
+  internal val __innerContext: CountryContext,
+  internal val __innerProjection: CountryProjectionImpl,
+  internal val __innerDto: CountryDto
+) : Country {
+  public override val id: Long
+    get() {
+      if (!__innerProjection.__innerId0) {
+        error("Property [id] is not available - add [id] projection to switch on it")
+      }
+      return __innerDto.id!!
+    }
+
+  public override val name: String
+    get() {
+      if (!__innerProjection.__innerName1) {
+        error("Property [name] is not available - add [name] projection to switch on it")
+      }
+      return __innerDto.name!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  public override fun toString(): String = buildString {
+    append("Country").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerId0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerName1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("name").append('=').append(name)
+    }
+
+    append(')')
+  }
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CountrySubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun CountryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class CountryProjectionImpl : CountryProjection {
+  internal var __innerId0: Boolean = false
+
+  internal var __innerName1: Boolean = false
+
+  public override fun id(): Unit {
+    __innerId0 = true
+  }
+
+  public override fun name(): Unit {
+    __innerName1 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection):
+      Unit {
+    if ("id" !in ignore && __innerId0) {
+      __projection.id()
+    }
+    if ("name" !in ignore && __innerName1) {
+      __projection.name()
+    }
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore && __innerId0) {
+      body.append(' ').append("id")
+    }
+
+    // Field: name
+    if ("name" !in ignore && __innerName1) {
+      body.append(' ').append("name")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun CountryDto.buildEntity(__innerContext: CountryContext,
+    __innerProjection: CountryProjectionImpl): Country = CountryImpl(__innerContext,
+    __innerProjection, this)

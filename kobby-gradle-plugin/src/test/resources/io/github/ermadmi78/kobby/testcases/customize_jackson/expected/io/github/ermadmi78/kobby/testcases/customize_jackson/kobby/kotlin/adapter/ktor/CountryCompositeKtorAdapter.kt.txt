@@ -46,6 +46,7 @@ import io.ktor.http.cio.websocket.WebSocketSession
 import io.ktor.http.cio.websocket.send
 import io.ktor.http.contentType
 import kotlin.Any
+import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -62,6 +63,7 @@ import kotlin.random.Random
 import kotlin.require
 import kotlin.takeIf
 import kotlin.to
+import kotlinx.coroutines.withTimeout
 import io.ktor.client.statement.readText as readResponseText
 import io.ktor.http.cio.websocket.readText as readFrameText
 
@@ -72,6 +74,7 @@ public open class CountryCompositeKtorAdapter(
   protected val mapper: CountryMapper,
   protected val requestHeaders: Map<String, String> = mapOf(),
   protected val subscriptionPayload: Map<String, Any?>? = null,
+  protected val subscriptionReceiveTimeoutMillis: Long? = null,
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
@@ -242,7 +245,16 @@ public open class CountryCompositeKtorAdapter(
   }
 
   protected open suspend fun WebSocketSession.receiveMessage(): CountryServerMessage {
-    val content = (incoming.receive() as Frame.Text).readFrameText()
+    val message = if (subscriptionReceiveTimeoutMillis == null) {
+      incoming.receive()
+    }
+    else {
+      withTimeout(subscriptionReceiveTimeoutMillis) {
+        incoming.receive()
+      }
+    }
+
+    val content = (message as Frame.Text).readFrameText()
     return mapper.deserialize(content, CountryServerMessage::class)
   }
 }
