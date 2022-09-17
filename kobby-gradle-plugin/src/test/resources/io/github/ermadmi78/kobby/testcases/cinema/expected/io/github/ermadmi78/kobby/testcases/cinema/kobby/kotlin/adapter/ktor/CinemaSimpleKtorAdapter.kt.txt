@@ -46,13 +46,14 @@ public open class CinemaSimpleKtorAdapter(
     val request = CinemaRequest(query, variables)
     listener(request)
 
+    val httpHeaders: Map<String, String> = headers
     val result = client.post<CinemaQueryResult> {
       body = request
       contentType(ContentType.Application.Json)
       this@CinemaSimpleKtorAdapter.url?.also {
         url(it)
       }
-      for (element in this@CinemaSimpleKtorAdapter.headers) {
+      for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }
@@ -71,13 +72,14 @@ public open class CinemaSimpleKtorAdapter(
     val request = CinemaRequest(query, variables)
     listener(request)
 
+    val httpHeaders: Map<String, String> = headers
     val result = client.post<CinemaMutationResult> {
       body = request
       contentType(ContentType.Application.Json)
       this@CinemaSimpleKtorAdapter.url?.also {
         url(it)
       }
-      for (element in this@CinemaSimpleKtorAdapter.headers) {
+      for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }

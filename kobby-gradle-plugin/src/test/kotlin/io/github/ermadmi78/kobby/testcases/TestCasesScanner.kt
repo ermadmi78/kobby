@@ -35,7 +35,8 @@ class TestCasesScanner {
 
     @Test
     fun scan(@TempDir tempDir: Path) {
-        val effectiveTempDir: Path = System.getenv("KOBBY_KOTLIN_TEMP_DIR")?.let { Path.of(it) } ?: tempDir
+        val effectiveTempDir: Path = System.getProperty("kobby.testcases.dir")?.let { Path.of(it) } ?: tempDir
+        println("Testcases directory: $effectiveTempDir")
 
         val resourceResolver: ResourcePatternResolver = PathMatchingResourcePatternResolver()
         val resourceScanRoot: String = javaClass.packageName.replace('.', File.separatorChar) + File.separatorChar

@@ -74,6 +74,7 @@ data class KotlinLayout(
             args.add(value)
             "%L"
         }
+
         is KobbyIntLiteral -> {
             val kotlinType: KotlinType? = type.node.takeIf { it.kind == SCALAR }?.let { scalars[it.name] }
             if (KotlinTypes.LONG == kotlinType) {
@@ -84,6 +85,7 @@ data class KotlinLayout(
                 "%L"
             }
         }
+
         is KobbyFloatLiteral -> {
             val kotlinType: KotlinType? = type.node.takeIf { it.kind == SCALAR }?.let { scalars[it.name] }
             if (KotlinTypes.DOUBLE == kotlinType) {
@@ -94,10 +96,12 @@ data class KotlinLayout(
                 "%LF"
             }
         }
+
         is KobbyStringLiteral -> {
             args.add(value)
             "%S"
         }
+
         is KobbyEnumLiteral -> {
             if (type.node.kind == ENUM) {
                 args.add(type.node.dtoClass)
@@ -106,6 +110,7 @@ data class KotlinLayout(
                 name
             }
         }
+
         is KobbyListLiteral -> {
             val nestedType = type.nestedOrNull
             if (nestedType != null) {
@@ -138,6 +143,7 @@ data class KotlinLayout(
                 "%T()"
             }
         }
+
         is KobbyObjectLiteral -> {
             if (type.node.kind == INPUT) {
                 args.add(type.dtoType)
@@ -165,6 +171,7 @@ data class KotlinLayout(
                 type.node.name
             }
         }
+
         is KobbyVariableLiteral -> name
     }
 
@@ -548,6 +555,7 @@ class KotlinAdapterKtorLayout(
     val compositeEnabled: Boolean,
     packageName: String,
     val decoration: Decoration,
+    val dynamicHttpHeaders: Boolean,
     val receiveTimeoutMillis: Long?
 ) {
     val packageName: String = packageName.validateKotlinPath()

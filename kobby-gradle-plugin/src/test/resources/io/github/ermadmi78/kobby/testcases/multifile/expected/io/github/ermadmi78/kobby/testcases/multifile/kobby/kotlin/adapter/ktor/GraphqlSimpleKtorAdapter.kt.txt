@@ -47,13 +47,14 @@ public open class GraphqlSimpleKtorAdapter(
     val request = GraphqlRequest(query, variables)
     listener(request)
 
+    val httpHeaders: Map<String, String> = headers
     val result = client.post<GraphqlQueryResult> {
       body = request
       contentType(ContentType.Application.Json)
       this@GraphqlSimpleKtorAdapter.url?.also {
         url(it)
       }
-      for (element in this@GraphqlSimpleKtorAdapter.headers) {
+      for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }
@@ -72,13 +73,14 @@ public open class GraphqlSimpleKtorAdapter(
     val request = GraphqlRequest(query, variables)
     listener(request)
 
+    val httpHeaders: Map<String, String> = headers
     val result = client.post<GraphqlMutationResult> {
       body = request
       contentType(ContentType.Application.Json)
       this@GraphqlSimpleKtorAdapter.url?.also {
         url(it)
       }
-      for (element in this@GraphqlSimpleKtorAdapter.headers) {
+      for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }

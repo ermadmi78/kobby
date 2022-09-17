@@ -47,13 +47,14 @@ public open class KtoPrSimpleKtoPo(
     val request = GPrefRequestGPost(query, variables)
     listener(request)
 
+    val httpHeaders: Map<String, String> = headers
     val result = client.post<GPrefQueryResultGPost> {
       body = request
       contentType(ContentType.Application.Json)
       this@KtoPrSimpleKtoPo.url?.also {
         url(it)
       }
-      for (element in this@KtoPrSimpleKtoPo.headers) {
+      for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }
@@ -72,13 +73,14 @@ public open class KtoPrSimpleKtoPo(
     val request = GPrefRequestGPost(query, variables)
     listener(request)
 
+    val httpHeaders: Map<String, String> = headers
     val result = client.post<GPrefMutationResultGPost> {
       body = request
       contentType(ContentType.Application.Json)
       this@KtoPrSimpleKtoPo.url?.also {
         url(it)
       }
-      for (element in this@KtoPrSimpleKtoPo.headers) {
+      for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }

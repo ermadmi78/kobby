@@ -341,6 +341,7 @@ internal val KotlinAdapterKtorLayout.simplePropertyClient: String get() = "clien
 internal val KotlinAdapterKtorLayout.simplePropertyUrl: String get() = "url"
 internal val KotlinAdapterKtorLayout.simplePropertyHeaders: String get() = "headers"
 internal val KotlinAdapterKtorLayout.simplePropertyListener: String get() = "listener"
+internal val KotlinAdapterKtorLayout.simpleValHeaders: String get() = "httpHeaders"
 internal val KotlinAdapterKtorLayout.simpleValRequest: String get() = "request"
 internal val KotlinAdapterKtorLayout.simpleValResult: String get() = "result"
 
@@ -366,6 +367,8 @@ internal val KotlinAdapterKtorLayout.compositePropertyWebSocketTokenHeader: Stri
     get() = "webSocketAuthorizationTokenHeader"
 internal val KotlinAdapterKtorLayout.compositePropertyIdGenerator: String get() = "idGenerator"
 internal val KotlinAdapterKtorLayout.compositePropertyListener: String get() = "listener"
+internal val KotlinAdapterKtorLayout.compositeValHeaders: String get() = "httpHeaders"
+internal val KotlinAdapterKtorLayout.compositeValPayload: String get() = "payload"
 internal val KotlinAdapterKtorLayout.compositeValRequest: String get() = "request"
 internal val KotlinAdapterKtorLayout.compositeValMessage: String get() = "message"
 internal val KotlinAdapterKtorLayout.compositeValContent: String get() = "content"

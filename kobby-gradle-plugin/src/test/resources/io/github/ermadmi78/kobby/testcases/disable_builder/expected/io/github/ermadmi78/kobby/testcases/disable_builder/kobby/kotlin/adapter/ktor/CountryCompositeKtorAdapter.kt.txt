@@ -84,11 +84,12 @@ public open class CountryCompositeKtorAdapter(
     val request = CountryRequest(query, variables)
     listener(request)
 
+    val httpHeaders: Map<String, String> = requestHeaders
     val content = client.post<HttpResponse> {
       body = mapper.serialize(request)
       contentType(ContentType.Application.Json)
       url(httpUrl)
-      for (element in requestHeaders) {
+      for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }
@@ -110,11 +111,12 @@ public open class CountryCompositeKtorAdapter(
     val request = CountryRequest(query, variables)
     listener(request)
 
+    val httpHeaders: Map<String, String> = requestHeaders
     val content = client.post<HttpResponse> {
       body = mapper.serialize(request)
       contentType(ContentType.Application.Json)
       url(httpUrl)
-      for (element in requestHeaders) {
+      for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }
@@ -136,16 +138,18 @@ public open class CountryCompositeKtorAdapter(
     variables: Map<String, Any?>,
     block: suspend CountryReceiver<SubscriptionDto>.() -> Unit
   ): Unit {
+    val httpHeaders: Map<String, String> = requestHeaders
+    val payload: Map<String, Any?>? = subscriptionPayload
     client.ws(
       webSocketUrl,
       request = {
-        requestHeaders.forEach { (key, value) ->
+        httpHeaders.forEach { (key, value) ->
           headers[key] = value
         }
       }
     ) {
-      var initPayload: Map<String, Any?>? = subscriptionPayload
-      if (httpAuthorizationTokenHeader in requestHeaders) {
+      var initPayload: Map<String, Any?>? = payload
+      if (httpAuthorizationTokenHeader in httpHeaders) {
         if (initPayload == null) {
           initPayload = mapOf()
         }
@@ -153,7 +157,7 @@ public open class CountryCompositeKtorAdapter(
         if (webSocketAuthorizationTokenHeader !in initPayload) {
           @Suppress("SuspiciousCollectionReassignment")
           initPayload += mapOf(webSocketAuthorizationTokenHeader to
-              requestHeaders[httpAuthorizationTokenHeader])
+              httpHeaders[httpAuthorizationTokenHeader])
         }
       }
 

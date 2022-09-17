@@ -666,6 +666,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "adapterKtorDynamicHttpHeaders",
+        description = "Is dynamic HTTP headers in Ktor adapters supported (default false)"
+    )
+    val adapterKtorDynamicHttpHeaders: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "adapterKtorReceiveTimeoutMillis",
         description = "Default receive message timeout in milliseconds for subscriptions " +
                 "in Ktor composite adapter (default null)"
@@ -812,6 +820,7 @@ open class KobbyKotlin : DefaultTask() {
         })
         adapterKtorPackageName.convention("adapter.ktor")
         adapterKtorPostfix.convention("KtorAdapter")
+        adapterKtorDynamicHttpHeaders.convention(false)
 
         resolverEnabled.convention(project.provider {
             project.hasDependency("com.graphql-java-kickstart", "graphql-java-tools")
@@ -978,6 +987,7 @@ open class KobbyKotlin : DefaultTask() {
                         adapterKtorPrefix.orNull?.trim() ?: capitalizedContextName,
                         adapterKtorPostfix.orNull
                     ),
+                    adapterKtorDynamicHttpHeaders.get(),
                     adapterKtorReceiveTimeoutMillis.orNull
                 )
             ),

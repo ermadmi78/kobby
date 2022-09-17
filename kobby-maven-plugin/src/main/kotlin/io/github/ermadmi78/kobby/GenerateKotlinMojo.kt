@@ -277,6 +277,7 @@ class GenerateKotlinMojo : AbstractMojo() {
                         ktor.prefix?.trim() ?: capitalizedContextName,
                         ktor.postfix
                     ),
+                    ktor.dynamicHttpHeaders,
                     ktor.receiveTimeoutMillis
                 )
             ),

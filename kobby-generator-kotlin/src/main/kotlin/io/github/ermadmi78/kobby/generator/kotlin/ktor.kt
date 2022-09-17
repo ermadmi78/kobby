@@ -22,22 +22,43 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                 addModifiers(OPEN)
                 addSuperinterface(context.adapterClass)
                 buildPrimaryConstructorProperties {
+                    // protected val client: HttpClient
                     buildProperty(
                         ktor.simplePropertyClient,
                         ClassName("io.ktor.client", "HttpClient")
                     ) {
                         addModifiers(PROTECTED)
                     }
+
+                    // protected val url: String? = null
                     buildProperty(ktor.simplePropertyUrl, STRING.nullable()) {
                         addModifiers(PROTECTED)
                     }
-                    buildPropertyWithDefault(
-                        ktor.simplePropertyHeaders,
-                        MAP.parameterizedBy(STRING, STRING),
-                        CodeBlock.of("%T()", Kotlin.mapOf)
-                    ) {
-                        addModifiers(PROTECTED)
+
+                    // protected val headers ...
+                    if (ktor.dynamicHttpHeaders) {
+                        // protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() }
+                        buildPropertyWithDefault(
+                            ktor.simplePropertyHeaders,
+                            LambdaTypeName
+                                .get(returnType = MAP.parameterizedBy(STRING, STRING))
+                                .copy(suspending = true),
+                            CodeBlock.of("{·%T<%T,·%T>()·}", Kotlin.mapOf, STRING, STRING)
+                        ) {
+                            addModifiers(PROTECTED)
+                        }
+                    } else {
+                        // protected val headers: Map<String, String> = mapOf()
+                        buildPropertyWithDefault(
+                            ktor.simplePropertyHeaders,
+                            MAP.parameterizedBy(STRING, STRING),
+                            CodeBlock.of("%T()", Kotlin.mapOf)
+                        ) {
+                            addModifiers(PROTECTED)
+                        }
                     }
+
+                    // protected val listener: (CinemaRequest) -> Unit = {}
                     buildPropertyWithDefault(
                         ktor.simplePropertyListener,
                         dto.adapterListenerLambda,
@@ -78,43 +99,84 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                 addModifiers(OPEN)
                 addSuperinterface(context.adapterClass)
                 buildPrimaryConstructorProperties {
+                    // protected val client: HttpClient
                     buildProperty(
                         ktor.compositePropertyClient,
                         ClassName("io.ktor.client", "HttpClient")
                     ) {
                         addModifiers(PROTECTED)
                     }
+
+                    // protected val httpUrl: String
                     buildProperty(
                         ktor.compositePropertyHttpUrl,
                         STRING
                     ) {
                         addModifiers(PROTECTED)
                     }
+
+                    // protected val webSocketUrl: String
                     buildProperty(
                         ktor.compositePropertyWebSocketUrl,
                         STRING
                     ) {
                         addModifiers(PROTECTED)
                     }
+
+                    // protected val mapper: XXXMapper
                     buildProperty(
                         ktor.compositePropertyMapper,
                         context.mapperClass
                     ) {
                         addModifiers(PROTECTED)
                     }
-                    buildPropertyWithDefault(
-                        ktor.compositePropertyRequestHeaders,
-                        MAP.parameterizedBy(STRING, STRING),
-                        CodeBlock.of("%T()", Kotlin.mapOf)
-                    ) {
-                        addModifiers(PROTECTED)
+
+                    // protected val requestHeaders ...
+                    if (ktor.dynamicHttpHeaders) {
+                        // protected val requestHeaders: suspend () -> Map<String, String> = { mapOf<String, String>() }
+                        buildPropertyWithDefault(
+                            ktor.compositePropertyRequestHeaders,
+                            LambdaTypeName
+                                .get(returnType = MAP.parameterizedBy(STRING, STRING))
+                                .copy(suspending = true),
+                            CodeBlock.of("{·%T<%T,·%T>()·}", Kotlin.mapOf, STRING, STRING)
+                        ) {
+                            addModifiers(PROTECTED)
+                        }
+                    } else {
+                        // protected val requestHeaders: Map<String, String> = mapOf()
+                        buildPropertyWithDefault(
+                            ktor.compositePropertyRequestHeaders,
+                            MAP.parameterizedBy(STRING, STRING),
+                            CodeBlock.of("%T()", Kotlin.mapOf)
+                        ) {
+                            addModifiers(PROTECTED)
+                        }
                     }
-                    buildProperty(
-                        ktor.compositePropertySubscriptionPayload,
-                        MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
-                    ) {
-                        addModifiers(PROTECTED)
+
+                    // protected val subscriptionPayload ...
+                    if (ktor.dynamicHttpHeaders) {
+                        // protected val subscriptionPayload: suspend () -> Map<String, Any?>? = { null }
+                        buildPropertyWithDefault(
+                            ktor.compositePropertySubscriptionPayload,
+                            LambdaTypeName
+                                .get(returnType = MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
+                                .copy(suspending = true),
+                            CodeBlock.of("{·null·}")
+                        ) {
+                            addModifiers(PROTECTED)
+                        }
+                    } else {
+                        // protected val subscriptionPayload: Map<String, Any?>? = null
+                        buildProperty(
+                            ktor.compositePropertySubscriptionPayload,
+                            MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+                        ) {
+                            addModifiers(PROTECTED)
+                        }
                     }
+
+                    // protected val subscriptionReceiveTimeoutMillis: Long? = null
                     buildPropertyWithDefault(
                         ktor.compositePropertySubscriptionReceiveTimeoutMillis,
                         LONG.nullable(),
@@ -122,6 +184,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     ) {
                         addModifiers(PROTECTED)
                     }
+
+                    // protected val httpAuthorizationTokenHeader: String = "Authorization"
                     buildPropertyWithDefault(
                         ktor.compositePropertyHttpTokenHeader,
                         STRING,
@@ -129,6 +193,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     ) {
                         addModifiers(PROTECTED)
                     }
+
+                    // protected val webSocketAuthorizationTokenHeader: String = "authToken"
                     buildPropertyWithDefault(
                         ktor.compositePropertyWebSocketTokenHeader,
                         STRING,
@@ -136,6 +202,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     ) {
                         addModifiers(PROTECTED)
                     }
+
+                    // protected val idGenerator: () -> String = { Random.nextLong().toString() }
                     buildPropertyWithDefault(
                         ktor.compositePropertyIdGenerator,
                         LambdaTypeName.get(null, listOf(), STRING),
@@ -146,6 +214,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     ) {
                         addModifiers(PROTECTED)
                     }
+
+                    // protected val listener: (CinemaRequest) -> Unit = {}
                     buildPropertyWithDefault(
                         ktor.compositePropertyListener,
                         dto.adapterListenerLambda,
@@ -251,6 +321,11 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
         addStatement("${ktor.simplePropertyListener}(${ktor.simpleValRequest})")
         addStatement("")
 
+        addStatement(
+            "val·${ktor.simpleValHeaders}:·%T·=·${ktor.simplePropertyHeaders}"
+                    + (if (ktor.dynamicHttpHeaders) "()" else ""),
+            MAP.parameterizedBy(STRING, STRING)
+        )
         controlFlow(
             "val·${ktor.simpleValResult}·=·${ktor.simplePropertyClient}.%T<%T>",
             ClassName("io.ktor.client.request", "post"),
@@ -265,7 +340,7 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
             controlFlow("this@%T.url?.%T", ktor.simpleClass, Kotlin.also) {
                 addStatement("%T(it)", ClassName("io.ktor.client.request", "url"))
             }
-            controlFlow("for (element·in·this@%T.${ktor.simplePropertyHeaders})", ktor.simpleClass) {
+            controlFlow("for (element·in·${ktor.simpleValHeaders})") {
                 addStatement("headers[element.key]·=·element.value")
             }
         }
@@ -312,6 +387,11 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
         addStatement("${ktor.compositePropertyListener}(${ktor.compositeValRequest})")
         addStatement("")
 
+        addStatement(
+            "val·${ktor.compositeValHeaders}:·%T·=·${ktor.compositePropertyRequestHeaders}"
+                    + (if (ktor.dynamicHttpHeaders) "()" else ""),
+            MAP.parameterizedBy(STRING, STRING)
+        )
         controlFlow(
             "val·${ktor.compositeValContent}·=·${ktor.compositePropertyClient}.%T<%T>",
             ClassName("io.ktor.client.request", "post"),
@@ -328,7 +408,7 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
             statement(ClassName("io.ktor.client.request", "url")) {
                 "%T(${ktor.compositePropertyHttpUrl})"
             }
-            controlFlow("for (element·in·${ktor.compositePropertyRequestHeaders})") {
+            controlFlow("for (element·in·${ktor.compositeValHeaders})") {
                 addStatement("headers[element.key]·=·element.value")
             }
         }
@@ -371,21 +451,31 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
 
         val ktor = adapter.ktor
 
+        addStatement(
+            "val·${ktor.compositeValHeaders}:·%T·=·${ktor.compositePropertyRequestHeaders}"
+                    + (if (ktor.dynamicHttpHeaders) "()" else ""),
+            MAP.parameterizedBy(STRING, STRING)
+        )
+        addStatement(
+            "val·${ktor.compositeValPayload}:·%T·=·${ktor.compositePropertySubscriptionPayload}"
+                    + (if (ktor.dynamicHttpHeaders) "()" else ""),
+            MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+        )
         controlFlow(
             "${ktor.compositePropertyClient}.%T(\n⇥${ktor.compositePropertyWebSocketUrl},\n" +
                     "request = {\n⇥" +
-                    ktor.compositePropertyRequestHeaders +
+                    ktor.compositeValHeaders +
                     ".%T·{·(key,·value)·->\n⇥headers[key] = value⇤\n}" +
                     "⇤\n}⇤\n)",
             ClassName("io.ktor.client.features.websocket", "ws"),
             Kotlin.forEach
         ) {
             statement(MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
-                "var·${ktor.compositeValInitPayload}:·%T·=·${ktor.compositePropertySubscriptionPayload}"
+                "var·${ktor.compositeValInitPayload}:·%T·=·${ktor.compositeValPayload}"
             }
             controlFlow(
                 "if (${ktor.compositePropertyHttpTokenHeader} " +
-                        "%M ${ktor.compositePropertyRequestHeaders})",
+                        "%M ${ktor.compositeValHeaders})",
                 Kotlin.contains
             ) {
                 controlFlow("if (${ktor.compositeValInitPayload}·==·null)") {
@@ -406,7 +496,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
                     statement(Kotlin.plus, Kotlin.mapOf, Kotlin.to) {
                         "${ktor.compositeValInitPayload} %M= " +
                                 "%T(${ktor.compositePropertyWebSocketTokenHeader} " +
-                                "%T ${ktor.compositePropertyRequestHeaders}" +
+                                "%T ${ktor.compositeValHeaders}" +
                                 "[${ktor.compositePropertyHttpTokenHeader}])"
                     }
                 }

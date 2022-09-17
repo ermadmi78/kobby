@@ -710,6 +710,13 @@ open class KobbyKotlinAdapterKtorExtension {
     var postfix: String? = null
 
     /**
+     * Is dynamic HTTP headers in Ktor adapters supported
+     *
+     * Default: false
+     */
+    var dynamicHttpHeaders: Boolean? = null
+
+    /**
      * Default receive message timeout in milliseconds for subscriptions in Ktor composite adapter
      *
      * Default: null

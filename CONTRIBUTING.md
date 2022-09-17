@@ -26,8 +26,8 @@ Please follow the steps below in order to make the changes:
 
    ```shell script
    # This will build and install both the Gradle and the Maven plugin 
-   # to your local maven repository.
-   ./gradlew clean build
+   # to your local maven repository without test execution.
+   ./gradlew clean build -x test --stacktrace
    ```
 
 1. The easiest way to test and debug your changes is to use the Kobby Example Projects.
@@ -105,3 +105,19 @@ Please follow the steps below in order to make the changes:
        ```
 
 1. Make sure that Kobby Example Projects are compiling and running.
+1. Actualize old testcases
+
+    1. Run this command to actualize old testcases:
+
+       ```shell script
+       ./gradlew clean build -Dkobby.testcases.actualize=true
+       ```
+
+    1. Look at the local changes in Git to make sure the generated code is correct for the old testcases.
+    1. Commit actualized testcases.
+    1. Rebuild the project to make sure the testcases are correct.
+
+       ```shell script
+       ./gradlew clean build --stacktrace
+       ```
+1. Please don't forget to write new testcases for new features!!!

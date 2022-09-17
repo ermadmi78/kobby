@@ -507,6 +507,9 @@ class KotlinAdapterKtorConfig {
     var postfix: String? = "KtorAdapter"
 
     @Parameter
+    var dynamicHttpHeaders: Boolean = false
+
+    @Parameter
     var receiveTimeoutMillis: Long? = null
 
     override fun toString(): String {
@@ -515,7 +518,8 @@ class KotlinAdapterKtorConfig {
                 "\n        compositeEnabled=$compositeEnabled, " +
                 "\n        packageName=$packageName, " +
                 "\n        prefix=$prefix, " +
-                "\n        postfix=$postfix," +
+                "\n        postfix=$postfix, " +
+                "\n        dynamicHttpHeaders=$dynamicHttpHeaders, " +
                 "\n        receiveTimeoutMillis=$receiveTimeoutMillis" +
                 "\n      )"
     }
