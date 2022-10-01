@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.re
@@ -37,7 +37,7 @@ public interface RePrCountryRePo : GraphQLResolver<DPrefCountryDPost> {
     title: String?,
     genre: EPrefGenreEPost?,
     limit: Int,
-    offset: Int
+    offset: Int,
   ): List<DPrefFilmDPost> = TODO("ToDo")
 
   public suspend fun actor(bean: DPrefCountryDPost, id: Long): DPrefActorDPost? = TODO("ToDo")
@@ -48,7 +48,7 @@ public interface RePrCountryRePo : GraphQLResolver<DPrefCountryDPost> {
     lastName: String?,
     gender: EPrefGenderEPost?,
     limit: Int,
-    offset: Int
+    offset: Int,
   ): List<DPrefActorDPost> = TODO("ToDo")
 
   public suspend fun native(bean: DPrefCountryDPost): List<DPrefNativeDPost> = TODO("ToDo")

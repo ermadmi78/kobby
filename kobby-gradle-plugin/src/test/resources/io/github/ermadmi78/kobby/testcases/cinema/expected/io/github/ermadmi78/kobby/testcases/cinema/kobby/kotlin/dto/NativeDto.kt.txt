@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
@@ -23,10 +23,10 @@ import kotlin.Suppress
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "__typename"
+  property = "__typename",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = FilmDto::class, name = "Film"),
-  JsonSubTypes.Type(value = ActorDto::class, name = "Actor")
+  JsonSubTypes.Type(value = ActorDto::class, name = "Actor"),
 )
 public interface NativeDto

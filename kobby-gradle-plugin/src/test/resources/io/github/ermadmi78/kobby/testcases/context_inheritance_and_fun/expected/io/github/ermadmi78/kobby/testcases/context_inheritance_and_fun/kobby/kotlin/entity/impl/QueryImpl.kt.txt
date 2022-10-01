@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.impl
@@ -43,7 +43,7 @@ import kotlin.text.isNotEmpty
 internal class QueryImpl(
   internal val __innerContext: ContextInheritanceAndFunContext,
   internal val __innerProjection: QueryProjectionImpl,
-  internal val __innerDto: QueryDto
+  internal val __innerDto: QueryDto,
 ) : Query {
   public override val all: List<List<List<Simple>?>>? by lazy {
     if (__innerProjection.__innerAll0 == null) {
@@ -109,7 +109,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

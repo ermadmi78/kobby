@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
@@ -28,7 +28,7 @@ public data class QueryDto(
   public val films: List<FilmDto>? = null,
   public val actor: ActorDto? = null,
   public val actors: List<ActorDto>? = null,
-  public val taggable: List<TaggableDto>? = null
+  public val taggable: List<TaggableDto>? = null,
 )
 
 public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {

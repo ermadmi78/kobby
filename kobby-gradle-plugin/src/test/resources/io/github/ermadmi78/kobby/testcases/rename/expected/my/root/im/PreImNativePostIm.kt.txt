@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.im
@@ -64,7 +64,7 @@ public open class PreImPreQPNativePostQPPostIm : PreQPNativePostQP {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

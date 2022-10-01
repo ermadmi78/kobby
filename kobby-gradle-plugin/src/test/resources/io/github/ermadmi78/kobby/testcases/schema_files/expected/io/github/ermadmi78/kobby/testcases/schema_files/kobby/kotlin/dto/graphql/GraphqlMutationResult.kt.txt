@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.dto.graphql
@@ -19,5 +19,5 @@ import kotlin.collections.List
 
 public data class GraphqlMutationResult(
   public val `data`: MutationDto? = null,
-  public val errors: List<GraphqlError>? = null
+  public val errors: List<GraphqlError>? = null,
 )

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.dto.graphql
@@ -41,7 +41,7 @@ public interface QueryServerMessage
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class QueryMessageConnectionInit(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : QueryMessage, QueryClientMessage
 
 /**
@@ -50,7 +50,7 @@ public data class QueryMessageConnectionInit(
  */
 public data class QueryMessageStart(
   public val id: String,
-  public val payload: QueryRequest
+  public val payload: QueryRequest,
 ) : QueryMessage, QueryClientMessage
 
 /**
@@ -58,7 +58,7 @@ public data class QueryMessageStart(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class QueryMessageStop(
-  public val id: String
+  public val id: String,
 ) : QueryMessage, QueryClientMessage
 
 /**
@@ -72,7 +72,7 @@ public class QueryMessageConnectionTerminate : QueryMessage, QueryClientMessage
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class QueryMessageConnectionError(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : QueryMessage, QueryServerMessage
 
 /**
@@ -80,7 +80,7 @@ public data class QueryMessageConnectionError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class QueryMessageConnectionAck(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : QueryMessage, QueryServerMessage
 
 /**
@@ -89,7 +89,7 @@ public data class QueryMessageConnectionAck(
  */
 public data class QueryMessageData(
   public val id: String,
-  public val payload: QuerySubscriptionResult
+  public val payload: QuerySubscriptionResult,
 ) : QueryMessage, QueryServerMessage
 
 /**
@@ -98,7 +98,7 @@ public data class QueryMessageData(
  */
 public data class QueryMessageError(
   public val id: String,
-  public val payload: QueryErrorResult
+  public val payload: QueryErrorResult,
 ) : QueryMessage, QueryServerMessage
 
 /**
@@ -106,7 +106,7 @@ public data class QueryMessageError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class QueryMessageComplete(
-  public val id: String
+  public val id: String,
 ) : QueryMessage, QueryServerMessage
 
 /**

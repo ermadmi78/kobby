@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
@@ -61,7 +61,7 @@ internal open class NativeQualifiedProjectionImpl : NativeQualifiedProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

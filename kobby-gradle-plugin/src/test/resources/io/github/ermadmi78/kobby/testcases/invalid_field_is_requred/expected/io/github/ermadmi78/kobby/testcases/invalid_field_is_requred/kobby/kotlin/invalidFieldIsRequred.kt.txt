@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin
@@ -47,8 +47,8 @@ import kotlin.to
 public fun invalidFieldIsRequredContextOf(adapter: InvalidFieldIsRequredAdapter):
     InvalidFieldIsRequredContext = InvalidFieldIsRequredContextImpl(adapter)
 
-public fun buildInvalidFieldIsRequredQuery(__projection: QueryProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildInvalidFieldIsRequredQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -135,12 +135,12 @@ public interface InvalidFieldIsRequredAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend InvalidFieldIsRequredReceiver<SubscriptionDto>.() -> Unit
+    block: suspend InvalidFieldIsRequredReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class InvalidFieldIsRequredContextImpl(
-  private val adapter: InvalidFieldIsRequredAdapter
+  private val adapter: InvalidFieldIsRequredAdapter,
 ) : InvalidFieldIsRequredContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

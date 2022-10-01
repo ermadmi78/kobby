@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_ktor_composite.kobby.kotlin.entity.impl
@@ -40,7 +40,7 @@ import kotlin.text.buildString
 internal class CountryImpl(
   internal val __innerContext: CountryContext,
   internal val __innerProjection: CountryProjectionImpl,
-  internal val __innerDto: CountryDto
+  internal val __innerDto: CountryDto,
 ) : Country {
   public override val id: Long
     get() {
@@ -124,7 +124,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
@@ -99,7 +99,7 @@ public interface QueryProjection {
     name: String? = null,
     limit: Int? = null,
     offset: Int? = null,
-    __projection: CountryProjection.() -> Unit = {}
+    __projection: CountryProjection.() -> Unit = {},
   ): Unit
 
   /**

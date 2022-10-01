@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.adapter.ktor
@@ -40,7 +40,7 @@ public open class CountrySimpleKtorAdapter(
   protected val client: HttpClient,
   protected val url: String? = null,
   protected val headers: Map<String, String> = mapOf(),
-  protected val listener: (CountryRequest) -> Unit = {}
+  protected val listener: (CountryRequest) -> Unit = {},
 ) : CountryAdapter {
   public override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
     val request = CountryRequest(query, variables)

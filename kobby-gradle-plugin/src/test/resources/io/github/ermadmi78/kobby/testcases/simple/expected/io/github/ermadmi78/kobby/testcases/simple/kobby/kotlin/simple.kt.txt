@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin
@@ -46,8 +46,8 @@ import kotlin.to
 
 public fun simpleContextOf(adapter: SimpleAdapter): SimpleContext = SimpleContextImpl(adapter)
 
-public fun buildSimpleQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String,
-    Any>> {
+public fun buildSimpleQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -66,8 +66,8 @@ public fun buildSimpleQuery(__projection: QueryProjection.() -> Unit): Pair<Stri
   return query to arguments
 }
 
-public fun buildSimpleMutation(__projection: MutationProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildSimpleMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -86,8 +86,8 @@ public fun buildSimpleMutation(__projection: MutationProjection.() -> Unit): Pai
   return mutation to arguments
 }
 
-public fun buildSimpleSubscription(__projection: SubscriptionProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildSimpleSubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -134,12 +134,12 @@ public interface SimpleAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend SimpleReceiver<SubscriptionDto>.() -> Unit
+    block: suspend SimpleReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class SimpleContextImpl(
-  private val adapter: SimpleAdapter
+  private val adapter: SimpleAdapter,
 ) : SimpleContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

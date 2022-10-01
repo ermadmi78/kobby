@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.im
@@ -48,7 +48,7 @@ import my.root.en.PrefEnMySubscriptionPostEn
 public class PreImMyMutationPostIm(
   public val innerContextPin: PrefCtxContextPostCtx,
   public val innerProjectionPin: PreImPrePrMyMutationPostPrPostIm,
-  public val innerDtoPin: DPrefMyMutationDPost
+  public val innerDtoPin: DPrefMyMutationDPost,
 ) : PrefEnMyMutationPostEn {
   public override val createCountry: PrefEnCountryPostEn by lazy {
     if (innerProjectionPin.innerCreateCountry0Pin == null) {
@@ -199,8 +199,8 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
 
   public var innerTagActor5TagValuePin: String? = null
 
-  public override fun withPrCreateCountryWithPo(name: String, projection: PrePrCountryPostPr.() ->
-      Unit): Unit {
+  public override fun withPrCreateCountryWithPo(name: String,
+      projection: PrePrCountryPostPr.() -> Unit): Unit {
     innerCreateCountry0Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
     innerCreateCountry0NamePin = name
   }
@@ -208,7 +208,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   public override fun withPrCreateFilmWithPo(
     countryId: Long,
     film: IPrefFilmInputIPost,
-    projection: PrePrFilmPostPr.() -> Unit
+    projection: PrePrFilmPostPr.() -> Unit,
   ): Unit {
     innerCreateFilm1Pin = PreImPrePrFilmPostPrPostIm().apply(projection)
     innerCreateFilm1CountryIdPin = countryId
@@ -218,7 +218,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   public override fun withPrCreateActorWithPo(
     countryId: Long,
     actor: IPrefActorInputIPost,
-    projection: PrePrActorPostPr.() -> Unit
+    projection: PrePrActorPostPr.() -> Unit,
   ): Unit {
     innerCreateActor2Pin = PreImPrePrActorPostPrPostIm().apply(projection)
     innerCreateActor2CountryIdPin = countryId
@@ -281,7 +281,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

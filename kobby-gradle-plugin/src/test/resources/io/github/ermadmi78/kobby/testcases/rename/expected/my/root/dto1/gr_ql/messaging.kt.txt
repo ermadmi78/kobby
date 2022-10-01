@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1.gr_ql
@@ -30,7 +30,7 @@ import kotlin.collections.Map
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = GPrefMessageConnectionInitGPost::class, name = "connection_init"),
@@ -43,7 +43,7 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = GPrefMessageDataGPost::class, name = "data"),
   JsonSubTypes.Type(value = GPrefMessageErrorGPost::class, name = "error"),
   JsonSubTypes.Type(value = GPrefMessageCompleteGPost::class, name = "complete"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka")
+  JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka"),
 )
 public interface GPrefMessageGPost
 
@@ -54,14 +54,14 @@ public interface GPrefMessageGPost
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = GPrefMessageConnectionInitGPost::class, name = "connection_init"),
   JsonSubTypes.Type(value = GPrefMessageStartGPost::class, name = "start"),
   JsonSubTypes.Type(value = GPrefMessageStopGPost::class, name = "stop"),
   JsonSubTypes.Type(value = GPrefMessageConnectionTerminateGPost::class, name =
-        "connection_terminate")
+        "connection_terminate"),
 )
 public interface GPrefClientMessageGPost
 
@@ -72,7 +72,7 @@ public interface GPrefClientMessageGPost
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = GPrefMessageConnectionErrorGPost::class, name = "connection_error"),
@@ -80,7 +80,7 @@ public interface GPrefClientMessageGPost
   JsonSubTypes.Type(value = GPrefMessageDataGPost::class, name = "data"),
   JsonSubTypes.Type(value = GPrefMessageErrorGPost::class, name = "error"),
   JsonSubTypes.Type(value = GPrefMessageCompleteGPost::class, name = "complete"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka")
+  JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka"),
 )
 public interface GPrefServerMessageGPost
 
@@ -93,11 +93,11 @@ public interface GPrefServerMessageGPost
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageConnectionInitGPost::class
+  defaultImpl = GPrefMessageConnectionInitGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageConnectionInitGPost @JsonCreator constructor(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : GPrefMessageGPost, GPrefClientMessageGPost
 
 /**
@@ -109,12 +109,12 @@ public data class GPrefMessageConnectionInitGPost @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageStartGPost::class
+  defaultImpl = GPrefMessageStartGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageStartGPost(
   public val id: String,
-  public val payload: GPrefRequestGPost
+  public val payload: GPrefRequestGPost,
 ) : GPrefMessageGPost, GPrefClientMessageGPost
 
 /**
@@ -126,11 +126,11 @@ public data class GPrefMessageStartGPost(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageStopGPost::class
+  defaultImpl = GPrefMessageStopGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageStopGPost @JsonCreator constructor(
-  public val id: String
+  public val id: String,
 ) : GPrefMessageGPost, GPrefClientMessageGPost
 
 /**
@@ -142,7 +142,7 @@ public data class GPrefMessageStopGPost @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageConnectionTerminateGPost::class
+  defaultImpl = GPrefMessageConnectionTerminateGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class GPrefMessageConnectionTerminateGPost : GPrefMessageGPost, GPrefClientMessageGPost
@@ -156,11 +156,11 @@ public class GPrefMessageConnectionTerminateGPost : GPrefMessageGPost, GPrefClie
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageConnectionErrorGPost::class
+  defaultImpl = GPrefMessageConnectionErrorGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageConnectionErrorGPost @JsonCreator constructor(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : GPrefMessageGPost, GPrefServerMessageGPost
 
 /**
@@ -172,11 +172,11 @@ public data class GPrefMessageConnectionErrorGPost @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageConnectionAckGPost::class
+  defaultImpl = GPrefMessageConnectionAckGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageConnectionAckGPost @JsonCreator constructor(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : GPrefMessageGPost, GPrefServerMessageGPost
 
 /**
@@ -188,12 +188,12 @@ public data class GPrefMessageConnectionAckGPost @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageDataGPost::class
+  defaultImpl = GPrefMessageDataGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageDataGPost(
   public val id: String,
-  public val payload: GPrefSubscriptionResultGPost
+  public val payload: GPrefSubscriptionResultGPost,
 ) : GPrefMessageGPost, GPrefServerMessageGPost
 
 /**
@@ -205,12 +205,12 @@ public data class GPrefMessageDataGPost(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageErrorGPost::class
+  defaultImpl = GPrefMessageErrorGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageErrorGPost(
   public val id: String,
-  public val payload: GPrefErrorResultGPost
+  public val payload: GPrefErrorResultGPost,
 ) : GPrefMessageGPost, GPrefServerMessageGPost
 
 /**
@@ -222,11 +222,11 @@ public data class GPrefMessageErrorGPost(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageCompleteGPost::class
+  defaultImpl = GPrefMessageCompleteGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageCompleteGPost @JsonCreator constructor(
-  public val id: String
+  public val id: String,
 ) : GPrefMessageGPost, GPrefServerMessageGPost
 
 /**
@@ -238,7 +238,7 @@ public data class GPrefMessageCompleteGPost @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageConnectionKeepAliveGPost::class
+  defaultImpl = GPrefMessageConnectionKeepAliveGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class GPrefMessageConnectionKeepAliveGPost : GPrefMessageGPost, GPrefServerMessageGPost

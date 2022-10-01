@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
@@ -39,7 +39,7 @@ import kotlin.text.buildString
 internal class TagImpl(
   internal val __innerContext: CinemaContext,
   internal val __innerProjection: TagProjectionImpl,
-  internal val __innerDto: TagDto
+  internal val __innerDto: TagDto,
 ) : Tag {
   public override val `value`: String
     get() {
@@ -98,7 +98,7 @@ internal open class TagProjectionImpl : TagProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

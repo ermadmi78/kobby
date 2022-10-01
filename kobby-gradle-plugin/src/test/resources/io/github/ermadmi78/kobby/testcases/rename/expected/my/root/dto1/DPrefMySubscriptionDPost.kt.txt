@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1
@@ -28,13 +28,13 @@ import my.root.ctx.PrefCtxDSLPostCtx
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = DPrefMySubscriptionDPost::class
+  defaultImpl = DPrefMySubscriptionDPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class DPrefMySubscriptionDPost(
   public val countryCreated: DPrefCountryDPost? = null,
   public val filmCreated: DPrefFilmDPost? = null,
-  public val actorCreated: DPrefActorDPost? = null
+  public val actorCreated: DPrefActorDPost? = null,
 )
 
 public fun DPrefMySubscriptionDPost(block: BPrefDPrefMySubscriptionDPostBPost.() -> Unit):

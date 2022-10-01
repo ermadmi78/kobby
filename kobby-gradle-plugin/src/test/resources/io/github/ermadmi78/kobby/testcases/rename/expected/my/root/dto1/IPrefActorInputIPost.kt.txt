@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1
@@ -27,7 +27,7 @@ import my.root.ctx.PrefCtxDSLPostCtx
 public data class IPrefActorInputIPost(
   public val firstName: String,
   public val lastName: String? = null,
-  public val gender: EPrefGenderEPost
+  public val gender: EPrefGenderEPost,
 )
 
 public fun IPrefActorInputIPost(block: BPrefIPrefActorInputIPostBPost.() -> Unit):

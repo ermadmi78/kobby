@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.dto
@@ -29,11 +29,11 @@ import kotlin.let
   use = JsonTypeInfo.Id.NONE,
   include = JsonTypeInfo.As.EXISTING_PROPERTY,
   property = "_name",
-  defaultImpl = SubscriptionDto::class
+  defaultImpl = SubscriptionDto::class,
 )
 @JsonInclude(value = JsonInclude.Include.ALWAYS)
 public data class SubscriptionDto @JsonCreator constructor(
-  public val countryCreated: CountryDto? = null
+  public val countryCreated: CountryDto? = null,
 )
 
 public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto
@@ -30,11 +30,11 @@ import kotlin.let
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = MyMutationDto::class
+  defaultImpl = MyMutationDto::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class MyMutationDto @JsonCreator constructor(
-  public val insert: Boolean? = null
+  public val insert: Boolean? = null,
 )
 
 public fun MyMutationDto(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto {

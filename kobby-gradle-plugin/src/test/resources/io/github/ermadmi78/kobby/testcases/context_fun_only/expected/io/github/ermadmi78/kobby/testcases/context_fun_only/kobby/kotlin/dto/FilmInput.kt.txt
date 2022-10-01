@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
@@ -27,7 +27,7 @@ public data class FilmInput(
   /**
    * Default: DRAMA
    */
-  public val genre: Genre = Genre.DRAMA
+  public val genre: Genre = Genre.DRAMA,
 )
 
 public fun FilmInput(block: FilmInputBuilder.() -> Unit): FilmInput {

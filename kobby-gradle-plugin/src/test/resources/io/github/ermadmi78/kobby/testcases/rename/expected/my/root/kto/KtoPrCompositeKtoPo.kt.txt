@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.kto
@@ -78,7 +78,7 @@ public open class KtoPrCompositeKtoPo(
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
-  protected val listener: (GPrefRequestGPost) -> Unit = {}
+  protected val listener: (GPrefRequestGPost) -> Unit = {},
 ) : PrefCtxAdapterPostCtx {
   public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
       DPrefMyQueryDPost {
@@ -137,7 +137,7 @@ public open class KtoPrCompositeKtoPo(
   public override suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit
+    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit,
   ): Unit {
     val httpHeaders: Map<String, String> = requestHeaders
     val payload: Map<String, Any?>? = subscriptionPayload
@@ -172,7 +172,7 @@ public open class KtoPrCompositeKtoPo(
   protected open suspend fun WebSocketSession.executeSubscriptionImpl(
     initPayload: Map<String, Any?>?,
     request: GPrefRequestGPost,
-    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit
+    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit,
   ): Unit {
     sendMessage(GPrefMessageConnectionInitGPost(initPayload))
     try {

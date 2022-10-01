@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
@@ -29,7 +29,7 @@ import kotlin.let
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = MutationDto::class
+  defaultImpl = MutationDto::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class MutationDto(
@@ -58,7 +58,7 @@ public data class MutationDto(
    * Add tag to actor.
    * Returns false if the actor already had such a tag
    */
-  public val tagActor: Boolean? = null
+  public val tagActor: Boolean? = null,
 )
 
 public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {

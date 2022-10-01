@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin
@@ -46,8 +46,8 @@ import kotlin.to
 
 public fun graphqlContextOf(adapter: GraphqlAdapter): GraphqlContext = GraphqlContextImpl(adapter)
 
-public fun buildGraphqlQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String,
-    Any>> {
+public fun buildGraphqlQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -66,8 +66,8 @@ public fun buildGraphqlQuery(__projection: QueryProjection.() -> Unit): Pair<Str
   return query to arguments
 }
 
-public fun buildGraphqlMutation(__projection: MutationProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildGraphqlMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -86,8 +86,8 @@ public fun buildGraphqlMutation(__projection: MutationProjection.() -> Unit): Pa
   return mutation to arguments
 }
 
-public fun buildGraphqlSubscription(__projection: SubscriptionProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildGraphqlSubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -134,12 +134,12 @@ public interface GraphqlAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend GraphqlReceiver<SubscriptionDto>.() -> Unit
+    block: suspend GraphqlReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class GraphqlContextImpl(
-  private val adapter: GraphqlAdapter
+  private val adapter: GraphqlAdapter,
 ) : GraphqlContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

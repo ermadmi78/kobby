@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.im
@@ -54,7 +54,7 @@ import my.root.en.PrefEnMySubscriptionPostEn
 public class PreImFilmPostIm(
   public val innerContextPin: PrefCtxContextPostCtx,
   public val innerProjectionPin: PreImPrePrFilmPostPrPostIm,
-  public val innerDtoPin: DPrefFilmDPost
+  public val innerDtoPin: DPrefFilmDPost,
 ) : PrefEnFilmPostEn {
   public override val id: Long
     get() = innerDtoPin.id!!
@@ -251,7 +251,7 @@ public open class PreImPrePrFilmPostPrPostIm : PrePrFilmPostPr {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

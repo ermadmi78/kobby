@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto
@@ -27,7 +27,7 @@ import kotlin.let
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class MyInput(
   public val id: Long,
-  public val name: String? = null
+  public val name: String? = null,
 )
 
 public fun MyInput(block: MyInputBuilder.() -> Unit): MyInput {

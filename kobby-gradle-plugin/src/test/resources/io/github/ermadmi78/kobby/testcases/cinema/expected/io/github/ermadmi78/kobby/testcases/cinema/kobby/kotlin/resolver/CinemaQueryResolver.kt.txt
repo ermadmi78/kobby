@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.resolver
@@ -46,7 +46,7 @@ public interface CinemaQueryResolver : GraphQLQueryResolver {
   public suspend fun countries(
     name: String?,
     limit: Int,
-    offset: Int
+    offset: Int,
   ): List<CountryDto>
 
   /**
@@ -69,7 +69,7 @@ public interface CinemaQueryResolver : GraphQLQueryResolver {
     title: String?,
     genre: Genre?,
     limit: Int,
-    offset: Int
+    offset: Int,
   ): List<FilmDto>
 
   /**
@@ -98,7 +98,7 @@ public interface CinemaQueryResolver : GraphQLQueryResolver {
     birthdayTo: LocalDate?,
     gender: Gender?,
     limit: Int,
-    offset: Int
+    offset: Int,
   ): List<ActorDto>
 
   /**

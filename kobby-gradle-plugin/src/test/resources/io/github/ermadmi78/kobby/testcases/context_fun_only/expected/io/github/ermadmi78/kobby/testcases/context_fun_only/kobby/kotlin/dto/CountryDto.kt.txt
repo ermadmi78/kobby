@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
@@ -31,7 +31,7 @@ public data class CountryDto(
   public val actor: ActorDto? = null,
   public val actors: List<ActorDto>? = null,
   public val taggable: List<TaggableDto>? = null,
-  public val native: List<NativeDto>? = null
+  public val native: List<NativeDto>? = null,
 ) : EntityDto
 
 public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto {

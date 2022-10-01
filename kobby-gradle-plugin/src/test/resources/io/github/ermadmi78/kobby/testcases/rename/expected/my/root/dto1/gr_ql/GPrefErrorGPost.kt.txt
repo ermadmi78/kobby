@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1.gr_ql
@@ -29,5 +29,5 @@ public data class GPrefErrorGPost(
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
   public val path: List<Any>? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-  public val extensions: Map<String, Any?>? = null
+  public val extensions: Map<String, Any?>? = null,
 )

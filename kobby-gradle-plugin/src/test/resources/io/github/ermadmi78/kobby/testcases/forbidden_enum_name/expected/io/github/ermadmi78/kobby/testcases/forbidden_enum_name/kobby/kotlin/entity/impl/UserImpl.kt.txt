@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.impl
@@ -42,7 +42,7 @@ import kotlin.text.buildString
 internal class UserImpl(
   internal val __innerContext: ForbiddenEnumNameContext,
   internal val __innerProjection: UserProjectionImpl,
-  internal val __innerDto: UserDto
+  internal val __innerDto: UserDto,
 ) : User {
   public override val id: Long
     get() {
@@ -149,7 +149,7 @@ internal open class UserProjectionImpl : UserProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

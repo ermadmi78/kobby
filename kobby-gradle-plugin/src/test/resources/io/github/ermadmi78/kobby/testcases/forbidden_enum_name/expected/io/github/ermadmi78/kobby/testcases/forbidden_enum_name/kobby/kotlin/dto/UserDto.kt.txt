@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.dto
@@ -29,13 +29,13 @@ import kotlin.let
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = UserDto::class
+  defaultImpl = UserDto::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class UserDto(
   public val id: Long? = null,
   public val update_column: user_update_column? = null,
-  public val mischievous: mischievous? = null
+  public val mischievous: mischievous? = null,
 )
 
 public fun UserDto(block: UserDtoBuilder.() -> Unit): UserDto {

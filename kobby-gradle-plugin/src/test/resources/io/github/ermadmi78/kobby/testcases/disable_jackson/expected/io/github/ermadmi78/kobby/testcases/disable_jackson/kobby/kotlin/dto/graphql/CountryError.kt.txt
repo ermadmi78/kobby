@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql
@@ -24,5 +24,5 @@ public data class CountryError(
   public val locations: List<CountryErrorSourceLocation>? = null,
   public val errorType: CountryErrorType? = null,
   public val path: List<Any>? = null,
-  public val extensions: Map<String, Any?>? = null
+  public val extensions: Map<String, Any?>? = null,
 )

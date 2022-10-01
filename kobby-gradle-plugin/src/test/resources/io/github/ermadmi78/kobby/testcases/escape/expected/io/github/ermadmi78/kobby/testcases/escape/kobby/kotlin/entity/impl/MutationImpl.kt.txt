@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
@@ -41,7 +41,7 @@ import kotlin.text.isNotEmpty
 internal class MutationImpl(
   internal val __innerContext: EscapeContext,
   internal val __innerProjection: MutationProjectionImpl,
-  internal val __innerDto: MutationDto
+  internal val __innerDto: MutationDto,
 ) : Mutation {
   public override val `by`: Escape? by lazy {
     if (__innerProjection.__innerBy0 == null) {
@@ -106,7 +106,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

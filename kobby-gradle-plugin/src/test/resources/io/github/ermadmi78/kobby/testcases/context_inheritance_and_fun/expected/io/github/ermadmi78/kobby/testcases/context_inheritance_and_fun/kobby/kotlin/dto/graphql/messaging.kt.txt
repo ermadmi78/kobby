@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.dto.graphql
@@ -41,7 +41,7 @@ public interface ContextInheritanceAndFunServerMessage
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextInheritanceAndFunMessageConnectionInit(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
 
 /**
@@ -50,7 +50,7 @@ public data class ContextInheritanceAndFunMessageConnectionInit(
  */
 public data class ContextInheritanceAndFunMessageStart(
   public val id: String,
-  public val payload: ContextInheritanceAndFunRequest
+  public val payload: ContextInheritanceAndFunRequest,
 ) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
 
 /**
@@ -58,7 +58,7 @@ public data class ContextInheritanceAndFunMessageStart(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextInheritanceAndFunMessageStop(
-  public val id: String
+  public val id: String,
 ) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
 
 /**
@@ -73,7 +73,7 @@ public class ContextInheritanceAndFunMessageConnectionTerminate : ContextInherit
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextInheritanceAndFunMessageConnectionError(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
 
 /**
@@ -81,7 +81,7 @@ public data class ContextInheritanceAndFunMessageConnectionError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextInheritanceAndFunMessageConnectionAck(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
 
 /**
@@ -90,7 +90,7 @@ public data class ContextInheritanceAndFunMessageConnectionAck(
  */
 public data class ContextInheritanceAndFunMessageData(
   public val id: String,
-  public val payload: ContextInheritanceAndFunSubscriptionResult
+  public val payload: ContextInheritanceAndFunSubscriptionResult,
 ) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
 
 /**
@@ -99,7 +99,7 @@ public data class ContextInheritanceAndFunMessageData(
  */
 public data class ContextInheritanceAndFunMessageError(
   public val id: String,
-  public val payload: ContextInheritanceAndFunErrorResult
+  public val payload: ContextInheritanceAndFunErrorResult,
 ) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
 
 /**
@@ -107,7 +107,7 @@ public data class ContextInheritanceAndFunMessageError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextInheritanceAndFunMessageComplete(
-  public val id: String
+  public val id: String,
 ) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
 
 /**

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.adapter.ktor
@@ -78,7 +78,7 @@ public open class GraphqlCompositeKtorAdapter(
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
-  protected val listener: (GraphqlRequest) -> Unit = {}
+  protected val listener: (GraphqlRequest) -> Unit = {},
 ) : GraphqlAdapter {
   public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
       MyQueryDto {
@@ -137,7 +137,7 @@ public open class GraphqlCompositeKtorAdapter(
   public override suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend GraphqlReceiver<MySubscriptionDto>.() -> Unit
+    block: suspend GraphqlReceiver<MySubscriptionDto>.() -> Unit,
   ): Unit {
     val httpHeaders: Map<String, String> = requestHeaders
     val payload: Map<String, Any?>? = subscriptionPayload
@@ -172,7 +172,7 @@ public open class GraphqlCompositeKtorAdapter(
   protected open suspend fun WebSocketSession.executeSubscriptionImpl(
     initPayload: Map<String, Any?>?,
     request: GraphqlRequest,
-    block: suspend GraphqlReceiver<MySubscriptionDto>.() -> Unit
+    block: suspend GraphqlReceiver<MySubscriptionDto>.() -> Unit,
   ): Unit {
     sendMessage(GraphqlMessageConnectionInit(initPayload))
     try {

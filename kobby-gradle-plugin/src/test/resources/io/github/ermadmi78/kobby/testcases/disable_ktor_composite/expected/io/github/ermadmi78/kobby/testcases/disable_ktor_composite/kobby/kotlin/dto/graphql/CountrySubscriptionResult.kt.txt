@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_ktor_composite.kobby.kotlin.dto.graphql
@@ -22,5 +22,5 @@ public data class CountrySubscriptionResult(
   @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
   public val `data`: SubscriptionDto? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-  public val errors: List<CountryError>? = null
+  public val errors: List<CountryError>? = null,
 )

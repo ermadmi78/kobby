@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql
@@ -19,5 +19,5 @@ import kotlin.collections.List
 
 public data class CountrySubscriptionResult(
   public val `data`: SubscriptionDto? = null,
-  public val errors: List<CountryError>? = null
+  public val errors: List<CountryError>? = null,
 )

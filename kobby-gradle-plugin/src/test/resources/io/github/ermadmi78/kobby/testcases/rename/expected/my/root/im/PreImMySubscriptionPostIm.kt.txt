@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.im
@@ -45,7 +45,7 @@ import my.root.en.PrefEnMySubscriptionPostEn
 public class PreImMySubscriptionPostIm(
   public val innerContextPin: PrefCtxContextPostCtx,
   public val innerProjectionPin: PreImPrePrMySubscriptionPostPrPostIm,
-  public val innerDtoPin: DPrefMySubscriptionDPost
+  public val innerDtoPin: DPrefMySubscriptionDPost,
 ) : PrefEnMySubscriptionPostEn {
   public override val countryCreated: PrefEnCountryPostEn by lazy {
     if (innerProjectionPin.innerCountryCreated0Pin == null) {
@@ -131,14 +131,14 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
     innerCountryCreated0Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
   }
 
-  public override fun withPrFilmCreatedWithPo(countryId: Long?, projection: PrePrFilmPostPr.() ->
-      Unit): Unit {
+  public override fun withPrFilmCreatedWithPo(countryId: Long?,
+      projection: PrePrFilmPostPr.() -> Unit): Unit {
     innerFilmCreated1Pin = PreImPrePrFilmPostPrPostIm().apply(projection)
     innerFilmCreated1CountryIdPin = countryId
   }
 
-  public override fun withPrActorCreatedWithPo(countryId: Long?, projection: PrePrActorPostPr.() ->
-      Unit): Unit {
+  public override fun withPrActorCreatedWithPo(countryId: Long?,
+      projection: PrePrActorPostPr.() -> Unit): Unit {
     innerActorCreated2Pin = PreImPrePrActorPostPrPostIm().apply(projection)
     innerActorCreated2CountryIdPin = countryId
   }
@@ -171,7 +171,7 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

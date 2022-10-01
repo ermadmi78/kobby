@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.dto
@@ -23,7 +23,7 @@ import kotlin.Suppress
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = SubscriptionDto::class
+  defaultImpl = SubscriptionDto::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class SubscriptionDto()

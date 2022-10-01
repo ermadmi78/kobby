@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.en
@@ -60,7 +60,7 @@ public interface PrePrMyQueryPostPr {
   public fun withPrCountriesWithPo(
     name: String? = null,
     limit: Int? = null,
-    projection: PrePrCountryPostPr.() -> Unit = {}
+    projection: PrePrCountryPostPr.() -> Unit = {},
   ): Unit
 
   public fun withPrFilmWithPo(id: Long, projection: PrePrFilmPostPr.() -> Unit = {}): Unit

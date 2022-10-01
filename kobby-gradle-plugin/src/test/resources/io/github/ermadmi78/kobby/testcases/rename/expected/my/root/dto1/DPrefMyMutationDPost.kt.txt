@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1
@@ -29,7 +29,7 @@ import my.root.ctx.PrefCtxDSLPostCtx
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = DPrefMyMutationDPost::class
+  defaultImpl = DPrefMyMutationDPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class DPrefMyMutationDPost(
@@ -38,7 +38,7 @@ public data class DPrefMyMutationDPost(
   public val createActor: DPrefActorDPost? = null,
   public val associate: Boolean? = null,
   public val tagFilm: Boolean? = null,
-  public val tagActor: Boolean? = null
+  public val tagActor: Boolean? = null,
 )
 
 public fun DPrefMyMutationDPost(block: BPrefDPrefMyMutationDPostBPost.() -> Unit):

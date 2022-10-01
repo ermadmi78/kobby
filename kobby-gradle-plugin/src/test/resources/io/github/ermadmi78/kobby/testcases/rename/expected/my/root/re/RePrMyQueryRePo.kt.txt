@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.re
@@ -37,7 +37,7 @@ public interface RePrMyQueryRePo : GraphQLQueryResolver {
     title: String?,
     genre: EPrefGenreEPost?,
     limit: Int,
-    offset: Int
+    offset: Int,
   ): List<DPrefFilmDPost> = TODO("ToDo")
 
   public suspend fun actor(id: Long): DPrefActorDPost? = TODO("ToDo")
@@ -46,6 +46,6 @@ public interface RePrMyQueryRePo : GraphQLQueryResolver {
     firstName: String?,
     lastName: String?,
     gender: EPrefGenderEPost?,
-    limit: Int
+    limit: Int,
   ): List<DPrefActorDPost> = TODO("ToDo")
 }

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
@@ -58,7 +58,7 @@ import kotlin.text.isNotEmpty
 internal class QueryImpl(
   internal val __innerContext: CinemaContext,
   internal val __innerProjection: QueryProjectionImpl,
-  internal val __innerDto: QueryDto
+  internal val __innerDto: QueryDto,
 ) : Query {
   public override val country: Country? by lazy {
     if (__innerProjection.__innerCountry0 == null) {
@@ -226,7 +226,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     name: String?,
     limit: Int?,
     offset: Int?,
-    __projection: CountryProjection.() -> Unit
+    __projection: CountryProjection.() -> Unit,
   ): Unit {
     __innerCountries1 = CountryProjectionImpl().apply(__projection)
     __innerCountries1Name = name
@@ -305,7 +305,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

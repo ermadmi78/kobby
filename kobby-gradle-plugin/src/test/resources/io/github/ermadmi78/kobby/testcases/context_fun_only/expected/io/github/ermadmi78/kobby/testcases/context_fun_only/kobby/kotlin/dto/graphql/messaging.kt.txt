@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.graphql
@@ -41,7 +41,7 @@ public interface ContextFunOnlyServerMessage
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextFunOnlyMessageConnectionInit(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : ContextFunOnlyMessage, ContextFunOnlyClientMessage
 
 /**
@@ -50,7 +50,7 @@ public data class ContextFunOnlyMessageConnectionInit(
  */
 public data class ContextFunOnlyMessageStart(
   public val id: String,
-  public val payload: ContextFunOnlyRequest
+  public val payload: ContextFunOnlyRequest,
 ) : ContextFunOnlyMessage, ContextFunOnlyClientMessage
 
 /**
@@ -58,7 +58,7 @@ public data class ContextFunOnlyMessageStart(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextFunOnlyMessageStop(
-  public val id: String
+  public val id: String,
 ) : ContextFunOnlyMessage, ContextFunOnlyClientMessage
 
 /**
@@ -73,7 +73,7 @@ public class ContextFunOnlyMessageConnectionTerminate : ContextFunOnlyMessage,
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextFunOnlyMessageConnectionError(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : ContextFunOnlyMessage, ContextFunOnlyServerMessage
 
 /**
@@ -81,7 +81,7 @@ public data class ContextFunOnlyMessageConnectionError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextFunOnlyMessageConnectionAck(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : ContextFunOnlyMessage, ContextFunOnlyServerMessage
 
 /**
@@ -90,7 +90,7 @@ public data class ContextFunOnlyMessageConnectionAck(
  */
 public data class ContextFunOnlyMessageData(
   public val id: String,
-  public val payload: ContextFunOnlySubscriptionResult
+  public val payload: ContextFunOnlySubscriptionResult,
 ) : ContextFunOnlyMessage, ContextFunOnlyServerMessage
 
 /**
@@ -99,7 +99,7 @@ public data class ContextFunOnlyMessageData(
  */
 public data class ContextFunOnlyMessageError(
   public val id: String,
-  public val payload: ContextFunOnlyErrorResult
+  public val payload: ContextFunOnlyErrorResult,
 ) : ContextFunOnlyMessage, ContextFunOnlyServerMessage
 
 /**
@@ -107,7 +107,7 @@ public data class ContextFunOnlyMessageError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class ContextFunOnlyMessageComplete(
-  public val id: String
+  public val id: String,
 ) : ContextFunOnlyMessage, ContextFunOnlyServerMessage
 
 /**

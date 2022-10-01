@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
@@ -23,7 +23,7 @@ import kotlin.error
 import kotlin.let
 
 public data class TagInput(
-  public val `value`: String
+  public val `value`: String,
 )
 
 public fun TagInput(block: TagInputBuilder.() -> Unit): TagInput {

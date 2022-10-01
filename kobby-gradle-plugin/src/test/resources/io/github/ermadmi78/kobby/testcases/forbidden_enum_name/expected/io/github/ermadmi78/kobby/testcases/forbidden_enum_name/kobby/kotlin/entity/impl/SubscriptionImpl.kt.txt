@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.impl
@@ -35,7 +35,7 @@ import kotlin.text.buildString
 internal class SubscriptionImpl(
   internal val __innerContext: ForbiddenEnumNameContext,
   internal val __innerProjection: SubscriptionProjectionImpl,
-  internal val __innerDto: SubscriptionDto
+  internal val __innerDto: SubscriptionDto,
 ) : Subscription {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
   public override fun toString(): String = buildString {
@@ -68,7 +68,7 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

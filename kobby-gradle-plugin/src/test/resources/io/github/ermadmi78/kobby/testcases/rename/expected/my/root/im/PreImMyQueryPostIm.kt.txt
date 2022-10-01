@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.im
@@ -55,7 +55,7 @@ import my.root.en.PrefEnMySubscriptionPostEn
 public class PreImMyQueryPostIm(
   public val innerContextPin: PrefCtxContextPostCtx,
   public val innerProjectionPin: PreImPrePrMyQueryPostPrPostIm,
-  public val innerDtoPin: DPrefMyQueryDPost
+  public val innerDtoPin: DPrefMyQueryDPost,
 ) : PrefEnMyQueryPostEn {
   public override val country: PrefEnCountryPostEn? by lazy {
     if (innerProjectionPin.innerCountry0Pin == null) {
@@ -203,7 +203,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   public override fun withPrCountriesWithPo(
     name: String?,
     limit: Int?,
-    projection: PrePrCountryPostPr.() -> Unit
+    projection: PrePrCountryPostPr.() -> Unit,
   ): Unit {
     innerCountries1Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
     innerCountries1NamePin = name
@@ -272,7 +272,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

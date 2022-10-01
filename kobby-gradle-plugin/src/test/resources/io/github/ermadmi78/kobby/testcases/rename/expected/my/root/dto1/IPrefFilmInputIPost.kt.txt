@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1
@@ -29,7 +29,7 @@ public data class IPrefFilmInputIPost(
   /**
    * Default: DRAMA
    */
-  public val genre: EPrefGenreEPost = EPrefGenreEPost.DRAMA
+  public val genre: EPrefGenreEPost = EPrefGenreEPost.DRAMA,
 )
 
 public fun IPrefFilmInputIPost(block: BPrefIPrefFilmInputIPostBPost.() -> Unit):

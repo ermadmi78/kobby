@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl
@@ -48,7 +48,7 @@ import kotlin.text.isNotEmpty
 internal class ActorImpl(
   internal val __innerContext: ContextFunOnlyContext,
   internal val __innerProjection: ActorProjectionImpl,
-  internal val __innerDto: ActorDto
+  internal val __innerDto: ActorDto,
 ) : Actor {
   public override val id: Long
     get() = __innerDto.id!!
@@ -273,7 +273,7 @@ internal open class ActorProjectionImpl : ActorProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl
@@ -53,7 +53,7 @@ import kotlin.text.isNotEmpty
 internal class CountryImpl(
   internal val __innerContext: ContextFunOnlyContext,
   internal val __innerProjection: CountryProjectionImpl,
-  internal val __innerDto: CountryDto
+  internal val __innerDto: CountryDto,
 ) : Country {
   public override val id: Long
     get() = __innerDto.id!!
@@ -298,7 +298,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

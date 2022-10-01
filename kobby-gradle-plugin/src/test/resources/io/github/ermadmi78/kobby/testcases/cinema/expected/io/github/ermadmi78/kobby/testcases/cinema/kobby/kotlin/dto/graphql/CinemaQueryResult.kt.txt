@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql
@@ -22,5 +22,5 @@ public data class CinemaQueryResult(
   @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
   public val `data`: QueryDto? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-  public val errors: List<CinemaError>? = null
+  public val errors: List<CinemaError>? = null,
 )

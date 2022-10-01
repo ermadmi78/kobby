@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql
@@ -41,7 +41,7 @@ public interface CountryServerMessage
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class CountryMessageConnectionInit(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : CountryMessage, CountryClientMessage
 
 /**
@@ -50,7 +50,7 @@ public data class CountryMessageConnectionInit(
  */
 public data class CountryMessageStart(
   public val id: String,
-  public val payload: CountryRequest
+  public val payload: CountryRequest,
 ) : CountryMessage, CountryClientMessage
 
 /**
@@ -58,7 +58,7 @@ public data class CountryMessageStart(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class CountryMessageStop(
-  public val id: String
+  public val id: String,
 ) : CountryMessage, CountryClientMessage
 
 /**
@@ -72,7 +72,7 @@ public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMe
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class CountryMessageConnectionError(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -80,7 +80,7 @@ public data class CountryMessageConnectionError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class CountryMessageConnectionAck(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -89,7 +89,7 @@ public data class CountryMessageConnectionAck(
  */
 public data class CountryMessageData(
   public val id: String,
-  public val payload: CountrySubscriptionResult
+  public val payload: CountrySubscriptionResult,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -98,7 +98,7 @@ public data class CountryMessageData(
  */
 public data class CountryMessageError(
   public val id: String,
-  public val payload: CountryErrorResult
+  public val payload: CountryErrorResult,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -106,7 +106,7 @@ public data class CountryMessageError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class CountryMessageComplete(
-  public val id: String
+  public val id: String,
 ) : CountryMessage, CountryServerMessage
 
 /**

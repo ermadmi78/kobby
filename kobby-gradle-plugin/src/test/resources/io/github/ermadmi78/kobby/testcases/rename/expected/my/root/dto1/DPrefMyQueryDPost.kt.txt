@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1
@@ -29,7 +29,7 @@ import my.root.ctx.PrefCtxDSLPostCtx
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = DPrefMyQueryDPost::class
+  defaultImpl = DPrefMyQueryDPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class DPrefMyQueryDPost(
@@ -38,7 +38,7 @@ public data class DPrefMyQueryDPost(
   public val film: DPrefFilmDPost? = null,
   public val films: List<DPrefFilmDPost>? = null,
   public val actor: DPrefActorDPost? = null,
-  public val actors: List<DPrefActorDPost>? = null
+  public val actors: List<DPrefActorDPost>? = null,
 )
 
 public fun DPrefMyQueryDPost(block: BPrefDPrefMyQueryDPostBPost.() -> Unit): DPrefMyQueryDPost {

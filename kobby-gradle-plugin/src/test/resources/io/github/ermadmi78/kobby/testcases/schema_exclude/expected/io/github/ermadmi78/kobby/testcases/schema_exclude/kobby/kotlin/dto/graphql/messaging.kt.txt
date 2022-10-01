@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.dto.graphql
@@ -41,7 +41,7 @@ public interface GraphqlServerMessage
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class GraphqlMessageConnectionInit(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : GraphqlMessage, GraphqlClientMessage
 
 /**
@@ -50,7 +50,7 @@ public data class GraphqlMessageConnectionInit(
  */
 public data class GraphqlMessageStart(
   public val id: String,
-  public val payload: GraphqlRequest
+  public val payload: GraphqlRequest,
 ) : GraphqlMessage, GraphqlClientMessage
 
 /**
@@ -58,7 +58,7 @@ public data class GraphqlMessageStart(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class GraphqlMessageStop(
-  public val id: String
+  public val id: String,
 ) : GraphqlMessage, GraphqlClientMessage
 
 /**
@@ -72,7 +72,7 @@ public class GraphqlMessageConnectionTerminate : GraphqlMessage, GraphqlClientMe
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class GraphqlMessageConnectionError(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -80,7 +80,7 @@ public data class GraphqlMessageConnectionError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class GraphqlMessageConnectionAck(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -89,7 +89,7 @@ public data class GraphqlMessageConnectionAck(
  */
 public data class GraphqlMessageData(
   public val id: String,
-  public val payload: GraphqlSubscriptionResult
+  public val payload: GraphqlSubscriptionResult,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -98,7 +98,7 @@ public data class GraphqlMessageData(
  */
 public data class GraphqlMessageError(
   public val id: String,
-  public val payload: GraphqlErrorResult
+  public val payload: GraphqlErrorResult,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -106,7 +106,7 @@ public data class GraphqlMessageError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class GraphqlMessageComplete(
-  public val id: String
+  public val id: String,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**

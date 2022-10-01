@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
@@ -51,7 +51,7 @@ import kotlin.text.isNotEmpty
 internal class MutationImpl(
   internal val __innerContext: CinemaContext,
   internal val __innerProjection: MutationProjectionImpl,
-  internal val __innerDto: MutationDto
+  internal val __innerDto: MutationDto,
 ) : Mutation {
   public override val createCountry: Country by lazy {
     if (__innerProjection.__innerCreateCountry0 == null) {
@@ -210,7 +210,7 @@ internal open class MutationProjectionImpl : MutationProjection {
   public override fun createFilm(
     countryId: Long,
     film: FilmInput,
-    __query: MutationCreateFilmQuery.() -> Unit
+    __query: MutationCreateFilmQuery.() -> Unit,
   ): Unit {
     __innerCreateFilm1 = MutationCreateFilmQueryImpl().apply(__query)
     __innerCreateFilm1CountryId = countryId
@@ -220,7 +220,7 @@ internal open class MutationProjectionImpl : MutationProjection {
   public override fun createActor(
     countryId: Long,
     actor: ActorInput,
-    __query: MutationCreateActorQuery.() -> Unit
+    __query: MutationCreateActorQuery.() -> Unit,
   ): Unit {
     __innerCreateActor2 = MutationCreateActorQueryImpl().apply(__query)
     __innerCreateActor2CountryId = countryId
@@ -281,7 +281,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin
@@ -47,8 +47,8 @@ import kotlin.to
 public fun forbiddenEnumNameContextOf(adapter: ForbiddenEnumNameAdapter): ForbiddenEnumNameContext =
     ForbiddenEnumNameContextImpl(adapter)
 
-public fun buildForbiddenEnumNameQuery(__projection: QueryProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildForbiddenEnumNameQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -67,8 +67,8 @@ public fun buildForbiddenEnumNameQuery(__projection: QueryProjection.() -> Unit)
   return query to arguments
 }
 
-public fun buildForbiddenEnumNameMutation(__projection: MutationProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildForbiddenEnumNameMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -135,12 +135,12 @@ public interface ForbiddenEnumNameAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend ForbiddenEnumNameReceiver<SubscriptionDto>.() -> Unit
+    block: suspend ForbiddenEnumNameReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class ForbiddenEnumNameContextImpl(
-  private val adapter: ForbiddenEnumNameAdapter
+  private val adapter: ForbiddenEnumNameAdapter,
 ) : ForbiddenEnumNameContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

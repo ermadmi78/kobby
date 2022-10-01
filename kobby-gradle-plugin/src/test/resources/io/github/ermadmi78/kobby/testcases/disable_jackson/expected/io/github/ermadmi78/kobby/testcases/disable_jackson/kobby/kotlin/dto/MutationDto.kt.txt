@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto
@@ -21,7 +21,7 @@ import kotlin.apply
 import kotlin.let
 
 public data class MutationDto(
-  public val createCountry: CountryDto? = null
+  public val createCountry: CountryDto? = null,
 )
 
 public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {

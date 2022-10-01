@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
@@ -40,7 +40,7 @@ import kotlin.text.isNotEmpty
 internal class MySubscriptionImpl(
   internal val __innerContext: GraphqlContext,
   internal val __innerProjection: MySubscriptionProjectionImpl,
-  internal val __innerDto: MySubscriptionDto
+  internal val __innerDto: MySubscriptionDto,
 ) : MySubscription {
   public override val onInsert: MyEvent by lazy {
     if (__innerProjection.__innerOnInsert0 == null) {
@@ -105,7 +105,7 @@ internal open class MySubscriptionProjectionImpl : MySubscriptionProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

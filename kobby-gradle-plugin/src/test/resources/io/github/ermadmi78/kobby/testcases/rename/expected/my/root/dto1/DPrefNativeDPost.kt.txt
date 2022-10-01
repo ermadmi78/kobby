@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1
@@ -20,10 +20,10 @@ import kotlin.Suppress
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "__typename"
+  property = "__typename",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = DPrefFilmDPost::class, name = "Film"),
-  JsonSubTypes.Type(value = DPrefActorDPost::class, name = "Actor")
+  JsonSubTypes.Type(value = DPrefActorDPost::class, name = "Actor"),
 )
 public interface DPrefNativeDPost

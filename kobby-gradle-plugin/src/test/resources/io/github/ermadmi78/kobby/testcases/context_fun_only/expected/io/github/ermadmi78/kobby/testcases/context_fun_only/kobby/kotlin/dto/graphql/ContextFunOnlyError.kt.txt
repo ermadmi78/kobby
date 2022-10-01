@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto.graphql
@@ -24,5 +24,5 @@ public data class ContextFunOnlyError(
   public val locations: List<ContextFunOnlyErrorSourceLocation>? = null,
   public val errorType: ContextFunOnlyErrorType? = null,
   public val path: List<Any>? = null,
-  public val extensions: Map<String, Any?>? = null
+  public val extensions: Map<String, Any?>? = null,
 )

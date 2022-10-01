@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin
@@ -46,8 +46,8 @@ import kotlin.to
 
 public fun queryContextOf(adapter: QueryAdapter): QueryContext = QueryContextImpl(adapter)
 
-public fun buildQueryQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String,
-    Any>> {
+public fun buildQueryQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -66,8 +66,8 @@ public fun buildQueryQuery(__projection: QueryProjection.() -> Unit): Pair<Strin
   return query to arguments
 }
 
-public fun buildQueryMutation(__projection: MutationProjection.() -> Unit): Pair<String, Map<String,
-    Any>> {
+public fun buildQueryMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -86,8 +86,8 @@ public fun buildQueryMutation(__projection: MutationProjection.() -> Unit): Pair
   return mutation to arguments
 }
 
-public fun buildQuerySubscription(__projection: SubscriptionProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildQuerySubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -134,12 +134,12 @@ public interface QueryAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend QueryReceiver<SubscriptionDto>.() -> Unit
+    block: suspend QueryReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class QueryContextImpl(
-  private val adapter: QueryAdapter
+  private val adapter: QueryAdapter,
 ) : QueryContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

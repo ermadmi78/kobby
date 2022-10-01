@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1
@@ -34,7 +34,7 @@ import my.root.ctx.PrefCtxDSLPostCtx
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = DPrefFilmDPost::class
+  defaultImpl = DPrefFilmDPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class DPrefFilmDPost(
@@ -44,7 +44,7 @@ public data class DPrefFilmDPost(
   public val genre: EPrefGenreEPost? = null,
   public val countryId: Long? = null,
   public val country: DPrefCountryDPost? = null,
-  public val actors: List<DPrefActorDPost>? = null
+  public val actors: List<DPrefActorDPost>? = null,
 ) : DPrefEntityDPost, DPrefNativeDPost {
   public override fun equals(other: Any?): Boolean {
     if (this === other) {

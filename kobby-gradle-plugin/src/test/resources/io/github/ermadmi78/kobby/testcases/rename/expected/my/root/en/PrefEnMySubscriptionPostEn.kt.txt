@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.en
@@ -46,8 +46,8 @@ public interface PrePrMySubscriptionPostPr {
   public fun withPrFilmCreatedWithPo(countryId: Long? = null, projection: PrePrFilmPostPr.() -> Unit
       = {}): Unit
 
-  public fun withPrActorCreatedWithPo(countryId: Long? = null, projection: PrePrActorPostPr.() ->
-      Unit = {}): Unit
+  public fun withPrActorCreatedWithPo(countryId: Long? = null,
+      projection: PrePrActorPostPr.() -> Unit = {}): Unit
 
   public fun minimize(): Unit {
   }

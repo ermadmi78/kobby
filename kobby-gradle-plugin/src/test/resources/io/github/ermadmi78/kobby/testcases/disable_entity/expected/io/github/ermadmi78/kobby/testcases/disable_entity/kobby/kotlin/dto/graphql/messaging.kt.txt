@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_entity.kobby.kotlin.dto.graphql
@@ -30,7 +30,7 @@ import kotlin.collections.Map
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = CountryMessageConnectionInit::class, name = "connection_init"),
@@ -43,7 +43,7 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = CountryMessageData::class, name = "data"),
   JsonSubTypes.Type(value = CountryMessageError::class, name = "error"),
   JsonSubTypes.Type(value = CountryMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = CountryMessageConnectionKeepAlive::class, name = "ka")
+  JsonSubTypes.Type(value = CountryMessageConnectionKeepAlive::class, name = "ka"),
 )
 public interface CountryMessage
 
@@ -54,13 +54,14 @@ public interface CountryMessage
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = CountryMessageConnectionInit::class, name = "connection_init"),
   JsonSubTypes.Type(value = CountryMessageStart::class, name = "start"),
   JsonSubTypes.Type(value = CountryMessageStop::class, name = "stop"),
-  JsonSubTypes.Type(value = CountryMessageConnectionTerminate::class, name = "connection_terminate")
+  JsonSubTypes.Type(value = CountryMessageConnectionTerminate::class, name =
+        "connection_terminate"),
 )
 public interface CountryClientMessage
 
@@ -71,7 +72,7 @@ public interface CountryClientMessage
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = CountryMessageConnectionError::class, name = "connection_error"),
@@ -79,7 +80,7 @@ public interface CountryClientMessage
   JsonSubTypes.Type(value = CountryMessageData::class, name = "data"),
   JsonSubTypes.Type(value = CountryMessageError::class, name = "error"),
   JsonSubTypes.Type(value = CountryMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = CountryMessageConnectionKeepAlive::class, name = "ka")
+  JsonSubTypes.Type(value = CountryMessageConnectionKeepAlive::class, name = "ka"),
 )
 public interface CountryServerMessage
 
@@ -92,11 +93,11 @@ public interface CountryServerMessage
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageConnectionInit::class
+  defaultImpl = CountryMessageConnectionInit::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageConnectionInit @JsonCreator constructor(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : CountryMessage, CountryClientMessage
 
 /**
@@ -108,12 +109,12 @@ public data class CountryMessageConnectionInit @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageStart::class
+  defaultImpl = CountryMessageStart::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageStart(
   public val id: String,
-  public val payload: CountryRequest
+  public val payload: CountryRequest,
 ) : CountryMessage, CountryClientMessage
 
 /**
@@ -125,11 +126,11 @@ public data class CountryMessageStart(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageStop::class
+  defaultImpl = CountryMessageStop::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageStop @JsonCreator constructor(
-  public val id: String
+  public val id: String,
 ) : CountryMessage, CountryClientMessage
 
 /**
@@ -141,7 +142,7 @@ public data class CountryMessageStop @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageConnectionTerminate::class
+  defaultImpl = CountryMessageConnectionTerminate::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMessage
@@ -155,11 +156,11 @@ public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMe
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageConnectionError::class
+  defaultImpl = CountryMessageConnectionError::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageConnectionError @JsonCreator constructor(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -171,11 +172,11 @@ public data class CountryMessageConnectionError @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageConnectionAck::class
+  defaultImpl = CountryMessageConnectionAck::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageConnectionAck @JsonCreator constructor(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -187,12 +188,12 @@ public data class CountryMessageConnectionAck @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageData::class
+  defaultImpl = CountryMessageData::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageData(
   public val id: String,
-  public val payload: CountrySubscriptionResult
+  public val payload: CountrySubscriptionResult,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -204,12 +205,12 @@ public data class CountryMessageData(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageError::class
+  defaultImpl = CountryMessageError::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageError(
   public val id: String,
-  public val payload: CountryErrorResult
+  public val payload: CountryErrorResult,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -221,11 +222,11 @@ public data class CountryMessageError(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageComplete::class
+  defaultImpl = CountryMessageComplete::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageComplete @JsonCreator constructor(
-  public val id: String
+  public val id: String,
 ) : CountryMessage, CountryServerMessage
 
 /**
@@ -237,7 +238,7 @@ public data class CountryMessageComplete @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CountryMessageConnectionKeepAlive::class
+  defaultImpl = CountryMessageConnectionKeepAlive::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class CountryMessageConnectionKeepAlive : CountryMessage, CountryServerMessage

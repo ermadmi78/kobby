@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.im
@@ -59,7 +59,7 @@ import my.root.en.PrefEnNativePostEn
 public class PreImCountryPostIm(
   public val innerContextPin: PrefCtxContextPostCtx,
   public val innerProjectionPin: PreImPrePrCountryPostPrPostIm,
-  public val innerDtoPin: DPrefCountryDPost
+  public val innerDtoPin: DPrefCountryDPost,
 ) : PrefEnCountryPostEn {
   public override val id: Long
     get() = innerDtoPin.id!!
@@ -309,7 +309,7 @@ public open class PreImPrePrCountryPostPrPostIm : PrePrCountryPostPr {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

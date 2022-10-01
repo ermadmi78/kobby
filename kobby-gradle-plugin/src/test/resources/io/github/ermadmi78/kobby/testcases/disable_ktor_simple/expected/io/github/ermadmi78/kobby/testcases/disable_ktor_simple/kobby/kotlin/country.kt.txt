@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin
@@ -46,8 +46,8 @@ import kotlin.to
 
 public fun countryContextOf(adapter: CountryAdapter): CountryContext = CountryContextImpl(adapter)
 
-public fun buildCountryQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String,
-    Any>> {
+public fun buildCountryQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -66,8 +66,8 @@ public fun buildCountryQuery(__projection: QueryProjection.() -> Unit): Pair<Str
   return query to arguments
 }
 
-public fun buildCountryMutation(__projection: MutationProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildCountryMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -86,8 +86,8 @@ public fun buildCountryMutation(__projection: MutationProjection.() -> Unit): Pa
   return mutation to arguments
 }
 
-public fun buildCountrySubscription(__projection: SubscriptionProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildCountrySubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -134,12 +134,12 @@ public interface CountryAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend CountryReceiver<SubscriptionDto>.() -> Unit
+    block: suspend CountryReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class CountryContextImpl(
-  private val adapter: CountryAdapter
+  private val adapter: CountryAdapter,
 ) : CountryContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1.gr_ql
@@ -22,5 +22,5 @@ public data class GPrefSubscriptionResultGPost(
   @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
   public val `data`: DPrefMySubscriptionDPost? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-  public val errors: List<GPrefErrorGPost>? = null
+  public val errors: List<GPrefErrorGPost>? = null,
 )

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity
@@ -42,13 +42,13 @@ public interface MutationProjection {
   public fun createFilm(
     countryId: Long,
     film: FilmInput,
-    __query: MutationCreateFilmQuery.() -> Unit = {}
+    __query: MutationCreateFilmQuery.() -> Unit = {},
   ): Unit
 
   public fun createActor(
     countryId: Long,
     actor: ActorInput,
-    __query: MutationCreateActorQuery.() -> Unit = {}
+    __query: MutationCreateActorQuery.() -> Unit = {},
   ): Unit
 
   public fun __minimize(): Unit {

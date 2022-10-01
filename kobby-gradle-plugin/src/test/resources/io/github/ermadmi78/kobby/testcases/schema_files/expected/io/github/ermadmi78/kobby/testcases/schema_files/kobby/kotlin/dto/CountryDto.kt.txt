@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.dto
@@ -24,7 +24,7 @@ import kotlin.let
 
 public data class CountryDto(
   public val id: Long? = null,
-  public val name: String? = null
+  public val name: String? = null,
 )
 
 public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto {

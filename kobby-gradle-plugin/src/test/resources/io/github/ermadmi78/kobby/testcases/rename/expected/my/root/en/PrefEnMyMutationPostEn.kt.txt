@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.en
@@ -57,13 +57,13 @@ public interface PrePrMyMutationPostPr {
   public fun withPrCreateFilmWithPo(
     countryId: Long,
     film: IPrefFilmInputIPost,
-    projection: PrePrFilmPostPr.() -> Unit = {}
+    projection: PrePrFilmPostPr.() -> Unit = {},
   ): Unit
 
   public fun withPrCreateActorWithPo(
     countryId: Long,
     actor: IPrefActorInputIPost,
-    projection: PrePrActorPostPr.() -> Unit = {}
+    projection: PrePrActorPostPr.() -> Unit = {},
   ): Unit
 
   public fun withPrAssociateWithPo(filmId: Long, actorId: Long): Unit

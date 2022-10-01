@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.ktor_dynamic_http_headers.kobby.kotlin.adapter.ktor
@@ -78,7 +78,7 @@ public open class CountryCompositeKtorAdapter(
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
-  protected val listener: (CountryRequest) -> Unit = {}
+  protected val listener: (CountryRequest) -> Unit = {},
 ) : CountryAdapter {
   public override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
     val request = CountryRequest(query, variables)
@@ -136,7 +136,7 @@ public open class CountryCompositeKtorAdapter(
   public override suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend CountryReceiver<SubscriptionDto>.() -> Unit
+    block: suspend CountryReceiver<SubscriptionDto>.() -> Unit,
   ): Unit {
     val httpHeaders: Map<String, String> = requestHeaders()
     val payload: Map<String, Any?>? = subscriptionPayload()
@@ -171,7 +171,7 @@ public open class CountryCompositeKtorAdapter(
   protected open suspend fun WebSocketSession.executeSubscriptionImpl(
     initPayload: Map<String, Any?>?,
     request: CountryRequest,
-    block: suspend CountryReceiver<SubscriptionDto>.() -> Unit
+    block: suspend CountryReceiver<SubscriptionDto>.() -> Unit,
   ): Unit {
     sendMessage(CountryMessageConnectionInit(initPayload))
     try {

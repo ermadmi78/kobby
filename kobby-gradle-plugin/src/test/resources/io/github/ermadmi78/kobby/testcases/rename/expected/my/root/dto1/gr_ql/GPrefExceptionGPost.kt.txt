@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1.gr_ql
@@ -22,6 +22,6 @@ import kotlin.collections.joinToString
 public class GPrefExceptionGPost(
   message: String,
   public val request: GPrefRequestGPost,
-  public val errors: List<GPrefErrorGPost>? = null
+  public val errors: List<GPrefErrorGPost>? = null,
 ) : RuntimeException(message + (errors?.joinToString(",\n  ", "\n  ", "\n") { it.toString() } ?:
     ""))

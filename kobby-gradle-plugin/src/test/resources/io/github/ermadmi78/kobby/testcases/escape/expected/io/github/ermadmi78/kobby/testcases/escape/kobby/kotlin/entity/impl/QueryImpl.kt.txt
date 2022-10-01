@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
@@ -48,7 +48,7 @@ import kotlin.text.isNotEmpty
 internal class QueryImpl(
   internal val __innerContext: EscapeContext,
   internal val __innerProjection: QueryProjectionImpl,
-  internal val __innerDto: QueryDto
+  internal val __innerDto: QueryDto,
 ) : Query {
   public override val escapes: List<Escape> by lazy {
     if (__innerProjection.__innerEscapes0 == null) {
@@ -133,7 +133,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   public override fun escapes(
     `do`: Int?,
     `by`: Int?,
-    __projection: EscapeProjection.() -> Unit
+    __projection: EscapeProjection.() -> Unit,
   ): Unit {
     __innerEscapes0 = EscapeProjectionImpl().apply(__projection)
     __innerEscapes0Do = `do`
@@ -175,7 +175,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

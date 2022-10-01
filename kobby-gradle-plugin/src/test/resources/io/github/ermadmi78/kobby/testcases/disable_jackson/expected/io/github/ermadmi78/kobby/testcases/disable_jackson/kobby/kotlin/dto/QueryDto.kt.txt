@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto
@@ -22,7 +22,7 @@ import kotlin.collections.List
 import kotlin.let
 
 public data class QueryDto(
-  public val countries: List<CountryDto>? = null
+  public val countries: List<CountryDto>? = null,
 )
 
 public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {

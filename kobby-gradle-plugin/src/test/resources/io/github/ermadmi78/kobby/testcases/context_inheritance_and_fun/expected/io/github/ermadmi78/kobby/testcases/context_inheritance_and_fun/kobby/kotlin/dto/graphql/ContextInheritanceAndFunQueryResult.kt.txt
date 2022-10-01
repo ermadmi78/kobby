@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.dto.graphql
@@ -19,5 +19,5 @@ import kotlin.collections.List
 
 public data class ContextInheritanceAndFunQueryResult(
   public val `data`: QueryDto? = null,
-  public val errors: List<ContextInheritanceAndFunError>? = null
+  public val errors: List<ContextInheritanceAndFunError>? = null,
 )

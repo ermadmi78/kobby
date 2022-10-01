@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.dto1.gr_ql
@@ -20,5 +20,5 @@ import kotlin.collections.List
 
 public data class GPrefErrorResultGPost @JsonCreator constructor(
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-  public val errors: List<GPrefErrorGPost>? = null
+  public val errors: List<GPrefErrorGPost>? = null,
 )

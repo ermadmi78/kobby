@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.re
@@ -35,6 +35,6 @@ public interface RePrFilmRePo : GraphQLResolver<DPrefFilmDPost> {
     lastName: String?,
     gender: EPrefGenderEPost?,
     limit: Int,
-    offset: Int
+    offset: Int,
   ): List<DPrefActorDPost> = TODO("ToDo")
 }

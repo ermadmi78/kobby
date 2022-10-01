@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
@@ -48,7 +48,7 @@ import kotlin.text.isNotEmpty
 internal class EscapeImpl(
   internal val __innerContext: EscapeContext,
   internal val __innerProjection: EscapeProjectionImpl,
-  internal val __innerDto: EscapeDto
+  internal val __innerDto: EscapeDto,
 ) : Escape {
   public override val `if`: Long
     get() = __innerDto.`if`!!
@@ -238,7 +238,7 @@ internal open class EscapeProjectionImpl : EscapeProjection {
   public override fun points(
     `do`: Int?,
     `by`: Int?,
-    __projection: PointProjection.() -> Unit
+    __projection: PointProjection.() -> Unit,
   ): Unit {
     __innerPoints3 = PointProjectionImpl().apply(__projection)
     __innerPoints3Do = `do`
@@ -303,7 +303,7 @@ internal open class EscapeProjectionImpl : EscapeProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
@@ -29,7 +29,7 @@ import kotlin.let
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = QueryDto::class
+  defaultImpl = QueryDto::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class QueryDto(
@@ -66,7 +66,7 @@ public data class QueryDto(
   /**
    * Find entities by tag
    */
-  public val taggable: List<TaggableDto>? = null
+  public val taggable: List<TaggableDto>? = null,
 )
 
 public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {

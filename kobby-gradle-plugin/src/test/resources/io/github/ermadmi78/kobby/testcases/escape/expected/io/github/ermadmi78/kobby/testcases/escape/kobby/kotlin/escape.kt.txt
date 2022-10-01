@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin
@@ -46,8 +46,8 @@ import kotlin.to
 
 public fun escapeContextOf(adapter: EscapeAdapter): EscapeContext = EscapeContextImpl(adapter)
 
-public fun buildEscapeQuery(__projection: QueryProjection.() -> Unit): Pair<String, Map<String,
-    Any>> {
+public fun buildEscapeQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -66,8 +66,8 @@ public fun buildEscapeQuery(__projection: QueryProjection.() -> Unit): Pair<Stri
   return query to arguments
 }
 
-public fun buildEscapeMutation(__projection: MutationProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildEscapeMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -86,8 +86,8 @@ public fun buildEscapeMutation(__projection: MutationProjection.() -> Unit): Pai
   return mutation to arguments
 }
 
-public fun buildEscapeSubscription(__projection: SubscriptionProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildEscapeSubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -134,12 +134,12 @@ public interface EscapeAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend EscapeReceiver<SubscriptionDto>.() -> Unit
+    block: suspend EscapeReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class EscapeContextImpl(
-  private val adapter: EscapeAdapter
+  private val adapter: EscapeAdapter,
 ) : EscapeContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

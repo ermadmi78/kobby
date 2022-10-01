@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_publisher.kobby.kotlin.entity.impl
@@ -39,7 +39,7 @@ import kotlin.text.buildString
 internal class SubscriptionImpl(
   internal val __innerContext: CountryContext,
   internal val __innerProjection: SubscriptionProjectionImpl,
-  internal val __innerDto: SubscriptionDto
+  internal val __innerDto: SubscriptionDto,
 ) : Subscription {
   public override val countryCreated: Country by lazy {
     if (__innerProjection.__innerCountryCreated0 == null) {
@@ -102,7 +102,7 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.impl
@@ -40,7 +40,7 @@ import kotlin.text.buildString
 internal class SimpleImpl(
   internal val __innerContext: ContextInheritanceAndFunContext,
   internal val __innerProjection: SimpleProjectionImpl,
-  internal val __innerDto: SimpleDto
+  internal val __innerDto: SimpleDto,
 ) : Simple {
   public override val id: Long
     get() {
@@ -125,7 +125,7 @@ internal open class SimpleProjectionImpl : SimpleProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

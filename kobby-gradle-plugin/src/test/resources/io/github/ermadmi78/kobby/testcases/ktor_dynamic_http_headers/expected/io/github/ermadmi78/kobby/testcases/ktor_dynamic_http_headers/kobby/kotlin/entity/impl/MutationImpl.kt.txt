@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.ktor_dynamic_http_headers.kobby.kotlin.entity.impl
@@ -40,7 +40,7 @@ import kotlin.text.isNotEmpty
 internal class MutationImpl(
   internal val __innerContext: CountryContext,
   internal val __innerProjection: MutationProjectionImpl,
-  internal val __innerDto: MutationDto
+  internal val __innerDto: MutationDto,
 ) : Mutation {
   public override val createCountry: Country by lazy {
     if (__innerProjection.__innerCreateCountry0 == null) {
@@ -106,7 +106,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

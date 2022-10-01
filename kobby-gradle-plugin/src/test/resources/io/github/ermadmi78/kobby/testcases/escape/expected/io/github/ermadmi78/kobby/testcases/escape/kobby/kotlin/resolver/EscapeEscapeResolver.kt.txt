@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.resolver
@@ -24,6 +24,6 @@ public interface EscapeEscapeResolver : GraphQLResolver<EscapeDto> {
   public suspend fun points(
     escape: EscapeDto,
     `do`: Int,
-    `by`: Int
+    `by`: Int,
   ): List<PointDto>
 }

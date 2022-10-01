@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.ctx
@@ -47,8 +47,8 @@ import my.root.im.buildEntity
 public fun prefCtxContextPostCtxOf(adapter: PrefCtxAdapterPostCtx): PrefCtxContextPostCtx =
     PreImPrefCtxContextPostCtxPostIm(adapter)
 
-public fun buildMyCtxQuery(projection: PrePrMyQueryPostPr.() -> Unit): Pair<String, Map<String,
-    Any>> {
+public fun buildMyCtxQuery(projection: PrePrMyQueryPostPr.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = PreImPrePrMyQueryPostPrPostIm().apply(projection)
 
   val header = StringBuilder()
@@ -67,8 +67,8 @@ public fun buildMyCtxQuery(projection: PrePrMyQueryPostPr.() -> Unit): Pair<Stri
   return query to arguments
 }
 
-public fun buildMyCtxMutation(projection: PrePrMyMutationPostPr.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildMyCtxMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = PreImPrePrMyMutationPostPrPostIm().apply(projection)
 
   val header = StringBuilder()
@@ -87,8 +87,8 @@ public fun buildMyCtxMutation(projection: PrePrMyMutationPostPr.() -> Unit): Pai
   return mutation to arguments
 }
 
-public fun buildMyCtxSubscription(projection: PrePrMySubscriptionPostPr.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildMyCtxSubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = PreImPrePrMySubscriptionPostPrPostIm().apply(projection)
 
   val header = StringBuilder()
@@ -137,12 +137,12 @@ public interface PrefCtxAdapterPostCtx {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit
+    block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class PreImPrefCtxContextPostCtxPostIm(
-  private val adapter: PrefCtxAdapterPostCtx
+  private val adapter: PrefCtxAdapterPostCtx,
 ) : PrefCtxContextPostCtx {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

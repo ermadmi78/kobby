@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
@@ -23,7 +23,7 @@ import kotlin.let
 public data class MutationDto(
   public val createCountry: CountryDto? = null,
   public val createFilm: FilmDto? = null,
-  public val createActor: ActorDto? = null
+  public val createActor: ActorDto? = null,
 )
 
 public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {

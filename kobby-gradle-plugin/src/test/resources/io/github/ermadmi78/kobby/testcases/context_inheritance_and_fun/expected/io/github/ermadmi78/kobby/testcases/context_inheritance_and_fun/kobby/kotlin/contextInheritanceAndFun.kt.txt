@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin
@@ -87,8 +87,9 @@ public fun buildContextInheritanceAndFunMutation(__projection: MutationProjectio
   return mutation to arguments
 }
 
-public fun buildContextInheritanceAndFunSubscription(__projection: SubscriptionProjection.() ->
-    Unit): Pair<String, Map<String, Any>> {
+public
+    fun buildContextInheritanceAndFunSubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -135,12 +136,12 @@ public interface ContextInheritanceAndFunAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend ContextInheritanceAndFunReceiver<SubscriptionDto>.() -> Unit
+    block: suspend ContextInheritanceAndFunReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class ContextInheritanceAndFunContextImpl(
-  private val adapter: ContextInheritanceAndFunAdapter
+  private val adapter: ContextInheritanceAndFunAdapter,
 ) : ContextInheritanceAndFunContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

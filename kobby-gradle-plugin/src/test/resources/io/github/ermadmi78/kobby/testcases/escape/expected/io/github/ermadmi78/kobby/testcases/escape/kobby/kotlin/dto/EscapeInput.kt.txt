@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto
@@ -27,7 +27,7 @@ import kotlin.let
 public data class EscapeInput(
   public val `is`: String,
   public val it: String,
-  public val `in`: String? = null
+  public val `in`: String? = null,
 )
 
 public fun EscapeInput(block: EscapeInputBuilder.() -> Unit): EscapeInput {

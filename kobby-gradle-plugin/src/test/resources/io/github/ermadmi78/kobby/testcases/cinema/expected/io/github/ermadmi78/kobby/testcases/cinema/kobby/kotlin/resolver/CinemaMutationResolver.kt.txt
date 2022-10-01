@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.resolver
@@ -43,7 +43,7 @@ public interface CinemaMutationResolver : GraphQLMutationResolver {
   public suspend fun createFilm(
     countryId: Long,
     film: FilmInput,
-    tags: TagInput?
+    tags: TagInput?,
   ): FilmDto
 
   /**
@@ -56,7 +56,7 @@ public interface CinemaMutationResolver : GraphQLMutationResolver {
   public suspend fun createActor(
     countryId: Long,
     actor: ActorInput,
-    tags: TagInput?
+    tags: TagInput?,
   ): ActorDto
 
   /**

@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto
@@ -24,9 +24,9 @@ import kotlin.Suppress
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = MutationDto::class
+  defaultImpl = MutationDto::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class MutationDto @JsonCreator constructor(
-  public val createCountry: CountryDto? = null
+  public val createCountry: CountryDto? = null,
 )

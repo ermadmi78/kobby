@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto
@@ -21,7 +21,7 @@ import kotlin.apply
 import kotlin.let
 
 public data class SubscriptionDto(
-  public val countryCreated: CountryDto? = null
+  public val countryCreated: CountryDto? = null,
 )
 
 public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {

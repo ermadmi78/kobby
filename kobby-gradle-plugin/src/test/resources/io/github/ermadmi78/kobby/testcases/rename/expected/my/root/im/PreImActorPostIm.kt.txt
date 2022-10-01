@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package my.root.im
@@ -54,7 +54,7 @@ import my.root.en.PrefEnMySubscriptionPostEn
 public class PreImActorPostIm(
   public val innerContextPin: PrefCtxContextPostCtx,
   public val innerProjectionPin: PreImPrePrActorPostPrPostIm,
-  public val innerDtoPin: DPrefActorDPost
+  public val innerDtoPin: DPrefActorDPost,
 ) : PrefEnActorPostEn {
   public override val id: Long
     get() = innerDtoPin.id!!
@@ -287,7 +287,7 @@ public open class PreImPrePrActorPostPrPostIm : PrePrActorPostPr {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

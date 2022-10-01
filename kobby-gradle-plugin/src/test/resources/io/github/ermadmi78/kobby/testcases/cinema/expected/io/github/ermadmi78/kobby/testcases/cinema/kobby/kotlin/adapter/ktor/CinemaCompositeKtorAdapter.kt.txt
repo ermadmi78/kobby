@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.adapter.ktor
@@ -78,7 +78,7 @@ public open class CinemaCompositeKtorAdapter(
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
-  protected val listener: (CinemaRequest) -> Unit = {}
+  protected val listener: (CinemaRequest) -> Unit = {},
 ) : CinemaAdapter {
   public override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
     val request = CinemaRequest(query, variables)
@@ -136,7 +136,7 @@ public open class CinemaCompositeKtorAdapter(
   public override suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit
+    block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit,
   ): Unit {
     val httpHeaders: Map<String, String> = requestHeaders
     val payload: Map<String, Any?>? = subscriptionPayload
@@ -171,7 +171,7 @@ public open class CinemaCompositeKtorAdapter(
   protected open suspend fun WebSocketSession.executeSubscriptionImpl(
     initPayload: Map<String, Any?>?,
     request: CinemaRequest,
-    block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit
+    block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit,
   ): Unit {
     sendMessage(CinemaMessageConnectionInit(initPayload))
     try {

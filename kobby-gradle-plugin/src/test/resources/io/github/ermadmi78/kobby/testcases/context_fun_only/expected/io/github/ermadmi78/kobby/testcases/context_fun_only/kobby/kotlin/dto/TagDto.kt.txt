@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.dto
@@ -22,7 +22,7 @@ import kotlin.apply
 import kotlin.let
 
 public data class TagDto(
-  public val `value`: String? = null
+  public val `value`: String? = null,
 )
 
 public fun TagDto(block: TagDtoBuilder.() -> Unit): TagDto {

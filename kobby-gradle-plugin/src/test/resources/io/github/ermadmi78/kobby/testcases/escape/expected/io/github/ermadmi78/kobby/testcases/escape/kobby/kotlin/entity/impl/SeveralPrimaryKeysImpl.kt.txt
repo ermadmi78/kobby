@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
@@ -40,7 +40,7 @@ import kotlin.text.buildString
 internal class SeveralPrimaryKeysImpl(
   internal val __innerContext: EscapeContext,
   internal val __innerProjection: SeveralPrimaryKeysProjectionImpl,
-  internal val __innerDto: SeveralPrimaryKeysDto
+  internal val __innerDto: SeveralPrimaryKeysDto,
 ) : SeveralPrimaryKeys {
   public override val `if`: Long
     get() = __innerDto.`if`!!
@@ -192,7 +192,7 @@ internal open class SeveralPrimaryKeysProjectionImpl : SeveralPrimaryKeysProject
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

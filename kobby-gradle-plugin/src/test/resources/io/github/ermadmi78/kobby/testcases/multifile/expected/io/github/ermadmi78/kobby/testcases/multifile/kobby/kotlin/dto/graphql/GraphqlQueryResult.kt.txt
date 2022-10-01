@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql
@@ -22,5 +22,5 @@ public data class GraphqlQueryResult(
   @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
   public val `data`: MyQueryDto? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-  public val errors: List<GraphqlError>? = null
+  public val errors: List<GraphqlError>? = null,
 )

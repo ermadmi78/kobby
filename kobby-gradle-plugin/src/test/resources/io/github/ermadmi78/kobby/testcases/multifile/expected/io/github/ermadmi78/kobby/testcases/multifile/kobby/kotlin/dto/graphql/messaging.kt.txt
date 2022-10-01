@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql
@@ -30,7 +30,7 @@ import kotlin.collections.Map
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = GraphqlMessageConnectionInit::class, name = "connection_init"),
@@ -43,7 +43,7 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = GraphqlMessageData::class, name = "data"),
   JsonSubTypes.Type(value = GraphqlMessageError::class, name = "error"),
   JsonSubTypes.Type(value = GraphqlMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = GraphqlMessageConnectionKeepAlive::class, name = "ka")
+  JsonSubTypes.Type(value = GraphqlMessageConnectionKeepAlive::class, name = "ka"),
 )
 public interface GraphqlMessage
 
@@ -54,13 +54,14 @@ public interface GraphqlMessage
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = GraphqlMessageConnectionInit::class, name = "connection_init"),
   JsonSubTypes.Type(value = GraphqlMessageStart::class, name = "start"),
   JsonSubTypes.Type(value = GraphqlMessageStop::class, name = "stop"),
-  JsonSubTypes.Type(value = GraphqlMessageConnectionTerminate::class, name = "connection_terminate")
+  JsonSubTypes.Type(value = GraphqlMessageConnectionTerminate::class, name =
+        "connection_terminate"),
 )
 public interface GraphqlClientMessage
 
@@ -71,7 +72,7 @@ public interface GraphqlClientMessage
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = GraphqlMessageConnectionError::class, name = "connection_error"),
@@ -79,7 +80,7 @@ public interface GraphqlClientMessage
   JsonSubTypes.Type(value = GraphqlMessageData::class, name = "data"),
   JsonSubTypes.Type(value = GraphqlMessageError::class, name = "error"),
   JsonSubTypes.Type(value = GraphqlMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = GraphqlMessageConnectionKeepAlive::class, name = "ka")
+  JsonSubTypes.Type(value = GraphqlMessageConnectionKeepAlive::class, name = "ka"),
 )
 public interface GraphqlServerMessage
 
@@ -92,11 +93,11 @@ public interface GraphqlServerMessage
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageConnectionInit::class
+  defaultImpl = GraphqlMessageConnectionInit::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageConnectionInit @JsonCreator constructor(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : GraphqlMessage, GraphqlClientMessage
 
 /**
@@ -108,12 +109,12 @@ public data class GraphqlMessageConnectionInit @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageStart::class
+  defaultImpl = GraphqlMessageStart::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageStart(
   public val id: String,
-  public val payload: GraphqlRequest
+  public val payload: GraphqlRequest,
 ) : GraphqlMessage, GraphqlClientMessage
 
 /**
@@ -125,11 +126,11 @@ public data class GraphqlMessageStart(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageStop::class
+  defaultImpl = GraphqlMessageStop::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageStop @JsonCreator constructor(
-  public val id: String
+  public val id: String,
 ) : GraphqlMessage, GraphqlClientMessage
 
 /**
@@ -141,7 +142,7 @@ public data class GraphqlMessageStop @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageConnectionTerminate::class
+  defaultImpl = GraphqlMessageConnectionTerminate::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class GraphqlMessageConnectionTerminate : GraphqlMessage, GraphqlClientMessage
@@ -155,11 +156,11 @@ public class GraphqlMessageConnectionTerminate : GraphqlMessage, GraphqlClientMe
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageConnectionError::class
+  defaultImpl = GraphqlMessageConnectionError::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageConnectionError @JsonCreator constructor(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -171,11 +172,11 @@ public data class GraphqlMessageConnectionError @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageConnectionAck::class
+  defaultImpl = GraphqlMessageConnectionAck::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageConnectionAck @JsonCreator constructor(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -187,12 +188,12 @@ public data class GraphqlMessageConnectionAck @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageData::class
+  defaultImpl = GraphqlMessageData::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageData(
   public val id: String,
-  public val payload: GraphqlSubscriptionResult
+  public val payload: GraphqlSubscriptionResult,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -204,12 +205,12 @@ public data class GraphqlMessageData(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageError::class
+  defaultImpl = GraphqlMessageError::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageError(
   public val id: String,
-  public val payload: GraphqlErrorResult
+  public val payload: GraphqlErrorResult,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -221,11 +222,11 @@ public data class GraphqlMessageError(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageComplete::class
+  defaultImpl = GraphqlMessageComplete::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageComplete @JsonCreator constructor(
-  public val id: String
+  public val id: String,
 ) : GraphqlMessage, GraphqlServerMessage
 
 /**
@@ -237,7 +238,7 @@ public data class GraphqlMessageComplete @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GraphqlMessageConnectionKeepAlive::class
+  defaultImpl = GraphqlMessageConnectionKeepAlive::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class GraphqlMessageConnectionKeepAlive : GraphqlMessage, GraphqlServerMessage

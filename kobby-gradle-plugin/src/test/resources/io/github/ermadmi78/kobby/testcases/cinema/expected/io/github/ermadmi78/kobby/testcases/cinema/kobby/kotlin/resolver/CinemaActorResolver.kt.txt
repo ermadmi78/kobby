@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.resolver
@@ -57,6 +57,6 @@ public interface CinemaActorResolver : GraphQLResolver<ActorDto> {
     title: String?,
     genre: Genre?,
     limit: Int,
-    offset: Int
+    offset: Int,
   ): List<FilmDto>
 }

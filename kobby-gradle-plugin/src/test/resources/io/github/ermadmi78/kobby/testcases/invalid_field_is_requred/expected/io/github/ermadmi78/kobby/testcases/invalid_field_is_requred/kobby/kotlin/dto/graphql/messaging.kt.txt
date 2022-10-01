@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.dto.graphql
@@ -41,7 +41,7 @@ public interface InvalidFieldIsRequredServerMessage
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class InvalidFieldIsRequredMessageConnectionInit(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredClientMessage
 
 /**
@@ -50,7 +50,7 @@ public data class InvalidFieldIsRequredMessageConnectionInit(
  */
 public data class InvalidFieldIsRequredMessageStart(
   public val id: String,
-  public val payload: InvalidFieldIsRequredRequest
+  public val payload: InvalidFieldIsRequredRequest,
 ) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredClientMessage
 
 /**
@@ -58,7 +58,7 @@ public data class InvalidFieldIsRequredMessageStart(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class InvalidFieldIsRequredMessageStop(
-  public val id: String
+  public val id: String,
 ) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredClientMessage
 
 /**
@@ -73,7 +73,7 @@ public class InvalidFieldIsRequredMessageConnectionTerminate : InvalidFieldIsReq
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class InvalidFieldIsRequredMessageConnectionError(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
 
 /**
@@ -81,7 +81,7 @@ public data class InvalidFieldIsRequredMessageConnectionError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class InvalidFieldIsRequredMessageConnectionAck(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
 
 /**
@@ -90,7 +90,7 @@ public data class InvalidFieldIsRequredMessageConnectionAck(
  */
 public data class InvalidFieldIsRequredMessageData(
   public val id: String,
-  public val payload: InvalidFieldIsRequredSubscriptionResult
+  public val payload: InvalidFieldIsRequredSubscriptionResult,
 ) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
 
 /**
@@ -99,7 +99,7 @@ public data class InvalidFieldIsRequredMessageData(
  */
 public data class InvalidFieldIsRequredMessageError(
   public val id: String,
-  public val payload: InvalidFieldIsRequredErrorResult
+  public val payload: InvalidFieldIsRequredErrorResult,
 ) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
 
 /**
@@ -107,7 +107,7 @@ public data class InvalidFieldIsRequredMessageError(
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
 public data class InvalidFieldIsRequredMessageComplete(
-  public val id: String
+  public val id: String,
 ) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
 
 /**

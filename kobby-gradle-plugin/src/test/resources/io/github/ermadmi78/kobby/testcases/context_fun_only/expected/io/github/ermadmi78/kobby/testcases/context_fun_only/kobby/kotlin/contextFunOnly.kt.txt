@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin
@@ -47,8 +47,8 @@ import kotlin.to
 public fun contextFunOnlyContextOf(adapter: ContextFunOnlyAdapter): ContextFunOnlyContext =
     ContextFunOnlyContextImpl(adapter)
 
-public fun buildContextFunOnlyQuery(__projection: QueryProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildContextFunOnlyQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -67,8 +67,8 @@ public fun buildContextFunOnlyQuery(__projection: QueryProjection.() -> Unit): P
   return query to arguments
 }
 
-public fun buildContextFunOnlyMutation(__projection: MutationProjection.() -> Unit): Pair<String,
-    Map<String, Any>> {
+public fun buildContextFunOnlyMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
@@ -135,12 +135,12 @@ public interface ContextFunOnlyAdapter {
   public suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
-    block: suspend ContextFunOnlyReceiver<SubscriptionDto>.() -> Unit
+    block: suspend ContextFunOnlyReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
 
 private class ContextFunOnlyContextImpl(
-  private val adapter: ContextFunOnlyAdapter
+  private val adapter: ContextFunOnlyAdapter,
 ) : ContextFunOnlyContext {
   /**
    * https://youtrack.jetbrains.com/issue/KTIJ-844

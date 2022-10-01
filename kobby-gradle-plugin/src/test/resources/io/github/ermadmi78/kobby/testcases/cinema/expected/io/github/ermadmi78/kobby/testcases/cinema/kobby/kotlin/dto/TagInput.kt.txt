@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
@@ -33,7 +33,7 @@ public data class TagInput @JsonCreator constructor(
   /**
    * The tag value
    */
-  public val `value`: String
+  public val `value`: String,
 )
 
 public fun TagInput(block: TagInputBuilder.() -> Unit): TagInput {

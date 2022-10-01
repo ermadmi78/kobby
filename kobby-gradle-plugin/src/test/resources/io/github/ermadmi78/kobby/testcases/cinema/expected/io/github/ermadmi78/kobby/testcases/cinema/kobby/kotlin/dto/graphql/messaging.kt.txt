@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql
@@ -30,7 +30,7 @@ import kotlin.collections.Map
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = CinemaMessageConnectionInit::class, name = "connection_init"),
@@ -42,7 +42,7 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = CinemaMessageData::class, name = "data"),
   JsonSubTypes.Type(value = CinemaMessageError::class, name = "error"),
   JsonSubTypes.Type(value = CinemaMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = CinemaMessageConnectionKeepAlive::class, name = "ka")
+  JsonSubTypes.Type(value = CinemaMessageConnectionKeepAlive::class, name = "ka"),
 )
 public interface CinemaMessage
 
@@ -53,13 +53,13 @@ public interface CinemaMessage
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = CinemaMessageConnectionInit::class, name = "connection_init"),
   JsonSubTypes.Type(value = CinemaMessageStart::class, name = "start"),
   JsonSubTypes.Type(value = CinemaMessageStop::class, name = "stop"),
-  JsonSubTypes.Type(value = CinemaMessageConnectionTerminate::class, name = "connection_terminate")
+  JsonSubTypes.Type(value = CinemaMessageConnectionTerminate::class, name = "connection_terminate"),
 )
 public interface CinemaClientMessage
 
@@ -70,7 +70,7 @@ public interface CinemaClientMessage
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
-  property = "type"
+  property = "type",
 )
 @JsonSubTypes(
   JsonSubTypes.Type(value = CinemaMessageConnectionError::class, name = "connection_error"),
@@ -78,7 +78,7 @@ public interface CinemaClientMessage
   JsonSubTypes.Type(value = CinemaMessageData::class, name = "data"),
   JsonSubTypes.Type(value = CinemaMessageError::class, name = "error"),
   JsonSubTypes.Type(value = CinemaMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = CinemaMessageConnectionKeepAlive::class, name = "ka")
+  JsonSubTypes.Type(value = CinemaMessageConnectionKeepAlive::class, name = "ka"),
 )
 public interface CinemaServerMessage
 
@@ -91,11 +91,11 @@ public interface CinemaServerMessage
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageConnectionInit::class
+  defaultImpl = CinemaMessageConnectionInit::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageConnectionInit @JsonCreator constructor(
-  public val payload: Map<String, Any?>? = null
+  public val payload: Map<String, Any?>? = null,
 ) : CinemaMessage, CinemaClientMessage
 
 /**
@@ -107,12 +107,12 @@ public data class CinemaMessageConnectionInit @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageStart::class
+  defaultImpl = CinemaMessageStart::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageStart(
   public val id: String,
-  public val payload: CinemaRequest
+  public val payload: CinemaRequest,
 ) : CinemaMessage, CinemaClientMessage
 
 /**
@@ -124,11 +124,11 @@ public data class CinemaMessageStart(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageStop::class
+  defaultImpl = CinemaMessageStop::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageStop @JsonCreator constructor(
-  public val id: String
+  public val id: String,
 ) : CinemaMessage, CinemaClientMessage
 
 /**
@@ -140,7 +140,7 @@ public data class CinemaMessageStop @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageConnectionTerminate::class
+  defaultImpl = CinemaMessageConnectionTerminate::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class CinemaMessageConnectionTerminate : CinemaMessage, CinemaClientMessage
@@ -154,11 +154,11 @@ public class CinemaMessageConnectionTerminate : CinemaMessage, CinemaClientMessa
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageConnectionError::class
+  defaultImpl = CinemaMessageConnectionError::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageConnectionError @JsonCreator constructor(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : CinemaMessage, CinemaServerMessage
 
 /**
@@ -170,11 +170,11 @@ public data class CinemaMessageConnectionError @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageConnectionAck::class
+  defaultImpl = CinemaMessageConnectionAck::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageConnectionAck @JsonCreator constructor(
-  public val payload: Any? = null
+  public val payload: Any? = null,
 ) : CinemaMessage, CinemaServerMessage
 
 /**
@@ -186,12 +186,12 @@ public data class CinemaMessageConnectionAck @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageData::class
+  defaultImpl = CinemaMessageData::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageData(
   public val id: String,
-  public val payload: CinemaSubscriptionResult
+  public val payload: CinemaSubscriptionResult,
 ) : CinemaMessage, CinemaServerMessage
 
 /**
@@ -203,12 +203,12 @@ public data class CinemaMessageData(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageError::class
+  defaultImpl = CinemaMessageError::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageError(
   public val id: String,
-  public val payload: CinemaErrorResult
+  public val payload: CinemaErrorResult,
 ) : CinemaMessage, CinemaServerMessage
 
 /**
@@ -220,11 +220,11 @@ public data class CinemaMessageError(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageComplete::class
+  defaultImpl = CinemaMessageComplete::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageComplete @JsonCreator constructor(
-  public val id: String
+  public val id: String,
 ) : CinemaMessage, CinemaServerMessage
 
 /**
@@ -236,7 +236,7 @@ public data class CinemaMessageComplete @JsonCreator constructor(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = CinemaMessageConnectionKeepAlive::class
+  defaultImpl = CinemaMessageConnectionKeepAlive::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public class CinemaMessageConnectionKeepAlive : CinemaMessage, CinemaServerMessage

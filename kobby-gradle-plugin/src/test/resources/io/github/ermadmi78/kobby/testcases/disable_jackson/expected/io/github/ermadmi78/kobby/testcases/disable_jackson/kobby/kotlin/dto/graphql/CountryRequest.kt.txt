@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql
@@ -21,5 +21,5 @@ import kotlin.collections.Map
 public data class CountryRequest(
   public val query: String,
   public val variables: Map<String, Any?>? = null,
-  public val operationName: String? = null
+  public val operationName: String? = null,
 )

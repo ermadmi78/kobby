@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
@@ -39,7 +39,7 @@ import kotlin.text.isNotEmpty
 internal class MyMutationImpl(
   internal val __innerContext: GraphqlContext,
   internal val __innerProjection: MyMutationProjectionImpl,
-  internal val __innerDto: MyMutationDto
+  internal val __innerDto: MyMutationDto,
 ) : MyMutation {
   public override val insert: Boolean
     get() {
@@ -102,7 +102,7 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 

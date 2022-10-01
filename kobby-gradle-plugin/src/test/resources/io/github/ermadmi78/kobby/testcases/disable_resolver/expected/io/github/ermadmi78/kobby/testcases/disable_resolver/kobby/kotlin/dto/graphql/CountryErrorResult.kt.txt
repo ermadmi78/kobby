@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_resolver.kobby.kotlin.dto.graphql
@@ -20,5 +20,5 @@ import kotlin.collections.List
 
 public data class CountryErrorResult @JsonCreator constructor(
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
-  public val errors: List<CountryError>? = null
+  public val errors: List<CountryError>? = null,
 )

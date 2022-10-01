@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql
@@ -22,6 +22,6 @@ import kotlin.collections.joinToString
 public class GraphqlException(
   message: String,
   public val request: GraphqlRequest,
-  public val errors: List<GraphqlError>? = null
+  public val errors: List<GraphqlError>? = null,
 ) : RuntimeException(message + (errors?.joinToString(",\n  ", "\n  ", "\n") { it.toString() } ?:
     ""))

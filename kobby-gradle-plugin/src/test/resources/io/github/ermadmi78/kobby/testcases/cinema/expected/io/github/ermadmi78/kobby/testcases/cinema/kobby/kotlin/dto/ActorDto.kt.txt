@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
@@ -38,7 +38,7 @@ import kotlin.let
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "__typename",
-  defaultImpl = ActorDto::class
+  defaultImpl = ActorDto::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class ActorDto(
@@ -86,7 +86,7 @@ public data class ActorDto(
    * Find films of actor by title and genre.
    * Returns empty list if not found.
    */
-  public val films: List<FilmDto>? = null
+  public val films: List<FilmDto>? = null,
 ) : EntityDto, TaggableDto, NativeDto
 
 public fun ActorDto(block: ActorDtoBuilder.() -> Unit): ActorDto {

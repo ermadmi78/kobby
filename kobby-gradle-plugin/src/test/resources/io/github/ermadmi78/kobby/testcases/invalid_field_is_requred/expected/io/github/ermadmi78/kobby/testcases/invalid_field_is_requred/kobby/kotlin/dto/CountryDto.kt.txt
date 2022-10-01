@@ -8,7 +8,7 @@
   "ConstantConditionIf",
   "CanBeParameter",
   "unused",
-  "RemoveExplicitTypeArguments"
+  "RemoveExplicitTypeArguments",
 )
 
 package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.dto
@@ -25,7 +25,7 @@ import kotlin.let
 public data class CountryDto(
   public override val id: Long? = null,
   public override val name: String? = null,
-  public override val description: String? = null
+  public override val description: String? = null,
 ) : BaseDto
 
 public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto {
