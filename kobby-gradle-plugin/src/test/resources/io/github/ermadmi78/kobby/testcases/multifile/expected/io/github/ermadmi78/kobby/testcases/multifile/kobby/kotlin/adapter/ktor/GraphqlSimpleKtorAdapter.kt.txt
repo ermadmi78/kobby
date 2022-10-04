@@ -21,7 +21,9 @@ import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.Gr
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlQueryResult
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlRequest
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -48,8 +50,8 @@ public open class GraphqlSimpleKtorAdapter(
     listener(request)
 
     val httpHeaders: Map<String, String> = headers
-    val result = client.post<GraphqlQueryResult> {
-      body = request
+    val result = client.post {
+      setBody<GraphqlRequest>(request)
       contentType(ContentType.Application.Json)
       this@GraphqlSimpleKtorAdapter.url?.also {
         url(it)
@@ -58,6 +60,7 @@ public open class GraphqlSimpleKtorAdapter(
         headers[element.key] = element.value
       }
     }
+    .body<GraphqlQueryResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw GraphqlException("GraphQL query failed", request, it)
@@ -74,8 +77,8 @@ public open class GraphqlSimpleKtorAdapter(
     listener(request)
 
     val httpHeaders: Map<String, String> = headers
-    val result = client.post<GraphqlMutationResult> {
-      body = request
+    val result = client.post {
+      setBody<GraphqlRequest>(request)
       contentType(ContentType.Application.Json)
       this@GraphqlSimpleKtorAdapter.url?.also {
         url(it)
@@ -84,6 +87,7 @@ public open class GraphqlSimpleKtorAdapter(
         headers[element.key] = element.value
       }
     }
+    .body<GraphqlMutationResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw GraphqlException("GraphQL mutation failed", request, it)

@@ -14,7 +14,9 @@
 package my.root.kto
 
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -48,8 +50,8 @@ public open class KtoPrSimpleKtoPo(
     listener(request)
 
     val httpHeaders: Map<String, String> = headers
-    val result = client.post<GPrefQueryResultGPost> {
-      body = request
+    val result = client.post {
+      setBody<GPrefRequestGPost>(request)
       contentType(ContentType.Application.Json)
       this@KtoPrSimpleKtoPo.url?.also {
         url(it)
@@ -58,6 +60,7 @@ public open class KtoPrSimpleKtoPo(
         headers[element.key] = element.value
       }
     }
+    .body<GPrefQueryResultGPost>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw GPrefExceptionGPost("GraphQL query failed", request, it)
@@ -74,8 +77,8 @@ public open class KtoPrSimpleKtoPo(
     listener(request)
 
     val httpHeaders: Map<String, String> = headers
-    val result = client.post<GPrefMutationResultGPost> {
-      body = request
+    val result = client.post {
+      setBody<GPrefRequestGPost>(request)
       contentType(ContentType.Application.Json)
       this@KtoPrSimpleKtoPo.url?.also {
         url(it)
@@ -84,6 +87,7 @@ public open class KtoPrSimpleKtoPo(
         headers[element.key] = element.value
       }
     }
+    .body<GPrefMutationResultGPost>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw GPrefExceptionGPost("GraphQL mutation failed", request, it)

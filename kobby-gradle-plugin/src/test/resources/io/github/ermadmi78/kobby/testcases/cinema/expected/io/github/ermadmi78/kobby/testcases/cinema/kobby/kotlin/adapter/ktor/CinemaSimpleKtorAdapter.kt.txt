@@ -21,7 +21,9 @@ import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.Cinem
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaQueryResult
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaRequest
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -47,8 +49,8 @@ public open class CinemaSimpleKtorAdapter(
     listener(request)
 
     val httpHeaders: Map<String, String> = headers
-    val result = client.post<CinemaQueryResult> {
-      body = request
+    val result = client.post {
+      setBody<CinemaRequest>(request)
       contentType(ContentType.Application.Json)
       this@CinemaSimpleKtorAdapter.url?.also {
         url(it)
@@ -57,6 +59,7 @@ public open class CinemaSimpleKtorAdapter(
         headers[element.key] = element.value
       }
     }
+    .body<CinemaQueryResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw CinemaException("GraphQL query failed", request, it)
@@ -73,8 +76,8 @@ public open class CinemaSimpleKtorAdapter(
     listener(request)
 
     val httpHeaders: Map<String, String> = headers
-    val result = client.post<CinemaMutationResult> {
-      body = request
+    val result = client.post {
+      setBody<CinemaRequest>(request)
       contentType(ContentType.Application.Json)
       this@CinemaSimpleKtorAdapter.url?.also {
         url(it)
@@ -83,6 +86,7 @@ public open class CinemaSimpleKtorAdapter(
         headers[element.key] = element.value
       }
     }
+    .body<CinemaMutationResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw CinemaException("GraphQL mutation failed", request, it)

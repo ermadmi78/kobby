@@ -43,7 +43,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                             LambdaTypeName
                                 .get(returnType = MAP.parameterizedBy(STRING, STRING))
                                 .copy(suspending = true),
-                            CodeBlock.of("{·%T<%T,·%T>()·}", Kotlin.mapOf, STRING, STRING)
+                            CodeBlock.of("{·%M<%T,·%T>()·}", Kotlin.mapOf, STRING, STRING)
                         ) {
                             addModifiers(PROTECTED)
                         }
@@ -52,7 +52,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                         buildPropertyWithDefault(
                             ktor.simplePropertyHeaders,
                             MAP.parameterizedBy(STRING, STRING),
-                            CodeBlock.of("%T()", Kotlin.mapOf)
+                            CodeBlock.of("%M()", Kotlin.mapOf)
                         ) {
                             addModifiers(PROTECTED)
                         }
@@ -89,12 +89,6 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
 
     if (ktor.compositeEnabled) {
         files += buildFile(ktor.packageName, ktor.compositeName) {
-            val readResponseText = MemberName("io.ktor.client.statement", "readText")
-            addAliasedImport(readResponseText, "readResponseText")
-
-            val readFrameText = MemberName("io.ktor.http.cio.websocket", "readText")
-            addAliasedImport(readFrameText, "readFrameText")
-
             buildClass(ktor.compositeName) {
                 addModifiers(OPEN)
                 addSuperinterface(context.adapterClass)
@@ -139,7 +133,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                             LambdaTypeName
                                 .get(returnType = MAP.parameterizedBy(STRING, STRING))
                                 .copy(suspending = true),
-                            CodeBlock.of("{·%T<%T,·%T>()·}", Kotlin.mapOf, STRING, STRING)
+                            CodeBlock.of("{·%M<%T,·%T>()·}", Kotlin.mapOf, STRING, STRING)
                         ) {
                             addModifiers(PROTECTED)
                         }
@@ -148,7 +142,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                         buildPropertyWithDefault(
                             ktor.compositePropertyRequestHeaders,
                             MAP.parameterizedBy(STRING, STRING),
-                            CodeBlock.of("%T()", Kotlin.mapOf)
+                            CodeBlock.of("%M()", Kotlin.mapOf)
                         ) {
                             addModifiers(PROTECTED)
                         }
@@ -230,8 +224,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteQuery,
                     "query",
-                    dto.graphql.queryResultClass,
-                    readResponseText
+                    dto.graphql.queryResultClass
                 )
 
                 buildCompositeQueryOrMutationFun(
@@ -239,8 +232,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteMutation,
                     "mutation",
-                    dto.graphql.mutationResultClass,
-                    readResponseText
+                    dto.graphql.mutationResultClass
                 )
 
                 buildExecuteSubscriptionFun(schema, layout)
@@ -249,7 +241,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
 
                 buildFunction(ktor.compositeFunSendMessage) {
                     addModifiers(PROTECTED, OPEN, SUSPEND)
-                    receiver(ClassName("io.ktor.http.cio.websocket", "WebSocketSession"))
+                    receiver(ClassName("io.ktor.websocket", "WebSocketSession"))
                     buildParameter(ktor.compositePropertyMessage, dto.graphql.clientMessageClass)
 
                     addStatement(
@@ -257,14 +249,14 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                                 ".${context.mapperFunSerialize}(${ktor.compositePropertyMessage})"
                     )
                     addStatement(
-                        "%T(${ktor.compositeValContent})",
-                        ClassName("io.ktor.http.cio.websocket", "send")
+                        "%M(${ktor.compositeValContent})",
+                        MemberName("io.ktor.websocket", "send")
                     )
                 }
 
                 buildFunction(ktor.compositeFunReceiveMessage) {
                     addModifiers(PROTECTED, OPEN, SUSPEND)
-                    receiver(ClassName("io.ktor.http.cio.websocket", "WebSocketSession"))
+                    receiver(ClassName("io.ktor.websocket", "WebSocketSession"))
                     returns(dto.graphql.serverMessageClass)
 
                     controlFlow(
@@ -285,8 +277,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     addStatement("")
                     addStatement(
                         "val·${ktor.compositeValContent}·=·(${ktor.compositeValMessage}·as·%T).%M()",
-                        ClassName("io.ktor.http.cio.websocket", "Frame", "Text"),
-                        readFrameText
+                        ClassName("io.ktor.websocket", "Frame", "Text"),
+                        MemberName("io.ktor.websocket", "readText")
                     )
                     statement(dto.graphql.serverMessageClass) {
                         "return·${ktor.compositePropertyMapper}" +
@@ -327,27 +319,35 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
             MAP.parameterizedBy(STRING, STRING)
         )
         controlFlow(
-            "val·${ktor.simpleValResult}·=·${ktor.simplePropertyClient}.%T<%T>",
-            ClassName("io.ktor.client.request", "post"),
-            graphQlResultClass
+            "val·${ktor.simpleValResult}·=·${ktor.simplePropertyClient}.%M",
+            MemberName("io.ktor.client.request", "post")
         ) {
-            addStatement("body = ${ktor.simpleValRequest}")
             addStatement(
-                "%T(%T.Application.Json)",
-                ClassName("io.ktor.http", "contentType"),
+                "%M<%T>(${ktor.simpleValRequest})",
+                MemberName("io.ktor.client.request", "setBody"),
+                dto.graphql.requestClass
+            )
+            addStatement(
+                "%M(%T.Application.Json)",
+                MemberName("io.ktor.http", "contentType"),
                 ClassName("io.ktor.http", "ContentType")
             )
-            controlFlow("this@%T.url?.%T", ktor.simpleClass, Kotlin.also) {
-                addStatement("%T(it)", ClassName("io.ktor.client.request", "url"))
+            controlFlow("this@%T.url?.%M", ktor.simpleClass, Kotlin.also) {
+                addStatement("%M(it)", MemberName("io.ktor.client.request", "url"))
             }
-            controlFlow("for (element·in·${ktor.simpleValHeaders})") {
+            controlFlow("for·(element·in·${ktor.simpleValHeaders})") {
                 addStatement("headers[element.key]·=·element.value")
             }
         }
+        addStatement(
+            ".%M<%T>()",
+            MemberName("io.ktor.client.call", "body"),
+            graphQlResultClass
+        )
         addStatement("")
 
         controlFlow(
-            "${ktor.simpleValResult}.errors?.%T·{ it.%T() }?.%T",
+            "${ktor.simpleValResult}.errors?.%M·{ it.%M() }?.%M",
             Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
         ) {
             addStatement(
@@ -369,8 +369,7 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
     layout: KotlinLayout,
     name: String,
     operation: String,
-    graphQlResultClass: TypeName,
-    readResponseText: MemberName
+    graphQlResultClass: TypeName
 ) = with(layout) {
     buildFunction(name) {
         addModifiers(OVERRIDE)
@@ -393,26 +392,27 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
             MAP.parameterizedBy(STRING, STRING)
         )
         controlFlow(
-            "val·${ktor.compositeValContent}·=·${ktor.compositePropertyClient}.%T<%T>",
-            ClassName("io.ktor.client.request", "post"),
-            ClassName("io.ktor.client.statement", "HttpResponse")
+            "val·${ktor.compositeValContent}·=·${ktor.compositePropertyClient}.%M",
+            MemberName("io.ktor.client.request", "post")
         ) {
-            statement {
-                "body = ${ktor.compositePropertyMapper}.${context.mapperFunSerialize}(${ktor.compositeValRequest})"
-            }
             addStatement(
-                "%T(%T.Application.Json)",
-                ClassName("io.ktor.http", "contentType"),
+                "%M<%T>(${ktor.compositePropertyMapper}.${context.mapperFunSerialize}(${ktor.compositeValRequest}))",
+                MemberName("io.ktor.client.request", "setBody"),
+                STRING
+            )
+            addStatement(
+                "%M(%T.Application.Json)",
+                MemberName("io.ktor.http", "contentType"),
                 ClassName("io.ktor.http", "ContentType")
             )
-            statement(ClassName("io.ktor.client.request", "url")) {
-                "%T(${ktor.compositePropertyHttpUrl})"
+            statement(MemberName("io.ktor.client.request", "url")) {
+                "%M(${ktor.compositePropertyHttpUrl})"
             }
-            controlFlow("for (element·in·${ktor.compositeValHeaders})") {
+            controlFlow("for·(element·in·${ktor.compositeValHeaders})") {
                 addStatement("headers[element.key]·=·element.value")
             }
         }
-        addStatement(".%M()", readResponseText)
+        addStatement(".%M()", MemberName("io.ktor.client.statement", "bodyAsText"))
         addStatement("")
 
         statement(graphQlResultClass) {
@@ -423,7 +423,7 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
         addStatement("")
 
         controlFlow(
-            "${ktor.compositeValResult}.errors?.%T·{ it.%T() }?.%T",
+            "${ktor.compositeValResult}.errors?.%M·{ it.%M() }?.%M",
             Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
         ) {
             addStatement(
@@ -462,12 +462,12 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
             MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
         )
         controlFlow(
-            "${ktor.compositePropertyClient}.%T(\n⇥${ktor.compositePropertyWebSocketUrl},\n" +
+            "${ktor.compositePropertyClient}.%M(\n⇥${ktor.compositePropertyWebSocketUrl},\n" +
                     "request = {\n⇥" +
                     ktor.compositeValHeaders +
-                    ".%T·{·(key,·value)·->\n⇥headers[key] = value⇤\n}" +
+                    ".%M·{·(key,·value)·->\n⇥headers[key] = value⇤\n}" +
                     "⇤\n}⇤\n)",
-            ClassName("io.ktor.client.features.websocket", "ws"),
+            MemberName("io.ktor.client.plugins.websocket", "webSocket"),
             Kotlin.forEach
         ) {
             statement(MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
@@ -479,7 +479,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
                 Kotlin.contains
             ) {
                 controlFlow("if (${ktor.compositeValInitPayload}·==·null)") {
-                    addStatement("${ktor.compositeValInitPayload} = %T()", Kotlin.mapOf)
+                    addStatement("${ktor.compositeValInitPayload} = %M()", Kotlin.mapOf)
                 }
                 addStatement("")
 
@@ -495,8 +495,8 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
                     )
                     statement(Kotlin.plus, Kotlin.mapOf, Kotlin.to) {
                         "${ktor.compositeValInitPayload} %M= " +
-                                "%T(${ktor.compositePropertyWebSocketTokenHeader} " +
-                                "%T ${ktor.compositeValHeaders}" +
+                                "%M(${ktor.compositePropertyWebSocketTokenHeader} " +
+                                "%M ${ktor.compositeValHeaders}" +
                                 "[${ktor.compositePropertyHttpTokenHeader}])"
                     }
                 }
@@ -538,7 +538,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
 
     buildFunction(ktor.compositeFunExecuteSubscriptionImpl) {
         addModifiers(PROTECTED, OPEN, SUSPEND)
-        receiver(ClassName("io.ktor.http.cio.websocket", "WebSocketSession"))
+        receiver(ClassName("io.ktor.websocket", "WebSocketSession"))
         buildParameter(initPayload, MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
         buildParameter(request, graphql.requestClass)
         buildParameter(block, schema.receiverSubscriptionDtoLambda)
@@ -584,12 +584,12 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                 controlFlow("while·(true)") {
                     controlFlow("when·(val·$reply·=·$receiveMessage())") {
                         controlFlow("is·%T·->", message(GQL_DATA)) {
-                            addStatement("%T($reply.id·==·$subscriptionId)", Kotlin.require)
+                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
                             addStatement("")
 
                             addStatement("val·$result·=·$reply.payload")
                             controlFlow(
-                                "$result.errors?.%T·{ it.%T() }?.%T",
+                                "$result.errors?.%M·{ it.%M() }?.%M",
                                 Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
                             ) {
                                 addStatement(
@@ -607,7 +607,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                         }
 
                         controlFlow("is·%T·->", message(GQL_ERROR)) {
-                            addStatement("%T($reply.id·==·$subscriptionId)", Kotlin.require)
+                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
                             addStatement(
                                 "throw·%T(%S, $request, $reply.payload.errors)",
                                 graphql.exceptionClass,
@@ -616,7 +616,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                         }
 
                         controlFlow("is·%T·->", message(GQL_COMPLETE)) {
-                            addStatement("%T($reply.id·==·$subscriptionId)", Kotlin.require)
+                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
                             addStatement(
                                 "throw·%T(%S)",
                                 ClassName(
@@ -647,7 +647,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                     ClassName("kotlin", "Suppress"),
                     "UNREACHABLE_CODE"
                 )
-                addStatement("%T(%S)", Kotlin.error, "Invalid algorithm")
+                addStatement("%M(%S)", Kotlin.error, "Invalid algorithm")
             }
             addStatement("")
 
@@ -676,16 +676,16 @@ private fun FunSpecBuilder.buildSendMessage(
 }
 
 private object Kotlin {
-    val also = ClassName("kotlin", "also")
-    val takeIf = ClassName("kotlin", "takeIf")
-    val let = ClassName("kotlin", "let")
-    val to = ClassName("kotlin", "to")
-    val error = ClassName("kotlin", "error")
-    val require = ClassName("kotlin", "require")
+    val also = MemberName("kotlin", "also")
+    val takeIf = MemberName("kotlin", "takeIf")
+    val let = MemberName("kotlin", "let")
+    val to = MemberName("kotlin", "to")
+    val error = MemberName("kotlin", "error")
+    val require = MemberName("kotlin", "require")
 
-    val isNotEmpty = ClassName("kotlin.collections", "isNotEmpty")
-    val forEach = ClassName("kotlin.collections", "forEach")
-    val mapOf = ClassName("kotlin.collections", "mapOf")
+    val isNotEmpty = MemberName("kotlin.collections", "isNotEmpty")
+    val forEach = MemberName("kotlin.collections", "forEach")
+    val mapOf = MemberName("kotlin.collections", "mapOf")
 
     val contains = MemberName("kotlin.collections", KOperator.CONTAINS)
     val notContains = MemberName("kotlin.collections", KOperator.NOT_CONTAINS)

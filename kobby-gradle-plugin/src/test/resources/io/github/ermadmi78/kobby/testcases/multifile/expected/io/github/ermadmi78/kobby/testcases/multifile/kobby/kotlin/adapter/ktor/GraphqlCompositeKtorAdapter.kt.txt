@@ -36,15 +36,17 @@ import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.Gr
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlRequest
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlServerMessage
 import io.ktor.client.HttpClient
-import io.ktor.client.features.websocket.ws
+import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
-import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
-import io.ktor.http.cio.websocket.Frame
-import io.ktor.http.cio.websocket.WebSocketSession
-import io.ktor.http.cio.websocket.send
 import io.ktor.http.contentType
+import io.ktor.websocket.Frame
+import io.ktor.websocket.WebSocketSession
+import io.ktor.websocket.readText
+import io.ktor.websocket.send
 import kotlin.Any
 import kotlin.Long
 import kotlin.String
@@ -64,8 +66,6 @@ import kotlin.require
 import kotlin.takeIf
 import kotlin.to
 import kotlinx.coroutines.withTimeout
-import io.ktor.client.statement.readText as readResponseText
-import io.ktor.http.cio.websocket.readText as readFrameText
 
 public open class GraphqlCompositeKtorAdapter(
   protected val client: HttpClient,
@@ -86,15 +86,15 @@ public open class GraphqlCompositeKtorAdapter(
     listener(request)
 
     val httpHeaders: Map<String, String> = requestHeaders
-    val content = client.post<HttpResponse> {
-      body = mapper.serialize(request)
+    val content = client.post {
+      setBody<String>(mapper.serialize(request))
       contentType(ContentType.Application.Json)
       url(httpUrl)
       for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }
-    .readResponseText()
+    .bodyAsText()
 
     val result = mapper.deserialize(content, GraphqlQueryResult::class)
 
@@ -113,15 +113,15 @@ public open class GraphqlCompositeKtorAdapter(
     listener(request)
 
     val httpHeaders: Map<String, String> = requestHeaders
-    val content = client.post<HttpResponse> {
-      body = mapper.serialize(request)
+    val content = client.post {
+      setBody<String>(mapper.serialize(request))
       contentType(ContentType.Application.Json)
       url(httpUrl)
       for (element in httpHeaders) {
         headers[element.key] = element.value
       }
     }
-    .readResponseText()
+    .bodyAsText()
 
     val result = mapper.deserialize(content, GraphqlMutationResult::class)
 
@@ -141,7 +141,7 @@ public open class GraphqlCompositeKtorAdapter(
   ): Unit {
     val httpHeaders: Map<String, String> = requestHeaders
     val payload: Map<String, Any?>? = subscriptionPayload
-    client.ws(
+    client.webSocket(
       webSocketUrl,
       request = {
         httpHeaders.forEach { (key, value) ->
@@ -259,7 +259,7 @@ public open class GraphqlCompositeKtorAdapter(
       }
     }
 
-    val content = (message as Frame.Text).readFrameText()
+    val content = (message as Frame.Text).readText()
     return mapper.deserialize(content, GraphqlServerMessage::class)
   }
 }

@@ -21,7 +21,9 @@ import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.grap
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryQueryResult
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryRequest
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -47,8 +49,8 @@ public open class CountrySimpleKtorAdapter(
     listener(request)
 
     val httpHeaders: Map<String, String> = headers
-    val result = client.post<CountryQueryResult> {
-      body = request
+    val result = client.post {
+      setBody<CountryRequest>(request)
       contentType(ContentType.Application.Json)
       this@CountrySimpleKtorAdapter.url?.also {
         url(it)
@@ -57,6 +59,7 @@ public open class CountrySimpleKtorAdapter(
         headers[element.key] = element.value
       }
     }
+    .body<CountryQueryResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw CountryException("GraphQL query failed", request, it)
@@ -73,8 +76,8 @@ public open class CountrySimpleKtorAdapter(
     listener(request)
 
     val httpHeaders: Map<String, String> = headers
-    val result = client.post<CountryMutationResult> {
-      body = request
+    val result = client.post {
+      setBody<CountryRequest>(request)
       contentType(ContentType.Application.Json)
       this@CountrySimpleKtorAdapter.url?.also {
         url(it)
@@ -83,6 +86,7 @@ public open class CountrySimpleKtorAdapter(
         headers[element.key] = element.value
       }
     }
+    .body<CountryMutationResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw CountryException("GraphQL mutation failed", request, it)
