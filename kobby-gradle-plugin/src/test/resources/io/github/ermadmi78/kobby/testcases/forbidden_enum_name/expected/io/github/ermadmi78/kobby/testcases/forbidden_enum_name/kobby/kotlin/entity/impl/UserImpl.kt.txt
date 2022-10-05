@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.impl
@@ -68,7 +70,7 @@ internal class UserImpl(
       return __innerDto.mischievous
     }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("User").append('(')
 
@@ -131,7 +133,7 @@ internal open class UserProjectionImpl : UserProjection {
     __innerMischievous2 = true
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: UserProjection): Unit {
     if ("id" !in ignore && __innerId0) {
       __projection.id()
@@ -144,7 +146,10 @@ internal open class UserProjectionImpl : UserProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
     header: StringBuilder,

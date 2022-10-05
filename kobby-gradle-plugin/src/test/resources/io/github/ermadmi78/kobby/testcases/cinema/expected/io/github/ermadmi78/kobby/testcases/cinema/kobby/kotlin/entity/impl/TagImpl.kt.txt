@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
@@ -49,7 +51,7 @@ internal class TagImpl(
       return __innerDto.`value`!!
     }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Tag").append('(')
 
@@ -86,14 +88,17 @@ internal open class TagProjectionImpl : TagProjection {
     __innerValue0 = true
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: TagProjection): Unit {
     if ("value" !in ignore && __innerValue0) {
       __projection.`value`()
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
     header: StringBuilder,

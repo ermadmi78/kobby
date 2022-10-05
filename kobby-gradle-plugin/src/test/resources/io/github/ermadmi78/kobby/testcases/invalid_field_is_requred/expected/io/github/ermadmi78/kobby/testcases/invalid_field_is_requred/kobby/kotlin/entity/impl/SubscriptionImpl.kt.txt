@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.entity.impl
@@ -37,7 +39,7 @@ internal class SubscriptionImpl(
   internal val __innerProjection: SubscriptionProjectionImpl,
   internal val __innerDto: SubscriptionDto,
 ) : Subscription {
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Subscription").append('(')
     append(')')
@@ -58,12 +60,15 @@ internal class SubscriptionImpl(
 }
 
 internal open class SubscriptionProjectionImpl : SubscriptionProjection {
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection):
       Unit {
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
     header: StringBuilder,

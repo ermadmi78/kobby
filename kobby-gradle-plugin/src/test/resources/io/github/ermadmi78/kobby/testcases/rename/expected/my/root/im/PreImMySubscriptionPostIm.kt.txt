@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package my.root.im
@@ -71,7 +73,7 @@ public class PreImMySubscriptionPostIm(
   }
 
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("MySubscription").append('(')
 
@@ -143,7 +145,7 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
     innerActorCreated2CountryIdPin = countryId
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMySubscriptionPostPr):
       Unit {
     if ("countryCreated" !in ignore && innerCountryCreated0Pin != null) {
@@ -166,24 +168,16 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  public fun _innerBuildPin(
+  /**
+   * Projection for field: filmCreated
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildFilmCreated1Pin(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: countryCreated
-    if ("countryCreated" !in ignore && innerCountryCreated0Pin != null) {
-      body.append(' ').append("countryCreated")
-
-      // Build nested projection of Country
-      innerCountryCreated0Pin!!._innerBuildPin(setOf(), header, body, arguments)
-    }
-
-    // Field: filmCreated
     if ("filmCreated" !in ignore && innerFilmCreated1Pin != null) {
       body.append(' ').append("filmCreated")
       var counter = 0
@@ -214,8 +208,18 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
       // Build nested projection of Film
       innerFilmCreated1Pin!!._innerBuildPin(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: actorCreated
+  /**
+   * Projection for field: actorCreated
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildActorCreated2Pin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("actorCreated" !in ignore && innerActorCreated2Pin != null) {
       body.append(' ').append("actorCreated")
       var counter = 0
@@ -246,6 +250,33 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
       // Build nested projection of Actor
       innerActorCreated2Pin!!._innerBuildPin(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public fun _innerBuildPin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: countryCreated
+    if ("countryCreated" !in ignore && innerCountryCreated0Pin != null) {
+      body.append(' ').append("countryCreated")
+
+      // Build nested projection of Country
+      innerCountryCreated0Pin!!._innerBuildPin(setOf(), header, body, arguments)
+    }
+
+    // Field: filmCreated
+    __innerBuildFilmCreated1Pin(ignore, header, body, arguments)
+
+    // Field: actorCreated
+    __innerBuildActorCreated2Pin(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }

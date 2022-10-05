@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl
@@ -60,7 +62,7 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
         ___inner__onCountry)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
       __projection: EntityQualifiedProjection): Unit {
     __projection.__onFilm {
@@ -74,7 +76,10 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
     header: StringBuilder,

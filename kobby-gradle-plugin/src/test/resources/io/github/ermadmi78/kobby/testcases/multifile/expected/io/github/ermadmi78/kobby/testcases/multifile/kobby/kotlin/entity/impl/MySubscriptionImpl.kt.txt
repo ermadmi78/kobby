@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
@@ -50,7 +52,7 @@ internal class MySubscriptionImpl(
   }
 
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("MySubscription").append('(')
 
@@ -90,7 +92,7 @@ internal open class MySubscriptionProjectionImpl : MySubscriptionProjection {
     __innerOnInsert0Pattern = pattern
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
       __projection: MySubscriptionProjection): Unit {
     if ("onInsert" !in ignore && __innerOnInsert0 != null) {
@@ -100,16 +102,16 @@ internal open class MySubscriptionProjectionImpl : MySubscriptionProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: onInsert
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildOnInsert0(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: onInsert
     if ("onInsert" !in ignore && __innerOnInsert0 != null) {
       body.append(' ').append("onInsert")
       var counter = 0
@@ -140,6 +142,22 @@ internal open class MySubscriptionProjectionImpl : MySubscriptionProjection {
       // Build nested projection of MyEvent
       __innerOnInsert0!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: onInsert
+    ____innerBuildOnInsert0(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }

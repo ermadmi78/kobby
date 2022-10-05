@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.impl
@@ -49,7 +51,7 @@ internal class SubscriptionImpl(
   }
 
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Subscription").append('(')
 
@@ -86,7 +88,7 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
     __innerCountryCreated0 = CountryProjectionImpl().apply(__projection)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection):
       Unit {
     if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
@@ -97,7 +99,10 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
     header: StringBuilder,

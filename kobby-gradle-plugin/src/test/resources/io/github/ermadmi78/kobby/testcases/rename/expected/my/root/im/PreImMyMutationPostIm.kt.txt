@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package my.root.im
@@ -98,7 +100,7 @@ public class PreImMyMutationPostIm(
       return innerDtoPin.tagActor!!
     }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("MyMutation").append('(')
 
@@ -243,7 +245,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
     innerTagActor5TagValuePin = tagValue
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMyMutationPostPr):
       Unit {
     if ("createCountry" !in ignore && innerCreateCountry0Pin != null) {
@@ -276,16 +278,16 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  public fun _innerBuildPin(
+  /**
+   * Projection for field: createCountry
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildCreateCountry0Pin(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: createCountry
     if ("createCountry" !in ignore && innerCreateCountry0Pin != null) {
       body.append(' ').append("createCountry")
       var counter = 0
@@ -316,8 +318,18 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
       // Build nested projection of Country
       innerCreateCountry0Pin!!._innerBuildPin(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: createFilm
+  /**
+   * Projection for field: createFilm
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildCreateFilm1Pin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("createFilm" !in ignore && innerCreateFilm1Pin != null) {
       body.append(' ').append("createFilm")
       var counter = 0
@@ -363,8 +375,18 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
       // Build nested projection of Film
       innerCreateFilm1Pin!!._innerBuildPin(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: createActor
+  /**
+   * Projection for field: createActor
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildCreateActor2Pin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("createActor" !in ignore && innerCreateActor2Pin != null) {
       body.append(' ').append("createActor")
       var counter = 0
@@ -410,8 +432,18 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
       // Build nested projection of Actor
       innerCreateActor2Pin!!._innerBuildPin(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: associate
+  /**
+   * Projection for field: associate
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildAssociate3Pin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("associate" !in ignore && innerAssociate3Pin) {
       body.append(' ').append("associate")
       var counter = 0
@@ -454,8 +486,18 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
         body.append(')')
       }
     }
+  }
 
-    // Field: tagFilm
+  /**
+   * Projection for field: tagFilm
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildTagFilm4Pin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("tagFilm" !in ignore && innerTagFilm4Pin) {
       body.append(' ').append("tagFilm")
       var counter = 0
@@ -498,8 +540,18 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
         body.append(')')
       }
     }
+  }
 
-    // Field: tagActor
+  /**
+   * Projection for field: tagActor
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildTagActor5Pin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("tagActor" !in ignore && innerTagActor5Pin) {
       body.append(' ').append("tagActor")
       var counter = 0
@@ -542,6 +594,37 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
         body.append(')')
       }
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public fun _innerBuildPin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: createCountry
+    __innerBuildCreateCountry0Pin(ignore, header, body, arguments)
+
+    // Field: createFilm
+    __innerBuildCreateFilm1Pin(ignore, header, body, arguments)
+
+    // Field: createActor
+    __innerBuildCreateActor2Pin(ignore, header, body, arguments)
+
+    // Field: associate
+    __innerBuildAssociate3Pin(ignore, header, body, arguments)
+
+    // Field: tagFilm
+    __innerBuildTagFilm4Pin(ignore, header, body, arguments)
+
+    // Field: tagActor
+    __innerBuildTagActor5Pin(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }

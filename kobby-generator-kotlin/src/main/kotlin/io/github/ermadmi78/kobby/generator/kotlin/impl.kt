@@ -3,12 +3,9 @@ package io.github.ermadmi78.kobby.generator.kotlin
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.KModifier.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import io.github.ermadmi78.kobby.model.KobbyNode
+import io.github.ermadmi78.kobby.model.*
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.INTERFACE
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.UNION
-import io.github.ermadmi78.kobby.model.KobbySchema
-import io.github.ermadmi78.kobby.model.KobbyType
-import io.github.ermadmi78.kobby.model.invalidSchema
 
 /**
  * Created on 27.01.2021
@@ -583,6 +580,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         }
 
         buildFunction(impl.buildFunName) {
+            addKdoc("Projection builder function")
             suppressUnused()
             if (impl.internal) {
                 addModifiers(INTERNAL)
@@ -601,83 +599,23 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
 
             addStatement("")
             node.fields { field ->
-                val fieldCondition = when {
-                    field.isRequired -> "%S·!in·$ignore"
-                    field.innerIsBoolean -> "%S·!in·$ignore && ${field.innerName}"
-                    else -> "%S·!in·$ignore && ${field.innerName}·!=·null"
-                }
                 addComment("Field: ${field.name}")
-                ifFlow(fieldCondition, field.name) {
-                    buildAppendChain(body) { spaceAppendLiteral(field.name) }
+                if (field.arguments.isEmpty()) {
+                    writeFieldProjectionBuilderCode(field, layout)
+                } else {
+                    val projectionBuilderFun = field.projectionBuilderFunName
+                    this@buildClass.buildFunction(projectionBuilderFun) {
+                        addKdoc("Projection for field: ${field.name}")
+                        suppressUnused()
+                        addModifiers(PRIVATE)
+                        buildParameter(buildFunArgIgnore)
+                        buildParameter(buildFunArgHeader)
+                        buildParameter(buildFunArgBody)
+                        buildParameter(buildFunArgArguments)
 
-                    // build arguments
-                    if (field.arguments.isNotEmpty()) {
-                        addStatement("var·counter·=·0")
-                        val addBracketsExpression: String = field.arguments.values.let { args ->
-                            if (args.any { !it.isInitialized }) "true"
-                            else args.asSequence()
-                                .map { arg ->
-                                    require(arg.isInitialized) { "Invalid algorithm" }
-                                    if (arg.isSelection) "${field.innerName}!!.${arg.name.escape()}" else arg.innerName
-                                }
-                                .joinToString(" || ") { "$it·!=·null" }
-                        }
-                        addStatement("val·addBrackets·=·$addBracketsExpression")
-                        ifFlow("addBrackets") {
-                            buildAppendChain(body) { appendLiteral('(') }
-                        }
-                        addStatement("")
-                        field.arguments { arg ->
-                            val argName =
-                                if (arg.isSelection) "${field.innerName}!!.${arg.name.escape()}" else arg.innerName
-                            addComment("Argument: ${field.name}.${arg.name}")
-                            ifFlow(if (arg.isInitialized) "$argName·!=·null" else "true") {
-                                ifFlow("counter++·>·0") {
-                                    buildAppendChain(body) { appendLiteral(", ") }
-                                }
-                                addStatement("val·arg·=·%S·+·$arguments.size", argPrefix)
-                                addStatement("$arguments[arg] = $argName!!")
-                                buildAppendChain(body) {
-                                    appendLiteral(arg.name)
-                                    appendLiteral(": ")
-                                    appendLiteral('$')
-                                    appendExactly("arg")
-                                }
-
-                                addStatement("")
-                                ifFlow(
-                                    "$header.%M()",
-                                    MemberName("kotlin.text", "isNotEmpty")
-                                ) {
-                                    buildAppendChain(header) { appendLiteral(", ") }
-                                }
-                                buildAppendChain(header) {
-                                    appendLiteral('$')
-                                    appendExactly("arg")
-                                    appendLiteral(": ")
-                                    appendLiteral(arg.type.sourceName)
-                                }
-                            }
-                            addStatement("")
-                        }
-                        ifFlow("addBrackets") {
-                            buildAppendChain(body) { appendLiteral(')') }
-                        }
+                        writeFieldProjectionBuilderCode(field, layout)
                     }
-
-                    // build field projection
-                    if (field.type.hasProjection) {
-                        addStatement("")
-                        addComment("Build nested projection of ${field.type.node.name}")
-                        addStatement(
-                            "${field.innerName}!!.${impl.buildFunName}(" +
-                                    "%T(), " +
-                                    "$header, " +
-                                    "$body, " +
-                                    "$arguments)",
-                            ClassName("kotlin.collections", "setOf")
-                        )
-                    }
+                    addStatement("$projectionBuilderFun($ignore,·$header,·$body,·$arguments)")
                 }
                 addStatement("")
             }
@@ -723,6 +661,91 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             }
 
             buildAppendChain(body) { spaceAppendLiteral('}') }
+        }
+    }
+}
+
+private fun FunSpecBuilder.writeFieldProjectionBuilderCode(field: KobbyField, layout: KotlinLayout) = with(layout) {
+    val ignore = buildFunArgIgnore.first
+    val header = buildFunArgHeader.first
+    val body = buildFunArgBody.first
+    val arguments = buildFunArgArguments.first
+
+    val fieldCondition = when {
+        field.isRequired -> "%S·!in·$ignore"
+        field.innerIsBoolean -> "%S·!in·$ignore && ${field.innerName}"
+        else -> "%S·!in·$ignore && ${field.innerName}·!=·null"
+    }
+    ifFlow(fieldCondition, field.name) {
+        buildAppendChain(body) { spaceAppendLiteral(field.name) }
+
+        // build arguments
+        if (field.arguments.isNotEmpty()) {
+            addStatement("var·counter·=·0")
+            val addBracketsExpression: String = field.arguments.values.let { args ->
+                if (args.any { !it.isInitialized }) "true"
+                else args.asSequence()
+                    .map { arg ->
+                        require(arg.isInitialized) { "Invalid algorithm" }
+                        if (arg.isSelection) "${field.innerName}!!.${arg.name.escape()}" else arg.innerName
+                    }
+                    .joinToString(" || ") { "$it·!=·null" }
+            }
+            addStatement("val·addBrackets·=·$addBracketsExpression")
+            ifFlow("addBrackets") {
+                buildAppendChain(body) { appendLiteral('(') }
+            }
+            addStatement("")
+            field.arguments { arg ->
+                val argName =
+                    if (arg.isSelection) "${field.innerName}!!.${arg.name.escape()}" else arg.innerName
+                addComment("Argument: ${field.name}.${arg.name}")
+                ifFlow(if (arg.isInitialized) "$argName·!=·null" else "true") {
+                    ifFlow("counter++·>·0") {
+                        buildAppendChain(body) { appendLiteral(", ") }
+                    }
+                    addStatement("val·arg·=·%S·+·$arguments.size", argPrefix)
+                    addStatement("$arguments[arg] = $argName!!")
+                    buildAppendChain(body) {
+                        appendLiteral(arg.name)
+                        appendLiteral(": ")
+                        appendLiteral('$')
+                        appendExactly("arg")
+                    }
+
+                    addStatement("")
+                    ifFlow(
+                        "$header.%M()",
+                        MemberName("kotlin.text", "isNotEmpty")
+                    ) {
+                        buildAppendChain(header) { appendLiteral(", ") }
+                    }
+                    buildAppendChain(header) {
+                        appendLiteral('$')
+                        appendExactly("arg")
+                        appendLiteral(": ")
+                        appendLiteral(arg.type.sourceName)
+                    }
+                }
+                addStatement("")
+            }
+            ifFlow("addBrackets") {
+                buildAppendChain(body) { appendLiteral(')') }
+            }
+        }
+
+        // build field projection
+        if (field.type.hasProjection) {
+            addStatement("")
+            addComment("Build nested projection of ${field.type.node.name}")
+            addStatement(
+                "${field.innerName}!!.${impl.buildFunName}(" +
+                        "%T(), " +
+                        "$header, " +
+                        "$body, " +
+                        "$arguments)",
+                ClassName("kotlin.collections", "setOf")
+            )
         }
     }
 }

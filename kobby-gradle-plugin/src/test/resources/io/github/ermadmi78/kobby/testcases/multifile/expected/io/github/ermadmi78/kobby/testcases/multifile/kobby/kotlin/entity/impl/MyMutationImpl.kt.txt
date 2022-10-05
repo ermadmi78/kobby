@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
@@ -49,7 +51,7 @@ internal class MyMutationImpl(
       return __innerDto.insert!!
     }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("MyMutation").append('(')
 
@@ -89,7 +91,7 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
     __innerInsert0Data = `data`
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MyMutationProjection):
       Unit {
     if ("insert" !in ignore && __innerInsert0) {
@@ -97,16 +99,16 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: insert
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildInsert0(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: insert
     if ("insert" !in ignore && __innerInsert0) {
       body.append(' ').append("insert")
       var counter = 0
@@ -134,6 +136,22 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
         body.append(')')
       }
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: insert
+    ____innerBuildInsert0(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }

@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
@@ -146,7 +148,7 @@ internal class CountryImpl(
 
   public override fun hashCode(): Int = __innerDto.id?.hashCode() ?: 0
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Country").append('(')
 
@@ -291,7 +293,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     __innerNative8 = NativeQualifiedProjectionImpl().apply(__projection)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection):
       Unit {
     if ("fields" !in ignore && __innerFields1 != null) {
@@ -336,21 +338,16 @@ internal open class CountryProjectionImpl : CountryProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: fields
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFields1(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: id
-    if ("id" !in ignore) {
-      body.append(' ').append("id")
-    }
-
-    // Field: fields
     if ("fields" !in ignore && __innerFields1 != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -378,13 +375,18 @@ internal open class CountryProjectionImpl : CountryProjection {
         body.append(')')
       }
     }
+  }
 
-    // Field: name
-    if ("name" !in ignore && __innerName2) {
-      body.append(' ').append("name")
-    }
-
-    // Field: film
+  /**
+   * Projection for field: film
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFilm3(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("film" !in ignore && __innerFilm3 != null) {
       body.append(' ').append("film")
       var counter = 0
@@ -415,8 +417,18 @@ internal open class CountryProjectionImpl : CountryProjection {
       // Build nested projection of Film
       __innerFilm3!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: films
+  /**
+   * Projection for field: films
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFilms4(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("films" !in ignore && __innerFilms4 != null) {
       body.append(' ').append("films")
       var counter = 0
@@ -493,8 +505,18 @@ internal open class CountryProjectionImpl : CountryProjection {
       // Build nested projection of Film
       __innerFilms4!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: actor
+  /**
+   * Projection for field: actor
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildActor5(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("actor" !in ignore && __innerActor5 != null) {
       body.append(' ').append("actor")
       var counter = 0
@@ -525,8 +547,18 @@ internal open class CountryProjectionImpl : CountryProjection {
       // Build nested projection of Actor
       __innerActor5!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: actors
+  /**
+   * Projection for field: actors
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildActors6(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("actors" !in ignore && __innerActors6 != null) {
       body.append(' ').append("actors")
       var counter = 0
@@ -650,8 +682,18 @@ internal open class CountryProjectionImpl : CountryProjection {
       // Build nested projection of Actor
       __innerActors6!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: taggable
+  /**
+   * Projection for field: taggable
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildTaggable7(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("taggable" !in ignore && __innerTaggable7 != null) {
       body.append(' ').append("taggable")
       var counter = 0
@@ -682,6 +724,47 @@ internal open class CountryProjectionImpl : CountryProjection {
       // Build nested projection of Taggable
       __innerTaggable7!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore) {
+      body.append(' ').append("id")
+    }
+
+    // Field: fields
+    ____innerBuildFields1(ignore, header, body, arguments)
+
+    // Field: name
+    if ("name" !in ignore && __innerName2) {
+      body.append(' ').append("name")
+    }
+
+    // Field: film
+    ____innerBuildFilm3(ignore, header, body, arguments)
+
+    // Field: films
+    ____innerBuildFilms4(ignore, header, body, arguments)
+
+    // Field: actor
+    ____innerBuildActor5(ignore, header, body, arguments)
+
+    // Field: actors
+    ____innerBuildActors6(ignore, header, body, arguments)
+
+    // Field: taggable
+    ____innerBuildTaggable7(ignore, header, body, arguments)
 
     // Field: native
     if ("native" !in ignore && __innerNative8 != null) {
@@ -704,7 +787,7 @@ internal class CountryFilmsQueryImpl : FilmProjectionImpl(), CountryFilmsQuery {
 
   public override var offset: Int? = null
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatSelection(__selection: CountryFilmsSelection): Unit {
     __selection.title = title
     __selection.genre = genre
@@ -728,7 +811,7 @@ internal class CountryActorsQueryImpl : ActorProjectionImpl(), CountryActorsQuer
 
   public override var offset: Int? = null
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatSelection(__selection: CountryActorsSelection): Unit {
     __selection.firstName = firstName
     __selection.lastName = lastName

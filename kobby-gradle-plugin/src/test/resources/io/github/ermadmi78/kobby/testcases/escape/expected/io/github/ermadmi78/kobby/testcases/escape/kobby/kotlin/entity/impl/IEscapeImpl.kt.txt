@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
@@ -78,7 +80,7 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
         ___inner__onEscape)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
       __projection: IEscapeQualifiedProjection): Unit {
     if ("is" !in ignore && __innerIs0) {
@@ -94,26 +96,16 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: points
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildPoints2(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: is
-    if ("is" !in ignore && __innerIs0) {
-      body.append(' ').append("is")
-    }
-
-    // Field: for
-    if ("for" !in ignore) {
-      body.append(' ').append("for")
-    }
-
-    // Field: points
     if ("points" !in ignore && __innerPoints2 != null) {
       body.append(' ').append("points")
       var counter = 0
@@ -159,6 +151,32 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
       // Build nested projection of Point
       __innerPoints2!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: is
+    if ("is" !in ignore && __innerIs0) {
+      body.append(' ').append("is")
+    }
+
+    // Field: for
+    if ("for" !in ignore) {
+      body.append(' ').append("for")
+    }
+
+    // Field: points
+    ____innerBuildPoints2(ignore, header, body, arguments)
 
     body.append(' ').append("__typename")
 

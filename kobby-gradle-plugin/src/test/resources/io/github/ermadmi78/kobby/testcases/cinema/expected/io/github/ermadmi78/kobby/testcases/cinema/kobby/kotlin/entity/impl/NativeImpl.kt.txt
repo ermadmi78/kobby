@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
@@ -45,7 +47,7 @@ internal open class NativeQualifiedProjectionImpl : NativeQualifiedProjection {
     ActorProjectionImpl().apply(__projection).___innerRepeatProjection(setOf(), ___inner__onActor)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
       __projection: NativeQualifiedProjection): Unit {
     __projection.__onFilm {
@@ -56,7 +58,10 @@ internal open class NativeQualifiedProjectionImpl : NativeQualifiedProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
     header: StringBuilder,

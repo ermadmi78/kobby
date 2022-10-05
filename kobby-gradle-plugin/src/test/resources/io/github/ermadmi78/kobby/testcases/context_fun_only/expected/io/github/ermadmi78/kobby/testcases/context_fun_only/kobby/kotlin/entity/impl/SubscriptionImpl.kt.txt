@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl
@@ -66,7 +68,7 @@ internal class SubscriptionImpl(
   }
 
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Subscription").append('(')
 
@@ -129,7 +131,7 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
     __innerActorCreated2CountryId = countryId
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection):
       Unit {
     if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
@@ -152,24 +154,16 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: filmCreated
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFilmCreated1(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: countryCreated
-    if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
-      body.append(' ').append("countryCreated")
-
-      // Build nested projection of Country
-      __innerCountryCreated0!!.___innerBuild(setOf(), header, body, arguments)
-    }
-
-    // Field: filmCreated
     if ("filmCreated" !in ignore && __innerFilmCreated1 != null) {
       body.append(' ').append("filmCreated")
       var counter = 0
@@ -200,8 +194,18 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
       // Build nested projection of Film
       __innerFilmCreated1!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
 
-    // Field: actorCreated
+  /**
+   * Projection for field: actorCreated
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildActorCreated2(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("actorCreated" !in ignore && __innerActorCreated2 != null) {
       body.append(' ').append("actorCreated")
       var counter = 0
@@ -232,6 +236,33 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
       // Build nested projection of Actor
       __innerActorCreated2!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: countryCreated
+    if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
+      body.append(' ').append("countryCreated")
+
+      // Build nested projection of Country
+      __innerCountryCreated0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: filmCreated
+    ____innerBuildFilmCreated1(ignore, header, body, arguments)
+
+    // Field: actorCreated
+    ____innerBuildActorCreated2(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }

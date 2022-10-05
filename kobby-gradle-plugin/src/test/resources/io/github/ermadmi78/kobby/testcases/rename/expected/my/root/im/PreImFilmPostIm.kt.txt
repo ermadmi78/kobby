@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package my.root.im
@@ -116,7 +118,7 @@ public class PreImFilmPostIm(
 
   public override fun hashCode(): Int = innerDtoPin.id?.hashCode() ?: 0
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Film").append('(')
 
@@ -220,7 +222,7 @@ public open class PreImPrePrFilmPostPrPostIm : PrePrFilmPostPr {
     innerActors6Pin = PreImPreQrFilmActorsPostQrPostIm().apply(query)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrFilmPostPr): Unit {
     if ("fields" !in ignore && innerFields1Pin != null) {
       projection.withPrFieldsWithPo {
@@ -246,21 +248,16 @@ public open class PreImPrePrFilmPostPrPostIm : PrePrFilmPostPr {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  public fun _innerBuildPin(
+  /**
+   * Projection for field: fields
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildFields1Pin(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: id
-    if ("id" !in ignore) {
-      body.append(' ').append("id")
-    }
-
-    // Field: fields
     if ("fields" !in ignore && innerFields1Pin != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -288,31 +285,18 @@ public open class PreImPrePrFilmPostPrPostIm : PrePrFilmPostPr {
         body.append(')')
       }
     }
+  }
 
-    // Field: title
-    if ("title" !in ignore && innerTitle2Pin) {
-      body.append(' ').append("title")
-    }
-
-    // Field: genre
-    if ("genre" !in ignore && innerGenre3Pin) {
-      body.append(' ').append("genre")
-    }
-
-    // Field: countryId
-    if ("countryId" !in ignore) {
-      body.append(' ').append("countryId")
-    }
-
-    // Field: country
-    if ("country" !in ignore && innerCountry5Pin != null) {
-      body.append(' ').append("country")
-
-      // Build nested projection of Country
-      innerCountry5Pin!!._innerBuildPin(setOf(), header, body, arguments)
-    }
-
-    // Field: actors
+  /**
+   * Projection for field: actors
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildActors6Pin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
     if ("actors" !in ignore && innerActors6Pin != null) {
       body.append(' ').append("actors")
       var counter = 0
@@ -405,6 +389,53 @@ public open class PreImPrePrFilmPostPrPostIm : PrePrFilmPostPr {
       // Build nested projection of Actor
       innerActors6Pin!!._innerBuildPin(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public fun _innerBuildPin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore) {
+      body.append(' ').append("id")
+    }
+
+    // Field: fields
+    __innerBuildFields1Pin(ignore, header, body, arguments)
+
+    // Field: title
+    if ("title" !in ignore && innerTitle2Pin) {
+      body.append(' ').append("title")
+    }
+
+    // Field: genre
+    if ("genre" !in ignore && innerGenre3Pin) {
+      body.append(' ').append("genre")
+    }
+
+    // Field: countryId
+    if ("countryId" !in ignore) {
+      body.append(' ').append("countryId")
+    }
+
+    // Field: country
+    if ("country" !in ignore && innerCountry5Pin != null) {
+      body.append(' ').append("country")
+
+      // Build nested projection of Country
+      innerCountry5Pin!!._innerBuildPin(setOf(), header, body, arguments)
+    }
+
+    // Field: actors
+    __innerBuildActors6Pin(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }
@@ -422,7 +453,7 @@ public class PreImPreQrFilmActorsPostQrPostIm : PreImPrePrActorPostPrPostIm(), P
 
   public override var offset: Int? = null
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerRepeatSelectionPin(selection: PreSelFilmActorsPostSel): Unit {
     selection.firstName = firstName
     selection.lastName = lastName

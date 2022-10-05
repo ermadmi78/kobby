@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package my.root.im
@@ -78,7 +80,7 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
         _innerOnPrActorOnPoPin)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PreQPEntityPostQP): Unit {
     if ("fields" !in ignore && innerFields1Pin != null) {
       projection.withPrFieldsWithPo {
@@ -99,21 +101,16 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  public fun _innerBuildPin(
+  /**
+   * Projection for field: fields
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun __innerBuildFields1Pin(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: id
-    if ("id" !in ignore) {
-      body.append(' ').append("id")
-    }
-
-    // Field: fields
     if ("fields" !in ignore && innerFields1Pin != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -141,6 +138,27 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
         body.append(')')
       }
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public fun _innerBuildPin(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore) {
+      body.append(' ').append("id")
+    }
+
+    // Field: fields
+    __innerBuildFields1Pin(ignore, header, body, arguments)
 
     body.append(' ').append("__typename")
 
@@ -174,7 +192,7 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
 public class PreImPreSelEntityFieldsPostSelPostIm : PreSelEntityFieldsPostSel {
   public override var keys: List<String>? = null
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerRepeatSelectionPin(selection: PreSelEntityFieldsPostSel): Unit {
     selection.keys = keys
   }

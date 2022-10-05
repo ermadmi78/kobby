@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package my.root.im
@@ -47,7 +49,7 @@ public open class PreImPreQPNativePostQPPostIm : PreQPNativePostQP {
         _innerOnPrActorOnPoPin)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PreQPNativePostQP): Unit {
     projection.onPrFilmOnPo {
       this@PreImPreQPNativePostQPPostIm._innerOnPrFilmOnPoPin._innerRepeatProjectionPin(setOf(),
@@ -59,7 +61,10 @@ public open class PreImPreQPNativePostQPPostIm : PreQPNativePostQP {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerBuildPin(
     ignore: Set<String>,
     header: StringBuilder,

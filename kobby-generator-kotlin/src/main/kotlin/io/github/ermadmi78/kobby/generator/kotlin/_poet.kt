@@ -43,6 +43,8 @@ private val SUPPRESS = AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
     .addMember("%S", "CanBeParameter")
     .addMember("%S", "unused")
     .addMember("%S", "RemoveExplicitTypeArguments")
+    .addMember("%S", "RedundantSuppression")
+    .addMember("%S", "KotlinRedundantDiagnosticSuppress")
     .build()
 
 internal fun buildFile(
@@ -212,7 +214,7 @@ internal fun FunSpecBuilder.buildParameter(
 internal fun FunSpecBuilder.suppressUnused() {
     addAnnotation(
         AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
-            .addMember("%S, %S", "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+            .addMember("%S, %S, %S", "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
             .build()
     )
 }

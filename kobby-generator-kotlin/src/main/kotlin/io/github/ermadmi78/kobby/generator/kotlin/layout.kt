@@ -357,6 +357,9 @@ data class KotlinLayout(
         get() = "Property [$name] is not available - " +
                 "${if (isDefault) "remove" else "add"} [$projectionFieldName] projection to switch on it"
 
+    internal val KobbyField.projectionBuilderFunName: String
+        get() = "__" + "build${name._capitalize()}${number}".decorate(impl.innerDecoration)
+
     internal val KobbyArgument.innerName: String
         get() = (field.name + field.number + name._capitalize())
             .decorate(impl.innerDecoration)

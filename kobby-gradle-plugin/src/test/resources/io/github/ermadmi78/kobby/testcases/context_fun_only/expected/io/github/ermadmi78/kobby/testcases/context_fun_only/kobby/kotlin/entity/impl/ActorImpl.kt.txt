@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_fun_only.kobby.kotlin.entity.impl
@@ -130,7 +132,7 @@ internal class ActorImpl(
     return result
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Actor").append('(')
 
@@ -239,7 +241,7 @@ internal open class ActorProjectionImpl : ActorProjection {
     __innerFilms7 = ActorFilmsQueryImpl().apply(__query)
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: ActorProjection): Unit {
     if ("tags" !in ignore && __innerTags1 != null) {
       __projection.tags {
@@ -268,57 +270,16 @@ internal open class ActorProjectionImpl : ActorProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: films
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFilms7(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: id
-    if ("id" !in ignore) {
-      body.append(' ').append("id")
-    }
-
-    // Field: tags
-    if ("tags" !in ignore && __innerTags1 != null) {
-      body.append(' ').append("tags")
-
-      // Build nested projection of Tag
-      __innerTags1!!.___innerBuild(setOf(), header, body, arguments)
-    }
-
-    // Field: firstName
-    if ("firstName" !in ignore && __innerFirstName2) {
-      body.append(' ').append("firstName")
-    }
-
-    // Field: lastName
-    if ("lastName" !in ignore && __innerLastName3) {
-      body.append(' ').append("lastName")
-    }
-
-    // Field: gender
-    if ("gender" !in ignore && __innerGender4) {
-      body.append(' ').append("gender")
-    }
-
-    // Field: countryId
-    if ("countryId" !in ignore) {
-      body.append(' ').append("countryId")
-    }
-
-    // Field: country
-    if ("country" !in ignore && __innerCountry6 != null) {
-      body.append(' ').append("country")
-
-      // Build nested projection of Country
-      __innerCountry6!!.___innerBuild(setOf(), header, body, arguments)
-    }
-
-    // Field: films
     if ("films" !in ignore && __innerFilms7 != null) {
       body.append(' ').append("films")
       var counter = 0
@@ -395,6 +356,63 @@ internal open class ActorProjectionImpl : ActorProjection {
       // Build nested projection of Film
       __innerFilms7!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore) {
+      body.append(' ').append("id")
+    }
+
+    // Field: tags
+    if ("tags" !in ignore && __innerTags1 != null) {
+      body.append(' ').append("tags")
+
+      // Build nested projection of Tag
+      __innerTags1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: firstName
+    if ("firstName" !in ignore && __innerFirstName2) {
+      body.append(' ').append("firstName")
+    }
+
+    // Field: lastName
+    if ("lastName" !in ignore && __innerLastName3) {
+      body.append(' ').append("lastName")
+    }
+
+    // Field: gender
+    if ("gender" !in ignore && __innerGender4) {
+      body.append(' ').append("gender")
+    }
+
+    // Field: countryId
+    if ("countryId" !in ignore) {
+      body.append(' ').append("countryId")
+    }
+
+    // Field: country
+    if ("country" !in ignore && __innerCountry6 != null) {
+      body.append(' ').append("country")
+
+      // Build nested projection of Country
+      __innerCountry6!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: films
+    ____innerBuildFilms7(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }
@@ -409,7 +427,7 @@ internal class ActorFilmsQueryImpl : FilmProjectionImpl(), ActorFilmsQuery {
 
   public override var offset: Int? = null
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatSelection(__selection: ActorFilmsSelection): Unit {
     __selection.title = title
     __selection.genre = genre

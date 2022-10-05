@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
@@ -53,7 +55,7 @@ internal class MyQueryImpl(
   }
 
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("MyQuery").append('(')
 
@@ -93,7 +95,7 @@ internal open class MyQueryProjectionImpl : MyQueryProjection {
     __innerFind0Pattern = pattern
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MyQueryProjection):
       Unit {
     if ("find" !in ignore && __innerFind0 != null) {
@@ -103,16 +105,16 @@ internal open class MyQueryProjectionImpl : MyQueryProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: find
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFind0(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: find
     if ("find" !in ignore && __innerFind0 != null) {
       body.append(' ').append("find")
       var counter = 0
@@ -143,6 +145,22 @@ internal open class MyQueryProjectionImpl : MyQueryProjection {
       // Build nested projection of MyResult
       __innerFind0!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: find
+    ____innerBuildFind0(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }

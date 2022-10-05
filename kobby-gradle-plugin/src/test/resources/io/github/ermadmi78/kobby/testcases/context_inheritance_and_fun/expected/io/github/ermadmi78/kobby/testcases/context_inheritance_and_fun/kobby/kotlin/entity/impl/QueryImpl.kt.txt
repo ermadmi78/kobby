@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.impl
@@ -53,7 +55,7 @@ internal class QueryImpl(
   }
 
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Query").append('(')
 
@@ -95,7 +97,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     __innerAll0Limit = limit
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
     if ("all" !in ignore && __innerAll0 != null) {
       __projection.all(__innerAll0Limit) {
@@ -104,16 +106,16 @@ internal open class QueryProjectionImpl : QueryProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: all
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildAll0(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: all
     if ("all" !in ignore && __innerAll0 != null) {
       body.append(' ').append("all")
       var counter = 0
@@ -144,6 +146,22 @@ internal open class QueryProjectionImpl : QueryProjection {
       // Build nested projection of Simple
       __innerAll0!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: all
+    ____innerBuildAll0(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }

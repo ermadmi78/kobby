@@ -9,6 +9,8 @@
   "CanBeParameter",
   "unused",
   "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
 )
 
 package io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.entity.impl
@@ -50,7 +52,7 @@ internal class MutationImpl(
   }
 
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public override fun toString(): String = buildString {
     append("Mutation").append('(')
 
@@ -91,7 +93,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     __innerCreateCountry0Name = name
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection):
       Unit {
     if ("createCountry" !in ignore && __innerCreateCountry0 != null) {
@@ -101,16 +103,16 @@ internal open class MutationProjectionImpl : MutationProjection {
     }
   }
 
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
-  internal fun ___innerBuild(
+  /**
+   * Projection for field: createCountry
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCreateCountry0(
     ignore: Set<String>,
     header: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
-    body.append(' ').append('{')
-
-    // Field: createCountry
     if ("createCountry" !in ignore && __innerCreateCountry0 != null) {
       body.append(' ').append("createCountry")
       var counter = 0
@@ -141,6 +143,22 @@ internal open class MutationProjectionImpl : MutationProjection {
       // Build nested projection of Country
       __innerCreateCountry0!!.___innerBuild(setOf(), header, body, arguments)
     }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: createCountry
+    ____innerBuildCreateCountry0(ignore, header, body, arguments)
 
     body.append(' ').append('}')
   }
