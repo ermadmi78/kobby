@@ -145,7 +145,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     .filter { !field.isSelection || !it.isInitialized }
                     .forEach { arg ->
                         buildParameter(arg.name, arg.entityType) {
-                            if (!field.isOverride && arg.isInitialized) {
+                            if (!field.isOverride && arg.isInitialized && !field.isMultiBase) {
                                 defaultValue("null")
                             }
                             arg.comments {

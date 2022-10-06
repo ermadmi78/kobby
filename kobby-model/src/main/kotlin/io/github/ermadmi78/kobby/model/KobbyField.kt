@@ -46,6 +46,28 @@ class KobbyField internal constructor(
 
     val isOverride: Boolean get() = overriddenField != null
 
+    private val isMultiOverride: Boolean by lazy {
+        node.implements.values.asSequence()
+            .map { it.fields[name] }
+            .filterNotNull()
+            .filter { !it.isOverride }
+            .count() > 1
+    }
+
+    val isMultiBase: Boolean by lazy {
+        if (node.kind != INTERFACE) {
+            return@lazy false
+        }
+
+        for (subNode in node.subTree) {
+            if (subNode.fields[name]?.isMultiOverride == true) {
+                return@lazy true
+            }
+        }
+
+        return@lazy false
+    }
+
     val isProperty: Boolean get() = arguments.isEmpty() && (type.node.kind == SCALAR || type.node.kind == ENUM)
 
     val isPrimaryKey: Boolean get() = isProperty && (overriddenField?.isPrimaryKey ?: primaryKey)

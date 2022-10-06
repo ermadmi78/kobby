@@ -41,8 +41,27 @@ class KobbyNode internal constructor(
 
                 res
             }
+
             else -> emptyMap()
         }
+    }
+
+    /**
+     * returns node tree hierarchy without this node
+     */
+    val subTree: List<KobbyNode> by lazy {
+        val subNodeNames: Set<String> = schema.subObjectsIndex[name]?.takeIf { it.isNotEmpty() }
+            ?: return@lazy emptyList<KobbyNode>()
+
+        val res = mutableListOf<KobbyNode>()
+        for (subName in subNodeNames) {
+            schema.all[subName]?.also { subNode ->
+                res += subNode
+                res += subNode.subTree
+            }
+        }
+
+        return@lazy res
     }
 
     fun implements(action: (KobbyNode) -> Unit) = implements.values.forEach(action)
