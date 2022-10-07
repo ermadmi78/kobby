@@ -32,7 +32,7 @@ import kotlin.collections.Map
  */
 public interface Taggable : CinemaContext, Entity {
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public override val id: Long
 

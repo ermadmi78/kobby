@@ -30,7 +30,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     addModifiers(KModifier.DATA)
                 }
                 node.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
                 node.implements {
                     addSuperinterface(it.dtoClass)
@@ -39,7 +39,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     node.fields { field ->
                         buildProperty(field.name, field.type.dtoType.nullable()) {
                             field.comments {
-                                addKdoc(it)
+                                addKdoc("%L", it)
                             }
                             if (field.isOverride) {
                                 addModifiers(KModifier.OVERRIDE)
@@ -158,12 +158,12 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 buildClass(node.builderName) {
                     addAnnotation(context.dslClass)
                     node.comments {
-                        addKdoc(it)
+                        addKdoc("%L", it)
                     }
                     node.fields { field ->
                         buildProperty(field.name, field.type.dtoType.nullable()) {
                             field.comments {
-                                addKdoc(it)
+                                addKdoc("%L", it)
                             }
                             mutable()
                             initializer("null")
@@ -182,7 +182,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             buildInterface(node.dtoName) {
                 jacksonizeInterface(node)
                 node.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
                 node.implements {
                     addSuperinterface(it.dtoClass)
@@ -190,7 +190,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 node.fields { field ->
                     buildProperty(field.name, field.type.dtoType.nullable()) {
                         field.comments {
-                            addKdoc(it)
+                            addKdoc("%L", it)
                         }
                         if (field.isOverride) {
                             addModifiers(KModifier.OVERRIDE)
@@ -209,7 +209,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             buildInterface(node.dtoName) {
                 jacksonizeInterface(node)
                 node.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
             }
         }
@@ -222,7 +222,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.packageName, node.dtoName) {
             buildEnum(node.dtoName) {
                 node.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
                 node.enumValues { enumValue ->
                     if (enumValue.name in FORBIDDEN_ENUM_NAMES) {
@@ -233,18 +233,18 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 }
                             }
                             enumValue.comments {
-                                addKdoc(it)
+                                addKdoc("%L", it)
                             }
 
                             if (enumValue.comments.isNotEmpty()) {
-                                addKdoc("  \n> ")
+                                addKdoc("%L", "  \n> ")
                             }
-                            addKdoc("see https://github.com/ermadmi78/kobby/issues/21")
+                            addKdoc("%L", "see https://github.com/ermadmi78/kobby/issues/21")
                         }
                     } else {
                         buildEnumConstant(enumValue.name) {
                             enumValue.comments {
-                                addKdoc(it)
+                                addKdoc("%L", it)
                             }
                         }
                     }
@@ -263,7 +263,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 jacksonizeClass(node)
                 addModifiers(KModifier.DATA)
                 node.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
                 buildPrimaryConstructorProperties {
                     node.fields { field ->
@@ -274,13 +274,13 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         }
                         buildPropertyWithDefault(field.name, field.type.dtoType, defaultValue) {
                             field.comments {
-                                addKdoc(it)
+                                addKdoc("%L", it)
                             }
                             field.defaultValue?.also { literal ->
                                 if (field.comments.isNotEmpty()) {
-                                    addKdoc("  \n> ")
+                                    addKdoc("%L", "  \n> ")
                                 }
-                                addKdoc("Default: $literal")
+                                addKdoc("%L", "Default: $literal")
                             }
                         }
                     }
@@ -355,7 +355,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 buildClass(node.builderName) {
                     addAnnotation(context.dslClass)
                     node.comments {
-                        addKdoc(it)
+                        addKdoc("%L", it)
                     }
                     node.fields { field ->
                         buildProperty(
@@ -363,7 +363,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             if (field.hasDefaultValue) field.type.dtoType else field.type.dtoType.nullable()
                         ) {
                             field.comments {
-                                addKdoc(it)
+                                addKdoc("%L", it)
                             }
                             mutable()
 
@@ -372,9 +372,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 initializer("null")
                             } else {
                                 if (field.comments.isNotEmpty()) {
-                                    addKdoc("  \n> ")
+                                    addKdoc("%L", "  \n> ")
                                 }
-                                addKdoc("Default: $literal")
+                                addKdoc("%L", "Default: $literal")
 
                                 val args = mutableListOf<Any?>()
                                 val format = literal.buildInitializer(field.type, args)
@@ -538,6 +538,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.graphql.packageName, "messaging") {
             buildInterface(dto.graphql.messageName) {
                 addKdoc(
+                    "%L",
                     "Message protocol description see [here]" +
                             "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
                 )
@@ -561,6 +562,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
             buildInterface(dto.graphql.clientMessageName) {
                 addKdoc(
+                    "%L",
                     "Message protocol description see [here]" +
                             "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
                 )
@@ -586,6 +588,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
             buildInterface(dto.graphql.serverMessageName) {
                 addKdoc(
+                    "%L",
                     "Message protocol description see [here]" +
                             "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
                 )
@@ -628,7 +631,10 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         }
                     }
 
-                    addKdoc("See ${message.name} [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)")
+                    addKdoc(
+                        "%L",
+                        "See ${message.name} [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
+                    )
 
                     addSuperinterface(dto.graphql.messageClass)
                     if (message.client) {
@@ -648,6 +654,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 }
                             }
                         }
+
                         GqlMessage.GQL_START -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
@@ -655,6 +662,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 buildProperty("payload", dto.graphql.requestClass)
                             }
                         }
+
                         GqlMessage.GQL_STOP -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
@@ -664,9 +672,11 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 }
                             }
                         }
+
                         GqlMessage.GQL_CONNECTION_TERMINATE -> {
                             // Do nothing
                         }
+
                         GqlMessage.GQL_CONNECTION_ERROR -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
@@ -676,6 +686,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 }
                             }
                         }
+
                         GqlMessage.GQL_CONNECTION_ACK -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
@@ -685,6 +696,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 }
                             }
                         }
+
                         GqlMessage.GQL_DATA -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
@@ -692,6 +704,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 buildProperty("payload", dto.graphql.subscriptionResultClass)
                             }
                         }
+
                         GqlMessage.GQL_ERROR -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
@@ -699,6 +712,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 buildProperty("payload", dto.graphql.errorResultClass)
                             }
                         }
+
                         GqlMessage.GQL_COMPLETE -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
@@ -708,6 +722,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 }
                             }
                         }
+
                         GqlMessage.GQL_CONNECTION_KEEP_ALIVE -> {
                             // Do nothing
                         }

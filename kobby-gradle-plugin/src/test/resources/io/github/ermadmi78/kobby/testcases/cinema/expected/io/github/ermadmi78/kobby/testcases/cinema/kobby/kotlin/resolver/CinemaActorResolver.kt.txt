@@ -35,7 +35,7 @@ public interface CinemaActorResolver : GraphQLResolver<ActorDto> {
   /**
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
-   * @param keys List of field keys to load.
+   * @param keys List of field keys to load. %
    * If no keys specified all entity fields will be loaded.
    */
   public suspend fun fields(actor: ActorDto, keys: List<String>?): Map<String, Any?>

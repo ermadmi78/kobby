@@ -26,12 +26,12 @@ import kotlin.error
 import kotlin.let
 
 /**
- * Film input data
+ * Film input data %
  */
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class FilmInput(
   /**
-   * Title of film
+   * Title of film %
    */
   public val title: String,
   /**
@@ -66,12 +66,12 @@ public fun FilmInput.copy(block: FilmInputBuilder.() -> Unit): FilmInput {
 }
 
 /**
- * Film input data
+ * Film input data %
  */
 @CinemaDSL
 public class FilmInputBuilder {
   /**
-   * Title of film
+   * Title of film %
    */
   public var title: String? = null
 

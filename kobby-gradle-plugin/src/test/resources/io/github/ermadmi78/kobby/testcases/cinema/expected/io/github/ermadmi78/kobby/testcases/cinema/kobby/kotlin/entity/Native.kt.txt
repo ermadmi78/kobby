@@ -22,7 +22,7 @@ import kotlin.Suppress
 import kotlin.Unit
 
 /**
- * Union of natives
+ * Union of natives %
  */
 public interface Native : CinemaContext {
   public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
@@ -34,7 +34,7 @@ public interface Native : CinemaContext {
 }
 
 /**
- * Union of natives
+ * Union of natives %
  */
 @CinemaDSL
 public interface NativeProjection {
@@ -43,7 +43,7 @@ public interface NativeProjection {
 }
 
 /**
- * Union of natives
+ * Union of natives %
  */
 @CinemaDSL
 public interface NativeQualification {
@@ -61,7 +61,7 @@ public interface NativeQualification {
 }
 
 /**
- * Union of natives
+ * Union of natives %
  */
 @CinemaDSL
 public interface NativeQualifiedProjection : NativeProjection, NativeQualification

@@ -32,11 +32,11 @@ import kotlin.collections.Map
 
 /**
  * Country entity.
- * The country can be home to several films and several actors.
+ * The country can be home to several films and several actors. %
  */
 public interface Country : CinemaContext, Entity {
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public override val id: Long
 
@@ -47,7 +47,7 @@ public interface Country : CinemaContext, Entity {
   public override val fields: Map<String, Any?>
 
   /**
-   * The name of the country
+   * The name of the country %
    */
   public val name: String
 
@@ -97,7 +97,7 @@ public interface Country : CinemaContext, Entity {
 
 /**
  * Country entity.
- * The country can be home to several films and several actors.
+ * The country can be home to several films and several actors. %
  */
 @CinemaDSL
 public interface CountryProjection : EntityProjection {
@@ -108,7 +108,7 @@ public interface CountryProjection : EntityProjection {
   public override fun fields(__selection: EntityFieldsSelection.() -> Unit): Unit
 
   /**
-   * The name of the country
+   * The name of the country %
    */
   public fun __withoutName(): Unit
 
@@ -158,12 +158,12 @@ public interface CountryProjection : EntityProjection {
 @CinemaDSL
 public interface CountryFilmsSelection {
   /**
-   * Part of title of film to search
+   * Part of title of film to search %
    */
   public var title: String?
 
   /**
-   * Genre of film to search
+   * Genre of film to search %
    */
   public var genre: Genre?
 

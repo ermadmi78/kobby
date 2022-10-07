@@ -24,7 +24,7 @@ import kotlin.Suppress
 import kotlin.collections.Map
 
 /**
- * Base interface for all entities.
+ * Base interface for all entities. %
  */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -38,7 +38,7 @@ import kotlin.collections.Map
 )
 public interface EntityDto {
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public val id: Long?
 

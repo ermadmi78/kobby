@@ -39,7 +39,7 @@ import kotlin.collections.Map
 )
 public interface TaggableDto : EntityDto {
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public override val id: Long?
 

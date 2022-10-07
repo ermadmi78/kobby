@@ -44,7 +44,7 @@ import kotlin.let
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class FilmDto(
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public override val id: Long? = null,
   /**
@@ -128,7 +128,7 @@ public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto {
 @CinemaDSL
 public class FilmDtoBuilder {
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public var id: Long? = null
 

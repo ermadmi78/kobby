@@ -140,7 +140,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
 
             // Build mapper interface
             buildInterface(context.mapperName) {
-                addKdoc("Helper interface for default adapter implementations")
+                addKdoc("%L", "Helper interface for default adapter implementations")
 
                 buildFunction(context.mapperFunSerialize) {
                     addModifiers(ABSTRACT)
@@ -243,7 +243,7 @@ private fun TypeSpecBuilder.buildContextFunction(
         buildParameter(entity.projection.projectionArgument, node.projectionLambda)
 
         if (!subscription) {
-            addKdoc("https://youtrack.jetbrains.com/issue/KTIJ-844")
+            addKdoc("%L", "https://youtrack.jetbrains.com/issue/KTIJ-844")
             suppressBlocking()
         }
 
@@ -369,7 +369,8 @@ private fun FileSpecBuilder.buildBuilderFunction(
         addStatement("")
         addStatement(
             "return $operation %T ${arguments.first}",
-            ClassName("kotlin", "to"))
+            ClassName("kotlin", "to")
+        )
     }
 }
 

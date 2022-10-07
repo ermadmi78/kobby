@@ -32,7 +32,7 @@ import kotlin.let
 
 /**
  * Country entity.
- * The country can be home to several films and several actors.
+ * The country can be home to several films and several actors. %
  */
 @JsonTypeName(value = "Country")
 @JsonTypeInfo(
@@ -44,7 +44,7 @@ import kotlin.let
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryDto(
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public override val id: Long? = null,
   /**
@@ -53,7 +53,7 @@ public data class CountryDto(
    */
   public override val fields: Map<String, Any?>? = null,
   /**
-   * The name of the country
+   * The name of the country %
    */
   public val name: String? = null,
   /**
@@ -133,12 +133,12 @@ public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto {
 
 /**
  * Country entity.
- * The country can be home to several films and several actors.
+ * The country can be home to several films and several actors. %
  */
 @CinemaDSL
 public class CountryDtoBuilder {
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public var id: Long? = null
 
@@ -149,7 +149,7 @@ public class CountryDtoBuilder {
   public var fields: Map<String, Any?>? = null
 
   /**
-   * The name of the country
+   * The name of the country %
    */
   public var name: String? = null
 

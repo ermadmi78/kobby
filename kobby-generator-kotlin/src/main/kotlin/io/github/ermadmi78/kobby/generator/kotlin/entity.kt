@@ -64,7 +64,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             addSuperinterface(it.entityClass)
         }
         node.comments {
-            addKdoc(it)
+            addKdoc("%L", it)
         }
 
         if (entity.contextInheritanceEnabled) {
@@ -115,7 +115,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                     addModifiers(OVERRIDE)
                 }
                 field.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
             }
         }
@@ -129,7 +129,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             addSuperinterface(it.projectionClass)
         }
         node.comments {
-            addKdoc(it)
+            addKdoc("%L", it)
         }
         node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
             buildFunction(field.projectionFieldName) {
@@ -138,7 +138,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     addModifiers(OVERRIDE)
                 }
                 field.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
 
                 field.arguments.values.asSequence()
@@ -149,13 +149,13 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                                 defaultValue("null")
                             }
                             arg.comments {
-                                addKdoc(it)
+                                addKdoc("%L", it)
                             }
                             arg.defaultValue?.also { literal ->
                                 if (arg.comments.isNotEmpty()) {
-                                    addKdoc(" ");
+                                    addKdoc("%L", " ");
                                 }
-                                addKdoc("Default: $literal")
+                                addKdoc("%L", "Default: $literal")
                             }
                         }
                     }
@@ -186,19 +186,19 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
         buildInterface(field.selectionName) {
             addAnnotation(context.dslClass)
             field.comments {
-                addKdoc(it)
+                addKdoc("%L", it)
             }
             field.arguments.values.asSequence().filter { it.isInitialized }.forEach { arg ->
                 buildProperty(arg.name, arg.entityType) {
                     mutable()
                     arg.comments {
-                        addKdoc(it)
+                        addKdoc("%L", it)
                     }
                     arg.defaultValue?.also { literal ->
                         if (arg.comments.isNotEmpty()) {
-                            addKdoc("  \n> ")
+                            addKdoc("%L", "  \n> ")
                         }
-                        addKdoc("Default: $literal")
+                        addKdoc("%L", "Default: $literal")
                     }
                 }
             }
@@ -208,7 +208,7 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
             buildInterface(field.queryName) {
                 addAnnotation(context.dslClass)
                 field.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
                 addSuperinterface(field.selectionClass)
                 addSuperinterface(field.type.node.qualifiedProjectionClass)
@@ -221,13 +221,13 @@ private fun FileSpecBuilder.buildQualification(node: KobbyNode, layout: KotlinLa
     buildInterface(node.qualificationName) {
         addAnnotation(context.dslClass)
         node.comments {
-            addKdoc(it)
+            addKdoc("%L", it)
         }
         node.subObjects { subObject ->
             buildFunction(subObject.projectionOnName) {
                 addModifiers(ABSTRACT)
                 subObject.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
                 buildParameter(entity.projection.projectionArgument, subObject.projectionLambda) {
                     if (subObject.hasDefaults) {
@@ -243,7 +243,7 @@ private fun FileSpecBuilder.buildQualifiedProjection(node: KobbyNode, layout: Ko
     buildInterface(node.qualifiedProjectionName) {
         addAnnotation(context.dslClass)
         node.comments {
-            addKdoc(it)
+            addKdoc("%L", it)
         }
         addSuperinterface(node.projectionClass)
         addSuperinterface(node.qualificationClass)

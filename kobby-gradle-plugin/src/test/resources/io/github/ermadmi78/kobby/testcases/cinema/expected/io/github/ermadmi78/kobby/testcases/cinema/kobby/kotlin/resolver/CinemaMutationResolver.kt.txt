@@ -64,7 +64,7 @@ public interface CinemaMutationResolver : GraphQLMutationResolver {
   /**
    * Associate film with actor
    *
-   * @param filmId ID of film
+   * @param filmId ID of film %
    * @param actorId ID of actor
    */
   public suspend fun associate(filmId: Long, actorId: Long): Boolean

@@ -18,19 +18,22 @@ internal fun generateResolver(schema: KobbySchema, layout: KotlinLayout): List<F
         files += buildFile(resolver.packageName, node.resolverName) {
             buildInterface(node.resolverName) {
                 node.comments {
-                    addKdoc(it)
+                    addKdoc("%L", it)
                 }
                 addSuperinterface(
                     when {
                         node.isQuery -> ClassName(
                             "graphql.kickstart.tools", "GraphQLQueryResolver"
                         )
+
                         node.isMutation -> ClassName(
                             "graphql.kickstart.tools", "GraphQLMutationResolver"
                         )
+
                         node.isSubscription -> ClassName(
                             "graphql.kickstart.tools", "GraphQLSubscriptionResolver"
                         )
+
                         else -> ClassName(
                             "graphql.kickstart.tools", "GraphQLResolver"
                         ).parameterizedBy(node.dtoClass)
@@ -44,7 +47,7 @@ internal fun generateResolver(schema: KobbySchema, layout: KotlinLayout): List<F
                             addModifiers(KModifier.ABSTRACT)
                         }
                         field.comments {
-                            addKdoc(it)
+                            addKdoc("%L", it)
                         }
 
                         if (resolver.publisherEnabled && node.isSubscription) {
@@ -62,7 +65,7 @@ internal fun generateResolver(schema: KobbySchema, layout: KotlinLayout): List<F
                         field.arguments { arg ->
                             buildParameter(arg.name, arg.type.dtoType) {
                                 arg.comments {
-                                    addKdoc(it)
+                                    addKdoc("%L", it)
                                 }
                             }
                         }

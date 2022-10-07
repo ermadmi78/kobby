@@ -580,7 +580,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
         }
 
         buildFunction(impl.buildFunName) {
-            addKdoc("Projection builder function")
+            addKdoc("%L", "Projection builder function")
             suppressUnused()
             if (impl.internal) {
                 addModifiers(INTERNAL)
@@ -605,7 +605,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 } else {
                     val projectionBuilderFun = field.projectionBuilderFunName
                     this@buildClass.buildFunction(projectionBuilderFun) {
-                        addKdoc("Projection for field: ${field.name}")
+                        addKdoc("%L", "Projection for field: ${field.name}")
                         suppressUnused()
                         addModifiers(PRIVATE)
                         buildParameter(buildFunArgIgnore)

@@ -27,11 +27,11 @@ import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
- * Base interface for all entities.
+ * Base interface for all entities. %
  */
 public interface Entity : CinemaContext {
   /**
-   * Unique identifier of entity
+   * Unique identifier of entity %
    */
   public val id: Long
 
@@ -50,7 +50,7 @@ public interface Entity : CinemaContext {
 }
 
 /**
- * Base interface for all entities.
+ * Base interface for all entities. %
  */
 @CinemaDSL
 public interface EntityProjection {
@@ -65,7 +65,7 @@ public interface EntityProjection {
 }
 
 /**
- * Base interface for all entities.
+ * Base interface for all entities. %
  */
 @CinemaDSL
 public interface EntityQualification {
@@ -83,13 +83,13 @@ public interface EntityQualification {
 
   /**
    * Country entity.
-   * The country can be home to several films and several actors.
+   * The country can be home to several films and several actors. %
    */
   public fun __onCountry(__projection: CountryProjection.() -> Unit = {}): Unit
 }
 
 /**
- * Base interface for all entities.
+ * Base interface for all entities. %
  */
 @CinemaDSL
 public interface EntityQualifiedProjection : EntityProjection, EntityQualification
@@ -101,7 +101,7 @@ public interface EntityQualifiedProjection : EntityProjection, EntityQualificati
 @CinemaDSL
 public interface EntityFieldsSelection {
   /**
-   * List of field keys to load.
+   * List of field keys to load. %
    * If no keys specified all entity fields will be loaded.
    */
   public var keys: List<String>?

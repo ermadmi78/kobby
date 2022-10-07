@@ -40,7 +40,7 @@ public interface CinemaQueryResolver : GraphQLQueryResolver {
    * Find countries by name.
    * Returns empty list if not found.
    *
-   * @param name Part of name of country to search
+   * @param name Part of name of country to search %
    * @param limit Limit of result list.
    * Put -1 to be unlimited.
    * @param offset Offset of result list.

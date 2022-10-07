@@ -18,11 +18,11 @@ package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
 import kotlin.Suppress
 
 /**
- * Enum of available film genres
+ * Enum of available film genres %
  */
 public enum class Genre {
   /**
-   * Drama
+   * Drama %
    */
   DRAMA,
   /**

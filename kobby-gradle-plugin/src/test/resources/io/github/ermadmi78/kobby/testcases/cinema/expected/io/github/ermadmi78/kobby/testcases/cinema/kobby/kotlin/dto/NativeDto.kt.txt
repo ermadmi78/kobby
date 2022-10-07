@@ -20,7 +20,7 @@ import com.fasterxml.jackson.`annotation`.JsonTypeInfo
 import kotlin.Suppress
 
 /**
- * Union of natives
+ * Union of natives %
  */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
