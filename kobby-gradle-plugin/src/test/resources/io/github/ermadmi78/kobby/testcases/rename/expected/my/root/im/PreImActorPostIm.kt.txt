@@ -494,5 +494,5 @@ public fun DPrefActorDPost.resolveCountry(innerContextPin: PrefCtxContextPostCtx
     country?.buildEntity(innerContextPin, innerProjectionPin)!!
 
 public fun DPrefActorDPost.resolveFilms(innerContextPin: PrefCtxContextPostCtx,
-    innerProjectionPin: PreImPrePrFilmPostPrPostIm): List<PrefEnFilmPostEn> = films?.map {
-    it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
+    innerProjectionPin: PreImPrePrFilmPostPrPostIm): List<PrefEnFilmPostEn> =
+    films?.map { it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()

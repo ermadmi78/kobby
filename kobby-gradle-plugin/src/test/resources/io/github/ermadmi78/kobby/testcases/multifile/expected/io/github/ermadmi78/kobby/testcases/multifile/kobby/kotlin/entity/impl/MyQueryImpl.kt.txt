@@ -167,9 +167,9 @@ internal open class MyQueryProjectionImpl : MyQueryProjection {
 }
 
 internal fun MyQueryDto.buildEntity(__innerContext: GraphqlContext,
-    __innerProjection: MyQueryProjectionImpl): MyQuery = MyQueryImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: MyQueryProjectionImpl): MyQuery =
+    MyQueryImpl(__innerContext, __innerProjection, this)
 
 internal fun MyQueryDto.resolveFind(__innerContext: GraphqlContext,
-    __innerProjection: MyResultProjectionImpl): List<MyResult> = find?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: MyResultProjectionImpl): List<MyResult> =
+    find?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

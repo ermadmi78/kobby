@@ -824,29 +824,29 @@ internal class CountryActorsQueryImpl : ActorProjectionImpl(), CountryActorsQuer
 }
 
 internal fun CountryDto.buildEntity(__innerContext: CinemaContext,
-    __innerProjection: CountryProjectionImpl): Country = CountryImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: CountryProjectionImpl): Country =
+    CountryImpl(__innerContext, __innerProjection, this)
 
 internal fun CountryDto.resolveFilm(__innerContext: CinemaContext,
-    __innerProjection: FilmProjectionImpl): Film? = film?.buildEntity(__innerContext,
-    __innerProjection)
+    __innerProjection: FilmProjectionImpl): Film? =
+    film?.buildEntity(__innerContext, __innerProjection)
 
 internal fun CountryDto.resolveFilms(__innerContext: CinemaContext,
-    __innerProjection: FilmProjectionImpl): List<Film> = films?.map { it.buildEntity(__innerContext,
-    __innerProjection) } ?: listOf()
+    __innerProjection: FilmProjectionImpl): List<Film> =
+    films?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun CountryDto.resolveActor(__innerContext: CinemaContext,
-    __innerProjection: ActorProjectionImpl): Actor? = actor?.buildEntity(__innerContext,
-    __innerProjection)
+    __innerProjection: ActorProjectionImpl): Actor? =
+    actor?.buildEntity(__innerContext, __innerProjection)
 
 internal fun CountryDto.resolveActors(__innerContext: CinemaContext,
-    __innerProjection: ActorProjectionImpl): List<Actor> = actors?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: ActorProjectionImpl): List<Actor> =
+    actors?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun CountryDto.resolveTaggable(__innerContext: CinemaContext,
-    __innerProjection: TaggableQualifiedProjectionImpl): List<Taggable> = taggable?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: TaggableQualifiedProjectionImpl): List<Taggable> =
+    taggable?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun CountryDto.resolveNative(__innerContext: CinemaContext,
-    __innerProjection: NativeQualifiedProjectionImpl): List<Native> = native?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: NativeQualifiedProjectionImpl): List<Native> =
+    native?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

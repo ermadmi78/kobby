@@ -55,8 +55,7 @@ internal open class IntermediateBaseQualifiedProjectionImpl : IntermediateBaseQu
     __innerIntermediateNoOverride0 = true
     __innerIntermediateNoOverride0Size = size
 
-    ___inner__onIntermediateMultiOverride.__innerIntermediateNoOverride3 =
-        __innerIntermediateNoOverride0
+    ___inner__onIntermediateMultiOverride.__innerIntermediateNoOverride3 = __innerIntermediateNoOverride0
     ___inner__onIntermediateMultiOverride.__innerIntermediateNoOverride3Size = size
 
     ___innerIgnore += "intermediateNoOverride"
@@ -66,8 +65,7 @@ internal open class IntermediateBaseQualifiedProjectionImpl : IntermediateBaseQu
     __innerIntermediateMultiOverride1 = true
     __innerIntermediateMultiOverride1Size = size
 
-    ___inner__onIntermediateMultiOverride.__innerIntermediateMultiOverride4 =
-        __innerIntermediateMultiOverride1
+    ___inner__onIntermediateMultiOverride.__innerIntermediateMultiOverride4 = __innerIntermediateMultiOverride1
     ___inner__onIntermediateMultiOverride.__innerIntermediateMultiOverride4Size = size
 
     ___innerIgnore += "intermediateMultiOverride"
@@ -76,8 +74,7 @@ internal open class IntermediateBaseQualifiedProjectionImpl : IntermediateBaseQu
   public override
       fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit):
       Unit {
-    IntermediateMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onIntermediateMultiOverride)
+    IntermediateMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onIntermediateMultiOverride)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
@@ -90,8 +87,7 @@ internal open class IntermediateBaseQualifiedProjectionImpl : IntermediateBaseQu
       __projection.intermediateMultiOverride(__innerIntermediateMultiOverride1Size)
     }
     __projection.__onIntermediateMultiOverride {
-      this@IntermediateBaseQualifiedProjectionImpl.___inner__onIntermediateMultiOverride.___innerRepeatProjection(setOf(),
-          this)
+      this@IntermediateBaseQualifiedProjectionImpl.___inner__onIntermediateMultiOverride.___innerRepeatProjection(setOf(), this)
     }
   }
 
@@ -208,7 +204,6 @@ internal open class IntermediateBaseQualifiedProjectionImpl : IntermediateBaseQu
 
 internal fun IntermediateBaseDto.buildEntity(__innerContext: MultiOverrideContext,
     __innerProjection: IntermediateBaseQualifiedProjectionImpl): IntermediateBase = when(this) {
-  is IntermediateMultiOverrideDto -> IntermediateMultiOverrideImpl(__innerContext,
-      __innerProjection.___inner__onIntermediateMultiOverride, this)
+  is IntermediateMultiOverrideDto -> IntermediateMultiOverrideImpl(__innerContext, __innerProjection.___inner__onIntermediateMultiOverride, this)
   else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
 }

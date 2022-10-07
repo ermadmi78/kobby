@@ -65,7 +65,7 @@ private fun FileSpecBuilder.buildObjectEntityBuilder(node: KobbyNode, layout: Ko
         returns(node.entityClass)
 
         statement(node.implClass) {
-            "return %T(${impl.contextPropertyName}, ${impl.projectionPropertyName}, this)"
+            "return·%T(${impl.contextPropertyName},·${impl.projectionPropertyName},·this)"
         }
     }
 }
@@ -81,12 +81,12 @@ private fun FileSpecBuilder.buildInterfaceOrUnionEntityBuilder(node: KobbyNode, 
         buildParameter(node.implProjectionProperty)
         returns(node.entityClass)
 
-        controlFlow("return when(this)") {
+        controlFlow("return·when(this)") {
             node.subObjects { subObject ->
                 statement(subObject.dtoClass, subObject.implClass) {
                     "is·%T·->·%T(" +
-                            "${impl.contextPropertyName}, " +
-                            "${impl.projectionPropertyName}.${subObject.innerProjectionOnName}, " +
+                            "${impl.contextPropertyName},·" +
+                            "${impl.projectionPropertyName}.${subObject.innerProjectionOnName},·" +
                             "this)"
                 }
             }
@@ -112,18 +112,18 @@ private fun FileSpecBuilder.buildResolvers(node: KobbyNode, layout: KotlinLayout
             returns(field.entityType)
 
             val builderCall = "${field.type.node.entityBuilderName}(" +
-                    "${impl.contextPropertyName}, " +
+                    "${impl.contextPropertyName},·" +
                     "${impl.projectionPropertyName})"
 
             if (field.type.run { !nullable && list }) {
                 val args = mutableListOf<Any>()
                 val expand = field.type.expand(field.name.escape(), true, args) { builderCall }
                 args += ClassName("kotlin.collections", "listOf")
-                addStatement("return $expand ?: %T()", *args.toTypedArray())
+                addStatement("return·$expand·?:·%T()", *args.toTypedArray())
             } else {
                 val args = mutableListOf<Any>()
                 val expand = field.type.expand(field.name.escape(), true, args) { builderCall }
-                addStatement("return ${expand}${field.notNullAssertion}", *args.toTypedArray())
+                addStatement("return·${expand}${field.notNullAssertion}", *args.toTypedArray())
             }
         }
     }
@@ -143,7 +143,7 @@ private fun KobbyType.expand(
 
     nestedOrNull?.also {
         args += MemberName("kotlin.collections", "map")
-        append("%M·{ ").append(it.expand("it", it.nullable, args, block)).append(" }")
+        append("%M·{·").append(it.expand("it", it.nullable, args, block)).append("·}")
     } ?: append(block())
 }
 
@@ -194,7 +194,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 }
 
                 addStatement("")
-                addStatement("$EQUALS_ARG as %T", node.implClass)
+                addStatement("$EQUALS_ARG·as·%T", node.implClass)
 
                 if (node.primaryKeysCount == 1) {
                     node.firstPrimaryKey().also {
@@ -285,7 +285,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 returns(node.schema.query.entityClass)
 
                 addStatement(
-                    "return ${impl.contextPropertyName}.${context.query}(${entity.projection.projectionArgument})"
+                    "return·${impl.contextPropertyName}.${context.query}(${entity.projection.projectionArgument})"
                 )
             }
 
@@ -296,7 +296,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 returns(node.schema.mutation.entityClass)
 
                 addStatement(
-                    "return ${impl.contextPropertyName}.${context.mutation}(${entity.projection.projectionArgument})"
+                    "return·${impl.contextPropertyName}.${context.mutation}(${entity.projection.projectionArgument})"
                 )
             }
 
@@ -307,7 +307,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
 
                 addStatement(
-                    "return ${impl.contextPropertyName}.${context.subscription}(${entity.projection.projectionArgument})"
+                    "return·${impl.contextPropertyName}.${context.subscription}(${entity.projection.projectionArgument})"
                 )
             }
         }
@@ -317,7 +317,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 addModifiers(OVERRIDE)
                 returns(context.contextClass)
 
-                addStatement("return ${impl.contextPropertyName}")
+                addStatement("return·${impl.contextPropertyName}")
             }
         }
 
@@ -327,7 +327,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             receiver(node.projectionClass)
 
             statement(ClassName("kotlin.collections", "setOf")) {
-                "${impl.projectionPropertyName}.${impl.repeatProjectionFunName}(%T(), this)"
+                "${impl.projectionPropertyName}.${impl.repeatProjectionFunName}(%T(),·this)"
             }
         }
 
@@ -345,7 +345,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                         ) { "%T(%S)" }
 
                         statement {
-                            "$innerDto.${field.resolverName}(${impl.contextPropertyName}, $projectionRef!!)"
+                            "$innerDto.${field.resolverName}(${impl.contextPropertyName},·$projectionRef!!)"
                         }
                     }
                 } else {
@@ -396,7 +396,7 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
                 val repeat = entity.selection.selectionArgument
                 buildParameter(repeat, field.selectionClass)
                 field.arguments.values.asSequence().filter { it.isInitialized }.forEach { arg ->
-                    addStatement("$repeat.${arg.name.escape()} = ${arg.name.escape()}")
+                    addStatement("$repeat.${arg.name.escape()}·=·${arg.name.escape()}")
                 }
             }
         }
@@ -459,16 +459,16 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 field.lambda?.also {
                     buildParameter(it)
                     addStatement(
-                        "${field.innerName} = %T().%M(${it.first})",
+                        "${field.innerName}·=·%T().%M(${it.first})",
                         field.innerClass,
                         MemberName("kotlin", "apply")
                     )
-                } ?: addStatement("${field.innerName} = ${!field.isDefault}")
+                } ?: addStatement("${field.innerName}·=·${!field.isDefault}")
 
                 field.arguments.values.asSequence()
                     .filter { !field.isSelection || !it.isInitialized }
                     .forEach { arg ->
-                        addStatement("${arg.innerName} = ${arg.name.escape()}")
+                        addStatement("${arg.innerName}·=·${arg.name.escape()}")
                     }
 
                 if (node.kind == INTERFACE || node.kind == UNION) {
@@ -479,11 +479,11 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             "The object type '${subObject.name}' does not have a field '${field.name}' " +
                                     "required via interface '${node.name}'"
                         )
-                        addStatement("${subObject.innerProjectionOnName}.${subField.innerName} = ${field.innerName}")
+                        addStatement("${subObject.innerProjectionOnName}.${subField.innerName}·=·${field.innerName}")
                         subField.arguments.values.asSequence()
                             .filter { !subField.isSelection || !it.isInitialized }
                             .forEach { subArg ->
-                                addStatement("${subObject.innerProjectionOnName}.${subArg.innerName} = ${subArg.name.escape()}")
+                                addStatement("${subObject.innerProjectionOnName}.${subArg.innerName}·=·${subArg.name.escape()}")
                             }
                     }
 
@@ -508,14 +508,14 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 if (node.kind == INTERFACE) {
                     addStatement(
                         "%T().%M(${entity.projection.projectionArgument}).${impl.repeatProjectionFunName}" +
-                                "(${impl.interfaceIgnore.first}, ${subObject.innerProjectionOnName})",
+                                "(${impl.interfaceIgnore.first},·${subObject.innerProjectionOnName})",
                         subObject.implProjectionClass,
                         MemberName("kotlin", "apply")
                     )
                 } else {
                     addStatement(
                         "%T().%M(${entity.projection.projectionArgument}).${impl.repeatProjectionFunName}" +
-                                "(%T(), ${subObject.innerProjectionOnName})",
+                                "(%T(),·${subObject.innerProjectionOnName})",
                         subObject.implProjectionClass,
                         MemberName("kotlin", "apply"),
                         ClassName("kotlin.collections", "setOf")
@@ -540,7 +540,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 val condition = if (field.innerIsBoolean) "${if (field.isDefault) "!" else ""}${field.innerName}"
                 else "${field.innerName}·!=·null"
 
-                ifFlow("%S·!in·$ignore && $condition", field.name) {
+                ifFlow("%S·!in·$ignore·&&·$condition", field.name) {
                     var args = field.arguments.values.asSequence()
                         .filter { !field.isSelection || !it.isInitialized }
                         .joinToString {
@@ -554,7 +554,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                             if (field.type.hasProjection) {
                                 statement(ClassName("kotlin.collections", "setOf")) {
                                     "this@${node.implProjectionName}" +
-                                            ".${field.innerName}!!.${impl.repeatProjectionFunName}(%T(), this)"
+                                            ".${field.innerName}!!.${impl.repeatProjectionFunName}(%T(),·this)"
                                 }
                             }
                             if (field.isSelection) statement {
@@ -573,7 +573,7 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                 controlFlow("$repeat.${subObject.projectionOnName}") {
                     statement(ClassName("kotlin.collections", "setOf")) {
                         "this@${node.implProjectionName}.${subObject.innerProjectionOnName}" +
-                                ".${impl.repeatProjectionFunName}(%T(), this)"
+                                ".${impl.repeatProjectionFunName}(%T(),·this)"
                     }
                 }
             }
@@ -633,17 +633,17 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
                     if (node.kind == INTERFACE) {
                         addStatement(
                             "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
-                                    "${impl.interfaceIgnore.first}, " +
-                                    "$header, " +
-                                    "$subBody, " +
+                                    "${impl.interfaceIgnore.first},·" +
+                                    "$header,·" +
+                                    "$subBody,·" +
                                     "$arguments)"
                         )
                     } else {
                         addStatement(
                             "${subObject.innerProjectionOnName}.${impl.buildFunName}(" +
-                                    "%T(), " +
-                                    "$header, " +
-                                    "$subBody, " +
+                                    "%T(),·" +
+                                    "$header,·" +
+                                    "$subBody,·" +
                                     "$arguments)",
                             ClassName("kotlin.collections", "setOf")
                         )
@@ -673,8 +673,8 @@ private fun FunSpecBuilder.writeFieldProjectionBuilderCode(field: KobbyField, la
 
     val fieldCondition = when {
         field.isRequired -> "%S·!in·$ignore"
-        field.innerIsBoolean -> "%S·!in·$ignore && ${field.innerName}"
-        else -> "%S·!in·$ignore && ${field.innerName}·!=·null"
+        field.innerIsBoolean -> "%S·!in·$ignore·&&·${field.innerName}"
+        else -> "%S·!in·$ignore·&&·${field.innerName}·!=·null"
     }
     ifFlow(fieldCondition, field.name) {
         buildAppendChain(body) { spaceAppendLiteral(field.name) }
@@ -705,7 +705,7 @@ private fun FunSpecBuilder.writeFieldProjectionBuilderCode(field: KobbyField, la
                         buildAppendChain(body) { appendLiteral(", ") }
                     }
                     addStatement("val·arg·=·%S·+·$arguments.size", argPrefix)
-                    addStatement("$arguments[arg] = $argName!!")
+                    addStatement("$arguments[arg]·=·$argName!!")
                     buildAppendChain(body) {
                         appendLiteral(arg.name)
                         appendLiteral(": ")
@@ -740,9 +740,9 @@ private fun FunSpecBuilder.writeFieldProjectionBuilderCode(field: KobbyField, la
             addComment("Build nested projection of ${field.type.node.name}")
             addStatement(
                 "${field.innerName}!!.${impl.buildFunName}(" +
-                        "%T(), " +
-                        "$header, " +
-                        "$body, " +
+                        "%T(),·" +
+                        "$header,·" +
+                        "$body,·" +
                         "$arguments)",
                 ClassName("kotlin.collections", "setOf")
             )

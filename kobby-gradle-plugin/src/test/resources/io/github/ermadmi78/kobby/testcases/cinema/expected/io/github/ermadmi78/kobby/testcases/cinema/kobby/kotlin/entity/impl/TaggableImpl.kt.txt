@@ -71,13 +71,11 @@ internal open class TaggableQualifiedProjectionImpl : TaggableQualifiedProjectio
   }
 
   public override fun __onFilm(__projection: FilmProjection.() -> Unit): Unit {
-    FilmProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onFilm)
+    FilmProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onFilm)
   }
 
   public override fun __onActor(__projection: ActorProjection.() -> Unit): Unit {
-    ActorProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onActor)
+    ActorProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onActor)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")

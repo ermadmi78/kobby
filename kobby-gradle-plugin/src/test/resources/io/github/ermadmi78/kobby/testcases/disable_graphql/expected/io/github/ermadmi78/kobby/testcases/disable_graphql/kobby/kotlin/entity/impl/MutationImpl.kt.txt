@@ -165,9 +165,9 @@ internal open class MutationProjectionImpl : MutationProjection {
 }
 
 internal fun MutationDto.buildEntity(__innerContext: CountryContext,
-    __innerProjection: MutationProjectionImpl): Mutation = MutationImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: MutationProjectionImpl): Mutation =
+    MutationImpl(__innerContext, __innerProjection, this)
 
 internal fun MutationDto.resolveCreateCountry(__innerContext: CountryContext,
-    __innerProjection: CountryProjectionImpl): Country = createCountry?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: CountryProjectionImpl): Country =
+    createCountry?.buildEntity(__innerContext, __innerProjection)!!

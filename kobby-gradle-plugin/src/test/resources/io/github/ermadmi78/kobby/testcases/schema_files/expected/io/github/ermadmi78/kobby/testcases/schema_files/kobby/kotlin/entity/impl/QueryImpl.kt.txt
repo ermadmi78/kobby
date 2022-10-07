@@ -125,9 +125,9 @@ internal open class QueryProjectionImpl : QueryProjection {
 }
 
 internal fun QueryDto.buildEntity(__innerContext: GraphqlContext,
-    __innerProjection: QueryProjectionImpl): Query = QueryImpl(__innerContext, __innerProjection,
-    this)
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
 
 internal fun QueryDto.resolveCountries(__innerContext: GraphqlContext,
-    __innerProjection: CountryProjectionImpl): List<Country> = countries?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: CountryProjectionImpl): List<Country> =
+    countries?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

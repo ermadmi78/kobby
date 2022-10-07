@@ -147,5 +147,5 @@ internal open class PointProjectionImpl : PointProjection {
 }
 
 internal fun PointDto.buildEntity(__innerContext: EscapeContext,
-    __innerProjection: PointProjectionImpl): Point = PointImpl(__innerContext, __innerProjection,
-    this)
+    __innerProjection: PointProjectionImpl): Point =
+    PointImpl(__innerContext, __innerProjection, this)

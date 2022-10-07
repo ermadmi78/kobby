@@ -234,14 +234,12 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMyQueryPostPr): Unit {
     if ("country" !in ignore && innerCountry0Pin != null) {
       projection.withPrCountryWithPo(innerCountry0IdPin!!) {
-        this@PreImPrePrMyQueryPostPrPostIm.innerCountry0Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMyQueryPostPrPostIm.innerCountry0Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
     if ("countries" !in ignore && innerCountries1Pin != null) {
       projection.withPrCountriesWithPo(innerCountries1NamePin, innerCountries1LimitPin) {
-        this@PreImPrePrMyQueryPostPrPostIm.innerCountries1Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMyQueryPostPrPostIm.innerCountries1Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
     if ("film" !in ignore && innerFilm2Pin != null) {
@@ -262,8 +260,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     }
     if ("actors" !in ignore && innerActors5Pin != null) {
       projection.withPrActorsWithPo {
-        this@PreImPrePrMyQueryPostPrPostIm.innerActors5Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMyQueryPostPrPostIm.innerActors5Pin!!._innerRepeatProjectionPin(setOf(), this)
         this@PreImPrePrMyQueryPostPrPostIm.innerActors5Pin!!._innerRepeatSelectionPin(this)
       }
     }
@@ -709,21 +706,21 @@ public fun DPrefMyQueryDPost.resolveCountry(innerContextPin: PrefCtxContextPostC
     country?.buildEntity(innerContextPin, innerProjectionPin)
 
 public fun DPrefMyQueryDPost.resolveCountries(innerContextPin: PrefCtxContextPostCtx,
-    innerProjectionPin: PreImPrePrCountryPostPrPostIm): List<PrefEnCountryPostEn> = countries?.map {
-    it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
+    innerProjectionPin: PreImPrePrCountryPostPrPostIm): List<PrefEnCountryPostEn> =
+    countries?.map { it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
 
 public fun DPrefMyQueryDPost.resolveFilm(innerContextPin: PrefCtxContextPostCtx,
     innerProjectionPin: PreImPrePrFilmPostPrPostIm): PrefEnFilmPostEn? =
     film?.buildEntity(innerContextPin, innerProjectionPin)
 
 public fun DPrefMyQueryDPost.resolveFilms(innerContextPin: PrefCtxContextPostCtx,
-    innerProjectionPin: PreImPrePrFilmPostPrPostIm): List<PrefEnFilmPostEn> = films?.map {
-    it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
+    innerProjectionPin: PreImPrePrFilmPostPrPostIm): List<PrefEnFilmPostEn> =
+    films?.map { it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
 
 public fun DPrefMyQueryDPost.resolveActor(innerContextPin: PrefCtxContextPostCtx,
     innerProjectionPin: PreImPrePrActorPostPrPostIm): PrefEnActorPostEn? =
     actor?.buildEntity(innerContextPin, innerProjectionPin)
 
 public fun DPrefMyQueryDPost.resolveActors(innerContextPin: PrefCtxContextPostCtx,
-    innerProjectionPin: PreImPrePrActorPostPrPostIm): List<PrefEnActorPostEn> = actors?.map {
-    it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
+    innerProjectionPin: PreImPrePrActorPostPrPostIm): List<PrefEnActorPostEn> =
+    actors?.map { it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()

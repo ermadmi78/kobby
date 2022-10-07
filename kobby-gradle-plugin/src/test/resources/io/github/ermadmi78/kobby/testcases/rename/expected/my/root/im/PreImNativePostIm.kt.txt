@@ -40,24 +40,20 @@ public open class PreImPreQPNativePostQPPostIm : PreQPNativePostQP {
   public val _innerOnPrActorOnPoPin: PreImPrePrActorPostPrPostIm = PreImPrePrActorPostPrPostIm()
 
   public override fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit): Unit {
-    PreImPrePrFilmPostPrPostIm().apply(projection)._innerRepeatProjectionPin(setOf(),
-        _innerOnPrFilmOnPoPin)
+    PreImPrePrFilmPostPrPostIm().apply(projection)._innerRepeatProjectionPin(setOf(), _innerOnPrFilmOnPoPin)
   }
 
   public override fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit): Unit {
-    PreImPrePrActorPostPrPostIm().apply(projection)._innerRepeatProjectionPin(setOf(),
-        _innerOnPrActorOnPoPin)
+    PreImPrePrActorPostPrPostIm().apply(projection)._innerRepeatProjectionPin(setOf(), _innerOnPrActorOnPoPin)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PreQPNativePostQP): Unit {
     projection.onPrFilmOnPo {
-      this@PreImPreQPNativePostQPPostIm._innerOnPrFilmOnPoPin._innerRepeatProjectionPin(setOf(),
-          this)
+      this@PreImPreQPNativePostQPPostIm._innerOnPrFilmOnPoPin._innerRepeatProjectionPin(setOf(), this)
     }
     projection.onPrActorOnPo {
-      this@PreImPreQPNativePostQPPostIm._innerOnPrActorOnPoPin._innerRepeatProjectionPin(setOf(),
-          this)
+      this@PreImPreQPNativePostQPPostIm._innerOnPrActorOnPoPin._innerRepeatProjectionPin(setOf(), this)
     }
   }
 
@@ -97,9 +93,7 @@ public open class PreImPreQPNativePostQPPostIm : PreQPNativePostQP {
 
 public fun DPrefNativeDPost.buildEntity(innerContextPin: PrefCtxContextPostCtx,
     innerProjectionPin: PreImPreQPNativePostQPPostIm): PrefEnNativePostEn = when(this) {
-  is DPrefFilmDPost -> PreImFilmPostIm(innerContextPin, innerProjectionPin._innerOnPrFilmOnPoPin,
-      this)
-  is DPrefActorDPost -> PreImActorPostIm(innerContextPin, innerProjectionPin._innerOnPrActorOnPoPin,
-      this)
+  is DPrefFilmDPost -> PreImFilmPostIm(innerContextPin, innerProjectionPin._innerOnPrFilmOnPoPin, this)
+  is DPrefActorDPost -> PreImActorPostIm(innerContextPin, innerProjectionPin._innerOnPrActorOnPoPin, this)
   else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
 }

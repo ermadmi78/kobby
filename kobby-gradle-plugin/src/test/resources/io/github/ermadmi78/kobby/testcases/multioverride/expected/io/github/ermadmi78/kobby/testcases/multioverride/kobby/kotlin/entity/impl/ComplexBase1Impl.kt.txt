@@ -76,8 +76,7 @@ internal open class ComplexBase1QualifiedProjectionImpl : ComplexBase1QualifiedP
     ___inner__onComplexMultiOverride.__innerComplexMultiOverride3 = __innerComplexMultiOverride1
     ___inner__onComplexMultiOverride.__innerComplexMultiOverride3Size = size
 
-    ___inner__onIntermediateMultiOverride.__innerComplexMultiOverride2 =
-        __innerComplexMultiOverride1
+    ___inner__onIntermediateMultiOverride.__innerComplexMultiOverride2 = __innerComplexMultiOverride1
     ___inner__onIntermediateMultiOverride.__innerComplexMultiOverride2Size = size
 
     ___innerIgnore += "complexMultiOverride"
@@ -85,15 +84,13 @@ internal open class ComplexBase1QualifiedProjectionImpl : ComplexBase1QualifiedP
 
   public override
       fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit): Unit {
-    ComplexMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onComplexMultiOverride)
+    ComplexMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onComplexMultiOverride)
   }
 
   public override
       fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit):
       Unit {
-    IntermediateMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onIntermediateMultiOverride)
+    IntermediateMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onIntermediateMultiOverride)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
@@ -106,12 +103,10 @@ internal open class ComplexBase1QualifiedProjectionImpl : ComplexBase1QualifiedP
       __projection.complexMultiOverride(__innerComplexMultiOverride1Size)
     }
     __projection.__onComplexMultiOverride {
-      this@ComplexBase1QualifiedProjectionImpl.___inner__onComplexMultiOverride.___innerRepeatProjection(setOf(),
-          this)
+      this@ComplexBase1QualifiedProjectionImpl.___inner__onComplexMultiOverride.___innerRepeatProjection(setOf(), this)
     }
     __projection.__onIntermediateMultiOverride {
-      this@ComplexBase1QualifiedProjectionImpl.___inner__onIntermediateMultiOverride.___innerRepeatProjection(setOf(),
-          this)
+      this@ComplexBase1QualifiedProjectionImpl.___inner__onIntermediateMultiOverride.___innerRepeatProjection(setOf(), this)
     }
   }
 
@@ -235,9 +230,7 @@ internal open class ComplexBase1QualifiedProjectionImpl : ComplexBase1QualifiedP
 
 internal fun ComplexBase1Dto.buildEntity(__innerContext: MultiOverrideContext,
     __innerProjection: ComplexBase1QualifiedProjectionImpl): ComplexBase1 = when(this) {
-  is ComplexMultiOverrideDto -> ComplexMultiOverrideImpl(__innerContext,
-      __innerProjection.___inner__onComplexMultiOverride, this)
-  is IntermediateMultiOverrideDto -> IntermediateMultiOverrideImpl(__innerContext,
-      __innerProjection.___inner__onIntermediateMultiOverride, this)
+  is ComplexMultiOverrideDto -> ComplexMultiOverrideImpl(__innerContext, __innerProjection.___inner__onComplexMultiOverride, this)
+  is IntermediateMultiOverrideDto -> IntermediateMultiOverrideImpl(__innerContext, __innerProjection.___inner__onIntermediateMultiOverride, this)
   else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
 }

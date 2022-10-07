@@ -679,17 +679,17 @@ internal class MutationCreateActorQueryImpl : ActorProjectionImpl(), MutationCre
 }
 
 internal fun MutationDto.buildEntity(__innerContext: CinemaContext,
-    __innerProjection: MutationProjectionImpl): Mutation = MutationImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: MutationProjectionImpl): Mutation =
+    MutationImpl(__innerContext, __innerProjection, this)
 
 internal fun MutationDto.resolveCreateCountry(__innerContext: CinemaContext,
-    __innerProjection: CountryProjectionImpl): Country = createCountry?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: CountryProjectionImpl): Country =
+    createCountry?.buildEntity(__innerContext, __innerProjection)!!
 
 internal fun MutationDto.resolveCreateFilm(__innerContext: CinemaContext,
-    __innerProjection: FilmProjectionImpl): Film = createFilm?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: FilmProjectionImpl): Film =
+    createFilm?.buildEntity(__innerContext, __innerProjection)!!
 
 internal fun MutationDto.resolveCreateActor(__innerContext: CinemaContext,
-    __innerProjection: ActorProjectionImpl): Actor = createActor?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: ActorProjectionImpl): Actor =
+    createActor?.buildEntity(__innerContext, __innerProjection)!!

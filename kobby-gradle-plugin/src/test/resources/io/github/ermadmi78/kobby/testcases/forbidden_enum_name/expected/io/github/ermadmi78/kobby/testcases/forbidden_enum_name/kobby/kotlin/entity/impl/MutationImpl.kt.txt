@@ -82,5 +82,5 @@ internal open class MutationProjectionImpl : MutationProjection {
 }
 
 internal fun MutationDto.buildEntity(__innerContext: ForbiddenEnumNameContext,
-    __innerProjection: MutationProjectionImpl): Mutation = MutationImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: MutationProjectionImpl): Mutation =
+    MutationImpl(__innerContext, __innerProjection, this)

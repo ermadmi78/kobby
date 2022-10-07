@@ -149,5 +149,5 @@ internal open class SimpleProjectionImpl : SimpleProjection {
 }
 
 internal fun SimpleDto.buildEntity(__innerContext: ContextInheritanceAndFunContext,
-    __innerProjection: SimpleProjectionImpl): Simple = SimpleImpl(__innerContext, __innerProjection,
-    this)
+    __innerProjection: SimpleProjectionImpl): Simple =
+    SimpleImpl(__innerContext, __innerProjection, this)

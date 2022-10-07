@@ -177,5 +177,5 @@ internal open class CountryProjectionImpl : CountryProjection {
 }
 
 internal fun CountryDto.buildEntity(__innerContext: InvalidFieldIsRequredContext,
-    __innerProjection: CountryProjectionImpl): Country = CountryImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: CountryProjectionImpl): Country =
+    CountryImpl(__innerContext, __innerProjection, this)

@@ -165,9 +165,9 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
 }
 
 internal fun SubscriptionDto.buildEntity(__innerContext: EscapeContext,
-    __innerProjection: SubscriptionProjectionImpl): Subscription = SubscriptionImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: SubscriptionProjectionImpl): Subscription =
+    SubscriptionImpl(__innerContext, __innerProjection, this)
 
 internal fun SubscriptionDto.resolveBy(__innerContext: EscapeContext,
-    __innerProjection: EscapeProjectionImpl): Escape? = `by`?.buildEntity(__innerContext,
-    __innerProjection)
+    __innerProjection: EscapeProjectionImpl): Escape? =
+    `by`?.buildEntity(__innerContext, __innerProjection)

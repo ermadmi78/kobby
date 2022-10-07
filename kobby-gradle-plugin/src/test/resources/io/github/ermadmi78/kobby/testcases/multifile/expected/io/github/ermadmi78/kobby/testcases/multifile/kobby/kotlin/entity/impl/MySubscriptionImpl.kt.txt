@@ -168,5 +168,5 @@ internal fun MySubscriptionDto.buildEntity(__innerContext: GraphqlContext,
     MySubscriptionImpl(__innerContext, __innerProjection, this)
 
 internal fun MySubscriptionDto.resolveOnInsert(__innerContext: GraphqlContext,
-    __innerProjection: MyEventProjectionImpl): MyEvent = onInsert?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: MyEventProjectionImpl): MyEvent =
+    onInsert?.buildEntity(__innerContext, __innerProjection)!!

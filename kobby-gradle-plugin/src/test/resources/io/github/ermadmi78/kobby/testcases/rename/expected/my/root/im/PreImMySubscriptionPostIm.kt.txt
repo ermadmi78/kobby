@@ -150,20 +150,17 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
       Unit {
     if ("countryCreated" !in ignore && innerCountryCreated0Pin != null) {
       projection.withPrCountryCreatedWithPo {
-        this@PreImPrePrMySubscriptionPostPrPostIm.innerCountryCreated0Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMySubscriptionPostPrPostIm.innerCountryCreated0Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
     if ("filmCreated" !in ignore && innerFilmCreated1Pin != null) {
       projection.withPrFilmCreatedWithPo(innerFilmCreated1CountryIdPin) {
-        this@PreImPrePrMySubscriptionPostPrPostIm.innerFilmCreated1Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMySubscriptionPostPrPostIm.innerFilmCreated1Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
     if ("actorCreated" !in ignore && innerActorCreated2Pin != null) {
       projection.withPrActorCreatedWithPo(innerActorCreated2CountryIdPin) {
-        this@PreImPrePrMySubscriptionPostPrPostIm.innerActorCreated2Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMySubscriptionPostPrPostIm.innerActorCreated2Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
   }

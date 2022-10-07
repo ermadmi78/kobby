@@ -148,20 +148,17 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
       Unit {
     if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
       __projection.countryCreated {
-        this@SubscriptionProjectionImpl.__innerCountryCreated0!!.___innerRepeatProjection(setOf(),
-            this)
+        this@SubscriptionProjectionImpl.__innerCountryCreated0!!.___innerRepeatProjection(setOf(), this)
       }
     }
     if ("filmCreated" !in ignore && __innerFilmCreated1 != null) {
       __projection.filmCreated(__innerFilmCreated1CountryId) {
-        this@SubscriptionProjectionImpl.__innerFilmCreated1!!.___innerRepeatProjection(setOf(),
-            this)
+        this@SubscriptionProjectionImpl.__innerFilmCreated1!!.___innerRepeatProjection(setOf(), this)
       }
     }
     if ("actorCreated" !in ignore && __innerActorCreated2 != null) {
       __projection.actorCreated(__innerActorCreated2CountryId) {
-        this@SubscriptionProjectionImpl.__innerActorCreated2!!.___innerRepeatProjection(setOf(),
-            this)
+        this@SubscriptionProjectionImpl.__innerActorCreated2!!.___innerRepeatProjection(setOf(), this)
       }
     }
   }
@@ -281,17 +278,17 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
 }
 
 internal fun SubscriptionDto.buildEntity(__innerContext: CinemaContext,
-    __innerProjection: SubscriptionProjectionImpl): Subscription = SubscriptionImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: SubscriptionProjectionImpl): Subscription =
+    SubscriptionImpl(__innerContext, __innerProjection, this)
 
 internal fun SubscriptionDto.resolveCountryCreated(__innerContext: CinemaContext,
-    __innerProjection: CountryProjectionImpl): Country = countryCreated?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: CountryProjectionImpl): Country =
+    countryCreated?.buildEntity(__innerContext, __innerProjection)!!
 
 internal fun SubscriptionDto.resolveFilmCreated(__innerContext: CinemaContext,
-    __innerProjection: FilmProjectionImpl): Film = filmCreated?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: FilmProjectionImpl): Film =
+    filmCreated?.buildEntity(__innerContext, __innerProjection)!!
 
 internal fun SubscriptionDto.resolveActorCreated(__innerContext: CinemaContext,
-    __innerProjection: ActorProjectionImpl): Actor = actorCreated?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: ActorProjectionImpl): Actor =
+    actorCreated?.buildEntity(__innerContext, __innerProjection)!!

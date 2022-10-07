@@ -426,21 +426,21 @@ internal open class EscapeProjectionImpl : EscapeProjection {
 }
 
 internal fun EscapeDto.buildEntity(__innerContext: EscapeContext,
-    __innerProjection: EscapeProjectionImpl): Escape = EscapeImpl(__innerContext, __innerProjection,
-    this)
+    __innerProjection: EscapeProjectionImpl): Escape =
+    EscapeImpl(__innerContext, __innerProjection, this)
 
 internal fun EscapeDto.resolvePoints(__innerContext: EscapeContext,
-    __innerProjection: PointProjectionImpl): List<Point> = points?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: PointProjectionImpl): List<Point> =
+    points?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun EscapeDto.resolveVal(__innerContext: EscapeContext,
-    __innerProjection: PointProjectionImpl): Point? = `val`?.buildEntity(__innerContext,
-    __innerProjection)
+    __innerProjection: PointProjectionImpl): Point? =
+    `val`?.buildEntity(__innerContext, __innerProjection)
 
 internal fun EscapeDto.resolveVar(__innerContext: EscapeContext,
-    __innerProjection: PointProjectionImpl): List<Point?>? = `var`?.map {
-    it?.buildEntity(__innerContext, __innerProjection) }
+    __innerProjection: PointProjectionImpl): List<Point?>? =
+    `var`?.map { it?.buildEntity(__innerContext, __innerProjection) }
 
 internal fun EscapeDto.resolveWhile(__innerContext: EscapeContext,
-    __innerProjection: PointProjectionImpl): List<Point> = `while`?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: PointProjectionImpl): List<Point> =
+    `while`?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

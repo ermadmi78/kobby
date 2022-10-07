@@ -71,8 +71,7 @@ internal open class BaseQualifiedProjectionImpl : BaseQualifiedProjection {
   }
 
   public override fun __onCountry(__projection: CountryProjection.() -> Unit): Unit {
-    CountryProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onCountry)
+    CountryProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onCountry)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")

@@ -76,8 +76,7 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
   }
 
   public override fun __onEscape(__projection: EscapeProjection.() -> Unit): Unit {
-    EscapeProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onEscape)
+    EscapeProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onEscape)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")

@@ -371,5 +371,5 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
 internal
     fun InterfaceMultiOverrideImplementationDto.buildEntity(__innerContext: MultiOverrideContext,
     __innerProjection: InterfaceMultiOverrideImplementationProjectionImpl):
-    InterfaceMultiOverrideImplementation = InterfaceMultiOverrideImplementationImpl(__innerContext,
-    __innerProjection, this)
+    InterfaceMultiOverrideImplementation =
+    InterfaceMultiOverrideImplementationImpl(__innerContext, __innerProjection, this)

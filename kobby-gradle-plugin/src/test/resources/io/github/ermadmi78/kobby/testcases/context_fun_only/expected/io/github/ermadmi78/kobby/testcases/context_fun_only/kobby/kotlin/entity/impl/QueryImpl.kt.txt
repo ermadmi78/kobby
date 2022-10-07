@@ -762,33 +762,33 @@ internal class QueryActorsQueryImpl : ActorProjectionImpl(), QueryActorsQuery {
 }
 
 internal fun QueryDto.buildEntity(__innerContext: ContextFunOnlyContext,
-    __innerProjection: QueryProjectionImpl): Query = QueryImpl(__innerContext, __innerProjection,
-    this)
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
 
 internal fun QueryDto.resolveCountry(__innerContext: ContextFunOnlyContext,
-    __innerProjection: CountryProjectionImpl): Country? = country?.buildEntity(__innerContext,
-    __innerProjection)
+    __innerProjection: CountryProjectionImpl): Country? =
+    country?.buildEntity(__innerContext, __innerProjection)
 
 internal fun QueryDto.resolveCountries(__innerContext: ContextFunOnlyContext,
-    __innerProjection: CountryProjectionImpl): List<Country> = countries?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: CountryProjectionImpl): List<Country> =
+    countries?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun QueryDto.resolveFilm(__innerContext: ContextFunOnlyContext,
-    __innerProjection: FilmProjectionImpl): Film? = film?.buildEntity(__innerContext,
-    __innerProjection)
+    __innerProjection: FilmProjectionImpl): Film? =
+    film?.buildEntity(__innerContext, __innerProjection)
 
 internal fun QueryDto.resolveFilms(__innerContext: ContextFunOnlyContext,
-    __innerProjection: FilmProjectionImpl): List<Film> = films?.map { it.buildEntity(__innerContext,
-    __innerProjection) } ?: listOf()
+    __innerProjection: FilmProjectionImpl): List<Film> =
+    films?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun QueryDto.resolveActor(__innerContext: ContextFunOnlyContext,
-    __innerProjection: ActorProjectionImpl): Actor? = actor?.buildEntity(__innerContext,
-    __innerProjection)
+    __innerProjection: ActorProjectionImpl): Actor? =
+    actor?.buildEntity(__innerContext, __innerProjection)
 
 internal fun QueryDto.resolveActors(__innerContext: ContextFunOnlyContext,
-    __innerProjection: ActorProjectionImpl): List<Actor> = actors?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: ActorProjectionImpl): List<Actor> =
+    actors?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun QueryDto.resolveTaggable(__innerContext: ContextFunOnlyContext,
-    __innerProjection: TaggableQualifiedProjectionImpl): List<Taggable> = taggable?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: TaggableQualifiedProjectionImpl): List<Taggable> =
+    taggable?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

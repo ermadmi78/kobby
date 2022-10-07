@@ -81,5 +81,5 @@ internal open class QueryProjectionImpl : QueryProjection {
 }
 
 internal fun QueryDto.buildEntity(__innerContext: MultiOverrideContext,
-    __innerProjection: QueryProjectionImpl): Query = QueryImpl(__innerContext, __innerProjection,
-    this)
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)

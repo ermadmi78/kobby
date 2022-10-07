@@ -72,8 +72,7 @@ internal class QueryImpl(
     if (__innerProjection.__innerSeveralPrimaryKeys2 == null) {
       error("Property [severalPrimaryKeys] is not available - add [severalPrimaryKeys] projection to switch on it")
     }
-    __innerDto.resolveSeveralPrimaryKeys(__innerContext,
-        __innerProjection.__innerSeveralPrimaryKeys2!!)
+    __innerDto.resolveSeveralPrimaryKeys(__innerContext, __innerProjection.__innerSeveralPrimaryKeys2!!)
   }
 
 
@@ -166,8 +165,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     }
     if ("severalPrimaryKeys" !in ignore && __innerSeveralPrimaryKeys2 != null) {
       __projection.severalPrimaryKeys {
-        this@QueryProjectionImpl.__innerSeveralPrimaryKeys2!!.___innerRepeatProjection(setOf(),
-            this)
+        this@QueryProjectionImpl.__innerSeveralPrimaryKeys2!!.___innerRepeatProjection(setOf(), this)
       }
     }
   }
@@ -330,16 +328,16 @@ internal class QueryEscapesSelectionQueryImpl : EscapeProjectionImpl(), QueryEsc
 }
 
 internal fun QueryDto.buildEntity(__innerContext: EscapeContext,
-    __innerProjection: QueryProjectionImpl): Query = QueryImpl(__innerContext, __innerProjection,
-    this)
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
 
 internal fun QueryDto.resolveEscapes(__innerContext: EscapeContext,
-    __innerProjection: EscapeProjectionImpl): List<Escape> = escapes?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: EscapeProjectionImpl): List<Escape> =
+    escapes?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun QueryDto.resolveEscapesSelection(__innerContext: EscapeContext,
-    __innerProjection: EscapeProjectionImpl): List<Escape> = escapesSelection?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: EscapeProjectionImpl): List<Escape> =
+    escapesSelection?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun QueryDto.resolveSeveralPrimaryKeys(__innerContext: EscapeContext,
     __innerProjection: SeveralPrimaryKeysProjectionImpl): SeveralPrimaryKeys? =

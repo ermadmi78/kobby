@@ -82,5 +82,5 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
 }
 
 internal fun SubscriptionDto.buildEntity(__innerContext: GraphqlContext,
-    __innerProjection: SubscriptionProjectionImpl): Subscription = SubscriptionImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: SubscriptionProjectionImpl): Subscription =
+    SubscriptionImpl(__innerContext, __innerProjection, this)

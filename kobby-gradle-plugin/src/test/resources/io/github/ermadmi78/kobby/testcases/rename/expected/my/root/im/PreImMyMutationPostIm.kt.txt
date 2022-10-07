@@ -250,21 +250,18 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
       Unit {
     if ("createCountry" !in ignore && innerCreateCountry0Pin != null) {
       projection.withPrCreateCountryWithPo(innerCreateCountry0NamePin!!) {
-        this@PreImPrePrMyMutationPostPrPostIm.innerCreateCountry0Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMyMutationPostPrPostIm.innerCreateCountry0Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
     if ("createFilm" !in ignore && innerCreateFilm1Pin != null) {
       projection.withPrCreateFilmWithPo(innerCreateFilm1CountryIdPin!!, innerCreateFilm1FilmPin!!) {
-        this@PreImPrePrMyMutationPostPrPostIm.innerCreateFilm1Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMyMutationPostPrPostIm.innerCreateFilm1Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
     if ("createActor" !in ignore && innerCreateActor2Pin != null) {
       projection.withPrCreateActorWithPo(innerCreateActor2CountryIdPin!!,
           innerCreateActor2ActorPin!!) {
-        this@PreImPrePrMyMutationPostPrPostIm.innerCreateActor2Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrMyMutationPostPrPostIm.innerCreateActor2Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
     if ("associate" !in ignore && innerAssociate3Pin) {

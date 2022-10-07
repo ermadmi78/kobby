@@ -66,18 +66,15 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
   }
 
   public override fun onPrCountryOnPo(projection: PrePrCountryPostPr.() -> Unit): Unit {
-    PreImPrePrCountryPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin,
-        _innerOnPrCountryOnPoPin)
+    PreImPrePrCountryPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin, _innerOnPrCountryOnPoPin)
   }
 
   public override fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit): Unit {
-    PreImPrePrFilmPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin,
-        _innerOnPrFilmOnPoPin)
+    PreImPrePrFilmPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin, _innerOnPrFilmOnPoPin)
   }
 
   public override fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit): Unit {
-    PreImPrePrActorPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin,
-        _innerOnPrActorOnPoPin)
+    PreImPrePrActorPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin, _innerOnPrActorOnPoPin)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
@@ -88,16 +85,13 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
       }
     }
     projection.onPrCountryOnPo {
-      this@PreImPreQPEntityPostQPPostIm._innerOnPrCountryOnPoPin._innerRepeatProjectionPin(setOf(),
-          this)
+      this@PreImPreQPEntityPostQPPostIm._innerOnPrCountryOnPoPin._innerRepeatProjectionPin(setOf(), this)
     }
     projection.onPrFilmOnPo {
-      this@PreImPreQPEntityPostQPPostIm._innerOnPrFilmOnPoPin._innerRepeatProjectionPin(setOf(),
-          this)
+      this@PreImPreQPEntityPostQPPostIm._innerOnPrFilmOnPoPin._innerRepeatProjectionPin(setOf(), this)
     }
     projection.onPrActorOnPo {
-      this@PreImPreQPEntityPostQPPostIm._innerOnPrActorOnPoPin._innerRepeatProjectionPin(setOf(),
-          this)
+      this@PreImPreQPEntityPostQPPostIm._innerOnPrActorOnPoPin._innerRepeatProjectionPin(setOf(), this)
     }
   }
 
@@ -200,11 +194,8 @@ public class PreImPreSelEntityFieldsPostSelPostIm : PreSelEntityFieldsPostSel {
 
 public fun DPrefEntityDPost.buildEntity(innerContextPin: PrefCtxContextPostCtx,
     innerProjectionPin: PreImPreQPEntityPostQPPostIm): PrefEnEntityPostEn = when(this) {
-  is DPrefCountryDPost -> PreImCountryPostIm(innerContextPin,
-      innerProjectionPin._innerOnPrCountryOnPoPin, this)
-  is DPrefFilmDPost -> PreImFilmPostIm(innerContextPin, innerProjectionPin._innerOnPrFilmOnPoPin,
-      this)
-  is DPrefActorDPost -> PreImActorPostIm(innerContextPin, innerProjectionPin._innerOnPrActorOnPoPin,
-      this)
+  is DPrefCountryDPost -> PreImCountryPostIm(innerContextPin, innerProjectionPin._innerOnPrCountryOnPoPin, this)
+  is DPrefFilmDPost -> PreImFilmPostIm(innerContextPin, innerProjectionPin._innerOnPrFilmOnPoPin, this)
+  is DPrefActorDPost -> PreImActorPostIm(innerContextPin, innerProjectionPin._innerOnPrActorOnPoPin, this)
   else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
 }

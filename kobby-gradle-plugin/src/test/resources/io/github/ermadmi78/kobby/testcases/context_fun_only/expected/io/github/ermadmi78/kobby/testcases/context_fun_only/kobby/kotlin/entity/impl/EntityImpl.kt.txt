@@ -48,18 +48,15 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
   internal val ___inner__onCountry: CountryProjectionImpl = CountryProjectionImpl()
 
   public override fun __onFilm(__projection: FilmProjection.() -> Unit): Unit {
-    FilmProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onFilm)
+    FilmProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onFilm)
   }
 
   public override fun __onActor(__projection: ActorProjection.() -> Unit): Unit {
-    ActorProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onActor)
+    ActorProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onActor)
   }
 
   public override fun __onCountry(__projection: CountryProjection.() -> Unit): Unit {
-    CountryProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onCountry)
+    CountryProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onCountry)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")

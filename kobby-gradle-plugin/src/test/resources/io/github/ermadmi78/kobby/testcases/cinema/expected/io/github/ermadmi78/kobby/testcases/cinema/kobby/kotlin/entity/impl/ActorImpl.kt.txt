@@ -537,17 +537,17 @@ internal class ActorFilmsQueryImpl : FilmProjectionImpl(), ActorFilmsQuery {
 }
 
 internal fun ActorDto.buildEntity(__innerContext: CinemaContext,
-    __innerProjection: ActorProjectionImpl): Actor = ActorImpl(__innerContext, __innerProjection,
-    this)
+    __innerProjection: ActorProjectionImpl): Actor =
+    ActorImpl(__innerContext, __innerProjection, this)
 
 internal fun ActorDto.resolveTags(__innerContext: CinemaContext,
-    __innerProjection: TagProjectionImpl): List<Tag> = tags?.map { it.buildEntity(__innerContext,
-    __innerProjection) } ?: listOf()
+    __innerProjection: TagProjectionImpl): List<Tag> =
+    tags?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun ActorDto.resolveCountry(__innerContext: CinemaContext,
-    __innerProjection: CountryProjectionImpl): Country = country?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: CountryProjectionImpl): Country =
+    country?.buildEntity(__innerContext, __innerProjection)!!
 
 internal fun ActorDto.resolveFilms(__innerContext: CinemaContext,
-    __innerProjection: FilmProjectionImpl): List<Film> = films?.map { it.buildEntity(__innerContext,
-    __innerProjection) } ?: listOf()
+    __innerProjection: FilmProjectionImpl): List<Film> =
+    films?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

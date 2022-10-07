@@ -293,15 +293,13 @@ public open class PreImPrePrCountryPostPrPostIm : PrePrCountryPostPr {
     }
     if ("actors" !in ignore && innerActors6Pin != null) {
       projection.withPrActorsWithPo {
-        this@PreImPrePrCountryPostPrPostIm.innerActors6Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrCountryPostPrPostIm.innerActors6Pin!!._innerRepeatProjectionPin(setOf(), this)
         this@PreImPrePrCountryPostPrPostIm.innerActors6Pin!!._innerRepeatSelectionPin(this)
       }
     }
     if ("native" !in ignore && innerNative7Pin != null) {
       projection.withPrNativeWithPo {
-        this@PreImPrePrCountryPostPrPostIm.innerNative7Pin!!._innerRepeatProjectionPin(setOf(),
-            this)
+        this@PreImPrePrCountryPostPrPostIm.innerNative7Pin!!._innerRepeatProjectionPin(setOf(), this)
       }
     }
   }
@@ -720,17 +718,17 @@ public fun DPrefCountryDPost.resolveFilm(innerContextPin: PrefCtxContextPostCtx,
     film?.buildEntity(innerContextPin, innerProjectionPin)
 
 public fun DPrefCountryDPost.resolveFilms(innerContextPin: PrefCtxContextPostCtx,
-    innerProjectionPin: PreImPrePrFilmPostPrPostIm): List<PrefEnFilmPostEn> = films?.map {
-    it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
+    innerProjectionPin: PreImPrePrFilmPostPrPostIm): List<PrefEnFilmPostEn> =
+    films?.map { it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
 
 public fun DPrefCountryDPost.resolveActor(innerContextPin: PrefCtxContextPostCtx,
     innerProjectionPin: PreImPrePrActorPostPrPostIm): PrefEnActorPostEn? =
     actor?.buildEntity(innerContextPin, innerProjectionPin)
 
 public fun DPrefCountryDPost.resolveActors(innerContextPin: PrefCtxContextPostCtx,
-    innerProjectionPin: PreImPrePrActorPostPrPostIm): List<PrefEnActorPostEn> = actors?.map {
-    it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
+    innerProjectionPin: PreImPrePrActorPostPrPostIm): List<PrefEnActorPostEn> =
+    actors?.map { it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
 
 public fun DPrefCountryDPost.resolveNative(innerContextPin: PrefCtxContextPostCtx,
-    innerProjectionPin: PreImPreQPNativePostQPPostIm): List<PrefEnNativePostEn> = native?.map {
-    it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()
+    innerProjectionPin: PreImPreQPNativePostQPPostIm): List<PrefEnNativePostEn> =
+    native?.map { it.buildEntity(innerContextPin, innerProjectionPin) } ?: listOf()

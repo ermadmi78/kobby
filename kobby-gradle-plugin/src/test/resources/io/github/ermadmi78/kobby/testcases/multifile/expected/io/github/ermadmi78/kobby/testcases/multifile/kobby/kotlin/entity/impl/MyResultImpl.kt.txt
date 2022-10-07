@@ -148,5 +148,5 @@ internal open class MyResultProjectionImpl : MyResultProjection {
 }
 
 internal fun MyResultDto.buildEntity(__innerContext: GraphqlContext,
-    __innerProjection: MyResultProjectionImpl): MyResult = MyResultImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: MyResultProjectionImpl): MyResult =
+    MyResultImpl(__innerContext, __innerProjection, this)

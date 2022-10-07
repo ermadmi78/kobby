@@ -73,8 +73,7 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
 
   public override
       fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit): Unit {
-    ComplexMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onComplexMultiOverride)
+    ComplexMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onComplexMultiOverride)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
@@ -87,8 +86,7 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
       __projection.complexMultiOverride(__innerComplexMultiOverride1Size)
     }
     __projection.__onComplexMultiOverride {
-      this@ComplexBase2QualifiedProjectionImpl.___inner__onComplexMultiOverride.___innerRepeatProjection(setOf(),
-          this)
+      this@ComplexBase2QualifiedProjectionImpl.___inner__onComplexMultiOverride.___innerRepeatProjection(setOf(), this)
     }
   }
 
@@ -205,7 +203,6 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
 
 internal fun ComplexBase2Dto.buildEntity(__innerContext: MultiOverrideContext,
     __innerProjection: ComplexBase2QualifiedProjectionImpl): ComplexBase2 = when(this) {
-  is ComplexMultiOverrideDto -> ComplexMultiOverrideImpl(__innerContext,
-      __innerProjection.___inner__onComplexMultiOverride, this)
+  is ComplexMultiOverrideDto -> ComplexMultiOverrideImpl(__innerContext, __innerProjection.___inner__onComplexMultiOverride, this)
   else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
 }

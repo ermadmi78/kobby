@@ -540,13 +540,13 @@ internal fun FilmDto.buildEntity(__innerContext: CinemaContext,
     __innerProjection: FilmProjectionImpl): Film = FilmImpl(__innerContext, __innerProjection, this)
 
 internal fun FilmDto.resolveTags(__innerContext: CinemaContext,
-    __innerProjection: TagProjectionImpl): List<Tag> = tags?.map { it.buildEntity(__innerContext,
-    __innerProjection) } ?: listOf()
+    __innerProjection: TagProjectionImpl): List<Tag> =
+    tags?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
 
 internal fun FilmDto.resolveCountry(__innerContext: CinemaContext,
-    __innerProjection: CountryProjectionImpl): Country = country?.buildEntity(__innerContext,
-    __innerProjection)!!
+    __innerProjection: CountryProjectionImpl): Country =
+    country?.buildEntity(__innerContext, __innerProjection)!!
 
 internal fun FilmDto.resolveActors(__innerContext: CinemaContext,
-    __innerProjection: ActorProjectionImpl): List<Actor> = actors?.map {
-    it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+    __innerProjection: ActorProjectionImpl): List<Actor> =
+    actors?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

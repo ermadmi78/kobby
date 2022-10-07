@@ -73,8 +73,7 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
 
   public override fun __onTypeMultiOverride(__projection: TypeMultiOverrideProjection.() -> Unit):
       Unit {
-    TypeMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
-        ___inner__onTypeMultiOverride)
+    TypeMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onTypeMultiOverride)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
@@ -87,8 +86,7 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
       __projection.typeMultiOverride(__innerTypeMultiOverride1Size)
     }
     __projection.__onTypeMultiOverride {
-      this@TypeBase1QualifiedProjectionImpl.___inner__onTypeMultiOverride.___innerRepeatProjection(setOf(),
-          this)
+      this@TypeBase1QualifiedProjectionImpl.___inner__onTypeMultiOverride.___innerRepeatProjection(setOf(), this)
     }
   }
 
@@ -205,7 +203,6 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
 
 internal fun TypeBase1Dto.buildEntity(__innerContext: MultiOverrideContext,
     __innerProjection: TypeBase1QualifiedProjectionImpl): TypeBase1 = when(this) {
-  is TypeMultiOverrideDto -> TypeMultiOverrideImpl(__innerContext,
-      __innerProjection.___inner__onTypeMultiOverride, this)
+  is TypeMultiOverrideDto -> TypeMultiOverrideImpl(__innerContext, __innerProjection.___inner__onTypeMultiOverride, this)
   else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
 }

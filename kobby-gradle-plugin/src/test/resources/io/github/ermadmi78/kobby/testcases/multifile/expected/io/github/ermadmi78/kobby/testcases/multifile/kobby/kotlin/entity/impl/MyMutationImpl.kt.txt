@@ -158,5 +158,5 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
 }
 
 internal fun MyMutationDto.buildEntity(__innerContext: GraphqlContext,
-    __innerProjection: MyMutationProjectionImpl): MyMutation = MyMutationImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: MyMutationProjectionImpl): MyMutation =
+    MyMutationImpl(__innerContext, __innerProjection, this)

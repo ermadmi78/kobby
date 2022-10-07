@@ -165,9 +165,9 @@ internal open class MutationProjectionImpl : MutationProjection {
 }
 
 internal fun MutationDto.buildEntity(__innerContext: EscapeContext,
-    __innerProjection: MutationProjectionImpl): Mutation = MutationImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: MutationProjectionImpl): Mutation =
+    MutationImpl(__innerContext, __innerProjection, this)
 
 internal fun MutationDto.resolveBy(__innerContext: EscapeContext,
-    __innerProjection: EscapeProjectionImpl): Escape? = `by`?.buildEntity(__innerContext,
-    __innerProjection)
+    __innerProjection: EscapeProjectionImpl): Escape? =
+    `by`?.buildEntity(__innerContext, __innerProjection)

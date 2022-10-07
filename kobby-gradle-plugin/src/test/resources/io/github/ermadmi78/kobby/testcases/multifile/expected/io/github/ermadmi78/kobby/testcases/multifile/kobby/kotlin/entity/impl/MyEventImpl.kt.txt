@@ -148,5 +148,5 @@ internal open class MyEventProjectionImpl : MyEventProjection {
 }
 
 internal fun MyEventDto.buildEntity(__innerContext: GraphqlContext,
-    __innerProjection: MyEventProjectionImpl): MyEvent = MyEventImpl(__innerContext,
-    __innerProjection, this)
+    __innerProjection: MyEventProjectionImpl): MyEvent =
+    MyEventImpl(__innerContext, __innerProjection, this)
