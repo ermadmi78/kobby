@@ -1,0 +1,29 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto
+
+import kotlin.String
+import kotlin.Suppress
+
+public interface ComplexIntermediateBase1Dto : ComplexBase1Dto {
+  public val noOverride0: String?
+
+  public override val noOverride1: String?
+
+  public override val complexMultiOverride: String?
+
+  public val intermediateMultiOverride: String?
+}

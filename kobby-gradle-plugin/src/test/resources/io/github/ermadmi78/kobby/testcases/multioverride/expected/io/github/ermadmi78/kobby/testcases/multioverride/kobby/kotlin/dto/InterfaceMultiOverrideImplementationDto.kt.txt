@@ -1,0 +1,76 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+public data class InterfaceMultiOverrideImplementationDto(
+  public override val noOverride1: String? = null,
+  public override val noOverride2: String? = null,
+  public override val interfaceMultiOverride: String? = null,
+  public val finalField: String? = null,
+) : InterfaceMultiOverrideDto, InterfaceBase1Dto, InterfaceBase2Dto
+
+public
+    fun InterfaceMultiOverrideImplementationDto(block: InterfaceMultiOverrideImplementationDtoBuilder.() -> Unit):
+    InterfaceMultiOverrideImplementationDto {
+  // InterfaceMultiOverrideImplementationDto builder DSL
+  return InterfaceMultiOverrideImplementationDtoBuilder().apply(block).let {
+    InterfaceMultiOverrideImplementationDto(
+          it.noOverride1,
+          it.noOverride2,
+          it.interfaceMultiOverride,
+          it.finalField
+        )
+  }
+}
+
+public
+    fun InterfaceMultiOverrideImplementationDto.copy(block: InterfaceMultiOverrideImplementationDtoBuilder.() -> Unit):
+    InterfaceMultiOverrideImplementationDto {
+  // InterfaceMultiOverrideImplementationDto copy DSL
+  return InterfaceMultiOverrideImplementationDtoBuilder().also {
+    it.noOverride1 = this.noOverride1
+    it.noOverride2 = this.noOverride2
+    it.interfaceMultiOverride = this.interfaceMultiOverride
+    it.finalField = this.finalField
+  }
+  .apply(block).let {
+    InterfaceMultiOverrideImplementationDto(
+          it.noOverride1,
+          it.noOverride2,
+          it.interfaceMultiOverride,
+          it.finalField
+        )
+  }
+}
+
+@MultiOverrideDSL
+public class InterfaceMultiOverrideImplementationDtoBuilder {
+  public var noOverride1: String? = null
+
+  public var noOverride2: String? = null
+
+  public var interfaceMultiOverride: String? = null
+
+  public var finalField: String? = null
+}

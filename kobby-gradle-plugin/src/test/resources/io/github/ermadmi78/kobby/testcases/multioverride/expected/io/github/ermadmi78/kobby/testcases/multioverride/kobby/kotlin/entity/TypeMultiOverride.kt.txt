@@ -1,0 +1,57 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideDSL
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideSubscriber
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface TypeMultiOverride : MultiOverrideContext, TypeBase1, TypeBase2 {
+  public override val noOverride1: String
+
+  public override val noOverride2: String
+
+  public override val typeMultiOverride: String
+
+  public val finalField: String
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      MultiOverrideSubscriber<Subscription>
+
+  public fun TypeMultiOverrideProjection.__withCurrentProjection(): Unit
+}
+
+@MultiOverrideDSL
+public interface TypeMultiOverrideProjection : TypeBase1Projection, TypeBase2Projection {
+  public override fun noOverride1(size: Int?): Unit
+
+  public override fun noOverride2(size: Int?): Unit
+
+  public override fun typeMultiOverride(size: Int?): Unit
+
+  public fun finalField(size: Int? = null): Unit
+
+  public override fun __minimize(): Unit {
+  }
+}

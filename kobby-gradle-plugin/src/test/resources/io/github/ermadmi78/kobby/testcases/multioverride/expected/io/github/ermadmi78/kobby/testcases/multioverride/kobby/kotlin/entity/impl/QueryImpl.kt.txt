@@ -1,0 +1,85 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideSubscriber
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class QueryImpl(
+  internal val __innerContext: MultiOverrideContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto,
+) : Query {
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+    append(')')
+  }
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      MultiOverrideSubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun QueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: MultiOverrideContext,
+    __innerProjection: QueryProjectionImpl): Query = QueryImpl(__innerContext, __innerProjection,
+    this)

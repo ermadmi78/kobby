@@ -1,0 +1,79 @@
+interface TypeBase1 {
+    noOverride1(size: Int): String!
+    typeMultiOverride(size: Int): String!
+}
+
+interface TypeBase2 {
+    noOverride2(size: Int): String!
+    typeMultiOverride(size: Int): String!
+}
+
+type TypeMultiOverride implements TypeBase1 & TypeBase2 {
+    noOverride1(size: Int): String!
+    noOverride2(size: Int): String!
+    typeMultiOverride(size: Int): String!
+    finalField(size: Int): String!
+}
+
+interface InterfaceBase1 {
+    noOverride1(size: Int): String!
+    interfaceMultiOverride(size: Int): String!
+}
+
+interface InterfaceBase2 {
+    noOverride2(size: Int): String!
+    interfaceMultiOverride(size: Int): String!
+}
+
+interface InterfaceMultiOverride implements InterfaceBase1 & InterfaceBase2 {
+    noOverride1(size: Int): String!
+    noOverride2(size: Int): String!
+    interfaceMultiOverride(size: Int): String!
+}
+
+type InterfaceMultiOverrideImplementation implements InterfaceMultiOverride & InterfaceBase1 & InterfaceBase2 {
+    noOverride1(size: Int): String!
+    noOverride2(size: Int): String!
+    interfaceMultiOverride(size: Int): String!
+    finalField(size: Int): String!
+}
+
+interface ComplexBase1 {
+    noOverride1(size: Int): String!
+    complexMultiOverride(size: Int): String!
+}
+
+interface ComplexIntermediateBase1 implements ComplexBase1 {
+    noOverride0(size: Int): String!
+    noOverride1(size: Int): String!
+    complexMultiOverride(size: Int): String!
+    intermediateMultiOverride(size: Int): String!
+}
+
+interface ComplexBase2 {
+    noOverride2(size: Int): String!
+    complexMultiOverride(size: Int): String!
+}
+
+type ComplexMultiOverride implements ComplexBase1 & ComplexIntermediateBase1 & ComplexBase2 {
+    noOverride0(size: Int): String!
+    noOverride1(size: Int): String!
+    noOverride2(size: Int): String!
+    complexMultiOverride(size: Int): String!
+    intermediateMultiOverride(size: Int): String!
+    finalField(size: Int): String!
+}
+
+interface IntermediateBase {
+    intermediateNoOverride(size: Int): String!
+    intermediateMultiOverride(size: Int): String!
+}
+
+type IntermediateMultiOverride implements ComplexIntermediateBase1 & ComplexBase1 & IntermediateBase {
+    noOverride0(size: Int): String!
+    noOverride1(size: Int): String!
+    complexMultiOverride(size: Int): String!
+    intermediateNoOverride(size: Int): String!
+    intermediateMultiOverride(size: Int): String!
+    finalField(size: Int): String!
+}

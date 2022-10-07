@@ -1,0 +1,214 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.IntermediateBaseDto
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.IntermediateMultiOverrideDto
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.IntermediateBase
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.IntermediateBaseQualifiedProjection
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.IntermediateMultiOverrideProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.MutableSet
+import kotlin.collections.Set
+import kotlin.collections.mutableSetOf
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
+
+internal open class IntermediateBaseQualifiedProjectionImpl : IntermediateBaseQualifiedProjection {
+  internal val ___innerIgnore: MutableSet<String> = mutableSetOf()
+
+  internal var __innerIntermediateNoOverride0: Boolean = false
+
+  internal var __innerIntermediateNoOverride0Size: Int? = null
+
+  internal var __innerIntermediateMultiOverride1: Boolean = false
+
+  internal var __innerIntermediateMultiOverride1Size: Int? = null
+
+  internal val ___inner__onIntermediateMultiOverride: IntermediateMultiOverrideProjectionImpl =
+      IntermediateMultiOverrideProjectionImpl()
+
+  public override fun intermediateNoOverride(size: Int?): Unit {
+    __innerIntermediateNoOverride0 = true
+    __innerIntermediateNoOverride0Size = size
+
+    ___inner__onIntermediateMultiOverride.__innerIntermediateNoOverride3 =
+        __innerIntermediateNoOverride0
+    ___inner__onIntermediateMultiOverride.__innerIntermediateNoOverride3Size = size
+
+    ___innerIgnore += "intermediateNoOverride"
+  }
+
+  public override fun intermediateMultiOverride(size: Int?): Unit {
+    __innerIntermediateMultiOverride1 = true
+    __innerIntermediateMultiOverride1Size = size
+
+    ___inner__onIntermediateMultiOverride.__innerIntermediateMultiOverride4 =
+        __innerIntermediateMultiOverride1
+    ___inner__onIntermediateMultiOverride.__innerIntermediateMultiOverride4Size = size
+
+    ___innerIgnore += "intermediateMultiOverride"
+  }
+
+  public override
+      fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit):
+      Unit {
+    IntermediateMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
+        ___inner__onIntermediateMultiOverride)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>,
+      __projection: IntermediateBaseQualifiedProjection): Unit {
+    if ("intermediateNoOverride" !in ignore && __innerIntermediateNoOverride0) {
+      __projection.intermediateNoOverride(__innerIntermediateNoOverride0Size)
+    }
+    if ("intermediateMultiOverride" !in ignore && __innerIntermediateMultiOverride1) {
+      __projection.intermediateMultiOverride(__innerIntermediateMultiOverride1Size)
+    }
+    __projection.__onIntermediateMultiOverride {
+      this@IntermediateBaseQualifiedProjectionImpl.___inner__onIntermediateMultiOverride.___innerRepeatProjection(setOf(),
+          this)
+    }
+  }
+
+  /**
+   * Projection for field: intermediateNoOverride
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildIntermediateNoOverride0(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("intermediateNoOverride" !in ignore && __innerIntermediateNoOverride0) {
+      body.append(' ').append("intermediateNoOverride")
+      var counter = 0
+      val addBrackets = __innerIntermediateNoOverride0Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: intermediateNoOverride.size
+      if (__innerIntermediateNoOverride0Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerIntermediateNoOverride0Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection for field: intermediateMultiOverride
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildIntermediateMultiOverride1(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("intermediateMultiOverride" !in ignore && __innerIntermediateMultiOverride1) {
+      body.append(' ').append("intermediateMultiOverride")
+      var counter = 0
+      val addBrackets = __innerIntermediateMultiOverride1Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: intermediateMultiOverride.size
+      if (__innerIntermediateMultiOverride1Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerIntermediateMultiOverride1Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: intermediateNoOverride
+    ____innerBuildIntermediateNoOverride0(ignore, header, body, arguments)
+
+    // Field: intermediateMultiOverride
+    ____innerBuildIntermediateMultiOverride1(ignore, header, body, arguments)
+
+    body.append(' ').append("__typename")
+
+    val subBody = StringBuilder()
+
+    // Qualification of: IntermediateMultiOverride
+    subBody.clear()
+    ___inner__onIntermediateMultiOverride.___innerBuild(___innerIgnore, header, subBody, arguments)
+    if (subBody.length > 4) {
+      body.append(" ... on ").append("IntermediateMultiOverride").append(subBody)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun IntermediateBaseDto.buildEntity(__innerContext: MultiOverrideContext,
+    __innerProjection: IntermediateBaseQualifiedProjectionImpl): IntermediateBase = when(this) {
+  is IntermediateMultiOverrideDto -> IntermediateMultiOverrideImpl(__innerContext,
+      __innerProjection.___inner__onIntermediateMultiOverride, this)
+  else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
+}

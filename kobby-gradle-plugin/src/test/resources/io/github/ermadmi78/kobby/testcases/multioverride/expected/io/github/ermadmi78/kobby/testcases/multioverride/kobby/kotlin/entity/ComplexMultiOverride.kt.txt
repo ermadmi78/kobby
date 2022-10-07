@@ -1,0 +1,67 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideDSL
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideSubscriber
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface ComplexMultiOverride : MultiOverrideContext, ComplexBase1,
+    ComplexIntermediateBase1, ComplexBase2 {
+  public override val noOverride0: String
+
+  public override val noOverride1: String
+
+  public override val noOverride2: String
+
+  public override val complexMultiOverride: String
+
+  public override val intermediateMultiOverride: String
+
+  public val finalField: String
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      MultiOverrideSubscriber<Subscription>
+
+  public fun ComplexMultiOverrideProjection.__withCurrentProjection(): Unit
+}
+
+@MultiOverrideDSL
+public interface ComplexMultiOverrideProjection : ComplexBase1Projection,
+    ComplexIntermediateBase1Projection, ComplexBase2Projection {
+  public override fun noOverride0(size: Int?): Unit
+
+  public override fun noOverride1(size: Int?): Unit
+
+  public override fun noOverride2(size: Int?): Unit
+
+  public override fun complexMultiOverride(size: Int?): Unit
+
+  public override fun intermediateMultiOverride(size: Int?): Unit
+
+  public fun finalField(size: Int? = null): Unit
+
+  public override fun __minimize(): Unit {
+  }
+}

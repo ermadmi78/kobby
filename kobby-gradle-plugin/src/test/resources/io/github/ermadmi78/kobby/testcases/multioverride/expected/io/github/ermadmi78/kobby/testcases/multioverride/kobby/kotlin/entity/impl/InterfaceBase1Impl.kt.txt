@@ -1,0 +1,215 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.InterfaceBase1Dto
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.InterfaceMultiOverrideImplementationDto
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.InterfaceBase1
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.InterfaceBase1QualifiedProjection
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.InterfaceMultiOverrideImplementationProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.MutableSet
+import kotlin.collections.Set
+import kotlin.collections.mutableSetOf
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
+
+internal open class InterfaceBase1QualifiedProjectionImpl : InterfaceBase1QualifiedProjection {
+  internal val ___innerIgnore: MutableSet<String> = mutableSetOf()
+
+  internal var __innerNoOverride10: Boolean = false
+
+  internal var __innerNoOverride10Size: Int? = null
+
+  internal var __innerInterfaceMultiOverride1: Boolean = false
+
+  internal var __innerInterfaceMultiOverride1Size: Int? = null
+
+  internal val ___inner__onInterfaceMultiOverrideImplementation:
+      InterfaceMultiOverrideImplementationProjectionImpl =
+      InterfaceMultiOverrideImplementationProjectionImpl()
+
+  public override fun noOverride1(size: Int?): Unit {
+    __innerNoOverride10 = true
+    __innerNoOverride10Size = size
+
+    ___inner__onInterfaceMultiOverrideImplementation.__innerNoOverride10 = __innerNoOverride10
+    ___inner__onInterfaceMultiOverrideImplementation.__innerNoOverride10Size = size
+
+    ___innerIgnore += "noOverride1"
+  }
+
+  public override fun interfaceMultiOverride(size: Int?): Unit {
+    __innerInterfaceMultiOverride1 = true
+    __innerInterfaceMultiOverride1Size = size
+
+    ___inner__onInterfaceMultiOverrideImplementation.__innerInterfaceMultiOverride2 =
+        __innerInterfaceMultiOverride1
+    ___inner__onInterfaceMultiOverrideImplementation.__innerInterfaceMultiOverride2Size = size
+
+    ___innerIgnore += "interfaceMultiOverride"
+  }
+
+  public override
+      fun __onInterfaceMultiOverrideImplementation(__projection: InterfaceMultiOverrideImplementationProjection.() -> Unit):
+      Unit {
+    InterfaceMultiOverrideImplementationProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
+        ___inner__onInterfaceMultiOverrideImplementation)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>,
+      __projection: InterfaceBase1QualifiedProjection): Unit {
+    if ("noOverride1" !in ignore && __innerNoOverride10) {
+      __projection.noOverride1(__innerNoOverride10Size)
+    }
+    if ("interfaceMultiOverride" !in ignore && __innerInterfaceMultiOverride1) {
+      __projection.interfaceMultiOverride(__innerInterfaceMultiOverride1Size)
+    }
+    __projection.__onInterfaceMultiOverrideImplementation {
+      this@InterfaceBase1QualifiedProjectionImpl.___inner__onInterfaceMultiOverrideImplementation.___innerRepeatProjection(setOf(),
+          this)
+    }
+  }
+
+  /**
+   * Projection for field: noOverride1
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildNoOverride10(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("noOverride1" !in ignore && __innerNoOverride10) {
+      body.append(' ').append("noOverride1")
+      var counter = 0
+      val addBrackets = __innerNoOverride10Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: noOverride1.size
+      if (__innerNoOverride10Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerNoOverride10Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection for field: interfaceMultiOverride
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildInterfaceMultiOverride1(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("interfaceMultiOverride" !in ignore && __innerInterfaceMultiOverride1) {
+      body.append(' ').append("interfaceMultiOverride")
+      var counter = 0
+      val addBrackets = __innerInterfaceMultiOverride1Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: interfaceMultiOverride.size
+      if (__innerInterfaceMultiOverride1Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerInterfaceMultiOverride1Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: noOverride1
+    ____innerBuildNoOverride10(ignore, header, body, arguments)
+
+    // Field: interfaceMultiOverride
+    ____innerBuildInterfaceMultiOverride1(ignore, header, body, arguments)
+
+    body.append(' ').append("__typename")
+
+    val subBody = StringBuilder()
+
+    // Qualification of: InterfaceMultiOverrideImplementation
+    subBody.clear()
+    ___inner__onInterfaceMultiOverrideImplementation.___innerBuild(___innerIgnore, header, subBody,
+        arguments)
+    if (subBody.length > 4) {
+      body.append(" ... on ").append("InterfaceMultiOverrideImplementation").append(subBody)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun InterfaceBase1Dto.buildEntity(__innerContext: MultiOverrideContext,
+    __innerProjection: InterfaceBase1QualifiedProjectionImpl): InterfaceBase1 = when(this) {
+  is InterfaceMultiOverrideImplementationDto -> InterfaceMultiOverrideImplementationImpl(__innerContext,
+      __innerProjection.___inner__onInterfaceMultiOverrideImplementation, this)
+  else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
+}

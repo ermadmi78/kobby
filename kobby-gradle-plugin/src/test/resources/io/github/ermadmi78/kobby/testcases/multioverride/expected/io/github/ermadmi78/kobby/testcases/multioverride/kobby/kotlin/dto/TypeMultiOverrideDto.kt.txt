@@ -1,0 +1,74 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+public data class TypeMultiOverrideDto(
+  public override val noOverride1: String? = null,
+  public override val noOverride2: String? = null,
+  public override val typeMultiOverride: String? = null,
+  public val finalField: String? = null,
+) : TypeBase1Dto, TypeBase2Dto
+
+public fun TypeMultiOverrideDto(block: TypeMultiOverrideDtoBuilder.() -> Unit):
+    TypeMultiOverrideDto {
+  // TypeMultiOverrideDto builder DSL
+  return TypeMultiOverrideDtoBuilder().apply(block).let {
+    TypeMultiOverrideDto(
+          it.noOverride1,
+          it.noOverride2,
+          it.typeMultiOverride,
+          it.finalField
+        )
+  }
+}
+
+public fun TypeMultiOverrideDto.copy(block: TypeMultiOverrideDtoBuilder.() -> Unit):
+    TypeMultiOverrideDto {
+  // TypeMultiOverrideDto copy DSL
+  return TypeMultiOverrideDtoBuilder().also {
+    it.noOverride1 = this.noOverride1
+    it.noOverride2 = this.noOverride2
+    it.typeMultiOverride = this.typeMultiOverride
+    it.finalField = this.finalField
+  }
+  .apply(block).let {
+    TypeMultiOverrideDto(
+          it.noOverride1,
+          it.noOverride2,
+          it.typeMultiOverride,
+          it.finalField
+        )
+  }
+}
+
+@MultiOverrideDSL
+public class TypeMultiOverrideDtoBuilder {
+  public var noOverride1: String? = null
+
+  public var noOverride2: String? = null
+
+  public var typeMultiOverride: String? = null
+
+  public var finalField: String? = null
+}

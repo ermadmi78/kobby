@@ -1,0 +1,55 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideDSL
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideSubscriber
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface ComplexBase2 : MultiOverrideContext {
+  public val noOverride2: String
+
+  public val complexMultiOverride: String
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      MultiOverrideSubscriber<Subscription>
+}
+
+@MultiOverrideDSL
+public interface ComplexBase2Projection {
+  public fun noOverride2(size: Int? = null): Unit
+
+  public fun complexMultiOverride(size: Int?): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
+
+@MultiOverrideDSL
+public interface ComplexBase2Qualification {
+  public fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit): Unit
+}
+
+@MultiOverrideDSL
+public interface ComplexBase2QualifiedProjection : ComplexBase2Projection, ComplexBase2Qualification

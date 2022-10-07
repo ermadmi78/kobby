@@ -1,0 +1,27 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto
+
+import kotlin.String
+import kotlin.Suppress
+
+public interface InterfaceMultiOverrideDto : InterfaceBase1Dto, InterfaceBase2Dto {
+  public override val noOverride1: String?
+
+  public override val noOverride2: String?
+
+  public override val interfaceMultiOverride: String?
+}

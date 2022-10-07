@@ -1,0 +1,211 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.ComplexBase2Dto
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.ComplexMultiOverrideDto
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.ComplexBase2
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.ComplexBase2QualifiedProjection
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.ComplexMultiOverrideProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.MutableSet
+import kotlin.collections.Set
+import kotlin.collections.mutableSetOf
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
+
+internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedProjection {
+  internal val ___innerIgnore: MutableSet<String> = mutableSetOf()
+
+  internal var __innerNoOverride20: Boolean = false
+
+  internal var __innerNoOverride20Size: Int? = null
+
+  internal var __innerComplexMultiOverride1: Boolean = false
+
+  internal var __innerComplexMultiOverride1Size: Int? = null
+
+  internal val ___inner__onComplexMultiOverride: ComplexMultiOverrideProjectionImpl =
+      ComplexMultiOverrideProjectionImpl()
+
+  public override fun noOverride2(size: Int?): Unit {
+    __innerNoOverride20 = true
+    __innerNoOverride20Size = size
+
+    ___inner__onComplexMultiOverride.__innerNoOverride22 = __innerNoOverride20
+    ___inner__onComplexMultiOverride.__innerNoOverride22Size = size
+
+    ___innerIgnore += "noOverride2"
+  }
+
+  public override fun complexMultiOverride(size: Int?): Unit {
+    __innerComplexMultiOverride1 = true
+    __innerComplexMultiOverride1Size = size
+
+    ___inner__onComplexMultiOverride.__innerComplexMultiOverride3 = __innerComplexMultiOverride1
+    ___inner__onComplexMultiOverride.__innerComplexMultiOverride3Size = size
+
+    ___innerIgnore += "complexMultiOverride"
+  }
+
+  public override
+      fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit): Unit {
+    ComplexMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore,
+        ___inner__onComplexMultiOverride)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>,
+      __projection: ComplexBase2QualifiedProjection): Unit {
+    if ("noOverride2" !in ignore && __innerNoOverride20) {
+      __projection.noOverride2(__innerNoOverride20Size)
+    }
+    if ("complexMultiOverride" !in ignore && __innerComplexMultiOverride1) {
+      __projection.complexMultiOverride(__innerComplexMultiOverride1Size)
+    }
+    __projection.__onComplexMultiOverride {
+      this@ComplexBase2QualifiedProjectionImpl.___inner__onComplexMultiOverride.___innerRepeatProjection(setOf(),
+          this)
+    }
+  }
+
+  /**
+   * Projection for field: noOverride2
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildNoOverride20(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("noOverride2" !in ignore && __innerNoOverride20) {
+      body.append(' ').append("noOverride2")
+      var counter = 0
+      val addBrackets = __innerNoOverride20Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: noOverride2.size
+      if (__innerNoOverride20Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerNoOverride20Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection for field: complexMultiOverride
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildComplexMultiOverride1(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("complexMultiOverride" !in ignore && __innerComplexMultiOverride1) {
+      body.append(' ').append("complexMultiOverride")
+      var counter = 0
+      val addBrackets = __innerComplexMultiOverride1Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: complexMultiOverride.size
+      if (__innerComplexMultiOverride1Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerComplexMultiOverride1Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: noOverride2
+    ____innerBuildNoOverride20(ignore, header, body, arguments)
+
+    // Field: complexMultiOverride
+    ____innerBuildComplexMultiOverride1(ignore, header, body, arguments)
+
+    body.append(' ').append("__typename")
+
+    val subBody = StringBuilder()
+
+    // Qualification of: ComplexMultiOverride
+    subBody.clear()
+    ___inner__onComplexMultiOverride.___innerBuild(___innerIgnore, header, subBody, arguments)
+    if (subBody.length > 4) {
+      body.append(" ... on ").append("ComplexMultiOverride").append(subBody)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun ComplexBase2Dto.buildEntity(__innerContext: MultiOverrideContext,
+    __innerProjection: ComplexBase2QualifiedProjectionImpl): ComplexBase2 = when(this) {
+  is ComplexMultiOverrideDto -> ComplexMultiOverrideImpl(__innerContext,
+      __innerProjection.___inner__onComplexMultiOverride, this)
+  else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
+}

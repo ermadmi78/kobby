@@ -1,0 +1,371 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideSubscriber
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.TypeMultiOverrideDto
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.SubscriptionProjection
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.TypeMultiOverride
+import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.TypeMultiOverrideProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class TypeMultiOverrideImpl(
+  internal val __innerContext: MultiOverrideContext,
+  internal val __innerProjection: TypeMultiOverrideProjectionImpl,
+  internal val __innerDto: TypeMultiOverrideDto,
+) : TypeMultiOverride {
+  public override val noOverride1: String
+    get() {
+      if (!__innerProjection.__innerNoOverride10) {
+        error("Property [noOverride1] is not available - add [noOverride1] projection to switch on it")
+      }
+      return __innerDto.noOverride1!!
+    }
+
+  public override val noOverride2: String
+    get() {
+      if (!__innerProjection.__innerNoOverride21) {
+        error("Property [noOverride2] is not available - add [noOverride2] projection to switch on it")
+      }
+      return __innerDto.noOverride2!!
+    }
+
+  public override val typeMultiOverride: String
+    get() {
+      if (!__innerProjection.__innerTypeMultiOverride2) {
+        error("Property [typeMultiOverride] is not available - add [typeMultiOverride] projection to switch on it")
+      }
+      return __innerDto.typeMultiOverride!!
+    }
+
+  public override val finalField: String
+    get() {
+      if (!__innerProjection.__innerFinalField3) {
+        error("Property [finalField] is not available - add [finalField] projection to switch on it")
+      }
+      return __innerDto.finalField!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("TypeMultiOverride").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerNoOverride10) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("noOverride1").append('=').append(noOverride1)
+    }
+
+    if (__innerProjection.__innerNoOverride21) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("noOverride2").append('=').append(noOverride2)
+    }
+
+    if (__innerProjection.__innerTypeMultiOverride2) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("typeMultiOverride").append('=').append(typeMultiOverride)
+    }
+
+    if (__innerProjection.__innerFinalField3) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("finalField").append('=').append(finalField)
+    }
+
+    append(')')
+  }
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      MultiOverrideSubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun TypeMultiOverrideProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class TypeMultiOverrideProjectionImpl : TypeMultiOverrideProjection {
+  internal var __innerNoOverride10: Boolean = false
+
+  internal var __innerNoOverride10Size: Int? = null
+
+  internal var __innerNoOverride21: Boolean = false
+
+  internal var __innerNoOverride21Size: Int? = null
+
+  internal var __innerTypeMultiOverride2: Boolean = false
+
+  internal var __innerTypeMultiOverride2Size: Int? = null
+
+  internal var __innerFinalField3: Boolean = false
+
+  internal var __innerFinalField3Size: Int? = null
+
+  public override fun noOverride1(size: Int?): Unit {
+    __innerNoOverride10 = true
+    __innerNoOverride10Size = size
+  }
+
+  public override fun noOverride2(size: Int?): Unit {
+    __innerNoOverride21 = true
+    __innerNoOverride21Size = size
+  }
+
+  public override fun typeMultiOverride(size: Int?): Unit {
+    __innerTypeMultiOverride2 = true
+    __innerTypeMultiOverride2Size = size
+  }
+
+  public override fun finalField(size: Int?): Unit {
+    __innerFinalField3 = true
+    __innerFinalField3Size = size
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>,
+      __projection: TypeMultiOverrideProjection): Unit {
+    if ("noOverride1" !in ignore && __innerNoOverride10) {
+      __projection.noOverride1(__innerNoOverride10Size)
+    }
+    if ("noOverride2" !in ignore && __innerNoOverride21) {
+      __projection.noOverride2(__innerNoOverride21Size)
+    }
+    if ("typeMultiOverride" !in ignore && __innerTypeMultiOverride2) {
+      __projection.typeMultiOverride(__innerTypeMultiOverride2Size)
+    }
+    if ("finalField" !in ignore && __innerFinalField3) {
+      __projection.finalField(__innerFinalField3Size)
+    }
+  }
+
+  /**
+   * Projection for field: noOverride1
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildNoOverride10(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("noOverride1" !in ignore && __innerNoOverride10) {
+      body.append(' ').append("noOverride1")
+      var counter = 0
+      val addBrackets = __innerNoOverride10Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: noOverride1.size
+      if (__innerNoOverride10Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerNoOverride10Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection for field: noOverride2
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildNoOverride21(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("noOverride2" !in ignore && __innerNoOverride21) {
+      body.append(' ').append("noOverride2")
+      var counter = 0
+      val addBrackets = __innerNoOverride21Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: noOverride2.size
+      if (__innerNoOverride21Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerNoOverride21Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection for field: typeMultiOverride
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildTypeMultiOverride2(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("typeMultiOverride" !in ignore && __innerTypeMultiOverride2) {
+      body.append(' ').append("typeMultiOverride")
+      var counter = 0
+      val addBrackets = __innerTypeMultiOverride2Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: typeMultiOverride.size
+      if (__innerTypeMultiOverride2Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerTypeMultiOverride2Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection for field: finalField
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFinalField3(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("finalField" !in ignore && __innerFinalField3) {
+      body.append(' ').append("finalField")
+      var counter = 0
+      val addBrackets = __innerFinalField3Size != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: finalField.size
+      if (__innerFinalField3Size != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFinalField3Size!!
+        body.append("size").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: noOverride1
+    ____innerBuildNoOverride10(ignore, header, body, arguments)
+
+    // Field: noOverride2
+    ____innerBuildNoOverride21(ignore, header, body, arguments)
+
+    // Field: typeMultiOverride
+    ____innerBuildTypeMultiOverride2(ignore, header, body, arguments)
+
+    // Field: finalField
+    ____innerBuildFinalField3(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun TypeMultiOverrideDto.buildEntity(__innerContext: MultiOverrideContext,
+    __innerProjection: TypeMultiOverrideProjectionImpl): TypeMultiOverride =
+    TypeMultiOverrideImpl(__innerContext, __innerProjection, this)
