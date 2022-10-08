@@ -146,7 +146,7 @@ public class PreImMyMutationPostIm(
     append(')')
   }
 
-  public override fun __context(): PrefCtxContextPostCtx = innerContextPin
+  public override fun context(): PrefCtxContextPostCtx = innerContextPin
 
   public override fun PrePrMyMutationPostPr.withCurrentProjection(): Unit {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)

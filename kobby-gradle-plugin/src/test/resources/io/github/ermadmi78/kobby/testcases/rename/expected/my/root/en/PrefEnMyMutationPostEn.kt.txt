@@ -38,7 +38,7 @@ public interface PrefEnMyMutationPostEn {
 
   public val tagActor: Boolean
 
-  public fun __context(): PrefCtxContextPostCtx
+  public fun context(): PrefCtxContextPostCtx
 
   public fun PrePrMyMutationPostPr.withCurrentProjection(): Unit
 }

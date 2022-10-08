@@ -169,7 +169,7 @@ public class PreImFilmPostIm(
     append(')')
   }
 
-  public override fun __context(): PrefCtxContextPostCtx = innerContextPin
+  public override fun context(): PrefCtxContextPostCtx = innerContextPin
 
   public override fun PrePrFilmPostPr.withCurrentProjection(): Unit {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)

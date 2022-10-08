@@ -28,7 +28,7 @@ public interface PrefEnEntityPostEn {
 
   public val fields: String
 
-  public fun __context(): PrefCtxContextPostCtx
+  public fun context(): PrefCtxContextPostCtx
 }
 
 @PrefCtxDSLPostCtx

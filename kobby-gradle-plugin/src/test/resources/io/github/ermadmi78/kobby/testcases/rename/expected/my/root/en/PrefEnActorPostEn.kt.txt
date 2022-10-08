@@ -43,7 +43,7 @@ public interface PrefEnActorPostEn : PrefEnEntityPostEn, PrefEnNativePostEn {
 
   public val films: List<PrefEnFilmPostEn>
 
-  public override fun __context(): PrefCtxContextPostCtx
+  public override fun context(): PrefCtxContextPostCtx
 
   public fun PrePrActorPostPr.withCurrentProjection(): Unit
 }

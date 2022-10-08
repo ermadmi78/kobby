@@ -43,7 +43,7 @@ public interface PrefEnCountryPostEn : PrefEnEntityPostEn {
 
   public val native: List<PrefEnNativePostEn>
 
-  public override fun __context(): PrefCtxContextPostCtx
+  public override fun context(): PrefCtxContextPostCtx
 
   public fun PrePrCountryPostPr.withCurrentProjection(): Unit
 }

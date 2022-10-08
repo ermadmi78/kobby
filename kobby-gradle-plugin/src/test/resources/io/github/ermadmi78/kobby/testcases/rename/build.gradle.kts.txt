@@ -69,6 +69,7 @@ kobby {
             packageName = "en"
             prefix = "PrefEn"
             postfix = "PostEn"
+            contextFunName = "context"
             withCurrentProjectionFun = "withCurrentProjection"
 
             projection {

@@ -98,7 +98,7 @@ public class PreImMySubscriptionPostIm(
     append(')')
   }
 
-  public override fun __context(): PrefCtxContextPostCtx = innerContextPin
+  public override fun context(): PrefCtxContextPostCtx = innerContextPin
 
   public override fun PrePrMySubscriptionPostPr.withCurrentProjection(): Unit {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)

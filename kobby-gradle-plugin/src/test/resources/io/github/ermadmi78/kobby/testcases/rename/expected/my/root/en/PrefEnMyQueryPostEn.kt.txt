@@ -39,7 +39,7 @@ public interface PrefEnMyQueryPostEn {
 
   public val actors: List<PrefEnActorPostEn>
 
-  public fun __context(): PrefCtxContextPostCtx
+  public fun context(): PrefCtxContextPostCtx
 
   public fun PrePrMyQueryPostPr.withCurrentProjection(): Unit
 }

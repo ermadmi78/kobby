@@ -196,7 +196,7 @@ public class PreImActorPostIm(
     append(')')
   }
 
-  public override fun __context(): PrefCtxContextPostCtx = innerContextPin
+  public override fun context(): PrefCtxContextPostCtx = innerContextPin
 
   public override fun PrePrActorPostPr.withCurrentProjection(): Unit {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)

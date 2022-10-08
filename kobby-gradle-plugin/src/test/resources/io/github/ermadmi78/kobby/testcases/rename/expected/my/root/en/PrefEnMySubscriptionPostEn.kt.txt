@@ -28,7 +28,7 @@ public interface PrefEnMySubscriptionPostEn {
 
   public val actorCreated: PrefEnActorPostEn
 
-  public fun __context(): PrefCtxContextPostCtx
+  public fun context(): PrefCtxContextPostCtx
 
   public fun PrePrMySubscriptionPostPr.withCurrentProjection(): Unit
 }

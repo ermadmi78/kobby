@@ -194,7 +194,7 @@ public class PreImCountryPostIm(
     append(')')
   }
 
-  public override fun __context(): PrefCtxContextPostCtx = innerContextPin
+  public override fun context(): PrefCtxContextPostCtx = innerContextPin
 
   public override fun PrePrCountryPostPr.withCurrentProjection(): Unit {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)
