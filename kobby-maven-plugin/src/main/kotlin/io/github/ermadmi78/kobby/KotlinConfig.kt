@@ -507,7 +507,7 @@ class KotlinAdapterKtorConfig {
     var postfix: String? = "KtorAdapter"
 
     @Parameter
-    var dynamicHttpHeaders: Boolean = false
+    var dynamicHttpHeaders: Boolean = true
 
     @Parameter
     var receiveTimeoutMillis: Long? = null

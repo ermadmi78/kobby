@@ -43,7 +43,7 @@ import my.root.dto1.gr_ql.GPrefRequestGPost
 public open class KtoPrSimpleKtoPo(
   protected val client: HttpClient,
   protected val url: String? = null,
-  protected val headers: Map<String, String> = mapOf(),
+  protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val listener: (GPrefRequestGPost) -> Unit = {},
 ) : PrefCtxAdapterPostCtx {
   public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
@@ -51,7 +51,7 @@ public open class KtoPrSimpleKtoPo(
     val request = GPrefRequestGPost(query, variables)
     listener(request)
 
-    val httpHeaders: Map<String, String> = headers
+    val httpHeaders: Map<String, String> = headers()
     val result = client.post {
       setBody<GPrefRequestGPost>(request)
       contentType(ContentType.Application.Json)
@@ -78,7 +78,7 @@ public open class KtoPrSimpleKtoPo(
     val request = GPrefRequestGPost(query, variables)
     listener(request)
 
-    val httpHeaders: Map<String, String> = headers
+    val httpHeaders: Map<String, String> = headers()
     val result = client.post {
       setBody<GPrefRequestGPost>(request)
       contentType(ContentType.Application.Json)

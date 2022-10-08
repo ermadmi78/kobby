@@ -43,14 +43,14 @@ import kotlin.takeIf
 public open class CinemaSimpleKtorAdapter(
   protected val client: HttpClient,
   protected val url: String? = null,
-  protected val headers: Map<String, String> = mapOf(),
+  protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val listener: (CinemaRequest) -> Unit = {},
 ) : CinemaAdapter {
   public override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
     val request = CinemaRequest(query, variables)
     listener(request)
 
-    val httpHeaders: Map<String, String> = headers
+    val httpHeaders: Map<String, String> = headers()
     val result = client.post {
       setBody<CinemaRequest>(request)
       contentType(ContentType.Application.Json)
@@ -77,7 +77,7 @@ public open class CinemaSimpleKtorAdapter(
     val request = CinemaRequest(query, variables)
     listener(request)
 
-    val httpHeaders: Map<String, String> = headers
+    val httpHeaders: Map<String, String> = headers()
     val result = client.post {
       setBody<CinemaRequest>(request)
       contentType(ContentType.Application.Json)

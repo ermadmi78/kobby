@@ -667,7 +667,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "adapterKtorDynamicHttpHeaders",
-        description = "Is dynamic HTTP headers in Ktor adapters supported (default false)"
+        description = "Is dynamic HTTP headers in Ktor adapters supported (default true)"
     )
     val adapterKtorDynamicHttpHeaders: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -820,7 +820,7 @@ open class KobbyKotlin : DefaultTask() {
         })
         adapterKtorPackageName.convention("adapter.ktor")
         adapterKtorPostfix.convention("KtorAdapter")
-        adapterKtorDynamicHttpHeaders.convention(false)
+        adapterKtorDynamicHttpHeaders.convention(true)
 
         resolverEnabled.convention(project.provider {
             project.hasDependency("com.graphql-java-kickstart", "graphql-java-tools")

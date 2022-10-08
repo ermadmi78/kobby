@@ -462,16 +462,18 @@ open class KobbyKotlinEntityExtension {
     /**
      * Inherit context interface in entity interface.
      * [More details](https://github.com/ermadmi78/kobby/issues/20)
+     * [More details](https://github.com/ermadmi78/kobby/issues/29)
      *
-     * Default: true
+     * Default: false
      */
     var contextInheritanceEnabled: Boolean? = null
 
     /**
      * Generate context access function in entity interface.
      * [More details](https://github.com/ermadmi78/kobby/issues/20)
+     * [More details](https://github.com/ermadmi78/kobby/issues/29)
      *
-     * Default: false
+     * Default: true
      */
     var contextFunEnabled: Boolean? = null
 
@@ -712,7 +714,7 @@ open class KobbyKotlinAdapterKtorExtension {
     /**
      * Is dynamic HTTP headers in Ktor adapters supported
      *
-     * Default: false
+     * Default: true
      */
     var dynamicHttpHeaders: Boolean? = null
 
