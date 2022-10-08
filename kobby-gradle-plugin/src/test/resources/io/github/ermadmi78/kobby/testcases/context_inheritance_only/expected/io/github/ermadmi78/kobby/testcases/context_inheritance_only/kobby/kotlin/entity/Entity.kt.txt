@@ -1,0 +1,52 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyDSL
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlySubscriber
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Entity : ContextInheritanceOnlyContext {
+  public val id: Long
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextInheritanceOnlySubscriber<Subscription>
+}
+
+@ContextInheritanceOnlyDSL
+public interface EntityProjection {
+  public fun __minimize(): Unit {
+  }
+}
+
+@ContextInheritanceOnlyDSL
+public interface EntityQualification {
+  public fun __onFilm(__projection: FilmProjection.() -> Unit = {}): Unit
+
+  public fun __onActor(__projection: ActorProjection.() -> Unit = {}): Unit
+
+  public fun __onCountry(__projection: CountryProjection.() -> Unit = {}): Unit
+}
+
+@ContextInheritanceOnlyDSL
+public interface EntityQualifiedProjection : EntityProjection, EntityQualification

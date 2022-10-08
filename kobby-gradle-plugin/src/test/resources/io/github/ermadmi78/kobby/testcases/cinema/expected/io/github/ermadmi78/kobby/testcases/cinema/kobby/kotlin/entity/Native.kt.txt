@@ -17,20 +17,14 @@ package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import kotlin.Suppress
 import kotlin.Unit
 
 /**
  * Union of natives %
  */
-public interface Native : CinemaContext {
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription>
+public interface Native {
+  public fun __context(): CinemaContext
 }
 
 /**

@@ -16,16 +16,11 @@
 package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
 
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlContext
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlSubscriber
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyQueryDto
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyMutation
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyMutationProjection
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyQuery
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyQueryProjection
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyResult
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyResultProjection
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MySubscription
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MySubscriptionProjection
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -71,14 +66,7 @@ internal class MyQueryImpl(
     append(')')
   }
 
-  public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery =
-      __innerContext.query(__projection)
-
-  public override suspend fun mutation(__projection: MyMutationProjection.() -> Unit): MyMutation =
-      __innerContext.mutation(__projection)
-
-  public override fun subscription(__projection: MySubscriptionProjection.() -> Unit):
-      GraphqlSubscriber<MySubscription> = __innerContext.subscription(__projection)
+  public override fun __context(): GraphqlContext = __innerContext
 
   public override fun MyQueryProjection.__withCurrentProjection(): Unit {
     __innerProjection.___innerRepeatProjection(setOf(), this)

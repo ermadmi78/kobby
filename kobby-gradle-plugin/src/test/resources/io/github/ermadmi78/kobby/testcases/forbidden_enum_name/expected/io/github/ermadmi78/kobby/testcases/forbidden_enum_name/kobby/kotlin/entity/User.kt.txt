@@ -17,26 +17,20 @@ package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ent
 
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameContext
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameDSL
-import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameSubscriber
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.dto.mischievous
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.dto.user_update_column
 import kotlin.Long
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface User : ForbiddenEnumNameContext {
+public interface User {
   public val id: Long
 
   public val update_column: user_update_column
 
   public val mischievous: mischievous?
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      ForbiddenEnumNameSubscriber<Subscription>
+  public fun __context(): ForbiddenEnumNameContext
 
   public fun UserProjection.__withCurrentProjection(): Unit
 }

@@ -16,7 +16,6 @@
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.CountryDto
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Gender
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Genre
@@ -31,14 +30,8 @@ import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.CountryPro
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.EntityFieldsSelection
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Film
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.FilmProjection
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Mutation
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationProjection
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Native
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.NativeQualifiedProjection
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Query
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.QueryProjection
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Subscription
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.SubscriptionProjection
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Taggable
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.TaggableQualifiedProjection
 import java.time.LocalDate
@@ -220,14 +213,7 @@ internal class CountryImpl(
     append(')')
   }
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
-      __innerContext.query(__projection)
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
-      __innerContext.mutation(__projection)
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription> = __innerContext.subscription(__projection)
+  public override fun __context(): CinemaContext = __innerContext
 
   public override fun CountryProjection.__withCurrentProjection(): Unit {
     __innerProjection.___innerRepeatProjection(setOf(), this)

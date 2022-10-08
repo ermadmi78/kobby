@@ -16,16 +16,11 @@
 package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.impl
 
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleContext
-import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleSubscriber
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.QueryDto
-import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Mutation
-import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.MutationProjection
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Query
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.QueryProjection
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Simple
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.SimpleProjection
-import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Subscription
-import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.SubscriptionProjection
 import kotlin.Any
 import kotlin.Int
 import kotlin.String
@@ -71,14 +66,7 @@ internal class QueryImpl(
     append(')')
   }
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
-      __innerContext.query(__projection)
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
-      __innerContext.mutation(__projection)
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      SimpleSubscriber<Subscription> = __innerContext.subscription(__projection)
+  public override fun __context(): SimpleContext = __innerContext
 
   public override fun QueryProjection.__withCurrentProjection(): Unit {
     __innerProjection.___innerRepeatProjection(setOf(), this)

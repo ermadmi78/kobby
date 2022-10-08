@@ -17,22 +17,16 @@ package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
 import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeDSL
-import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeSubscriber
 import kotlin.Int
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface Point : EscapeContext {
+public interface Point {
   public val x: Int
 
   public val y: Int
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      EscapeSubscriber<Subscription>
+  public fun __context(): EscapeContext
 
   public fun PointProjection.__withCurrentProjection(): Unit
 }

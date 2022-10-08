@@ -17,23 +17,17 @@ package io.github.ermadmi78.kobby.testcases.disable_resolver.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.disable_resolver.kobby.kotlin.CountryContext
 import io.github.ermadmi78.kobby.testcases.disable_resolver.kobby.kotlin.CountryDSL
-import io.github.ermadmi78.kobby.testcases.disable_resolver.kobby.kotlin.CountrySubscriber
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface Country : CountryContext {
+public interface Country {
   public val id: Long
 
   public val name: String
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CountrySubscriber<Subscription>
+  public fun __context(): CountryContext
 
   public fun CountryProjection.__withCurrentProjection(): Unit
 }

@@ -1,0 +1,44 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyDSL
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlySubscriber
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Tag : ContextInheritanceOnlyContext {
+  public val `value`: String
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextInheritanceOnlySubscriber<Subscription>
+
+  public fun TagProjection.__withCurrentProjection(): Unit
+}
+
+@ContextInheritanceOnlyDSL
+public interface TagProjection {
+  public fun `value`(): Unit
+
+  public fun __minimize(): Unit {
+  }
+}

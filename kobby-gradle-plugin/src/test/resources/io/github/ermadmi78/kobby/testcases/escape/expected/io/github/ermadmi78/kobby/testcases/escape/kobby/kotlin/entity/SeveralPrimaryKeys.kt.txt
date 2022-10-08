@@ -17,14 +17,13 @@ package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
 import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeDSL
-import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeSubscriber
 import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface SeveralPrimaryKeys : EscapeContext {
+public interface SeveralPrimaryKeys {
   public val `if`: Long
 
   public val `do`: String?
@@ -39,12 +38,7 @@ public interface SeveralPrimaryKeys : EscapeContext {
 
   public val block: String?
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      EscapeSubscriber<Subscription>
+  public fun __context(): EscapeContext
 
   public fun SeveralPrimaryKeysProjection.__withCurrentProjection(): Unit
 }

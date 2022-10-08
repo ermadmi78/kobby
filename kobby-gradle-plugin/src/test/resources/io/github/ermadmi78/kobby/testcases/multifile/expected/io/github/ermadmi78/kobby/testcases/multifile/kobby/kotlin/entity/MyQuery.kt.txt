@@ -17,21 +17,15 @@ package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlContext
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlDSL
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlSubscriber
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 import kotlin.collections.List
 
-public interface MyQuery : GraphqlContext {
+public interface MyQuery {
   public val find: List<MyResult>
 
-  public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery
-
-  public override suspend fun mutation(__projection: MyMutationProjection.() -> Unit): MyMutation
-
-  public override fun subscription(__projection: MySubscriptionProjection.() -> Unit):
-      GraphqlSubscriber<MySubscription>
+  public fun __context(): GraphqlContext
 
   public fun MyQueryProjection.__withCurrentProjection(): Unit
 }

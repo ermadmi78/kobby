@@ -17,7 +17,6 @@ package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleContext
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleDSL
-import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleSubscriber
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
@@ -26,7 +25,7 @@ import kotlin.Unit
 /**
  *  Simple type
  */
-public interface Simple : SimpleContext {
+public interface Simple {
   /**
    *  id of simple
    */
@@ -37,12 +36,7 @@ public interface Simple : SimpleContext {
    */
   public val name: String
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      SimpleSubscriber<Subscription>
+  public fun __context(): SimpleContext
 
   public fun SimpleProjection.__withCurrentProjection(): Unit
 }

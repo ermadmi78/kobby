@@ -384,7 +384,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityContextInheritanceEnabled",
-        description = "Inherit context interface in entity interface (default true)"
+        description = "Inherit context interface in entity interface (default false)"
     )
     val entityContextInheritanceEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -392,7 +392,7 @@ open class KobbyKotlin : DefaultTask() {
     @Optional
     @Option(
         option = "entityContextFunEnabled",
-        description = "Generate context access function in entity interface (default false)"
+        description = "Generate context access function in entity interface (default true)"
     )
     val entityContextFunEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
 
@@ -791,8 +791,8 @@ open class KobbyKotlin : DefaultTask() {
 
         entityEnabled.convention(true)
         entityPackageName.convention("entity")
-        entityContextInheritanceEnabled.convention(true)
-        entityContextFunEnabled.convention(false)
+        entityContextInheritanceEnabled.convention(false)
+        entityContextFunEnabled.convention(true)
         entityContextFunName.convention("__context")
         entityWithCurrentProjectionFun.convention("__withCurrentProjection")
         entityProjectionPostfix.convention("Projection")

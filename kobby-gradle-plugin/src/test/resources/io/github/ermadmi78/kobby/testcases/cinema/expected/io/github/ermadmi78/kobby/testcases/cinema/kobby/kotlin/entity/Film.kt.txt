@@ -17,7 +17,6 @@ package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Gender
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Genre
 import java.time.LocalDate
@@ -34,7 +33,7 @@ import kotlin.collections.Map
  * Film entity.
  * The film belongs to one country and can be played by several actors.
  */
-public interface Film : CinemaContext, Entity, Taggable, Native {
+public interface Film : Entity, Taggable, Native {
   /**
    * Unique identifier of entity %
    */
@@ -77,12 +76,7 @@ public interface Film : CinemaContext, Entity, Taggable, Native {
    */
   public val actors: List<Actor>
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription>
+  public override fun __context(): CinemaContext
 
   public fun FilmProjection.__withCurrentProjection(): Unit
 }

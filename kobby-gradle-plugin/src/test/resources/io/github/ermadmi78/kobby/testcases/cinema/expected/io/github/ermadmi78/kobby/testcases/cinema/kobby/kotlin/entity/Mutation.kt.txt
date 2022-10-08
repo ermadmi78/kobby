@@ -17,7 +17,6 @@ package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.ActorInput
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.FilmInput
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.TagInput
@@ -27,7 +26,7 @@ import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface Mutation : CinemaContext {
+public interface Mutation {
   /**
    * Create country
    */
@@ -60,12 +59,7 @@ public interface Mutation : CinemaContext {
    */
   public val tagActor: Boolean
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription>
+  public fun __context(): CinemaContext
 
   public fun MutationProjection.__withCurrentProjection(): Unit
 }

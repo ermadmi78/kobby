@@ -1,0 +1,80 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyDSL
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlySubscriber
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto.ActorInput
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto.FilmInput
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto.TagInput
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Mutation : ContextInheritanceOnlyContext {
+  public val createCountry: Country
+
+  public val createFilm: Film
+
+  public val createActor: Actor
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextInheritanceOnlySubscriber<Subscription>
+
+  public fun MutationProjection.__withCurrentProjection(): Unit
+}
+
+@ContextInheritanceOnlyDSL
+public interface MutationProjection {
+  public fun createCountry(name: String, __projection: CountryProjection.() -> Unit = {}): Unit
+
+  public fun createFilm(
+    countryId: Long,
+    film: FilmInput,
+    __query: MutationCreateFilmQuery.() -> Unit = {},
+  ): Unit
+
+  public fun createActor(
+    countryId: Long,
+    actor: ActorInput,
+    __query: MutationCreateActorQuery.() -> Unit = {},
+  ): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
+
+@ContextInheritanceOnlyDSL
+public interface MutationCreateFilmSelection {
+  public var tags: TagInput?
+}
+
+@ContextInheritanceOnlyDSL
+public interface MutationCreateFilmQuery : MutationCreateFilmSelection, FilmProjection
+
+@ContextInheritanceOnlyDSL
+public interface MutationCreateActorSelection {
+  public var tags: TagInput?
+}
+
+@ContextInheritanceOnlyDSL
+public interface MutationCreateActorQuery : MutationCreateActorSelection, ActorProjection

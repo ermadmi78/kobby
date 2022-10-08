@@ -16,14 +16,9 @@
 package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.impl
 
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameContext
-import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameSubscriber
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.dto.MutationDto
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.Mutation
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.MutationProjection
-import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.Query
-import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.QueryProjection
-import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.Subscription
-import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.SubscriptionProjection
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
@@ -45,14 +40,7 @@ internal class MutationImpl(
     append(')')
   }
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
-      __innerContext.query(__projection)
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
-      __innerContext.mutation(__projection)
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      ForbiddenEnumNameSubscriber<Subscription> = __innerContext.subscription(__projection)
+  public override fun __context(): ForbiddenEnumNameContext = __innerContext
 
   public override fun MutationProjection.__withCurrentProjection(): Unit {
     __innerProjection.___innerRepeatProjection(setOf(), this)

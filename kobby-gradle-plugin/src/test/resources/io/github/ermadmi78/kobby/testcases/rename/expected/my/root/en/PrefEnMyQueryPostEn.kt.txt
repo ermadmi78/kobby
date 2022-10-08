@@ -23,11 +23,10 @@ import kotlin.Unit
 import kotlin.collections.List
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxDSLPostCtx
-import my.root.ctx.PrefCtxSubscriberPostCtx
 import my.root.dto1.EPrefGenderEPost
 import my.root.dto1.EPrefGenreEPost
 
-public interface PrefEnMyQueryPostEn : PrefCtxContextPostCtx {
+public interface PrefEnMyQueryPostEn {
   public val country: PrefEnCountryPostEn?
 
   public val countries: List<PrefEnCountryPostEn>
@@ -40,14 +39,7 @@ public interface PrefEnMyQueryPostEn : PrefCtxContextPostCtx {
 
   public val actors: List<PrefEnActorPostEn>
 
-  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
-      PrefEnMyQueryPostEn
-
-  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
-      PrefEnMyMutationPostEn
-
-  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
-      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+  public fun __context(): PrefCtxContextPostCtx
 
   public fun PrePrMyQueryPostPr.withCurrentProjection(): Unit
 }

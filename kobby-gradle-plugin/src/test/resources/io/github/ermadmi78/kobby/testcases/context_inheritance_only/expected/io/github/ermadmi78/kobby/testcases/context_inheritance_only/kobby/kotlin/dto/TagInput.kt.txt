@@ -1,0 +1,55 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+import kotlin.let
+
+public data class TagInput(
+  public val `value`: String,
+)
+
+public fun TagInput(block: TagInputBuilder.() -> Unit): TagInput {
+  // TagInput builder DSL
+  return TagInputBuilder().apply(block).let {
+    TagInput(
+          it.`value` ?: error("TagInput: 'value' must not be null")
+        )
+  }
+}
+
+public fun TagInput.copy(block: TagInputBuilder.() -> Unit): TagInput {
+  // TagInput copy DSL
+  return TagInputBuilder().also {
+    it.`value` = this.`value`
+  }
+  .apply(block).let {
+    TagInput(
+          it.`value` ?: error("TagInput: 'value' must not be null")
+        )
+  }
+}
+
+@ContextInheritanceOnlyDSL
+public class TagInputBuilder {
+  public var `value`: String? = null
+}

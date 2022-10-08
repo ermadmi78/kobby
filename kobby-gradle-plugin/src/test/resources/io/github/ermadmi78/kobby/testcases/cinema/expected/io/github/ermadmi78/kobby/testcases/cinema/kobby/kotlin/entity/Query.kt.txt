@@ -17,7 +17,6 @@ package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Gender
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Genre
 import java.time.LocalDate
@@ -28,7 +27,7 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.collections.List
 
-public interface Query : CinemaContext {
+public interface Query {
   /**
    * Find country by id.
    * Returns null if not found.
@@ -70,12 +69,7 @@ public interface Query : CinemaContext {
    */
   public val taggable: List<Taggable>
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription>
+  public fun __context(): CinemaContext
 
   public fun QueryProjection.__withCurrentProjection(): Unit
 }

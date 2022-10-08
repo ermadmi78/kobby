@@ -17,17 +17,11 @@ package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleContext
 import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleDSL
-import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleSubscriber
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface Subscription : SimpleContext {
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      SimpleSubscriber<Subscription>
+public interface Subscription {
+  public fun __context(): SimpleContext
 
   public fun SubscriptionProjection.__withCurrentProjection(): Unit
 }

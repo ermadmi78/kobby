@@ -17,23 +17,17 @@ package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
 import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideDSL
-import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideSubscriber
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface TypeBase1 : MultiOverrideContext {
+public interface TypeBase1 {
   public val noOverride1: String
 
   public val typeMultiOverride: String
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      MultiOverrideSubscriber<Subscription>
+  public fun __context(): MultiOverrideContext
 }
 
 @MultiOverrideDSL

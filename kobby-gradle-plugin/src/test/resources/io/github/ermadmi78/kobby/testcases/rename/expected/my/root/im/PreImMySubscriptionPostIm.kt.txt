@@ -29,19 +29,14 @@ import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import my.root.ctx.PrefCtxContextPostCtx
-import my.root.ctx.PrefCtxSubscriberPostCtx
 import my.root.dto1.DPrefMySubscriptionDPost
 import my.root.en.PrePrActorPostPr
 import my.root.en.PrePrCountryPostPr
 import my.root.en.PrePrFilmPostPr
-import my.root.en.PrePrMyMutationPostPr
-import my.root.en.PrePrMyQueryPostPr
 import my.root.en.PrePrMySubscriptionPostPr
 import my.root.en.PrefEnActorPostEn
 import my.root.en.PrefEnCountryPostEn
 import my.root.en.PrefEnFilmPostEn
-import my.root.en.PrefEnMyMutationPostEn
-import my.root.en.PrefEnMyQueryPostEn
 import my.root.en.PrefEnMySubscriptionPostEn
 
 public class PreImMySubscriptionPostIm(
@@ -103,15 +98,7 @@ public class PreImMySubscriptionPostIm(
     append(')')
   }
 
-  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
-      PrefEnMyQueryPostEn = innerContextPin.myQuery(projection)
-
-  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
-      PrefEnMyMutationPostEn = innerContextPin.myMutation(projection)
-
-  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
-      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> =
-      innerContextPin.mySubscription(projection)
+  public override fun __context(): PrefCtxContextPostCtx = innerContextPin
 
   public override fun PrePrMySubscriptionPostPr.withCurrentProjection(): Unit {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)

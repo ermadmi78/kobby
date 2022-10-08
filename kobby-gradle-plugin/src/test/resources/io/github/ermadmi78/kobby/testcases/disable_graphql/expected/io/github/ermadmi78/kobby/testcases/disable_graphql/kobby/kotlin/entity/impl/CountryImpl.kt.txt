@@ -16,16 +16,9 @@
 package io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.impl
 
 import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.CountryContext
-import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.CountrySubscriber
 import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.dto.CountryDto
 import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.Country
 import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.CountryProjection
-import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.Mutation
-import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.MutationProjection
-import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.Query
-import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.QueryProjection
-import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.Subscription
-import io.github.ermadmi78.kobby.testcases.disable_graphql.kobby.kotlin.entity.SubscriptionProjection
 import kotlin.Any
 import kotlin.Boolean
 import kotlin.Long
@@ -83,14 +76,7 @@ internal class CountryImpl(
     append(')')
   }
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
-      __innerContext.query(__projection)
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
-      __innerContext.mutation(__projection)
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CountrySubscriber<Subscription> = __innerContext.subscription(__projection)
+  public override fun __context(): CountryContext = __innerContext
 
   public override fun CountryProjection.__withCurrentProjection(): Unit {
     __innerProjection.___innerRepeatProjection(setOf(), this)

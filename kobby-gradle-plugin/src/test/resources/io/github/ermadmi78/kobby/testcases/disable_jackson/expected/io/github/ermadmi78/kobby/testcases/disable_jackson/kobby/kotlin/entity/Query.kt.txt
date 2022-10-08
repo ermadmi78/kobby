@@ -17,20 +17,14 @@ package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountryContext
 import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountryDSL
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountrySubscriber
 import kotlin.Suppress
 import kotlin.Unit
 import kotlin.collections.List
 
-public interface Query : CountryContext {
+public interface Query {
   public val countries: List<Country>
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CountrySubscriber<Subscription>
+  public fun __context(): CountryContext
 
   public fun QueryProjection.__withCurrentProjection(): Unit
 }

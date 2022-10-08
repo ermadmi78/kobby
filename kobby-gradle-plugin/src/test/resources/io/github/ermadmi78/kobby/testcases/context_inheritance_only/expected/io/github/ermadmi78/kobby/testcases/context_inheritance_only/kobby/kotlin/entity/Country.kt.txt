@@ -1,0 +1,116 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyDSL
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlySubscriber
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto.Gender
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto.Genre
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Country : ContextInheritanceOnlyContext, Entity {
+  public override val id: Long
+
+  public val name: String
+
+  public val film: Film?
+
+  public val films: List<Film>
+
+  public val actor: Actor?
+
+  public val actors: List<Actor>
+
+  public val taggable: List<Taggable>
+
+  public val native: List<Native>
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextInheritanceOnlySubscriber<Subscription>
+
+  public fun CountryProjection.__withCurrentProjection(): Unit
+}
+
+@ContextInheritanceOnlyDSL
+public interface CountryProjection : EntityProjection {
+  public fun __withoutName(): Unit
+
+  public fun film(id: Long, __projection: FilmProjection.() -> Unit = {}): Unit
+
+  public fun films(__query: CountryFilmsQuery.() -> Unit = {}): Unit
+
+  public fun actor(id: Long, __projection: ActorProjection.() -> Unit = {}): Unit
+
+  public fun actors(__query: CountryActorsQuery.() -> Unit = {}): Unit
+
+  public fun taggable(tag: String, __projection: TaggableQualifiedProjection.() -> Unit = {}): Unit
+
+  public fun native(__projection: NativeQualifiedProjection.() -> Unit = {}): Unit
+
+  public override fun __minimize(): Unit {
+    __withoutName()
+  }
+}
+
+@ContextInheritanceOnlyDSL
+public interface CountryFilmsSelection {
+  public var title: String?
+
+  public var genre: Genre?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Default: 0
+   */
+  public var offset: Int?
+}
+
+@ContextInheritanceOnlyDSL
+public interface CountryFilmsQuery : CountryFilmsSelection, FilmProjection
+
+@ContextInheritanceOnlyDSL
+public interface CountryActorsSelection {
+  public var firstName: String?
+
+  public var gender: Gender?
+
+  /**
+   * Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Default: 0
+   */
+  public var offset: Int?
+}
+
+@ContextInheritanceOnlyDSL
+public interface CountryActorsQuery : CountryActorsSelection, ActorProjection

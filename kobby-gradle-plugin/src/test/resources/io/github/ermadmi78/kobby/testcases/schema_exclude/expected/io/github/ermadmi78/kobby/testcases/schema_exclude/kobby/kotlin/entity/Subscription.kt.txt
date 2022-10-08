@@ -17,19 +17,13 @@ package io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.GraphqlContext
 import io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.GraphqlDSL
-import io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.GraphqlSubscriber
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface Subscription : GraphqlContext {
+public interface Subscription {
   public val countryCreated: Country
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      GraphqlSubscriber<Subscription>
+  public fun __context(): GraphqlContext
 
   public fun SubscriptionProjection.__withCurrentProjection(): Unit
 }

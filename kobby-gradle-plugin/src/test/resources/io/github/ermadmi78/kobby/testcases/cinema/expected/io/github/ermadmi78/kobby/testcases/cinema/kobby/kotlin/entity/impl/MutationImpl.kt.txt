@@ -16,7 +16,6 @@
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.ActorInput
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.FilmInput
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.MutationDto
@@ -31,10 +30,6 @@ import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationCr
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationCreateFilmQuery
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationCreateFilmSelection
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationProjection
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Query
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.QueryProjection
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Subscription
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.SubscriptionProjection
 import kotlin.Any
 import kotlin.Boolean
 import kotlin.Long
@@ -154,14 +149,7 @@ internal class MutationImpl(
     append(')')
   }
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
-      __innerContext.query(__projection)
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
-      __innerContext.mutation(__projection)
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription> = __innerContext.subscription(__projection)
+  public override fun __context(): CinemaContext = __innerContext
 
   public override fun MutationProjection.__withCurrentProjection(): Unit {
     __innerProjection.___innerRepeatProjection(setOf(), this)

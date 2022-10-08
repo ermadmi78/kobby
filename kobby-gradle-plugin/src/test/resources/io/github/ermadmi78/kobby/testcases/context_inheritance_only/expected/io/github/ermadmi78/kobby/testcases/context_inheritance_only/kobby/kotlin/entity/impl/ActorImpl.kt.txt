@@ -1,0 +1,467 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyContext
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlySubscriber
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto.ActorDto
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto.Gender
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.dto.Genre
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.Actor
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.ActorFilmsQuery
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.ActorFilmsSelection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.ActorProjection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.Film
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.SubscriptionProjection
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.Tag
+import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.TagProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class ActorImpl(
+  internal val __innerContext: ContextInheritanceOnlyContext,
+  internal val __innerProjection: ActorProjectionImpl,
+  internal val __innerDto: ActorDto,
+) : Actor {
+  public override val id: Long
+    get() = __innerDto.id!!
+
+  public override val tags: List<Tag> by lazy {
+    if (__innerProjection.__innerTags1 == null) {
+      error("Property [tags] is not available - add [tags] projection to switch on it")
+    }
+    __innerDto.resolveTags(__innerContext, __innerProjection.__innerTags1!!)
+  }
+
+
+  public override val firstName: String
+    get() {
+      if (!__innerProjection.__innerFirstName2) {
+        error("Property [firstName] is not available - remove [__withoutFirstName] projection to switch on it")
+      }
+      return __innerDto.firstName!!
+    }
+
+  public override val lastName: String?
+    get() {
+      if (!__innerProjection.__innerLastName3) {
+        error("Property [lastName] is not available - remove [__withoutLastName] projection to switch on it")
+      }
+      return __innerDto.lastName
+    }
+
+  public override val gender: Gender
+    get() {
+      if (!__innerProjection.__innerGender4) {
+        error("Property [gender] is not available - add [gender] projection to switch on it")
+      }
+      return __innerDto.gender!!
+    }
+
+  public override val countryId: Long
+    get() = __innerDto.countryId!!
+
+  public override val country: Country by lazy {
+    if (__innerProjection.__innerCountry6 == null) {
+      error("Property [country] is not available - add [country] projection to switch on it")
+    }
+    __innerDto.resolveCountry(__innerContext, __innerProjection.__innerCountry6!!)
+  }
+
+
+  public override val films: List<Film> by lazy {
+    if (__innerProjection.__innerFilms7 == null) {
+      error("Property [films] is not available - add [films] projection to switch on it")
+    }
+    __innerDto.resolveFilms(__innerContext, __innerProjection.__innerFilms7!!)
+  }
+
+
+  public override fun equals(other: Any?): Boolean {
+    if (this === other) {
+      return true
+    }
+    if (this.javaClass != other?.javaClass) {
+      return false
+    }
+
+    other as ActorImpl
+
+    if (__innerDto.id != other.__innerDto.id) {
+      return false
+    }
+    if (__innerDto.countryId != other.__innerDto.countryId) {
+      return false
+    }
+
+    return true
+  }
+
+  public override fun hashCode(): Int {
+    var result = __innerDto.id?.hashCode() ?: 0
+    result = 31 * result + (__innerDto.countryId?.hashCode() ?: 0)
+    return result
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Actor").append('(')
+
+    var counter = 0
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerTags1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tags").append('=').append(tags)
+    }
+
+    if (__innerProjection.__innerFirstName2) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("firstName").append('=').append(firstName)
+    }
+
+    if (__innerProjection.__innerLastName3) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("lastName").append('=').append(lastName)
+    }
+
+    if (__innerProjection.__innerGender4) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("gender").append('=').append(gender)
+    }
+
+    if (true) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countryId").append('=').append(countryId)
+    }
+
+    if (__innerProjection.__innerCountry6 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("country").append('=').append(country)
+    }
+
+    if (__innerProjection.__innerFilms7 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("films").append('=').append(films)
+    }
+
+    append(')')
+  }
+
+  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
+      __innerContext.query(__projection)
+
+  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
+      __innerContext.mutation(__projection)
+
+  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      ContextInheritanceOnlySubscriber<Subscription> = __innerContext.subscription(__projection)
+
+  public override fun ActorProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class ActorProjectionImpl : ActorProjection {
+  internal var __innerTags1: TagProjectionImpl? = null
+
+  internal var __innerFirstName2: Boolean = true
+
+  internal var __innerLastName3: Boolean = true
+
+  internal var __innerGender4: Boolean = false
+
+  internal var __innerCountry6: CountryProjectionImpl? = null
+
+  internal var __innerFilms7: ActorFilmsQueryImpl? = null
+
+  public override fun tags(__projection: TagProjection.() -> Unit): Unit {
+    __innerTags1 = TagProjectionImpl().apply(__projection)
+  }
+
+  public override fun __withoutFirstName(): Unit {
+    __innerFirstName2 = false
+  }
+
+  public override fun __withoutLastName(): Unit {
+    __innerLastName3 = false
+  }
+
+  public override fun gender(): Unit {
+    __innerGender4 = true
+  }
+
+  public override fun country(__projection: CountryProjection.() -> Unit): Unit {
+    __innerCountry6 = CountryProjectionImpl().apply(__projection)
+  }
+
+  public override fun films(__query: ActorFilmsQuery.() -> Unit): Unit {
+    __innerFilms7 = ActorFilmsQueryImpl().apply(__query)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: ActorProjection): Unit {
+    if ("tags" !in ignore && __innerTags1 != null) {
+      __projection.tags {
+        this@ActorProjectionImpl.__innerTags1!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("firstName" !in ignore && !__innerFirstName2) {
+      __projection.__withoutFirstName()
+    }
+    if ("lastName" !in ignore && !__innerLastName3) {
+      __projection.__withoutLastName()
+    }
+    if ("gender" !in ignore && __innerGender4) {
+      __projection.gender()
+    }
+    if ("country" !in ignore && __innerCountry6 != null) {
+      __projection.country {
+        this@ActorProjectionImpl.__innerCountry6!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("films" !in ignore && __innerFilms7 != null) {
+      __projection.films {
+        this@ActorProjectionImpl.__innerFilms7!!.___innerRepeatProjection(setOf(), this)
+        this@ActorProjectionImpl.__innerFilms7!!.___innerRepeatSelection(this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: films
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFilms7(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("films" !in ignore && __innerFilms7 != null) {
+      body.append(' ').append("films")
+      var counter = 0
+      val addBrackets = __innerFilms7!!.title != null || __innerFilms7!!.genre != null ||
+          __innerFilms7!!.limit != null || __innerFilms7!!.offset != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: films.title
+      if (__innerFilms7!!.title != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFilms7!!.title!!
+        body.append("title").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String")
+      }
+
+      // Argument: films.genre
+      if (__innerFilms7!!.genre != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFilms7!!.genre!!
+        body.append("genre").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Genre")
+      }
+
+      // Argument: films.limit
+      if (__innerFilms7!!.limit != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFilms7!!.limit!!
+        body.append("limit").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int!")
+      }
+
+      // Argument: films.offset
+      if (__innerFilms7!!.offset != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFilms7!!.offset!!
+        body.append("offset").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Film
+      __innerFilms7!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore) {
+      body.append(' ').append("id")
+    }
+
+    // Field: tags
+    if ("tags" !in ignore && __innerTags1 != null) {
+      body.append(' ').append("tags")
+
+      // Build nested projection of Tag
+      __innerTags1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: firstName
+    if ("firstName" !in ignore && __innerFirstName2) {
+      body.append(' ').append("firstName")
+    }
+
+    // Field: lastName
+    if ("lastName" !in ignore && __innerLastName3) {
+      body.append(' ').append("lastName")
+    }
+
+    // Field: gender
+    if ("gender" !in ignore && __innerGender4) {
+      body.append(' ').append("gender")
+    }
+
+    // Field: countryId
+    if ("countryId" !in ignore) {
+      body.append(' ').append("countryId")
+    }
+
+    // Field: country
+    if ("country" !in ignore && __innerCountry6 != null) {
+      body.append(' ').append("country")
+
+      // Build nested projection of Country
+      __innerCountry6!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: films
+    ____innerBuildFilms7(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal class ActorFilmsQueryImpl : FilmProjectionImpl(), ActorFilmsQuery {
+  public override var title: String? = null
+
+  public override var genre: Genre? = null
+
+  public override var limit: Int? = null
+
+  public override var offset: Int? = null
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatSelection(__selection: ActorFilmsSelection): Unit {
+    __selection.title = title
+    __selection.genre = genre
+    __selection.limit = limit
+    __selection.offset = offset
+  }
+}
+
+internal fun ActorDto.buildEntity(__innerContext: ContextInheritanceOnlyContext,
+    __innerProjection: ActorProjectionImpl): Actor =
+    ActorImpl(__innerContext, __innerProjection, this)
+
+internal fun ActorDto.resolveTags(__innerContext: ContextInheritanceOnlyContext,
+    __innerProjection: TagProjectionImpl): List<Tag> =
+    tags?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+
+internal fun ActorDto.resolveCountry(__innerContext: ContextInheritanceOnlyContext,
+    __innerProjection: CountryProjectionImpl): Country =
+    country?.buildEntity(__innerContext, __innerProjection)!!
+
+internal fun ActorDto.resolveFilms(__innerContext: ContextInheritanceOnlyContext,
+    __innerProjection: FilmProjectionImpl): List<Film> =
+    films?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

@@ -17,7 +17,6 @@ package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import kotlin.Any
 import kotlin.Long
 import kotlin.String
@@ -29,7 +28,7 @@ import kotlin.collections.Map
 /**
  * Base interface for all entities. %
  */
-public interface Entity : CinemaContext {
+public interface Entity {
   /**
    * Unique identifier of entity %
    */
@@ -41,12 +40,7 @@ public interface Entity : CinemaContext {
    */
   public val fields: Map<String, Any?>
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription>
+  public fun __context(): CinemaContext
 }
 
 /**

@@ -19,17 +19,9 @@ import kotlin.Suppress
 import kotlin.Unit
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxDSLPostCtx
-import my.root.ctx.PrefCtxSubscriberPostCtx
 
-public interface PrefEnNativePostEn : PrefCtxContextPostCtx {
-  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
-      PrefEnMyQueryPostEn
-
-  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
-      PrefEnMyMutationPostEn
-
-  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
-      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+public interface PrefEnNativePostEn {
+  public fun __context(): PrefCtxContextPostCtx
 }
 
 @PrefCtxDSLPostCtx

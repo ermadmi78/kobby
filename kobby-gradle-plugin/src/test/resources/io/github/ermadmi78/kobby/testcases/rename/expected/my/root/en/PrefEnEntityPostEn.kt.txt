@@ -22,21 +22,13 @@ import kotlin.Unit
 import kotlin.collections.List
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxDSLPostCtx
-import my.root.ctx.PrefCtxSubscriberPostCtx
 
-public interface PrefEnEntityPostEn : PrefCtxContextPostCtx {
+public interface PrefEnEntityPostEn {
   public val id: Long
 
   public val fields: String
 
-  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
-      PrefEnMyQueryPostEn
-
-  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
-      PrefEnMyMutationPostEn
-
-  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
-      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+  public fun __context(): PrefCtxContextPostCtx
 }
 
 @PrefCtxDSLPostCtx

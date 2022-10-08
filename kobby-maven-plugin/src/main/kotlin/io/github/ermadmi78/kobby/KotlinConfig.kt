@@ -313,10 +313,10 @@ class KotlinEntityConfig {
     var postfix: String? = null
 
     @Parameter
-    var contextInheritanceEnabled: Boolean = true
+    var contextInheritanceEnabled: Boolean = false
 
     @Parameter
-    var contextFunEnabled: Boolean = false
+    var contextFunEnabled: Boolean = true
 
     @Parameter
     var contextFunName: String = "__context"

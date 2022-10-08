@@ -22,11 +22,10 @@ import kotlin.Suppress
 import kotlin.Unit
 import my.root.ctx.PrefCtxContextPostCtx
 import my.root.ctx.PrefCtxDSLPostCtx
-import my.root.ctx.PrefCtxSubscriberPostCtx
 import my.root.dto1.IPrefActorInputIPost
 import my.root.dto1.IPrefFilmInputIPost
 
-public interface PrefEnMyMutationPostEn : PrefCtxContextPostCtx {
+public interface PrefEnMyMutationPostEn {
   public val createCountry: PrefEnCountryPostEn
 
   public val createFilm: PrefEnFilmPostEn
@@ -39,14 +38,7 @@ public interface PrefEnMyMutationPostEn : PrefCtxContextPostCtx {
 
   public val tagActor: Boolean
 
-  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
-      PrefEnMyQueryPostEn
-
-  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
-      PrefEnMyMutationPostEn
-
-  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
-      PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn>
+  public fun __context(): PrefCtxContextPostCtx
 
   public fun PrePrMyMutationPostPr.withCurrentProjection(): Unit
 }

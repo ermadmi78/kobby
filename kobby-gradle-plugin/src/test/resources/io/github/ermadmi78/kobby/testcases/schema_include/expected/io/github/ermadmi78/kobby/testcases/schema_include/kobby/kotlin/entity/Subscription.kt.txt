@@ -17,17 +17,11 @@ package io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.QueryContext
 import io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.QueryDSL
-import io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.QuerySubscriber
 import kotlin.Suppress
 import kotlin.Unit
 
-public interface Subscription : QueryContext {
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      QuerySubscriber<Subscription>
+public interface Subscription {
+  public fun __context(): QueryContext
 
   public fun SubscriptionProjection.__withCurrentProjection(): Unit
 }

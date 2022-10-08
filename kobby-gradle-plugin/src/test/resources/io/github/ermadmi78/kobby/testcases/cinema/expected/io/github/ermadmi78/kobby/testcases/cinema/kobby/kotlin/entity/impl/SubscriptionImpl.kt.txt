@@ -16,7 +16,6 @@
 package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.SubscriptionDto
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Actor
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.ActorProjection
@@ -24,10 +23,6 @@ import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Country
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.CountryProjection
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Film
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.FilmProjection
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Mutation
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationProjection
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Query
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.QueryProjection
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Subscription
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.SubscriptionProjection
 import kotlin.Any
@@ -103,14 +98,7 @@ internal class SubscriptionImpl(
     append(')')
   }
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query =
-      __innerContext.query(__projection)
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation =
-      __innerContext.mutation(__projection)
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription> = __innerContext.subscription(__projection)
+  public override fun __context(): CinemaContext = __innerContext
 
   public override fun SubscriptionProjection.__withCurrentProjection(): Unit {
     __innerProjection.___innerRepeatProjection(setOf(), this)

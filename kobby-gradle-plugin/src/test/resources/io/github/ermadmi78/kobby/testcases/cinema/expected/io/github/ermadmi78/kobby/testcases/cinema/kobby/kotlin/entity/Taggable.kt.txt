@@ -17,7 +17,6 @@ package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaSubscriber
 import kotlin.Any
 import kotlin.Long
 import kotlin.String
@@ -30,7 +29,7 @@ import kotlin.collections.Map
  * Entity with tags.
  * Introduced for testing complex inheritance.
  */
-public interface Taggable : CinemaContext, Entity {
+public interface Taggable : Entity {
   /**
    * Unique identifier of entity %
    */
@@ -47,12 +46,7 @@ public interface Taggable : CinemaContext, Entity {
    */
   public val tags: List<Tag>
 
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query
-
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
-
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
-      CinemaSubscriber<Subscription>
+  public override fun __context(): CinemaContext
 }
 
 /**
