@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen)](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
-[![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v1.6.0-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
-[![Maven Central](https://img.shields.io/badge/Maven%20Central-v1.6.0-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
+[![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v2.0.0-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
+[![Maven Central](https://img.shields.io/badge/Maven%20Central-v2.0.0-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
 [![Discussions](https://img.shields.io/badge/Discussions-On%20GitHub-blue)](https://github.com/ermadmi78/kobby/discussions)
 
 [![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)](https://github.com/ermadmi78/kobby/wiki)
@@ -21,6 +21,15 @@ customize generated DSL by means of GraphQL schema directives and Kotlin extensi
 
 ### Requirements
 
+#### Kobby 2.x.x
+
+* Gradle at least version 7.0 is required.
+* Maven at least version 3.6.3 is required.
+* Kotlin at least version 1.6 is required to compile generated client DSL.
+* Ktor at least version 2.0.0 is required to generate default adapters.
+
+#### Kobby 1.x.x
+
 * Gradle at least version 7.0 is required.
 * Maven at least version 3.6.3 is required.
 * Kotlin at least version 1.5 is required to compile generated client DSL.
@@ -34,7 +43,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ```kotlin
 plugins {
-    id("io.github.ermadmi78.kobby") version "1.6.0"
+    id("io.github.ermadmi78.kobby") version "2.0.0"
 }
 ```
 
@@ -47,7 +56,7 @@ plugins {
         <plugin>
             <groupId>io.github.ermadmi78</groupId>
             <artifactId>kobby-maven-plugin</artifactId>
-            <version>1.6.0</version>
+            <version>2.0.0</version>
             <executions>
                 <execution>
                     <phase>generate-sources</phase>
@@ -149,9 +158,9 @@ The `CinemaSimpleKtorAdapter` is simple to configure, but it does not support Gr
 queries and mutations:
 
 ```kotlin
-val client = HttpClient {
-    install(JsonFeature) {
-        serializer = JacksonSerializer {
+val client = HttpClient(CIO) {
+    install(ContentNegotiation) {
+        jackson {
             registerModule(ParameterNamesModule(JsonCreator.Mode.PROPERTIES))
             registerModule(JavaTimeModule())
             // Force Jackson to serialize dates as String
@@ -167,7 +176,7 @@ The `CinemaCompositeKtorAdapter` is more difficult to configure, but it supports
 including subscriptions:
 
 ```kotlin
-val client = HttpClient {
+val client = HttpClient(CIO) {
     install(WebSockets)
 }
 
