@@ -127,8 +127,8 @@ public fun interface CountryReceiver<out T> {
 }
 
 public interface CountryAdapter {
-  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto = throw
-      NotImplementedError("Adapter function executeQuery is not implemented")
+  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto =
+      throw NotImplementedError("Adapter function executeQuery is not implemented")
 
   public suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto =
       throw NotImplementedError("Adapter function executeMutation is not implemented")
@@ -210,11 +210,12 @@ private class CountryContextImpl(
 
     return CountrySubscriber<Subscription> {
       adapter.executeSubscription(subscription, arguments) {
-        val receiver = CountryReceiver<Subscription> {
-          val subscriptionDto: SubscriptionDto = receive()
-          subscriptionDto.buildEntity(this@CountryContextImpl, projectionRef)
-        }
-        it.invoke(receiver)
+        it.invoke(object : CountryReceiver<Subscription> {
+          public override suspend fun receive(): Subscription {
+            val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
+            return subscriptionDto.buildEntity(this@CountryContextImpl, projectionRef)
+          }
+        })
       }
     }
   }

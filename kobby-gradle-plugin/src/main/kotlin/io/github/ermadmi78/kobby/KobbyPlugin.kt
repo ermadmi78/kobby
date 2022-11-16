@@ -107,6 +107,9 @@ class KobbyPlugin : Plugin<Project> {
                     subscription?.also {
                         kotlinTask.contextSubscription.convention(it)
                     }
+                    commitEnabled?.also {
+                        kotlinTask.contextCommitEnabled.convention(it)
+                    }
                 }
                 kotlinExtension.dtoExtension.valueOrNull?.apply {
                     packageName?.also {

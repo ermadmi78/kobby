@@ -128,8 +128,8 @@ public fun interface InvalidFieldIsRequredReceiver<out T> {
 }
 
 public interface InvalidFieldIsRequredAdapter {
-  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto = throw
-      NotImplementedError("Adapter function executeQuery is not implemented")
+  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto =
+      throw NotImplementedError("Adapter function executeQuery is not implemented")
 
   public suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto =
       throw NotImplementedError("Adapter function executeMutation is not implemented")
@@ -211,11 +211,12 @@ private class InvalidFieldIsRequredContextImpl(
 
     return InvalidFieldIsRequredSubscriber<Subscription> {
       adapter.executeSubscription(subscription, arguments) {
-        val receiver = InvalidFieldIsRequredReceiver<Subscription> {
-          val subscriptionDto: SubscriptionDto = receive()
-          subscriptionDto.buildEntity(this@InvalidFieldIsRequredContextImpl, projectionRef)
-        }
-        it.invoke(receiver)
+        it.invoke(object : InvalidFieldIsRequredReceiver<Subscription> {
+          public override suspend fun receive(): Subscription {
+            val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
+            return subscriptionDto.buildEntity(this@InvalidFieldIsRequredContextImpl, projectionRef)
+          }
+        })
       }
     }
   }

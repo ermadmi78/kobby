@@ -271,6 +271,14 @@ open class KobbyKotlinContextExtension {
      * Default: "subscription"
      */
     var subscription: String? = null
+
+    /**
+     * Is generation of the commit function enabled for subscription
+     * [More details](https://github.com/ermadmi78/kobby/issues/31)
+     *
+     * Default: false
+     */
+    var commitEnabled: Boolean? = null
 }
 
 /**

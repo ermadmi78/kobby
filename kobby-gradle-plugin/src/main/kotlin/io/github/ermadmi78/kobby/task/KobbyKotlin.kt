@@ -183,6 +183,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "contextCommitEnabled",
+        description = "Is generation of the commit function enabled for subscription (default false)"
+    )
+    val contextCommitEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoPackageName",
         description = "Package name for DTO classes relative to root package name (default \"dto\")"
     )
@@ -772,6 +780,7 @@ open class KobbyKotlin : DefaultTask() {
         contextQuery.convention("query")
         contextMutation.convention("mutation")
         contextSubscription.convention("subscription")
+        contextCommitEnabled.convention(false)
 
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
@@ -918,7 +927,8 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(contextPrefix.orNull ?: capitalizedContextName, contextPostfix.orNull),
                 contextQuery.get(),
                 contextMutation.get(),
-                contextSubscription.get()
+                contextSubscription.get(),
+                contextCommitEnabled.get()
             ),
             KotlinDtoLayout(
                 dtoPackage.toPackageName(),

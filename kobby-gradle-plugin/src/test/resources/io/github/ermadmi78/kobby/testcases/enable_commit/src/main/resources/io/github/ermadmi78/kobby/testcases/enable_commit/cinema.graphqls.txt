@@ -1,0 +1,24 @@
+type Query {
+    countries(offset: Int! = 0, limit: Int! = 100): [Country!]!
+}
+
+type Subscription {
+    countryCreated: Country!
+}
+
+type Country {
+    id: ID!
+    name: String!
+
+    films(
+        offset: Int! = 0,
+        limit: Int! = 100
+    ): [Film!]!
+}
+
+type Film {
+    id: ID!
+    title: String!
+
+    country: Country!
+}

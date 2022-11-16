@@ -1,0 +1,78 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.CinemaDSL
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "Film")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = FilmDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class FilmDto(
+  public val id: Long? = null,
+  public val title: String? = null,
+  public val country: CountryDto? = null,
+)
+
+public fun FilmDto(block: FilmDtoBuilder.() -> Unit): FilmDto {
+  // FilmDto builder DSL
+  return FilmDtoBuilder().apply(block).let {
+    FilmDto(
+          it.id,
+          it.title,
+          it.country
+        )
+  }
+}
+
+public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto {
+  // FilmDto copy DSL
+  return FilmDtoBuilder().also {
+    it.id = this.id
+    it.title = this.title
+    it.country = this.country
+  }
+  .apply(block).let {
+    FilmDto(
+          it.id,
+          it.title,
+          it.country
+        )
+  }
+}
+
+@CinemaDSL
+public class FilmDtoBuilder {
+  public var id: Long? = null
+
+  public var title: String? = null
+
+  public var country: CountryDto? = null
+}

@@ -154,6 +154,9 @@ class KotlinContextConfig {
     @Parameter
     var subscription: String = "subscription"
 
+    @Parameter
+    var commitEnabled: Boolean = false
+
     override fun toString(): String {
         return "KotlinContextConfig(" +
                 "\n      packageName=$packageName, " +
@@ -162,7 +165,8 @@ class KotlinContextConfig {
                 "\n      postfix=$postfix, " +
                 "\n      query=$query, " +
                 "\n      mutation=$mutation, " +
-                "\n      subscription=$subscription" +
+                "\n      subscription=$subscription, " +
+                "\n      commitEnabled=$commitEnabled" +
                 "\n    )"
     }
 }

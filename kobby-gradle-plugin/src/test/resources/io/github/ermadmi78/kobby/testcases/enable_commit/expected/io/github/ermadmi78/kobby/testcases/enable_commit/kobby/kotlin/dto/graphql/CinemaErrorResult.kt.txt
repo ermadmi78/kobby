@@ -1,0 +1,26 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.dto.graphql
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import kotlin.Suppress
+import kotlin.collections.List
+
+public data class CinemaErrorResult @JsonCreator constructor(
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val errors: List<CinemaError>? = null,
+)

@@ -133,8 +133,8 @@ public interface PrefCtxAdapterPostCtx {
       throw NotImplementedError("Adapter function executeQuery is not implemented")
 
   public suspend fun executeMutation(query: String, variables: Map<String, Any?>):
-      DPrefMyMutationDPost = throw
-      NotImplementedError("Adapter function executeMutation is not implemented")
+      DPrefMyMutationDPost =
+      throw NotImplementedError("Adapter function executeMutation is not implemented")
 
   public suspend fun executeSubscription(
     query: String,
@@ -215,11 +215,13 @@ private class PreImPrefCtxContextPostCtxPostIm(
 
     return PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> {
       adapter.executeSubscription(subscription, arguments) {
-        val receiver = PrefCtxReceiverPostCtx<PrefEnMySubscriptionPostEn> {
-          val DPrefSubscriptionDPost: DPrefMySubscriptionDPost = receive()
-          DPrefSubscriptionDPost.buildEntity(this@PreImPrefCtxContextPostCtxPostIm, projectionRef)
-        }
-        it.invoke(receiver)
+        it.invoke(object : PrefCtxReceiverPostCtx<PrefEnMySubscriptionPostEn> {
+          public override suspend fun receive(): PrefEnMySubscriptionPostEn {
+            val DPrefSubscriptionDPost: DPrefMySubscriptionDPost = this@executeSubscription.receive()
+            return DPrefSubscriptionDPost.buildEntity(this@PreImPrefCtxContextPostCtxPostIm,
+                projectionRef)
+          }
+        })
       }
     }
   }

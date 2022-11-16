@@ -197,44 +197,44 @@ public open class CinemaCompositeKtorAdapter(
       val subscriptionId = idGenerator()
       sendMessage(CinemaMessageStart(subscriptionId, request))
 
-      val receiver = CinemaReceiver<SubscriptionDto> {
-        while (true) {
-          when (val reply = receiveMessage()) {
-            is CinemaMessageData -> {
-              require(reply.id == subscriptionId)
-
-              val result = reply.payload
-              result.errors?.takeIf { it.isNotEmpty() }?.let {
-                throw CinemaException("GraphQL subscription failed", request, it)
-              }
-              return@CinemaReceiver result.data ?: throw CinemaException(
-                    "GraphQL subscription completes successfully but returns no data",
-                    request
-                  )
-            }
-            is CinemaMessageError -> {
-              require(reply.id == subscriptionId)
-              throw CinemaException("Subscription failed", request, reply.payload.errors)
-            }
-            is CinemaMessageComplete -> {
-              require(reply.id == subscriptionId)
-              throw CancellationException("Subscription finished")
-            }
-            is CinemaMessageConnectionKeepAlive -> {
-              continue
-            }
-            else -> {
-              throw CinemaException("""Invalid protocol - unexpected reply: $reply""", request)
-            }
-          }
-        }
-
-        @Suppress("UNREACHABLE_CODE")
-        error("Invalid algorithm")
-      }
-
       try {
-        block.invoke(receiver)
+        block.invoke(object : CinemaReceiver<SubscriptionDto> {
+          public override suspend fun receive(): SubscriptionDto {
+            while (true) {
+              when (val reply = receiveMessage()) {
+                is CinemaMessageData -> {
+                  require(reply.id == subscriptionId)
+
+                  val result = reply.payload
+                  result.errors?.takeIf { it.isNotEmpty() }?.let {
+                    throw CinemaException("GraphQL subscription failed", request, it)
+                  }
+                  return result.data ?: throw CinemaException(
+                        "GraphQL subscription completes successfully but returns no data",
+                        request
+                      )
+                }
+                is CinemaMessageError -> {
+                  require(reply.id == subscriptionId)
+                  throw CinemaException("Subscription failed", request, reply.payload.errors)
+                }
+                is CinemaMessageComplete -> {
+                  require(reply.id == subscriptionId)
+                  throw CancellationException("Subscription finished")
+                }
+                is CinemaMessageConnectionKeepAlive -> {
+                  continue
+                }
+                else -> {
+                  throw CinemaException("""Invalid protocol - unexpected reply: $reply""", request)
+                }
+              }
+            }
+
+            @Suppress("UNREACHABLE_CODE")
+            error("Invalid algorithm")
+          }
+        })
       }
       finally {
         sendMessage(CinemaMessageStop(subscriptionId))

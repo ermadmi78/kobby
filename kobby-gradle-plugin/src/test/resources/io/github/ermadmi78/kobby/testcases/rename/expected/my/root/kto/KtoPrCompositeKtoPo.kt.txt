@@ -198,44 +198,45 @@ public open class KtoPrCompositeKtoPo(
       val subscriptionId = idGenerator()
       sendMessage(GPrefMessageStartGPost(subscriptionId, request))
 
-      val receiver = PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost> {
-        while (true) {
-          when (val reply = receiveMessage()) {
-            is GPrefMessageDataGPost -> {
-              require(reply.id == subscriptionId)
-
-              val result = reply.payload
-              result.errors?.takeIf { it.isNotEmpty() }?.let {
-                throw GPrefExceptionGPost("GraphQL subscription failed", request, it)
-              }
-              return@PrefCtxReceiverPostCtx result.data ?: throw GPrefExceptionGPost(
-                    "GraphQL subscription completes successfully but returns no data",
-                    request
-                  )
-            }
-            is GPrefMessageErrorGPost -> {
-              require(reply.id == subscriptionId)
-              throw GPrefExceptionGPost("Subscription failed", request, reply.payload.errors)
-            }
-            is GPrefMessageCompleteGPost -> {
-              require(reply.id == subscriptionId)
-              throw CancellationException("Subscription finished")
-            }
-            is GPrefMessageConnectionKeepAliveGPost -> {
-              continue
-            }
-            else -> {
-              throw GPrefExceptionGPost("""Invalid protocol - unexpected reply: $reply""", request)
-            }
-          }
-        }
-
-        @Suppress("UNREACHABLE_CODE")
-        error("Invalid algorithm")
-      }
-
       try {
-        block.invoke(receiver)
+        block.invoke(object : PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost> {
+          public override suspend fun receive(): DPrefMySubscriptionDPost {
+            while (true) {
+              when (val reply = receiveMessage()) {
+                is GPrefMessageDataGPost -> {
+                  require(reply.id == subscriptionId)
+
+                  val result = reply.payload
+                  result.errors?.takeIf { it.isNotEmpty() }?.let {
+                    throw GPrefExceptionGPost("GraphQL subscription failed", request, it)
+                  }
+                  return result.data ?: throw GPrefExceptionGPost(
+                        "GraphQL subscription completes successfully but returns no data",
+                        request
+                      )
+                }
+                is GPrefMessageErrorGPost -> {
+                  require(reply.id == subscriptionId)
+                  throw GPrefExceptionGPost("Subscription failed", request, reply.payload.errors)
+                }
+                is GPrefMessageCompleteGPost -> {
+                  require(reply.id == subscriptionId)
+                  throw CancellationException("Subscription finished")
+                }
+                is GPrefMessageConnectionKeepAliveGPost -> {
+                  continue
+                }
+                else -> {
+                  throw GPrefExceptionGPost("""Invalid protocol - unexpected reply: $reply""",
+                      request)
+                }
+              }
+            }
+
+            @Suppress("UNREACHABLE_CODE")
+            error("Invalid algorithm")
+          }
+        })
       }
       finally {
         sendMessage(GPrefMessageStopGPost(subscriptionId))

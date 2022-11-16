@@ -29,7 +29,8 @@ class SchemaValidationTest {
             Decoration("Kobby", null),
             "query",
             "mutation",
-            "subscription"
+            "subscription",
+            false
         ),
         KotlinDtoLayout(
             "kobby.dto",

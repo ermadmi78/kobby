@@ -198,44 +198,44 @@ public open class GraphqlCompositeKtorAdapter(
       val subscriptionId = idGenerator()
       sendMessage(GraphqlMessageStart(subscriptionId, request))
 
-      val receiver = GraphqlReceiver<MySubscriptionDto> {
-        while (true) {
-          when (val reply = receiveMessage()) {
-            is GraphqlMessageData -> {
-              require(reply.id == subscriptionId)
-
-              val result = reply.payload
-              result.errors?.takeIf { it.isNotEmpty() }?.let {
-                throw GraphqlException("GraphQL subscription failed", request, it)
-              }
-              return@GraphqlReceiver result.data ?: throw GraphqlException(
-                    "GraphQL subscription completes successfully but returns no data",
-                    request
-                  )
-            }
-            is GraphqlMessageError -> {
-              require(reply.id == subscriptionId)
-              throw GraphqlException("Subscription failed", request, reply.payload.errors)
-            }
-            is GraphqlMessageComplete -> {
-              require(reply.id == subscriptionId)
-              throw CancellationException("Subscription finished")
-            }
-            is GraphqlMessageConnectionKeepAlive -> {
-              continue
-            }
-            else -> {
-              throw GraphqlException("""Invalid protocol - unexpected reply: $reply""", request)
-            }
-          }
-        }
-
-        @Suppress("UNREACHABLE_CODE")
-        error("Invalid algorithm")
-      }
-
       try {
-        block.invoke(receiver)
+        block.invoke(object : GraphqlReceiver<MySubscriptionDto> {
+          public override suspend fun receive(): MySubscriptionDto {
+            while (true) {
+              when (val reply = receiveMessage()) {
+                is GraphqlMessageData -> {
+                  require(reply.id == subscriptionId)
+
+                  val result = reply.payload
+                  result.errors?.takeIf { it.isNotEmpty() }?.let {
+                    throw GraphqlException("GraphQL subscription failed", request, it)
+                  }
+                  return result.data ?: throw GraphqlException(
+                        "GraphQL subscription completes successfully but returns no data",
+                        request
+                      )
+                }
+                is GraphqlMessageError -> {
+                  require(reply.id == subscriptionId)
+                  throw GraphqlException("Subscription failed", request, reply.payload.errors)
+                }
+                is GraphqlMessageComplete -> {
+                  require(reply.id == subscriptionId)
+                  throw CancellationException("Subscription finished")
+                }
+                is GraphqlMessageConnectionKeepAlive -> {
+                  continue
+                }
+                else -> {
+                  throw GraphqlException("""Invalid protocol - unexpected reply: $reply""", request)
+                }
+              }
+            }
+
+            @Suppress("UNREACHABLE_CODE")
+            error("Invalid algorithm")
+          }
+        })
       }
       finally {
         sendMessage(GraphqlMessageStop(subscriptionId))

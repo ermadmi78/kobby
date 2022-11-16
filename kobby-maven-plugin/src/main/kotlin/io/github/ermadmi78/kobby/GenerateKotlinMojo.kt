@@ -205,7 +205,8 @@ class GenerateKotlinMojo : AbstractMojo() {
                 Decoration(context.prefix ?: capitalizedContextName, context.postfix),
                 context.query,
                 context.mutation,
-                context.subscription
+                context.subscription,
+                context.commitEnabled
             ),
             KotlinDtoLayout(
                 dtoPackage.toPackageName(),

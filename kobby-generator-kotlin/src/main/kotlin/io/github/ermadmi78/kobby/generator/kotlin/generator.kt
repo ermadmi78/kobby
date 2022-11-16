@@ -20,7 +20,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
             buildFunction(context.contextName._decapitalize() + "Of") {
                 buildParameter(Const.ADAPTER, context.adapterClass)
                 returns(context.contextClass)
-                addStatement("return %T(${Const.ADAPTER})", layout.contextImplClass)
+                addStatement("return·%T(${Const.ADAPTER})", layout.contextImplClass)
             }
 
             // Static query builder function
@@ -69,7 +69,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
             }
 
             // Build subscriber interface
-            buildFunInterface(context.subscriberName) {
+            buildInterface(context.subscriberName, true) {
                 val typeVariable = TypeVariableName.invoke("T")
                 addTypeVariable(typeVariable)
                 buildFunction(context.subscriberFunSubscribe) {
@@ -80,14 +80,22 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
             }
 
             // Build receiver interface
-            buildFunInterface(context.receiverName) {
+            buildInterface(context.receiverName, !context.commitEnabled) {
                 addAnnotation(context.dslClass)
 
                 val typeVariable = TypeVariableName.invoke("T", OUT)
                 addTypeVariable(typeVariable)
+
                 buildFunction(context.receiverFunReceive) {
                     addModifiers(SUSPEND, ABSTRACT)
                     returns(typeVariable)
+                }
+
+                if (context.commitEnabled) {
+                    buildFunction(context.receiverFunCommit) {
+                        addModifiers(SUSPEND, ABSTRACT)
+                        returns(UNIT)
+                    }
                 }
             }
 
@@ -102,7 +110,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                     returns(schema.query.dtoClass)
 
                     addStatement(
-                        "return throw %T(%S)",
+                        "return·throw·%T(%S)",
                         notImplementedClass,
                         "Adapter function ${context.adapterFunExecuteQuery} is not implemented"
                     )
@@ -115,7 +123,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                     returns(schema.mutation.dtoClass)
 
                     addStatement(
-                        "return throw %T(%S)",
+                        "return·throw·%T(%S)",
                         notImplementedClass,
                         "Adapter function ${context.adapterFunExecuteMutation} is not implemented"
                     )
@@ -129,7 +137,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                     returns(UNIT)
 
                     addStatement(
-                        "return throw %T(%S)",
+                        "return·throw·%T(%S)",
                         notImplementedClass,
                         "Adapter function ${context.adapterFunExecuteSubscription} is not implemented"
                     )
@@ -295,15 +303,32 @@ private fun TypeSpecBuilder.buildContextFunction(
         if (subscription) {
             controlFlow("return·%T", context.subscriberClass.parameterizedBy(node.entityClass)) {
                 controlFlow("${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})") {
-                    controlFlow("val·receiver·=·%T", context.receiverClass.parameterizedBy(node.entityClass)) {
-                        statement(node.dtoClass) {
-                            "val·$dtoVal:·%T·=·receive()"
+                    buildAnonymousClass {
+                        addSuperinterface(context.receiverClass.parameterizedBy(node.entityClass))
+
+                        buildFunction(context.receiverFunReceive) {
+                            addModifiers(SUSPEND, OVERRIDE)
+                            returns(node.entityClass)
+
+                            statement(node.dtoClass) {
+                                "val·$dtoVal:·%T·=·this@$adapterFun.${context.receiverFunReceive}()"
+                            }
+                            statement(ClassName(impl.packageName, node.entityBuilderName), contextImplClass) {
+                                "return·$dtoVal.%T(this@%T, $projectionRef)"
+                            }
                         }
-                        statement(ClassName(impl.packageName, node.entityBuilderName), contextImplClass) {
-                            "$dtoVal.%T(this@%T, $projectionRef)"
+
+                        if (context.commitEnabled) {
+                            buildFunction(context.receiverFunCommit) {
+                                addModifiers(SUSPEND, OVERRIDE)
+                                returns(UNIT)
+
+                                addStatement("this@$adapterFun.${context.receiverFunCommit}()")
+                            }
                         }
+                    }.also {
+                        addStatement("it.invoke(%L)", it)
                     }
-                    addStatement("it.invoke(receiver)")
                 }
             }
         } else {
@@ -368,7 +393,7 @@ private fun FileSpecBuilder.buildBuilderFunction(
 
         addStatement("")
         addStatement(
-            "return $operation %T ${arguments.first}",
+            "return·$operation·%T·${arguments.first}",
             ClassName("kotlin", "to")
         )
     }

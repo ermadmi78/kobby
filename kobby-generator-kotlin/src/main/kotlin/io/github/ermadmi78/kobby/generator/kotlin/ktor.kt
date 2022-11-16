@@ -532,7 +532,6 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
 
     val reply = ktor.compositeValReply
     val receiveMessage = ktor.compositeFunReceiveMessage
-    val receiver = ktor.compositeValReceiver
     val subscriptionId = ktor.compositeValSubscriptionId
     val result = ktor.compositeValResult
 
@@ -580,83 +579,97 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
             }
             addStatement("")
 
-            controlFlow("val·$receiver·=·%T<%T>", context.receiverClass, schema.subscription.dtoClass) {
-                controlFlow("while·(true)") {
-                    controlFlow("when·(val·$reply·=·$receiveMessage())") {
-                        controlFlow("is·%T·->", message(GQL_DATA)) {
-                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
-                            addStatement("")
+            buildAnonymousClass {
+                addSuperinterface(context.receiverClass.parameterizedBy(schema.subscription.dtoClass))
 
-                            addStatement("val·$result·=·$reply.payload")
-                            controlFlow(
-                                "$result.errors?.%M·{ it.%M() }?.%M",
-                                Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
-                            ) {
+                buildFunction(context.receiverFunReceive) {
+                    addModifiers(SUSPEND, OVERRIDE)
+                    returns(schema.subscription.dtoClass)
+
+                    controlFlow("while·(true)") {
+                        controlFlow("when·(val·$reply·=·$receiveMessage())") {
+                            controlFlow("is·%T·->", message(GQL_DATA)) {
+                                addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
+                                addStatement("")
+
+                                addStatement("val·$result·=·$reply.payload")
+                                controlFlow(
+                                    "$result.errors?.%M·{ it.%M() }?.%M",
+                                    Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
+                                ) {
+                                    addStatement(
+                                        "throw·%T(%S, $request, it)",
+                                        graphql.exceptionClass,
+                                        "GraphQL subscription failed"
+                                    )
+                                }
                                 addStatement(
-                                    "throw·%T(%S, $request, it)",
+                                    "return·$result.data ?: throw·%T(\n⇥%S,\n$request⇤\n)",
                                     graphql.exceptionClass,
-                                    "GraphQL subscription failed"
+                                    "GraphQL subscription completes successfully but returns no data"
                                 )
                             }
-                            addStatement(
-                                "return@%T·$result.data ?: throw·%T(\n⇥%S,\n$request⇤\n)",
-                                context.receiverClass,
-                                graphql.exceptionClass,
-                                "GraphQL subscription completes successfully but returns no data"
-                            )
-                        }
 
-                        controlFlow("is·%T·->", message(GQL_ERROR)) {
-                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
-                            addStatement(
-                                "throw·%T(%S, $request, $reply.payload.errors)",
-                                graphql.exceptionClass,
-                                "Subscription failed"
-                            )
-                        }
+                            controlFlow("is·%T·->", message(GQL_ERROR)) {
+                                addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
+                                addStatement(
+                                    "throw·%T(%S, $request, $reply.payload.errors)",
+                                    graphql.exceptionClass,
+                                    "Subscription failed"
+                                )
+                            }
 
-                        controlFlow("is·%T·->", message(GQL_COMPLETE)) {
-                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
-                            addStatement(
-                                "throw·%T(%S)",
-                                ClassName(
-                                    "kotlin.coroutines.cancellation",
-                                    "CancellationException"
-                                ),
-                                "Subscription finished"
-                            )
-                        }
+                            controlFlow("is·%T·->", message(GQL_COMPLETE)) {
+                                addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
+                                addStatement(
+                                    "throw·%T(%S)",
+                                    ClassName(
+                                        "kotlin.coroutines.cancellation",
+                                        "CancellationException"
+                                    ),
+                                    "Subscription finished"
+                                )
+                            }
 
-                        controlFlow("is·%T·->", message(GQL_CONNECTION_KEEP_ALIVE)) {
-                            addStatement("continue")
-                        }
+                            controlFlow("is·%T·->", message(GQL_CONNECTION_KEEP_ALIVE)) {
+                                addStatement("continue")
+                            }
 
-                        controlFlow("else·->") {
-                            addStatement(
-                                "throw·%T(%P, $request)",
-                                graphql.exceptionClass,
-                                "Invalid protocol - unexpected reply: \$$reply"
-                            )
+                            controlFlow("else·->") {
+                                addStatement(
+                                    "throw·%T(%P, $request)",
+                                    graphql.exceptionClass,
+                                    "Invalid protocol - unexpected reply: \$$reply"
+                                )
+                            }
                         }
                     }
+
+                    addStatement("")
+                    addStatement(
+                        "@%T(%S)",
+                        ClassName("kotlin", "Suppress"),
+                        "UNREACHABLE_CODE"
+                    )
+                    addStatement("%M(%S)", Kotlin.error, "Invalid algorithm")
                 }
 
-                addStatement("")
-                addStatement(
-                    "@%T(%S)",
-                    ClassName("kotlin", "Suppress"),
-                    "UNREACHABLE_CODE"
-                )
-                addStatement("%M(%S)", Kotlin.error, "Invalid algorithm")
-            }
-            addStatement("")
+                if (context.commitEnabled) {
+                    buildFunction(context.receiverFunCommit) {
+                        addModifiers(SUSPEND, OVERRIDE)
+                        returns(UNIT)
 
-            controlFlow("try") {
-                addStatement("$block.invoke($receiver)")
-            }
-            controlFlow("finally") {
-                buildSendMessage(layout, GQL_STOP) {
-                    subscriptionId
+                        addStatement("//·Do·nothing")
+                    }
+                }
+            }.also {
+                controlFlow("try") {
+                    addStatement("$block.invoke(%L)", it)
+                }
+                controlFlow("finally") {
+                    buildSendMessage(layout, GQL_STOP) {
+                        subscriptionId
+                    }
                 }
             }
         }

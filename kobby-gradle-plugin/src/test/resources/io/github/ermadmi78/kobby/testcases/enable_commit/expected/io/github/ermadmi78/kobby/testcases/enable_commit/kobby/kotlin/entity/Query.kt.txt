@@ -1,0 +1,47 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.CinemaDSL
+import kotlin.Int
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Query {
+  public val countries: List<Country>
+
+  public fun __context(): CinemaContext
+
+  public fun QueryProjection.__withCurrentProjection(): Unit
+}
+
+@CinemaDSL
+public interface QueryProjection {
+  /**
+   * @param offset Default: 0
+   * @param limit Default: 100
+   */
+  public fun countries(
+    offset: Int? = null,
+    limit: Int? = null,
+    __projection: CountryProjection.() -> Unit,
+  ): Unit
+
+  public fun __minimize(): Unit {
+  }
+}

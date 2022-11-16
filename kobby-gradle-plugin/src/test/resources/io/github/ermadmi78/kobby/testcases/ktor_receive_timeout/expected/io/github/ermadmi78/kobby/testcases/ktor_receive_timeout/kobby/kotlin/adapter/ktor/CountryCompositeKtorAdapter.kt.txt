@@ -197,44 +197,44 @@ public open class CountryCompositeKtorAdapter(
       val subscriptionId = idGenerator()
       sendMessage(CountryMessageStart(subscriptionId, request))
 
-      val receiver = CountryReceiver<SubscriptionDto> {
-        while (true) {
-          when (val reply = receiveMessage()) {
-            is CountryMessageData -> {
-              require(reply.id == subscriptionId)
-
-              val result = reply.payload
-              result.errors?.takeIf { it.isNotEmpty() }?.let {
-                throw CountryException("GraphQL subscription failed", request, it)
-              }
-              return@CountryReceiver result.data ?: throw CountryException(
-                    "GraphQL subscription completes successfully but returns no data",
-                    request
-                  )
-            }
-            is CountryMessageError -> {
-              require(reply.id == subscriptionId)
-              throw CountryException("Subscription failed", request, reply.payload.errors)
-            }
-            is CountryMessageComplete -> {
-              require(reply.id == subscriptionId)
-              throw CancellationException("Subscription finished")
-            }
-            is CountryMessageConnectionKeepAlive -> {
-              continue
-            }
-            else -> {
-              throw CountryException("""Invalid protocol - unexpected reply: $reply""", request)
-            }
-          }
-        }
-
-        @Suppress("UNREACHABLE_CODE")
-        error("Invalid algorithm")
-      }
-
       try {
-        block.invoke(receiver)
+        block.invoke(object : CountryReceiver<SubscriptionDto> {
+          public override suspend fun receive(): SubscriptionDto {
+            while (true) {
+              when (val reply = receiveMessage()) {
+                is CountryMessageData -> {
+                  require(reply.id == subscriptionId)
+
+                  val result = reply.payload
+                  result.errors?.takeIf { it.isNotEmpty() }?.let {
+                    throw CountryException("GraphQL subscription failed", request, it)
+                  }
+                  return result.data ?: throw CountryException(
+                        "GraphQL subscription completes successfully but returns no data",
+                        request
+                      )
+                }
+                is CountryMessageError -> {
+                  require(reply.id == subscriptionId)
+                  throw CountryException("Subscription failed", request, reply.payload.errors)
+                }
+                is CountryMessageComplete -> {
+                  require(reply.id == subscriptionId)
+                  throw CancellationException("Subscription finished")
+                }
+                is CountryMessageConnectionKeepAlive -> {
+                  continue
+                }
+                else -> {
+                  throw CountryException("""Invalid protocol - unexpected reply: $reply""", request)
+                }
+              }
+            }
+
+            @Suppress("UNREACHABLE_CODE")
+            error("Invalid algorithm")
+          }
+        })
       }
       finally {
         sendMessage(CountryMessageStop(subscriptionId))

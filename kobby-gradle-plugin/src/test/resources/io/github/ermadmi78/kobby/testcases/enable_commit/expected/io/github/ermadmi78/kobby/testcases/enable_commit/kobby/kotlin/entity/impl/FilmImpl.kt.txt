@@ -1,0 +1,177 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.dto.FilmDto
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.Film
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.FilmProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class FilmImpl(
+  internal val __innerContext: CinemaContext,
+  internal val __innerProjection: FilmProjectionImpl,
+  internal val __innerDto: FilmDto,
+) : Film {
+  public override val id: Long
+    get() {
+      if (!__innerProjection.__innerId0) {
+        error("Property [id] is not available - add [id] projection to switch on it")
+      }
+      return __innerDto.id!!
+    }
+
+  public override val title: String
+    get() {
+      if (!__innerProjection.__innerTitle1) {
+        error("Property [title] is not available - add [title] projection to switch on it")
+      }
+      return __innerDto.title!!
+    }
+
+  public override val country: Country by lazy {
+    if (__innerProjection.__innerCountry2 == null) {
+      error("Property [country] is not available - add [country] projection to switch on it")
+    }
+    __innerDto.resolveCountry(__innerContext, __innerProjection.__innerCountry2!!)
+  }
+
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Film").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerId0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerTitle1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("title").append('=').append(title)
+    }
+
+    if (__innerProjection.__innerCountry2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("country").append('=').append(country)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): CinemaContext = __innerContext
+
+  public override fun FilmProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class FilmProjectionImpl : FilmProjection {
+  internal var __innerId0: Boolean = false
+
+  internal var __innerTitle1: Boolean = false
+
+  internal var __innerCountry2: CountryProjectionImpl? = null
+
+  public override fun id(): Unit {
+    __innerId0 = true
+  }
+
+  public override fun title(): Unit {
+    __innerTitle1 = true
+  }
+
+  public override fun country(__projection: CountryProjection.() -> Unit): Unit {
+    __innerCountry2 = CountryProjectionImpl().apply(__projection)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: FilmProjection): Unit {
+    if ("id" !in ignore && __innerId0) {
+      __projection.id()
+    }
+    if ("title" !in ignore && __innerTitle1) {
+      __projection.title()
+    }
+    if ("country" !in ignore && __innerCountry2 != null) {
+      __projection.country {
+        this@FilmProjectionImpl.__innerCountry2!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore && __innerId0) {
+      body.append(' ').append("id")
+    }
+
+    // Field: title
+    if ("title" !in ignore && __innerTitle1) {
+      body.append(' ').append("title")
+    }
+
+    // Field: country
+    if ("country" !in ignore && __innerCountry2 != null) {
+      body.append(' ').append("country")
+
+      // Build nested projection of Country
+      __innerCountry2!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun FilmDto.buildEntity(__innerContext: CinemaContext,
+    __innerProjection: FilmProjectionImpl): Film = FilmImpl(__innerContext, __innerProjection, this)
+
+internal fun FilmDto.resolveCountry(__innerContext: CinemaContext,
+    __innerProjection: CountryProjectionImpl): Country =
+    country?.buildEntity(__innerContext, __innerProjection)!!

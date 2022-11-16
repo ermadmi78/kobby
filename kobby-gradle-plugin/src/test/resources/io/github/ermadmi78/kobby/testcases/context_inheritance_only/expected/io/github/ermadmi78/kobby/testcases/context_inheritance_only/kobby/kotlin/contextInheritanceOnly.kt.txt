@@ -128,8 +128,8 @@ public fun interface ContextInheritanceOnlyReceiver<out T> {
 }
 
 public interface ContextInheritanceOnlyAdapter {
-  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto = throw
-      NotImplementedError("Adapter function executeQuery is not implemented")
+  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto =
+      throw NotImplementedError("Adapter function executeQuery is not implemented")
 
   public suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto =
       throw NotImplementedError("Adapter function executeMutation is not implemented")
@@ -211,11 +211,13 @@ private class ContextInheritanceOnlyContextImpl(
 
     return ContextInheritanceOnlySubscriber<Subscription> {
       adapter.executeSubscription(subscription, arguments) {
-        val receiver = ContextInheritanceOnlyReceiver<Subscription> {
-          val subscriptionDto: SubscriptionDto = receive()
-          subscriptionDto.buildEntity(this@ContextInheritanceOnlyContextImpl, projectionRef)
-        }
-        it.invoke(receiver)
+        it.invoke(object : ContextInheritanceOnlyReceiver<Subscription> {
+          public override suspend fun receive(): Subscription {
+            val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
+            return subscriptionDto.buildEntity(this@ContextInheritanceOnlyContextImpl,
+                projectionRef)
+          }
+        })
       }
     }
   }

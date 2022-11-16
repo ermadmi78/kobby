@@ -468,7 +468,8 @@ class KotlinContextLayout(
     val decoration: Decoration,
     val query: String,
     val mutation: String,
-    val subscription: String
+    val subscription: String,
+    val commitEnabled: Boolean
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }

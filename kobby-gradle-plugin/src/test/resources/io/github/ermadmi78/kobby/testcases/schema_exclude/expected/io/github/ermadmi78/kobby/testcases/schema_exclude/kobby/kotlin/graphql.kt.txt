@@ -127,8 +127,8 @@ public fun interface GraphqlReceiver<out T> {
 }
 
 public interface GraphqlAdapter {
-  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto = throw
-      NotImplementedError("Adapter function executeQuery is not implemented")
+  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto =
+      throw NotImplementedError("Adapter function executeQuery is not implemented")
 
   public suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto =
       throw NotImplementedError("Adapter function executeMutation is not implemented")
@@ -210,11 +210,12 @@ private class GraphqlContextImpl(
 
     return GraphqlSubscriber<Subscription> {
       adapter.executeSubscription(subscription, arguments) {
-        val receiver = GraphqlReceiver<Subscription> {
-          val subscriptionDto: SubscriptionDto = receive()
-          subscriptionDto.buildEntity(this@GraphqlContextImpl, projectionRef)
-        }
-        it.invoke(receiver)
+        it.invoke(object : GraphqlReceiver<Subscription> {
+          public override suspend fun receive(): Subscription {
+            val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
+            return subscriptionDto.buildEntity(this@GraphqlContextImpl, projectionRef)
+          }
+        })
       }
     }
   }

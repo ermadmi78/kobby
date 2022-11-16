@@ -266,6 +266,9 @@ internal val KotlinContextLayout.receiverClass: ClassName
 internal val KotlinContextLayout.receiverFunReceive: String
     get() = "receive"
 
+internal val KotlinContextLayout.receiverFunCommit: String
+    get() = "commit"
+
 internal fun KotlinContextLayout.receiverLambda(receiverType: TypeName): LambdaTypeName =
     LambdaTypeName.get(
         receiverClass.parameterizedBy(receiverType),
@@ -377,7 +380,6 @@ internal val KotlinAdapterKtorLayout.compositeValInitPayload: String get() = "in
 
 internal val KotlinAdapterKtorLayout.compositeFunExecuteSubscriptionImpl: String get() = "executeSubscriptionImpl"
 internal val KotlinAdapterKtorLayout.compositeValReply: String get() = "reply"
-internal val KotlinAdapterKtorLayout.compositeValReceiver: String get() = "receiver"
 internal val KotlinAdapterKtorLayout.compositeValSubscriptionId: String get() = "subscriptionId"
 
 internal val KotlinAdapterKtorLayout.compositeFunSendMessage: String get() = "sendMessage"

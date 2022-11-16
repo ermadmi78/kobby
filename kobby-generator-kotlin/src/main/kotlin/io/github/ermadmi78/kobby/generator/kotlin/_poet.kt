@@ -62,17 +62,14 @@ internal fun FileSpecBuilder.buildClass(
 
 internal fun FileSpecBuilder.buildInterface(
     name: String,
+    funInterface: Boolean = false,
     block: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpec.interfaceBuilder(name).apply(block).build().also {
-    addType(it)
-}
-
-internal fun FileSpecBuilder.buildFunInterface(
-    name: String,
-    block: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpec.funInterfaceBuilder(name).apply(block).build().also {
-    addType(it)
-}
+): TypeSpec = (if (funInterface) TypeSpec.funInterfaceBuilder(name) else TypeSpec.interfaceBuilder(name))
+    .apply(block)
+    .build()
+    .also {
+        addType(it)
+    }
 
 internal fun FileSpecBuilder.buildEnum(
     name: String,
@@ -100,6 +97,10 @@ internal fun TypeSpecBuilder.buildCompanionObject(
 ): TypeSpec = TypeSpec.companionObjectBuilder().apply(block).build().also {
     this.addType(it)
 }
+
+internal fun buildAnonymousClass(
+    block: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.anonymousClassBuilder().apply(block).build()
 
 internal fun TypeSpecBuilder.buildPrimaryConstructor(
     block: FunSpecBuilder.() -> Unit

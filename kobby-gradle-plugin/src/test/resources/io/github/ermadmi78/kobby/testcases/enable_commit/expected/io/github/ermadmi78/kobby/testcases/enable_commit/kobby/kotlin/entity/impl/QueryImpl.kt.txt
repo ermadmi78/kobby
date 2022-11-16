@@ -1,0 +1,185 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.impl
+
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity.QueryProjection
+import kotlin.Any
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class QueryImpl(
+  internal val __innerContext: CinemaContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto,
+) : Query {
+  public override val countries: List<Country> by lazy {
+    if (__innerProjection.__innerCountries0 == null) {
+      error("Property [countries] is not available - add [countries] projection to switch on it")
+    }
+    __innerDto.resolveCountries(__innerContext, __innerProjection.__innerCountries0!!)
+  }
+
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCountries0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countries").append('=').append(countries)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): CinemaContext = __innerContext
+
+  public override fun QueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerCountries0: CountryProjectionImpl? = null
+
+  internal var __innerCountries0Offset: Int? = null
+
+  internal var __innerCountries0Limit: Int? = null
+
+  public override fun countries(
+    offset: Int?,
+    limit: Int?,
+    __projection: CountryProjection.() -> Unit,
+  ): Unit {
+    __innerCountries0 = CountryProjectionImpl().apply(__projection)
+    __innerCountries0Offset = offset
+    __innerCountries0Limit = limit
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+    if ("countries" !in ignore && __innerCountries0 != null) {
+      __projection.countries(__innerCountries0Offset, __innerCountries0Limit) {
+        this@QueryProjectionImpl.__innerCountries0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: countries
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCountries0(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("countries" !in ignore && __innerCountries0 != null) {
+      body.append(' ').append("countries")
+      var counter = 0
+      val addBrackets = __innerCountries0Offset != null || __innerCountries0Limit != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: countries.offset
+      if (__innerCountries0Offset != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCountries0Offset!!
+        body.append("offset").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int!")
+      }
+
+      // Argument: countries.limit
+      if (__innerCountries0Limit != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCountries0Limit!!
+        body.append("limit").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Country
+      __innerCountries0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    header: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: countries
+    ____innerBuildCountries0(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: CinemaContext,
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
+
+internal fun QueryDto.resolveCountries(__innerContext: CinemaContext,
+    __innerProjection: CountryProjectionImpl): List<Country> =
+    countries?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
