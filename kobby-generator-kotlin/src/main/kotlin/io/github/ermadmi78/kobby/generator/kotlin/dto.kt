@@ -418,6 +418,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 addEnumConstant("DataFetchingException")
                 addEnumConstant("OperationNotSupported")
                 addEnumConstant("ExecutionAborted")
+                addEnumConstant("UnauthorizedException")
             }
         }
 
