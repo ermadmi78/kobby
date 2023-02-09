@@ -1,5 +1,6 @@
 package io.github.ermadmi78.kobby
 
+import io.github.ermadmi78.kobby.generator.kotlin.KotlinDtoKotlinxSerializationLayout
 import io.github.ermadmi78.kobby.generator.kotlin.KotlinType
 import org.apache.maven.plugins.annotations.Parameter
 import java.io.File
@@ -201,6 +202,9 @@ class KotlinDtoConfig {
     var applyPrimaryKeys: Boolean = false
 
     @Parameter
+    var serialization: KotlinDtoSerializationConfig = KotlinDtoSerializationConfig()
+
+    @Parameter
     var jackson: KotlinDtoJacksonConfig = KotlinDtoJacksonConfig()
 
     @Parameter
@@ -296,6 +300,17 @@ class KotlinDtoGraphQLConfig {
                 "\n        prefix=$prefix, " +
                 "\n        postfix=$postfix" +
                 "\n      )"
+    }
+}
+
+class KotlinDtoSerializationConfig {
+    @Parameter
+    var enabled: Boolean? = null
+
+    override fun toString(): String {
+        return "KotlinDtoSerializationConfig(" +
+            "\n        enabled=$enabled, " +
+            "\n      )"
     }
 }
 

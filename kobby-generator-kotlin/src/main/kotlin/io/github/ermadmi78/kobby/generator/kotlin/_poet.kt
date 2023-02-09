@@ -1,6 +1,7 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
+import io.github.ermadmi78.kobby.generator.kotlin.KotlinxSerializationAnnotations.CONTEXTUAL
 import io.github.ermadmi78.kobby.model.KobbyScope
 
 /**
@@ -167,6 +168,16 @@ internal fun PropertySpecBuilder.buildLazyDelegate(
     controlFlow("lazy") {
         apply(block)
     }
+}
+
+internal fun TypeName.annotated(annotation: AnnotationSpec): TypeName {
+    val newAnnotations = annotations.toMutableList()
+    newAnnotations.add(annotation)
+
+    return copy(
+        nullable = isNullable,
+        annotations = newAnnotations
+    )
 }
 
 internal fun CodeBlockBuilder.controlFlow(flow: String, vararg args: Any, block: CodeBlockBuilder.() -> Unit) {
@@ -452,3 +463,24 @@ internal enum class JacksonInclude {
     CUSTOM,
     USE_DEFAULTS
 }
+
+//**********************************************************************************************************************
+//                                              Kotlinx Serialization
+//**********************************************************************************************************************
+
+internal object KotlinxSerializationAnnotations {
+    val SERIALIZABLE = ClassName(
+        "kotlinx.serialization",
+        "Serializable"
+    )
+
+    val CONTEXTUAL = ClassName(
+        "kotlinx.serialization",
+        "Contextual"
+    )
+}
+
+
+
+internal fun TypeName.serializationContextual(): TypeName =
+    annotated(AnnotationSpec.builder(CONTEXTUAL).build())

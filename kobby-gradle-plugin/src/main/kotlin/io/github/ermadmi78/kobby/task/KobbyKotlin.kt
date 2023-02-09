@@ -255,6 +255,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoKotlinxSerializationEnabled",
+        description = "Add Kotlinx Serialization annotations for generated DTO classes (default true)"
+    )
+    val dtoKotlinxSerialization: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoJacksonEnabled",
         description = "Add Jackson annotations for generated DTO classes (default true)"
     )
@@ -788,6 +796,9 @@ open class KobbyKotlin : DefaultTask() {
         dtoJacksonEnabled.convention(project.provider {
             project.hasDependency("com.fasterxml.jackson.core", "jackson-annotations")
         })
+        dtoKotlinxSerialization.convention(project.provider {
+            project.pluginManager.hasPlugin("org.jetbrains.kotlin.plugin.serialization")
+        })
         dtoJacksonTypeInfoUse.convention("NAME")
         dtoJacksonTypeInfoInclude.convention("PROPERTY")
         dtoJacksonTypeInfoProperty.convention("__typename")
@@ -936,6 +947,9 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(dtoEnumPrefix.orNull, dtoEnumPostfix.orNull),
                 Decoration(dtoInputPrefix.orNull, dtoInputPostfix.orNull),
                 dtoApplyPrimaryKeys.get(),
+                KotlinDtoKotlinxSerializationLayout(
+                    dtoKotlinxSerialization.get()
+                ),
                 KotlinDtoJacksonLayout(
                     dtoJacksonEnabled.get(),
                     dtoJacksonTypeInfoUse.get(),

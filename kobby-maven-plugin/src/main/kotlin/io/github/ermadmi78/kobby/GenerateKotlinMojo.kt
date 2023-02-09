@@ -214,6 +214,9 @@ class GenerateKotlinMojo : AbstractMojo() {
                 Decoration(dto.enumPrefix, dto.enumPostfix),
                 Decoration(dto.inputPrefix, dto.inputPostfix),
                 dto.applyPrimaryKeys,
+                KotlinDtoKotlinxSerializationLayout(
+                    dto.serialization.enabled!!,
+                ),
                 KotlinDtoJacksonLayout(
                     dto.jackson.enabled!!,
                     dto.jackson.typeInfoUse,

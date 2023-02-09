@@ -25,6 +25,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.packageName, node.dtoName) {
             // Build object DTO class
             buildClass(node.dtoName) {
+                kotlinxSerializeClass()
                 jacksonizeClass(node)
                 if (node.fields.isNotEmpty()) {
                     addModifiers(KModifier.DATA)
@@ -260,6 +261,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.packageName, node.dtoName) {
             // Build input DTO class
             buildClass(node.dtoName) {
+                kotlinxSerializeClass()
                 jacksonizeClass(node)
                 addModifiers(KModifier.DATA)
                 node.comments {
@@ -395,9 +397,10 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.graphql.packageName, dto.graphql.requestName) {
             buildClass(dto.graphql.requestName) {
                 addModifiers(KModifier.DATA)
+                kotlinxSerializeClass()
                 buildPrimaryConstructorProperties {
                     buildProperty("query", STRING)
-                    buildProperty("variables", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
+                    buildProperty("variables", MAP.parameterizedBy(STRING, ANY.nullable().serializationContextual()).nullable()) {
                         jacksonIncludeNonEmpty()
                     }
                     buildProperty("operationName", STRING.nullable()) {
@@ -422,6 +425,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.graphql.packageName, dto.graphql.errorSourceLocationName) {
             buildClass(dto.graphql.errorSourceLocationName) {
                 addModifiers(KModifier.DATA)
+                kotlinxSerializeClass()
                 buildPrimaryConstructorProperties {
                     buildProperty("line", INT)
                     buildProperty("column", INT)
@@ -436,6 +440,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.graphql.packageName, dto.graphql.errorName) {
             buildClass(dto.graphql.errorName) {
                 addModifiers(KModifier.DATA)
+                kotlinxSerializeClass()
                 buildPrimaryConstructorProperties {
                     buildProperty("message", STRING)
                     buildProperty(
@@ -446,10 +451,10 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     buildProperty("errorType", dto.graphql.errorTypeClass.nullable()) {
                         jacksonIncludeNonAbsent()
                     }
-                    buildProperty("path", LIST.parameterizedBy(ANY).nullable()) {
+                    buildProperty("path", LIST.parameterizedBy(ANY.serializationContextual()).nullable()) {
                         jacksonIncludeNonEmpty()
                     }
-                    buildProperty("extensions", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
+                    buildProperty("extensions", MAP.parameterizedBy(STRING, ANY.nullable().serializationContextual()).nullable()) {
                         jacksonIncludeNonEmpty()
                     }
                 }
@@ -478,6 +483,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.graphql.packageName, dto.graphql.queryResultName) {
             buildClass(dto.graphql.queryResultName) {
                 addModifiers(KModifier.DATA)
+                kotlinxSerializeClass()
                 buildPrimaryConstructorProperties {
                     buildProperty("data", schema.query.dtoClass.nullable()) {
                         jacksonIncludeNonAbsent()
@@ -493,6 +499,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.graphql.packageName, dto.graphql.mutationResultName) {
             buildClass(dto.graphql.mutationResultName) {
                 addModifiers(KModifier.DATA)
+                kotlinxSerializeClass()
                 buildPrimaryConstructorProperties {
                     buildProperty("data", schema.mutation.dtoClass.nullable()) {
                         jacksonIncludeNonAbsent()
@@ -508,6 +515,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.graphql.packageName, dto.graphql.subscriptionResultName) {
             buildClass(dto.graphql.subscriptionResultName) {
                 addModifiers(KModifier.DATA)
+                kotlinxSerializeClass()
                 buildPrimaryConstructorProperties {
                     buildProperty("data", schema.subscription.dtoClass.nullable()) {
                         jacksonIncludeNonAbsent()
@@ -523,6 +531,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.graphql.packageName, dto.graphql.errorResultName) {
             buildClass(dto.graphql.errorResultName) {
                 addModifiers(KModifier.DATA)
+                kotlinxSerializeClass()
                 buildPrimaryConstructorProperties {
                     buildProperty(argErrors) {
                         jacksonIncludeNonEmpty()
@@ -614,6 +623,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
             GqlMessage.values().forEach { message ->
                 buildClass(dto.graphql.messageImplName(message)) {
+                    kotlinxSerializeClass()
                     if (dto.jackson.enabled) {
                         buildAnnotation(JSON_TYPE_NAME) {
                             addMember("value = %S", message.type)
@@ -648,7 +658,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         GqlMessage.GQL_CONNECTION_INIT -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                buildProperty("payload", MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
+                                buildProperty("payload", MAP.parameterizedBy(STRING, ANY.nullable().serializationContextual()).nullable())
                                 customizeConstructor {
                                     jacksonizeConstructor()
                                 }
@@ -680,7 +690,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         GqlMessage.GQL_CONNECTION_ERROR -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                buildProperty("payload", ANY.nullable())
+                                buildProperty("payload", ANY.nullable().serializationContextual())
                                 customizeConstructor {
                                     jacksonizeConstructor()
                                 }
@@ -690,7 +700,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         GqlMessage.GQL_CONNECTION_ACK -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                buildProperty("payload", ANY.nullable())
+                                buildProperty("payload", ANY.nullable().serializationContextual())
                                 customizeConstructor {
                                     jacksonizeConstructor()
                                 }

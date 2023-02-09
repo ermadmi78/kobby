@@ -8,6 +8,8 @@ import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TY
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES_TYPE
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_INFO
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_NAME
+import io.github.ermadmi78.kobby.generator.kotlin.KotlinxSerializationAnnotations.CONTEXTUAL
+import io.github.ermadmi78.kobby.generator.kotlin.KotlinxSerializationAnnotations.SERIALIZABLE
 import io.github.ermadmi78.kobby.model.*
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.*
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.ENUM
@@ -385,6 +387,37 @@ data class KotlinLayout(
         get() = (resolver.argument ?: node.name._decapitalize()).let {
             if (it in arguments) it.decorate(impl.innerDecoration) else it
         }
+    //******************************************************************************************************************
+    //                                          Kotlinx Serialization
+    //******************************************************************************************************************
+
+    internal fun TypeSpecBuilder.kotlinxSerializeClass(): TypeSpecBuilder {
+        if (!dto.serialization.enabled) {
+            return this
+        }
+
+        buildAnnotation(SERIALIZABLE)
+
+        return this
+    }
+
+    internal fun PropertySpecBuilder.kotlinxSerializationContextual(): PropertySpecBuilder {
+        if (!dto.serialization.enabled) {
+            return this
+        }
+
+        buildAnnotation(CONTEXTUAL)
+
+        return this
+    }
+
+    internal fun TypeName.addContextualAnnotation(): TypeName {
+        if (!dto.serialization.enabled) {
+            return this
+        }
+
+        return this
+    }
 
     //******************************************************************************************************************
     //                                          Jackson
@@ -480,12 +513,17 @@ class KotlinDtoLayout(
     val enumDecoration: Decoration,
     val inputDecoration: Decoration,
     val applyPrimaryKeys: Boolean,
+    val serialization: KotlinDtoKotlinxSerializationLayout,
     val jackson: KotlinDtoJacksonLayout,
     val builder: KotlinDtoBuilderLayout,
     val graphql: KotlinDtoGraphQLLayout
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
+
+data class KotlinDtoKotlinxSerializationLayout(
+    val enabled: Boolean
+)
 
 data class KotlinDtoJacksonLayout(
     val enabled: Boolean,
