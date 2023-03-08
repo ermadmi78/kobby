@@ -407,17 +407,6 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             }
         }
 
-        // GraphQL ErrorType
-        files += buildFile(dto.graphql.packageName, dto.graphql.errorTypeName) {
-            buildEnum(dto.graphql.errorTypeName) {
-                addEnumConstant("InvalidSyntax")
-                addEnumConstant("ValidationError")
-                addEnumConstant("DataFetchingException")
-                addEnumConstant("OperationNotSupported")
-                addEnumConstant("ExecutionAborted")
-            }
-        }
-
         // GraphQL ErrorSourceLocation
         files += buildFile(dto.graphql.packageName, dto.graphql.errorSourceLocationName) {
             buildClass(dto.graphql.errorSourceLocationName) {
@@ -443,7 +432,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     ) {
                         jacksonIncludeNonEmpty()
                     }
-                    buildProperty("errorType", dto.graphql.errorTypeClass.nullable()) {
+                    buildProperty("errorType", STRING.nullable()) {
                         jacksonIncludeNonAbsent()
                     }
                     buildProperty("path", LIST.parameterizedBy(ANY).nullable()) {

@@ -24,7 +24,7 @@ import kotlin.collections.Map
 public data class ContextInheritanceAndFunError(
   public val message: String,
   public val locations: List<ContextInheritanceAndFunErrorSourceLocation>? = null,
-  public val errorType: ContextInheritanceAndFunErrorType? = null,
+  public val errorType: String? = null,
   public val path: List<Any>? = null,
   public val extensions: Map<String, Any?>? = null,
 )

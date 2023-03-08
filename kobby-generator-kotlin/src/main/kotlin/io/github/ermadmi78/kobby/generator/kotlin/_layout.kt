@@ -98,12 +98,6 @@ internal val KotlinDtoGraphQLLayout.requestName: String
 internal val KotlinDtoGraphQLLayout.requestClass: ClassName
     get() = ClassName(packageName, requestName)
 
-internal val KotlinDtoGraphQLLayout.errorTypeName: String
-    get() = "ErrorType".decorate(decoration)
-
-internal val KotlinDtoGraphQLLayout.errorTypeClass: ClassName
-    get() = ClassName(packageName, errorTypeName)
-
 internal val KotlinDtoGraphQLLayout.errorSourceLocationName: String
     get() = "ErrorSourceLocation".decorate(decoration)
 

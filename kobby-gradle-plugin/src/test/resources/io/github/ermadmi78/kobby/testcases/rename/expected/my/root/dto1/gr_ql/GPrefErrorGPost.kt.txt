@@ -27,7 +27,7 @@ public data class GPrefErrorGPost(
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
   public val locations: List<GPrefErrorSourceLocationGPost>? = null,
   @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-  public val errorType: GPrefErrorTypeGPost? = null,
+  public val errorType: String? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
   public val path: List<Any>? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)

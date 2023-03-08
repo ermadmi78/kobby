@@ -27,7 +27,7 @@ public data class CountryError(
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
   public val locations: List<CountryErrorSourceLocation>? = null,
   @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-  public val errorType: CountryErrorType? = null,
+  public val errorType: String? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
   public val path: List<Any>? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)

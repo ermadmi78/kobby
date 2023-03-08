@@ -24,7 +24,7 @@ import kotlin.collections.Map
 public data class SimpleError(
   public val message: String,
   public val locations: List<SimpleErrorSourceLocation>? = null,
-  public val errorType: SimpleErrorType? = null,
+  public val errorType: String? = null,
   public val path: List<Any>? = null,
   public val extensions: Map<String, Any?>? = null,
 )
