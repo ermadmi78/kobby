@@ -40,32 +40,8 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = CountryMessageStop::class, name = "stop"),
   JsonSubTypes.Type(value = CountryMessageConnectionTerminate::class, name =
         "connection_terminate"),
-  JsonSubTypes.Type(value = CountryMessageConnectionError::class, name = "connection_error"),
-  JsonSubTypes.Type(value = CountryMessageConnectionAck::class, name = "connection_ack"),
-  JsonSubTypes.Type(value = CountryMessageData::class, name = "data"),
-  JsonSubTypes.Type(value = CountryMessageError::class, name = "error"),
-  JsonSubTypes.Type(value = CountryMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = CountryMessageConnectionKeepAlive::class, name = "ka"),
 )
-public interface CountryMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-)
-@JsonSubTypes(
-  JsonSubTypes.Type(value = CountryMessageConnectionInit::class, name = "connection_init"),
-  JsonSubTypes.Type(value = CountryMessageStart::class, name = "start"),
-  JsonSubTypes.Type(value = CountryMessageStop::class, name = "stop"),
-  JsonSubTypes.Type(value = CountryMessageConnectionTerminate::class, name =
-        "connection_terminate"),
-)
-public interface CountryClientMessage
+public sealed class CountryClientMessage
 
 /**
  * Message protocol description see
@@ -84,7 +60,7 @@ public interface CountryClientMessage
   JsonSubTypes.Type(value = CountryMessageComplete::class, name = "complete"),
   JsonSubTypes.Type(value = CountryMessageConnectionKeepAlive::class, name = "ka"),
 )
-public interface CountryServerMessage
+public sealed class CountryServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -100,7 +76,7 @@ public interface CountryServerMessage
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageConnectionInit @JsonCreator constructor(
   public val payload: Map<String, Any?>? = null,
-) : CountryMessage, CountryClientMessage
+) : CountryClientMessage()
 
 /**
  * See GQL_START
@@ -117,7 +93,7 @@ public data class CountryMessageConnectionInit @JsonCreator constructor(
 public data class CountryMessageStart(
   public val id: String,
   public val payload: CountryRequest,
-) : CountryMessage, CountryClientMessage
+) : CountryClientMessage()
 
 /**
  * See GQL_STOP
@@ -133,7 +109,7 @@ public data class CountryMessageStart(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageStop @JsonCreator constructor(
   public val id: String,
-) : CountryMessage, CountryClientMessage
+) : CountryClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
@@ -147,7 +123,8 @@ public data class CountryMessageStop @JsonCreator constructor(
   defaultImpl = CountryMessageConnectionTerminate::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class CountryMessageConnectionTerminate : CountryClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -163,7 +140,7 @@ public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMe
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageConnectionError @JsonCreator constructor(
   public val payload: Any? = null,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -179,7 +156,7 @@ public data class CountryMessageConnectionError @JsonCreator constructor(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageConnectionAck @JsonCreator constructor(
   public val payload: Any? = null,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_DATA
@@ -196,7 +173,7 @@ public data class CountryMessageConnectionAck @JsonCreator constructor(
 public data class CountryMessageData(
   public val id: String,
   public val payload: CountrySubscriptionResult,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_ERROR
@@ -213,7 +190,7 @@ public data class CountryMessageData(
 public data class CountryMessageError(
   public val id: String,
   public val payload: CountryErrorResult,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -229,7 +206,7 @@ public data class CountryMessageError(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CountryMessageComplete @JsonCreator constructor(
   public val id: String,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
@@ -243,4 +220,5 @@ public data class CountryMessageComplete @JsonCreator constructor(
   defaultImpl = CountryMessageConnectionKeepAlive::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class CountryMessageConnectionKeepAlive : CountryMessage, CountryServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class CountryMessageConnectionKeepAlive : CountryServerMessage()

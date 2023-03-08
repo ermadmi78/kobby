@@ -24,19 +24,13 @@ import kotlin.collections.Map
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface CountryMessage
+public sealed class CountryClientMessage
 
 /**
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface CountryClientMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public interface CountryServerMessage
+public sealed class CountryServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -44,7 +38,7 @@ public interface CountryServerMessage
  */
 public data class CountryMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
-) : CountryMessage, CountryClientMessage
+) : CountryClientMessage()
 
 /**
  * See GQL_START
@@ -53,7 +47,7 @@ public data class CountryMessageConnectionInit(
 public data class CountryMessageStart(
   public val id: String,
   public val payload: CountryRequest,
-) : CountryMessage, CountryClientMessage
+) : CountryClientMessage()
 
 /**
  * See GQL_STOP
@@ -61,13 +55,14 @@ public data class CountryMessageStart(
  */
 public data class CountryMessageStop(
   public val id: String,
-) : CountryMessage, CountryClientMessage
+) : CountryClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class CountryMessageConnectionTerminate : CountryClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -75,7 +70,7 @@ public class CountryMessageConnectionTerminate : CountryMessage, CountryClientMe
  */
 public data class CountryMessageConnectionError(
   public val payload: Any? = null,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -83,7 +78,7 @@ public data class CountryMessageConnectionError(
  */
 public data class CountryMessageConnectionAck(
   public val payload: Any? = null,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_DATA
@@ -92,7 +87,7 @@ public data class CountryMessageConnectionAck(
 public data class CountryMessageData(
   public val id: String,
   public val payload: CountrySubscriptionResult,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_ERROR
@@ -101,7 +96,7 @@ public data class CountryMessageData(
 public data class CountryMessageError(
   public val id: String,
   public val payload: CountryErrorResult,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -109,10 +104,11 @@ public data class CountryMessageError(
  */
 public data class CountryMessageComplete(
   public val id: String,
-) : CountryMessage, CountryServerMessage
+) : CountryServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class CountryMessageConnectionKeepAlive : CountryMessage, CountryServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class CountryMessageConnectionKeepAlive : CountryServerMessage()

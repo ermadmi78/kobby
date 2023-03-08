@@ -32,7 +32,7 @@ internal typealias CodeBlockBuilder = CodeBlock.Builder
 @KobbyScope
 internal typealias AnnotationSpecBuilder = AnnotationSpec.Builder
 
-private val SUPPRESS = AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
+private val suppressFile = AnnotationSpec.builder(KotlinAnnotations.SUPPRESS)
     .addMember("%S", "RedundantVisibilityModifier")
     .addMember("%S", "RedundantUnitReturnType")
     .addMember("%S", "FunctionName")
@@ -51,7 +51,7 @@ internal fun buildFile(
     packageName: String,
     fileName: String,
     block: FileSpecBuilder.() -> Unit
-): FileSpec = FileSpec.builder(packageName, fileName).apply { addAnnotation(SUPPRESS) }.apply(block).build()
+): FileSpec = FileSpec.builder(packageName, fileName).apply { addAnnotation(suppressFile) }.apply(block).build()
 
 internal fun FileSpecBuilder.buildClass(
     name: String,
@@ -83,6 +83,14 @@ internal fun FileSpecBuilder.buildFunction(
     block: FunSpecBuilder.() -> Unit
 ): FunSpec = FunSpec.builder(name).apply(block).build().also {
     addFunction(it)
+}
+
+internal fun FileSpecBuilder.buildProperty(
+    name: String,
+    type: TypeName,
+    block: PropertySpecBuilder.() -> Unit = {}
+): PropertySpec = PropertySpec.builder(name, type).apply(block).build().also {
+    addProperty(it)
 }
 
 internal fun TypeSpecBuilder.buildFunction(
@@ -127,6 +135,11 @@ internal fun TypeSpecBuilder.deprecate(message: String): TypeSpecBuilder = addAn
         .build()
 )
 
+internal fun buildAnnotation(
+    type: ClassName,
+    block: AnnotationSpecBuilder.() -> Unit = {}
+): AnnotationSpec = AnnotationSpec.builder(type).apply(block).build()
+
 internal fun TypeSpecBuilder.buildAnnotation(
     type: ClassName,
     block: AnnotationSpecBuilder.() -> Unit = {}
@@ -148,6 +161,10 @@ internal fun PropertySpecBuilder.buildAnnotation(
 ): AnnotationSpec = AnnotationSpec.builder(type).apply(block).build().also {
     addAnnotation(it)
 }
+
+internal fun PropertySpecBuilder.buildInitializer(
+    block: CodeBlockBuilder.() -> Unit
+): PropertySpecBuilder = initializer(CodeBlock.builder().apply(block).build())
 
 internal fun PropertySpecBuilder.buildGetter(
     block: FunSpecBuilder.() -> Unit
@@ -214,7 +231,7 @@ internal fun FunSpecBuilder.buildParameter(
 
 internal fun FunSpecBuilder.suppressUnused() {
     addAnnotation(
-        AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
+        AnnotationSpec.builder(KotlinAnnotations.SUPPRESS)
             .addMember("%S, %S, %S", "UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
             .build()
     )
@@ -222,7 +239,7 @@ internal fun FunSpecBuilder.suppressUnused() {
 
 internal fun FunSpecBuilder.suppressBlocking() {
     addAnnotation(
-        AnnotationSpec.builder(ClassName("kotlin", "Suppress"))
+        AnnotationSpec.builder(KotlinAnnotations.SUPPRESS)
             .addMember("%S", "BlockingMethodInNonBlockingContext")
             .build()
     )
@@ -400,6 +417,70 @@ internal class PrimaryConstructorPropertiesBuilder(
 
     internal fun customizeConstructor(block: FunSpecBuilder.() -> Unit): FunSpecBuilder =
         primaryConstructorBuilder.apply(block)
+}
+
+//**********************************************************************************************************************
+//                                              Common
+//**********************************************************************************************************************
+
+internal object KotlinAnnotations {
+    val SUPPRESS = ClassName(
+        "kotlin",
+        "Suppress"
+    )
+
+    val OPT_IN = ClassName(
+        "kotlin",
+        "OptIn"
+    )
+}
+
+//**********************************************************************************************************************
+//                                        Kotlinx Serialization
+//**********************************************************************************************************************
+
+internal object SerializationAnnotations {
+    val SERIALIZABLE = ClassName(
+        "kotlinx.serialization",
+        "Serializable"
+    )
+
+    val SERIAL_NAME = ClassName(
+        "kotlinx.serialization",
+        "SerialName"
+    )
+
+    val ExperimentalSerializationApi = ClassName(
+        "kotlinx.serialization",
+        "ExperimentalSerializationApi"
+    )
+
+    val JSON_CLASS_DISCRIMINATOR = ClassName(
+        "kotlinx.serialization.json",
+        "JsonClassDiscriminator"
+    )
+}
+
+internal object SerializationJson {
+    val JSON_ELEMENT = ClassName(
+        "kotlinx.serialization.json",
+        "JsonElement"
+    )
+
+    val JSON_PRIMITIVE = ClassName(
+        "kotlinx.serialization.json",
+        "JsonPrimitive"
+    )
+
+    val JSON_OBJECT = ClassName(
+        "kotlinx.serialization.json",
+        "JsonObject"
+    )
+
+    val JSON_ARRAY = ClassName(
+        "kotlinx.serialization.json",
+        "JsonArray"
+    )
 }
 
 //**********************************************************************************************************************

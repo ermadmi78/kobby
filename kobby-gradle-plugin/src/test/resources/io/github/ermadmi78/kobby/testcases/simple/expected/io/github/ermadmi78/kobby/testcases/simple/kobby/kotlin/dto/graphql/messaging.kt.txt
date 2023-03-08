@@ -24,19 +24,13 @@ import kotlin.collections.Map
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface SimpleMessage
+public sealed class SimpleClientMessage
 
 /**
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface SimpleClientMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public interface SimpleServerMessage
+public sealed class SimpleServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -44,7 +38,7 @@ public interface SimpleServerMessage
  */
 public data class SimpleMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
-) : SimpleMessage, SimpleClientMessage
+) : SimpleClientMessage()
 
 /**
  * See GQL_START
@@ -53,7 +47,7 @@ public data class SimpleMessageConnectionInit(
 public data class SimpleMessageStart(
   public val id: String,
   public val payload: SimpleRequest,
-) : SimpleMessage, SimpleClientMessage
+) : SimpleClientMessage()
 
 /**
  * See GQL_STOP
@@ -61,13 +55,14 @@ public data class SimpleMessageStart(
  */
 public data class SimpleMessageStop(
   public val id: String,
-) : SimpleMessage, SimpleClientMessage
+) : SimpleClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class SimpleMessageConnectionTerminate : SimpleMessage, SimpleClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class SimpleMessageConnectionTerminate : SimpleClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -75,7 +70,7 @@ public class SimpleMessageConnectionTerminate : SimpleMessage, SimpleClientMessa
  */
 public data class SimpleMessageConnectionError(
   public val payload: Any? = null,
-) : SimpleMessage, SimpleServerMessage
+) : SimpleServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -83,7 +78,7 @@ public data class SimpleMessageConnectionError(
  */
 public data class SimpleMessageConnectionAck(
   public val payload: Any? = null,
-) : SimpleMessage, SimpleServerMessage
+) : SimpleServerMessage()
 
 /**
  * See GQL_DATA
@@ -92,7 +87,7 @@ public data class SimpleMessageConnectionAck(
 public data class SimpleMessageData(
   public val id: String,
   public val payload: SimpleSubscriptionResult,
-) : SimpleMessage, SimpleServerMessage
+) : SimpleServerMessage()
 
 /**
  * See GQL_ERROR
@@ -101,7 +96,7 @@ public data class SimpleMessageData(
 public data class SimpleMessageError(
   public val id: String,
   public val payload: SimpleErrorResult,
-) : SimpleMessage, SimpleServerMessage
+) : SimpleServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -109,10 +104,11 @@ public data class SimpleMessageError(
  */
 public data class SimpleMessageComplete(
   public val id: String,
-) : SimpleMessage, SimpleServerMessage
+) : SimpleServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class SimpleMessageConnectionKeepAlive : SimpleMessage, SimpleServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class SimpleMessageConnectionKeepAlive : SimpleServerMessage()

@@ -24,19 +24,13 @@ import kotlin.collections.Map
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface QueryMessage
+public sealed class QueryClientMessage
 
 /**
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface QueryClientMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public interface QueryServerMessage
+public sealed class QueryServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -44,7 +38,7 @@ public interface QueryServerMessage
  */
 public data class QueryMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
-) : QueryMessage, QueryClientMessage
+) : QueryClientMessage()
 
 /**
  * See GQL_START
@@ -53,7 +47,7 @@ public data class QueryMessageConnectionInit(
 public data class QueryMessageStart(
   public val id: String,
   public val payload: QueryRequest,
-) : QueryMessage, QueryClientMessage
+) : QueryClientMessage()
 
 /**
  * See GQL_STOP
@@ -61,13 +55,14 @@ public data class QueryMessageStart(
  */
 public data class QueryMessageStop(
   public val id: String,
-) : QueryMessage, QueryClientMessage
+) : QueryClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class QueryMessageConnectionTerminate : QueryMessage, QueryClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class QueryMessageConnectionTerminate : QueryClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -75,7 +70,7 @@ public class QueryMessageConnectionTerminate : QueryMessage, QueryClientMessage
  */
 public data class QueryMessageConnectionError(
   public val payload: Any? = null,
-) : QueryMessage, QueryServerMessage
+) : QueryServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -83,7 +78,7 @@ public data class QueryMessageConnectionError(
  */
 public data class QueryMessageConnectionAck(
   public val payload: Any? = null,
-) : QueryMessage, QueryServerMessage
+) : QueryServerMessage()
 
 /**
  * See GQL_DATA
@@ -92,7 +87,7 @@ public data class QueryMessageConnectionAck(
 public data class QueryMessageData(
   public val id: String,
   public val payload: QuerySubscriptionResult,
-) : QueryMessage, QueryServerMessage
+) : QueryServerMessage()
 
 /**
  * See GQL_ERROR
@@ -101,7 +96,7 @@ public data class QueryMessageData(
 public data class QueryMessageError(
   public val id: String,
   public val payload: QueryErrorResult,
-) : QueryMessage, QueryServerMessage
+) : QueryServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -109,10 +104,11 @@ public data class QueryMessageError(
  */
 public data class QueryMessageComplete(
   public val id: String,
-) : QueryMessage, QueryServerMessage
+) : QueryServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class QueryMessageConnectionKeepAlive : QueryMessage, QueryServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class QueryMessageConnectionKeepAlive : QueryServerMessage()

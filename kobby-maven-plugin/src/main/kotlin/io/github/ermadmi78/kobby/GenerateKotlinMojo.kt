@@ -104,6 +104,11 @@ class GenerateKotlinMojo : AbstractMojo() {
         val ktor = kotlin.adapter.ktor
         val resolver = kotlin.resolver
 
+        dto.serialization.apply {
+            if (enabled == null) {
+                enabled = "org.jetbrains.kotlinx:kotlinx-serialization-json" in dependencies
+            }
+        }
         dto.jackson.apply {
             if (enabled == null) {
                 enabled = "com.fasterxml.jackson.core:jackson-annotations" in dependencies
@@ -214,6 +219,13 @@ class GenerateKotlinMojo : AbstractMojo() {
                 Decoration(dto.enumPrefix, dto.enumPostfix),
                 Decoration(dto.inputPrefix, dto.inputPostfix),
                 dto.applyPrimaryKeys,
+                KotlinDtoSerialization(
+                    dto.serialization.enabled!!,
+                    dto.serialization.classDiscriminator,
+                    dto.serialization.ignoreUnknownKeys,
+                    dto.serialization.encodeDefaults,
+                    dto.serialization.prettyPrint
+                ),
                 KotlinDtoJacksonLayout(
                     dto.jackson.enabled!!,
                     dto.jackson.typeInfoUse,
@@ -295,6 +307,10 @@ class GenerateKotlinMojo : AbstractMojo() {
                 resolver.toDoMessage
             )
         )
+
+        if (layout.dto.run { serialization.enabled && jackson.enabled }) {
+            log.warn("[kobby] Kotlinx serialization and Jackson serialization are not supported simultaneously.")
+        }
 
         val schema = try {
             parseSchema(directiveLayout, *schema.files.map { FileReader(it) }.toTypedArray())

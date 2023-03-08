@@ -38,6 +38,13 @@ class SchemaValidationTest {
             Decoration(null, null),
             Decoration(null, null),
             true,
+            KotlinDtoSerialization(
+                true,
+                "serialization",
+                true,
+                false,
+                false
+            ),
             KotlinDtoJacksonLayout(
                 true,
                 "NAME",

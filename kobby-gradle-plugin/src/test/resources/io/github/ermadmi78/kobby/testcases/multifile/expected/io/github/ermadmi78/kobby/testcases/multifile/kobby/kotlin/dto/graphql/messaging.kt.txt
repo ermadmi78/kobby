@@ -40,32 +40,8 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = GraphqlMessageStop::class, name = "stop"),
   JsonSubTypes.Type(value = GraphqlMessageConnectionTerminate::class, name =
         "connection_terminate"),
-  JsonSubTypes.Type(value = GraphqlMessageConnectionError::class, name = "connection_error"),
-  JsonSubTypes.Type(value = GraphqlMessageConnectionAck::class, name = "connection_ack"),
-  JsonSubTypes.Type(value = GraphqlMessageData::class, name = "data"),
-  JsonSubTypes.Type(value = GraphqlMessageError::class, name = "error"),
-  JsonSubTypes.Type(value = GraphqlMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = GraphqlMessageConnectionKeepAlive::class, name = "ka"),
 )
-public interface GraphqlMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-)
-@JsonSubTypes(
-  JsonSubTypes.Type(value = GraphqlMessageConnectionInit::class, name = "connection_init"),
-  JsonSubTypes.Type(value = GraphqlMessageStart::class, name = "start"),
-  JsonSubTypes.Type(value = GraphqlMessageStop::class, name = "stop"),
-  JsonSubTypes.Type(value = GraphqlMessageConnectionTerminate::class, name =
-        "connection_terminate"),
-)
-public interface GraphqlClientMessage
+public sealed class GraphqlClientMessage
 
 /**
  * Message protocol description see
@@ -84,7 +60,7 @@ public interface GraphqlClientMessage
   JsonSubTypes.Type(value = GraphqlMessageComplete::class, name = "complete"),
   JsonSubTypes.Type(value = GraphqlMessageConnectionKeepAlive::class, name = "ka"),
 )
-public interface GraphqlServerMessage
+public sealed class GraphqlServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -100,7 +76,7 @@ public interface GraphqlServerMessage
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageConnectionInit @JsonCreator constructor(
   public val payload: Map<String, Any?>? = null,
-) : GraphqlMessage, GraphqlClientMessage
+) : GraphqlClientMessage()
 
 /**
  * See GQL_START
@@ -117,7 +93,7 @@ public data class GraphqlMessageConnectionInit @JsonCreator constructor(
 public data class GraphqlMessageStart(
   public val id: String,
   public val payload: GraphqlRequest,
-) : GraphqlMessage, GraphqlClientMessage
+) : GraphqlClientMessage()
 
 /**
  * See GQL_STOP
@@ -133,7 +109,7 @@ public data class GraphqlMessageStart(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageStop @JsonCreator constructor(
   public val id: String,
-) : GraphqlMessage, GraphqlClientMessage
+) : GraphqlClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
@@ -147,7 +123,8 @@ public data class GraphqlMessageStop @JsonCreator constructor(
   defaultImpl = GraphqlMessageConnectionTerminate::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class GraphqlMessageConnectionTerminate : GraphqlMessage, GraphqlClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class GraphqlMessageConnectionTerminate : GraphqlClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -163,7 +140,7 @@ public class GraphqlMessageConnectionTerminate : GraphqlMessage, GraphqlClientMe
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageConnectionError @JsonCreator constructor(
   public val payload: Any? = null,
-) : GraphqlMessage, GraphqlServerMessage
+) : GraphqlServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -179,7 +156,7 @@ public data class GraphqlMessageConnectionError @JsonCreator constructor(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageConnectionAck @JsonCreator constructor(
   public val payload: Any? = null,
-) : GraphqlMessage, GraphqlServerMessage
+) : GraphqlServerMessage()
 
 /**
  * See GQL_DATA
@@ -196,7 +173,7 @@ public data class GraphqlMessageConnectionAck @JsonCreator constructor(
 public data class GraphqlMessageData(
   public val id: String,
   public val payload: GraphqlSubscriptionResult,
-) : GraphqlMessage, GraphqlServerMessage
+) : GraphqlServerMessage()
 
 /**
  * See GQL_ERROR
@@ -213,7 +190,7 @@ public data class GraphqlMessageData(
 public data class GraphqlMessageError(
   public val id: String,
   public val payload: GraphqlErrorResult,
-) : GraphqlMessage, GraphqlServerMessage
+) : GraphqlServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -229,7 +206,7 @@ public data class GraphqlMessageError(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GraphqlMessageComplete @JsonCreator constructor(
   public val id: String,
-) : GraphqlMessage, GraphqlServerMessage
+) : GraphqlServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
@@ -243,4 +220,5 @@ public data class GraphqlMessageComplete @JsonCreator constructor(
   defaultImpl = GraphqlMessageConnectionKeepAlive::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class GraphqlMessageConnectionKeepAlive : GraphqlMessage, GraphqlServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class GraphqlMessageConnectionKeepAlive : GraphqlServerMessage()

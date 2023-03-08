@@ -255,6 +255,48 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoSerializationEnabled",
+        description = "Enable Kotlinx Serialization in generated DTO classes (default false)"
+    )
+    val dtoSerializationEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoSerializationClassDiscriminator",
+        description = "Name of the class descriptor property for polymorphic serialization (default \"__typename\")"
+    )
+    val dtoSerializationClassDiscriminator: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoSerializationIgnoreUnknownKeys",
+        description = "Specifies whether encounters of unknown properties in the input JSON should be ignored " +
+                "instead of throwing SerializationException (default true)"
+    )
+    val dtoSerializationIgnoreUnknownKeys: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoSerializationEncodeDefaults",
+        description = "Specifies whether default values of Kotlin properties should be encoded to JSON (default false)"
+    )
+    val dtoSerializationEncodeDefaults: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoSerializationPrettyPrint",
+        description = "Specifies whether resulting JSON should be pretty-printed (default false)"
+    )
+    val dtoSerializationPrettyPrint: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoJacksonEnabled",
         description = "Add Jackson annotations for generated DTO classes (default true)"
     )
@@ -785,6 +827,15 @@ open class KobbyKotlin : DefaultTask() {
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
         dtoApplyPrimaryKeys.convention(false)
+
+        dtoSerializationEnabled.convention(project.provider {
+            project.hasDependency("org.jetbrains.kotlinx", "kotlinx-serialization-json")
+        })
+        dtoSerializationClassDiscriminator.convention("__typename")
+        dtoSerializationIgnoreUnknownKeys.convention(true)
+        dtoSerializationEncodeDefaults.convention(false)
+        dtoSerializationPrettyPrint.convention(false)
+
         dtoJacksonEnabled.convention(project.provider {
             project.hasDependency("com.fasterxml.jackson.core", "jackson-annotations")
         })
@@ -792,6 +843,7 @@ open class KobbyKotlin : DefaultTask() {
         dtoJacksonTypeInfoInclude.convention("PROPERTY")
         dtoJacksonTypeInfoProperty.convention("__typename")
         dtoJacksonJsonInclude.convention("NON_ABSENT")
+
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
         dtoBuilderCopyFun.convention("copy")
@@ -936,6 +988,13 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(dtoEnumPrefix.orNull, dtoEnumPostfix.orNull),
                 Decoration(dtoInputPrefix.orNull, dtoInputPostfix.orNull),
                 dtoApplyPrimaryKeys.get(),
+                KotlinDtoSerialization(
+                    dtoSerializationEnabled.get(),
+                    dtoSerializationClassDiscriminator.get(),
+                    dtoSerializationIgnoreUnknownKeys.get(),
+                    dtoSerializationEncodeDefaults.get(),
+                    dtoSerializationPrettyPrint.get()
+                ),
                 KotlinDtoJacksonLayout(
                     dtoJacksonEnabled.get(),
                     dtoJacksonTypeInfoUse.get(),
@@ -1014,6 +1073,10 @@ open class KobbyKotlin : DefaultTask() {
                 resolverToDoMessage.orNull
             )
         )
+
+        if (layout.dto.run { serialization.enabled && jackson.enabled }) {
+            logger.warn("[kobby] Kotlinx serialization and Jackson serialization are not supported simultaneously.")
+        }
 
         val targetDirectory = outputDirectory.get().asFile
         if (!targetDirectory.isDirectory && !targetDirectory.mkdirs()) {

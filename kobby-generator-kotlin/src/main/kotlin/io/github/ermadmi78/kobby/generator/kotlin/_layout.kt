@@ -4,6 +4,7 @@ package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import io.github.ermadmi78.kobby.model._decapitalize
 import io.github.ermadmi78.kobby.model.decorate
 import io.github.ermadmi78.kobby.model.isNotEmpty
 import java.io.File
@@ -46,6 +47,9 @@ internal fun FileSpec.toKotlinFile(): KotlinFile {
 //                                   KotlinType
 //******************************************************************************************************************
 
+internal val SerializerType.typeName: ClassName
+    get() = ClassName(packageName, className.toKotlinPath())
+
 internal val KotlinType.typeName: TypeName
     get() = ClassName(packageName, className.toKotlinPath())
         .let { res ->
@@ -55,6 +59,26 @@ internal val KotlinType.typeName: TypeName
                 res.parameterizedBy(generics.map { it.typeName })
                     .let { if (allowNull) it.copy(true) else it }
             }
+        }
+
+internal val KotlinType.typeNameWithSerializer: TypeName
+    get() = ClassName(packageName, className.toKotlinPath())
+        .let { res ->
+            if (generics.isEmpty()) {
+                res.let { if (allowNull) it.copy(true) else it }
+            } else {
+                res.parameterizedBy(generics.map { it.typeNameWithSerializer })
+                    .let { if (allowNull) it.copy(true) else it }
+            }
+        }
+        .let { res ->
+            if (serializer == null) res else res.copy(
+                annotations = listOf(
+                    buildAnnotation(SerializationAnnotations.SERIALIZABLE) {
+                        addMember("with·=·%T::class", serializer.typeName)
+                    }
+                )
+            )
         }
 
 private fun String.toKotlinPath(): List<String> = splitToSequence('.')
@@ -145,12 +169,6 @@ internal val KotlinDtoGraphQLLayout.errorResultClass: ClassName
 //                                   Messaging
 //******************************************************************************************************************
 
-internal val KotlinDtoGraphQLLayout.messageName: String
-    get() = "Message".decorate(decoration)
-
-internal val KotlinDtoGraphQLLayout.messageClass: ClassName
-    get() = ClassName(packageName, messageName)
-
 internal val KotlinDtoGraphQLLayout.clientMessageName: String
     get() = "ClientMessage".decorate(decoration)
 
@@ -185,6 +203,12 @@ internal fun KotlinDtoGraphQLLayout.messageImplClass(massage: GqlMessage) =
 //******************************************************************************************************************
 //                                   KotlinContextLayout
 //******************************************************************************************************************
+
+internal val KotlinContextLayout.jsonName: String
+    get() = "Json".decorate(decoration)._decapitalize()
+
+internal val KotlinContextLayout.jsonMember: MemberName
+    get() = MemberName(packageName, jsonName)
 
 internal val KotlinContextLayout.contextName: String
     get() = "Context".decorate(decoration)
@@ -245,8 +269,12 @@ internal val KotlinContextLayout.adapterFunExecuteSubscription: String
 internal val KotlinContextLayout.adapterArgQuery: Pair<String, TypeName>
     get() = "query" to STRING
 
-internal val KotlinContextLayout.adapterArgVariables: Pair<String, TypeName>
-    get() = "variables" to MAP.parameterizedBy(STRING, ANY.nullable())
+internal val KotlinLayout.adapterArgVariables: Pair<String, TypeName>
+    get() = if (dto.serialization.enabled) {
+        "variables" to SerializationJson.JSON_OBJECT
+    } else {
+        "variables" to MAP.parameterizedBy(STRING, ANY.nullable())
+    }
 
 internal val KotlinContextLayout.adapterArgBlock: String
     get() = "block"
@@ -316,8 +344,12 @@ internal val buildFunArgHeader: Pair<String, TypeName> =
 internal val buildFunArgBody: Pair<String, TypeName> =
     Pair("body", ClassName("kotlin.text", "StringBuilder"))
 
-internal val buildFunArgArguments: Pair<String, TypeName> =
-    Pair("arguments", MUTABLE_MAP.parameterizedBy(STRING, ANY))
+internal val KotlinLayout.buildFunArgArguments: Pair<String, TypeName>
+    get() = if (dto.serialization.enabled) {
+        Pair("arguments", MUTABLE_MAP.parameterizedBy(STRING, SerializationJson.JSON_ELEMENT))
+    } else {
+        Pair("arguments", MUTABLE_MAP.parameterizedBy(STRING, ANY))
+    }
 
 internal val argPrefix: String get() = "arg"
 
@@ -356,6 +388,14 @@ internal val KotlinAdapterKtorLayout.compositePropertyWebSocketUrl: String get()
 internal val KotlinAdapterKtorLayout.compositePropertyMapper: String get() = "mapper"
 internal val KotlinAdapterKtorLayout.compositePropertyRequestHeaders: String get() = "requestHeaders"
 internal val KotlinAdapterKtorLayout.compositePropertySubscriptionPayload: String get() = "subscriptionPayload"
+
+internal val KotlinLayout.compositePropertySubscriptionPayloadType: TypeName
+    get() = if (dto.serialization.enabled) {
+        SerializationJson.JSON_OBJECT.nullable()
+    } else {
+        MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+    }
+
 internal val KotlinAdapterKtorLayout.compositePropertySubscriptionReceiveTimeoutMillis: String
     get() = "subscriptionReceiveTimeoutMillis"
 internal val KotlinAdapterKtorLayout.compositePropertyHttpTokenHeader: String

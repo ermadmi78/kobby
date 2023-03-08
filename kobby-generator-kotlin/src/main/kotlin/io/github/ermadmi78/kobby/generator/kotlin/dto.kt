@@ -1,6 +1,7 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.KModifier.SEALED
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_INCLUDE
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_PROPERTY
@@ -25,6 +26,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.packageName, node.dtoName) {
             // Build object DTO class
             buildClass(node.dtoName) {
+                annotateSerializable()
+                annotateSerialName(node.name)
+
                 jacksonizeClass(node)
                 if (node.fields.isNotEmpty()) {
                     addModifiers(KModifier.DATA)
@@ -37,7 +41,12 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 }
                 buildPrimaryConstructorProperties {
                     node.fields { field ->
-                        buildProperty(field.name, field.type.dtoType.nullable()) {
+                        val fieldType = if (dto.serialization.enabled) {
+                            field.type.dtoTypeWithSerializer.nullable()
+                        } else {
+                            field.type.dtoType.nullable()
+                        }
+                        buildProperty(field.name, fieldType) {
                             field.comments {
                                 addKdoc("%L", it)
                             }
@@ -227,6 +236,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 node.enumValues { enumValue ->
                     if (enumValue.name in FORBIDDEN_ENUM_NAMES) {
                         buildEnumConstant(enumValue.name.rename(node.enumValues.keys)) {
+                            annotateSerialName(enumValue.name)
                             if (dto.jackson.enabled) {
                                 buildAnnotation(JSON_PROPERTY) {
                                     addMember("%S", enumValue.name)
@@ -260,6 +270,8 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         files += buildFile(dto.packageName, node.dtoName) {
             // Build input DTO class
             buildClass(node.dtoName) {
+                annotateSerializable()
+
                 jacksonizeClass(node)
                 addModifiers(KModifier.DATA)
                 node.comments {
@@ -267,12 +279,17 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 }
                 buildPrimaryConstructorProperties {
                     node.fields { field ->
+                        val fieldType = if (dto.serialization.enabled) {
+                            field.type.dtoTypeWithSerializer
+                        } else {
+                            field.type.dtoType
+                        }
                         val defaultValue: CodeBlock? = field.defaultValue?.let { literal ->
                             val args = mutableListOf<Any?>()
                             val format = literal.buildInitializer(field.type, args)
                             CodeBlock.of(format, *args.toTypedArray())
                         }
-                        buildPropertyWithDefault(field.name, field.type.dtoType, defaultValue) {
+                        buildPropertyWithDefault(field.name, fieldType, defaultValue) {
                             field.comments {
                                 addKdoc("%L", it)
                             }
@@ -394,12 +411,19 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         // GraphQL Request
         files += buildFile(dto.graphql.packageName, dto.graphql.requestName) {
             buildClass(dto.graphql.requestName) {
+                annotateSerializable()
                 addModifiers(KModifier.DATA)
                 buildPrimaryConstructorProperties {
                     buildProperty("query", STRING)
-                    buildProperty("variables", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
-                        jacksonIncludeNonEmpty()
+
+                    if (dto.serialization.enabled) {
+                        buildProperty("variables", SerializationJson.JSON_OBJECT.nullable())
+                    } else {
+                        buildProperty("variables", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
+                            jacksonIncludeNonEmpty()
+                        }
                     }
+
                     buildProperty("operationName", STRING.nullable()) {
                         jacksonIncludeNonAbsent()
                     }
@@ -410,6 +434,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         // GraphQL ErrorSourceLocation
         files += buildFile(dto.graphql.packageName, dto.graphql.errorSourceLocationName) {
             buildClass(dto.graphql.errorSourceLocationName) {
+                annotateSerializable()
                 addModifiers(KModifier.DATA)
                 buildPrimaryConstructorProperties {
                     buildProperty("line", INT)
@@ -424,6 +449,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         // GraphQL Error
         files += buildFile(dto.graphql.packageName, dto.graphql.errorName) {
             buildClass(dto.graphql.errorName) {
+                annotateSerializable()
                 addModifiers(KModifier.DATA)
                 buildPrimaryConstructorProperties {
                     buildProperty("message", STRING)
@@ -435,11 +461,17 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     buildProperty("errorType", STRING.nullable()) {
                         jacksonIncludeNonAbsent()
                     }
-                    buildProperty("path", LIST.parameterizedBy(ANY).nullable()) {
-                        jacksonIncludeNonEmpty()
-                    }
-                    buildProperty("extensions", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
-                        jacksonIncludeNonEmpty()
+
+                    if (dto.serialization.enabled) {
+                        buildProperty("path", SerializationJson.JSON_ARRAY.nullable())
+                        buildProperty("extensions", SerializationJson.JSON_OBJECT.nullable())
+                    } else {
+                        buildProperty("path", LIST.parameterizedBy(ANY).nullable()) {
+                            jacksonIncludeNonEmpty()
+                        }
+                        buildProperty("extensions", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
+                            jacksonIncludeNonEmpty()
+                        }
                     }
                 }
             }
@@ -466,6 +498,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         // GraphQL QueryResult
         files += buildFile(dto.graphql.packageName, dto.graphql.queryResultName) {
             buildClass(dto.graphql.queryResultName) {
+                annotateSerializable()
                 addModifiers(KModifier.DATA)
                 buildPrimaryConstructorProperties {
                     buildProperty("data", schema.query.dtoClass.nullable()) {
@@ -481,6 +514,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         // GraphQL MutationResult
         files += buildFile(dto.graphql.packageName, dto.graphql.mutationResultName) {
             buildClass(dto.graphql.mutationResultName) {
+                annotateSerializable()
                 addModifiers(KModifier.DATA)
                 buildPrimaryConstructorProperties {
                     buildProperty("data", schema.mutation.dtoClass.nullable()) {
@@ -496,6 +530,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         // GraphQL SubscriptionResult
         files += buildFile(dto.graphql.packageName, dto.graphql.subscriptionResultName) {
             buildClass(dto.graphql.subscriptionResultName) {
+                annotateSerializable()
                 addModifiers(KModifier.DATA)
                 buildPrimaryConstructorProperties {
                     buildProperty("data", schema.subscription.dtoClass.nullable()) {
@@ -511,6 +546,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         // GraphQL ErrorResult
         files += buildFile(dto.graphql.packageName, dto.graphql.errorResultName) {
             buildClass(dto.graphql.errorResultName) {
+                annotateSerializable()
                 addModifiers(KModifier.DATA)
                 buildPrimaryConstructorProperties {
                     buildProperty(argErrors) {
@@ -525,36 +561,18 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
         // GraphQL Messaging
         files += buildFile(dto.graphql.packageName, "messaging") {
-            buildInterface(dto.graphql.messageName) {
+            buildClass(dto.graphql.clientMessageName) {
+                addModifiers(SEALED)
                 addKdoc(
                     "%L",
                     "Message protocol description see [here]" +
                             "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
                 )
-                if (dto.jackson.enabled) {
-                    buildAnnotation(JSON_TYPE_INFO) {
-                        addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
-                        addMember("include = %T.As.PROPERTY", JSON_TYPE_INFO)
-                        addMember("property = %S", "type")
-                    }
 
-                    buildAnnotation(JSON_SUB_TYPES) {
-                        for (message in GqlMessage.values()) {
-                            buildAnnotation(JSON_SUB_TYPES_TYPE) {
-                                addMember("value = %T::class", dto.graphql.messageImplClass(message))
-                                addMember("name = %S", message.type)
-                            }
-                        }
-                    }
-                }
-            }
+                annotateSerializable()
+                enableExperimentalSerializationApi()
+                annotateJsonClassDiscriminator("type")
 
-            buildInterface(dto.graphql.clientMessageName) {
-                addKdoc(
-                    "%L",
-                    "Message protocol description see [here]" +
-                            "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
-                )
                 if (dto.jackson.enabled) {
                     buildAnnotation(JSON_TYPE_INFO) {
                         addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
@@ -575,12 +593,18 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 }
             }
 
-            buildInterface(dto.graphql.serverMessageName) {
+            buildClass(dto.graphql.serverMessageName) {
+                addModifiers(SEALED)
                 addKdoc(
                     "%L",
                     "Message protocol description see [here]" +
                             "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
                 )
+
+                annotateSerializable()
+                enableExperimentalSerializationApi()
+                annotateJsonClassDiscriminator("type")
+
                 if (dto.jackson.enabled) {
                     buildAnnotation(JSON_TYPE_INFO) {
                         addMember("use = %T.Id.NAME", JSON_TYPE_INFO)
@@ -603,6 +627,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
             GqlMessage.values().forEach { message ->
                 buildClass(dto.graphql.messageImplName(message)) {
+                    annotateSerializable()
+                    annotateSerialName(message.type)
+
                     if (dto.jackson.enabled) {
                         buildAnnotation(JSON_TYPE_NAME) {
                             addMember("value = %S", message.type)
@@ -625,21 +652,24 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         "See ${message.name} [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
                     )
 
-                    addSuperinterface(dto.graphql.messageClass)
                     if (message.client) {
-                        addSuperinterface(dto.graphql.clientMessageClass)
+                        superclass(dto.graphql.clientMessageClass)
                     }
                     if (message.server) {
-                        addSuperinterface(dto.graphql.serverMessageClass)
+                        superclass(dto.graphql.serverMessageClass)
                     }
 
                     when (message) {
                         GqlMessage.GQL_CONNECTION_INIT -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                buildProperty("payload", MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
-                                customizeConstructor {
-                                    jacksonizeConstructor()
+                                if (dto.serialization.enabled) {
+                                    buildProperty("payload", SerializationJson.JSON_OBJECT.nullable())
+                                } else {
+                                    buildProperty("payload", MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
+                                    customizeConstructor {
+                                        jacksonizeConstructor()
+                                    }
                                 }
                             }
                         }
@@ -663,15 +693,21 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         }
 
                         GqlMessage.GQL_CONNECTION_TERMINATE -> {
-                            // Do nothing
+                            buildAnnotation(KotlinAnnotations.SUPPRESS) {
+                                addMember("%S", "CanSealedSubClassBeObject")
+                            }
                         }
 
                         GqlMessage.GQL_CONNECTION_ERROR -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                buildProperty("payload", ANY.nullable())
-                                customizeConstructor {
-                                    jacksonizeConstructor()
+                                if (dto.serialization.enabled) {
+                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
+                                } else {
+                                    buildProperty("payload", ANY.nullable())
+                                    customizeConstructor {
+                                        jacksonizeConstructor()
+                                    }
                                 }
                             }
                         }
@@ -679,9 +715,13 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         GqlMessage.GQL_CONNECTION_ACK -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                buildProperty("payload", ANY.nullable())
-                                customizeConstructor {
-                                    jacksonizeConstructor()
+                                if (dto.serialization.enabled) {
+                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
+                                } else {
+                                    buildProperty("payload", ANY.nullable())
+                                    customizeConstructor {
+                                        jacksonizeConstructor()
+                                    }
                                 }
                             }
                         }
@@ -713,7 +753,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         }
 
                         GqlMessage.GQL_CONNECTION_KEEP_ALIVE -> {
-                            // Do nothing
+                            buildAnnotation(KotlinAnnotations.SUPPRESS) {
+                                addMember("%S", "CanSealedSubClassBeObject")
+                            }
                         }
                     }
                 }

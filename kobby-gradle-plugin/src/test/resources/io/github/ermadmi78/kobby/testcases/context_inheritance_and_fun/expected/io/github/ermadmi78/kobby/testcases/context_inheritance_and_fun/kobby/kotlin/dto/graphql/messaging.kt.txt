@@ -24,19 +24,13 @@ import kotlin.collections.Map
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface ContextInheritanceAndFunMessage
+public sealed class ContextInheritanceAndFunClientMessage
 
 /**
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface ContextInheritanceAndFunClientMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public interface ContextInheritanceAndFunServerMessage
+public sealed class ContextInheritanceAndFunServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -44,7 +38,7 @@ public interface ContextInheritanceAndFunServerMessage
  */
 public data class ContextInheritanceAndFunMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
-) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
+) : ContextInheritanceAndFunClientMessage()
 
 /**
  * See GQL_START
@@ -53,7 +47,7 @@ public data class ContextInheritanceAndFunMessageConnectionInit(
 public data class ContextInheritanceAndFunMessageStart(
   public val id: String,
   public val payload: ContextInheritanceAndFunRequest,
-) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
+) : ContextInheritanceAndFunClientMessage()
 
 /**
  * See GQL_STOP
@@ -61,14 +55,15 @@ public data class ContextInheritanceAndFunMessageStart(
  */
 public data class ContextInheritanceAndFunMessageStop(
   public val id: String,
-) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunClientMessage
+) : ContextInheritanceAndFunClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class ContextInheritanceAndFunMessageConnectionTerminate : ContextInheritanceAndFunMessage,
-    ContextInheritanceAndFunClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class ContextInheritanceAndFunMessageConnectionTerminate :
+    ContextInheritanceAndFunClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -76,7 +71,7 @@ public class ContextInheritanceAndFunMessageConnectionTerminate : ContextInherit
  */
 public data class ContextInheritanceAndFunMessageConnectionError(
   public val payload: Any? = null,
-) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+) : ContextInheritanceAndFunServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -84,7 +79,7 @@ public data class ContextInheritanceAndFunMessageConnectionError(
  */
 public data class ContextInheritanceAndFunMessageConnectionAck(
   public val payload: Any? = null,
-) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+) : ContextInheritanceAndFunServerMessage()
 
 /**
  * See GQL_DATA
@@ -93,7 +88,7 @@ public data class ContextInheritanceAndFunMessageConnectionAck(
 public data class ContextInheritanceAndFunMessageData(
   public val id: String,
   public val payload: ContextInheritanceAndFunSubscriptionResult,
-) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+) : ContextInheritanceAndFunServerMessage()
 
 /**
  * See GQL_ERROR
@@ -102,7 +97,7 @@ public data class ContextInheritanceAndFunMessageData(
 public data class ContextInheritanceAndFunMessageError(
   public val id: String,
   public val payload: ContextInheritanceAndFunErrorResult,
-) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+) : ContextInheritanceAndFunServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -110,11 +105,12 @@ public data class ContextInheritanceAndFunMessageError(
  */
 public data class ContextInheritanceAndFunMessageComplete(
   public val id: String,
-) : ContextInheritanceAndFunMessage, ContextInheritanceAndFunServerMessage
+) : ContextInheritanceAndFunServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class ContextInheritanceAndFunMessageConnectionKeepAlive : ContextInheritanceAndFunMessage,
-    ContextInheritanceAndFunServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class ContextInheritanceAndFunMessageConnectionKeepAlive :
+    ContextInheritanceAndFunServerMessage()

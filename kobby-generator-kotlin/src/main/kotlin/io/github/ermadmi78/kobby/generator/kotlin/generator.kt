@@ -15,6 +15,50 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
     val files = mutableListOf<FileSpec>()
 
     files += buildFile(context.packageName, context.name) {
+        if (dto.serialization.enabled) {
+            // Build default mapper property
+            buildProperty(
+                context.jsonName,
+                ClassName("kotlinx.serialization.json", "Json")
+            ) {
+                addKdoc("Default entry point to work with JSON serialization.")
+                buildInitializer {
+                    controlFlow("Json") {
+                        addStatement("classDiscriminator·=·%S", dto.serialization.classDiscriminator)
+                        addStatement("ignoreUnknownKeys·=·%L", dto.serialization.ignoreUnknownKeys)
+                        addStatement("encodeDefaults·=·%L", dto.serialization.encodeDefaults)
+                        addStatement("prettyPrint·=·%L", dto.serialization.prettyPrint)
+                        controlFlow(
+                            "serializersModule·=·%M",
+                            MemberName("kotlinx.serialization.modules", "SerializersModule")
+                        ) {
+                            schema.interfacesAndUnions { polymorphicNode ->
+                                controlFlow(
+                                    "%M(%T::class)",
+                                    MemberName(
+                                        "kotlinx.serialization.modules",
+                                        "polymorphic"
+                                    ),
+                                    polymorphicNode.dtoClass
+                                ) {
+                                    polymorphicNode.subObjects { subObjectNode ->
+                                        addStatement(
+                                            "%M(%T::class)",
+                                            MemberName(
+                                                "kotlinx.serialization.modules",
+                                                "subclass"
+                                            ),
+                                            subObjectNode.dtoClass
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         if (entity.enabled) {
             // Build context builder
             buildFunction(context.contextName._decapitalize() + "Of") {
@@ -106,7 +150,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                 buildFunction(context.adapterFunExecuteQuery) {
                     addModifiers(SUSPEND)
                     buildParameter(context.adapterArgQuery)
-                    buildParameter(context.adapterArgVariables)
+                    buildParameter(adapterArgVariables)
                     returns(schema.query.dtoClass)
 
                     addStatement(
@@ -119,7 +163,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                 buildFunction(context.adapterFunExecuteMutation) {
                     addModifiers(SUSPEND)
                     buildParameter(context.adapterArgQuery)
-                    buildParameter(context.adapterArgVariables)
+                    buildParameter(adapterArgVariables)
                     returns(schema.mutation.dtoClass)
 
                     addStatement(
@@ -132,7 +176,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                 buildFunction(context.adapterFunExecuteSubscription) {
                     addModifiers(SUSPEND)
                     buildParameter(context.adapterArgQuery)
-                    buildParameter(context.adapterArgVariables)
+                    buildParameter(adapterArgVariables)
                     buildParameter(context.adapterArgBlock, schema.receiverSubscriptionDtoLambda)
                     returns(UNIT)
 
@@ -146,26 +190,28 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
 
             buildContextImplementation(schema, layout)
 
-            // Build mapper interface
-            buildInterface(context.mapperName) {
-                addKdoc("%L", "Helper interface for default adapter implementations")
+            if (!dto.serialization.enabled) {
+                // Build mapper interface
+                buildInterface(context.mapperName) {
+                    addKdoc("%L", "Helper interface for default adapter implementations")
 
-                buildFunction(context.mapperFunSerialize) {
-                    addModifiers(ABSTRACT)
-                    buildParameter("value", ANY)
-                    returns(STRING)
-                }
+                    buildFunction(context.mapperFunSerialize) {
+                        addModifiers(ABSTRACT)
+                        buildParameter("value", ANY)
+                        returns(STRING)
+                    }
 
-                buildFunction(context.mapperFunDeserialize) {
-                    addModifiers(ABSTRACT)
-                    val typeVariable = TypeVariableName.invoke("T", ANY)
-                    addTypeVariable(typeVariable)
-                    buildParameter("content", STRING)
-                    buildParameter(
-                        "contentType",
-                        ClassName("kotlin.reflect", "KClass").parameterizedBy(typeVariable)
-                    )
-                    returns(typeVariable)
+                    buildFunction(context.mapperFunDeserialize) {
+                        addModifiers(ABSTRACT)
+                        val typeVariable = TypeVariableName.invoke("T", ANY)
+                        addTypeVariable(typeVariable)
+                        buildParameter("content", STRING)
+                        buildParameter(
+                            "contentType",
+                            ClassName("kotlin.reflect", "KClass").parameterizedBy(typeVariable)
+                        )
+                        returns(typeVariable)
+                    }
                 }
             }
         }
@@ -302,7 +348,17 @@ private fun TypeSpecBuilder.buildContextFunction(
         }
         if (subscription) {
             controlFlow("return·%T", context.subscriberClass.parameterizedBy(node.entityClass)) {
-                controlFlow("${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})") {
+                val callAdapterFlow = if (dto.serialization.enabled) {
+                    "${Const.ADAPTER}.$adapterFun($operation, %T(${arguments.first}))"
+                } else {
+                    "${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
+                }
+                val callAdapterArgs: Array<Any> = if (dto.serialization.enabled) {
+                    arrayOf(SerializationJson.JSON_OBJECT)
+                } else {
+                    arrayOf()
+                }
+                controlFlow(callAdapterFlow, *callAdapterArgs) {
                     buildAnonymousClass {
                         addSuperinterface(context.receiverClass.parameterizedBy(node.entityClass))
 
@@ -332,8 +388,14 @@ private fun TypeSpecBuilder.buildContextFunction(
                 }
             }
         } else {
-            statement(node.dtoClass) {
-                "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
+            if (dto.serialization.enabled) {
+                statement(node.dtoClass, SerializationJson.JSON_OBJECT) {
+                    "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, %T(${arguments.first}))"
+                }
+            } else {
+                statement(node.dtoClass) {
+                    "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
+                }
             }
             statement(ClassName(impl.packageName, node.entityBuilderName)) {
                 "return·$dtoVal.%T(this,·$projectionRef)"
@@ -350,7 +412,17 @@ private fun FileSpecBuilder.buildBuilderFunction(
 ) = with(layout) {
     buildFunction(name) {
         buildParameter(entity.projection.projectionArgument, node.projectionLambda)
-        returns(ClassName("kotlin", "Pair").parameterizedBy(STRING, MAP.parameterizedBy(STRING, ANY)))
+        if (dto.serialization.enabled) {
+            returns(
+                ClassName("kotlin", "Pair")
+                    .parameterizedBy(STRING, SerializationJson.JSON_OBJECT)
+            )
+        } else {
+            returns(
+                ClassName("kotlin", "Pair")
+                    .parameterizedBy(STRING, MAP.parameterizedBy(STRING, ANY))
+            )
+        }
 
         val projectionRef = entity.projection.projectionArgument.trim('_').decorate(null, "Ref")
         statement(node.implProjectionClass, MemberName("kotlin", "apply")) {
@@ -392,10 +464,18 @@ private fun FileSpecBuilder.buildBuilderFunction(
         }
 
         addStatement("")
-        addStatement(
-            "return·$operation·%T·${arguments.first}",
-            ClassName("kotlin", "to")
-        )
+        if (dto.serialization.enabled) {
+            addStatement(
+                "return·$operation·%M·%T(${arguments.first})",
+                MemberName("kotlin", "to"),
+                SerializationJson.JSON_OBJECT
+            )
+        } else {
+            addStatement(
+                "return·$operation·%M·${arguments.first}",
+                MemberName("kotlin", "to")
+            )
+        }
     }
 }
 

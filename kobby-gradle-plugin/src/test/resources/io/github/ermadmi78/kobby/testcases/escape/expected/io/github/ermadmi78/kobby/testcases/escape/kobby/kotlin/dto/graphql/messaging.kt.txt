@@ -39,31 +39,8 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = EscapeMessageStart::class, name = "start"),
   JsonSubTypes.Type(value = EscapeMessageStop::class, name = "stop"),
   JsonSubTypes.Type(value = EscapeMessageConnectionTerminate::class, name = "connection_terminate"),
-  JsonSubTypes.Type(value = EscapeMessageConnectionError::class, name = "connection_error"),
-  JsonSubTypes.Type(value = EscapeMessageConnectionAck::class, name = "connection_ack"),
-  JsonSubTypes.Type(value = EscapeMessageData::class, name = "data"),
-  JsonSubTypes.Type(value = EscapeMessageError::class, name = "error"),
-  JsonSubTypes.Type(value = EscapeMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = EscapeMessageConnectionKeepAlive::class, name = "ka"),
 )
-public interface EscapeMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-)
-@JsonSubTypes(
-  JsonSubTypes.Type(value = EscapeMessageConnectionInit::class, name = "connection_init"),
-  JsonSubTypes.Type(value = EscapeMessageStart::class, name = "start"),
-  JsonSubTypes.Type(value = EscapeMessageStop::class, name = "stop"),
-  JsonSubTypes.Type(value = EscapeMessageConnectionTerminate::class, name = "connection_terminate"),
-)
-public interface EscapeClientMessage
+public sealed class EscapeClientMessage
 
 /**
  * Message protocol description see
@@ -82,7 +59,7 @@ public interface EscapeClientMessage
   JsonSubTypes.Type(value = EscapeMessageComplete::class, name = "complete"),
   JsonSubTypes.Type(value = EscapeMessageConnectionKeepAlive::class, name = "ka"),
 )
-public interface EscapeServerMessage
+public sealed class EscapeServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -98,7 +75,7 @@ public interface EscapeServerMessage
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class EscapeMessageConnectionInit @JsonCreator constructor(
   public val payload: Map<String, Any?>? = null,
-) : EscapeMessage, EscapeClientMessage
+) : EscapeClientMessage()
 
 /**
  * See GQL_START
@@ -115,7 +92,7 @@ public data class EscapeMessageConnectionInit @JsonCreator constructor(
 public data class EscapeMessageStart(
   public val id: String,
   public val payload: EscapeRequest,
-) : EscapeMessage, EscapeClientMessage
+) : EscapeClientMessage()
 
 /**
  * See GQL_STOP
@@ -131,7 +108,7 @@ public data class EscapeMessageStart(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class EscapeMessageStop @JsonCreator constructor(
   public val id: String,
-) : EscapeMessage, EscapeClientMessage
+) : EscapeClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
@@ -145,7 +122,8 @@ public data class EscapeMessageStop @JsonCreator constructor(
   defaultImpl = EscapeMessageConnectionTerminate::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class EscapeMessageConnectionTerminate : EscapeMessage, EscapeClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class EscapeMessageConnectionTerminate : EscapeClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -161,7 +139,7 @@ public class EscapeMessageConnectionTerminate : EscapeMessage, EscapeClientMessa
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class EscapeMessageConnectionError @JsonCreator constructor(
   public val payload: Any? = null,
-) : EscapeMessage, EscapeServerMessage
+) : EscapeServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -177,7 +155,7 @@ public data class EscapeMessageConnectionError @JsonCreator constructor(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class EscapeMessageConnectionAck @JsonCreator constructor(
   public val payload: Any? = null,
-) : EscapeMessage, EscapeServerMessage
+) : EscapeServerMessage()
 
 /**
  * See GQL_DATA
@@ -194,7 +172,7 @@ public data class EscapeMessageConnectionAck @JsonCreator constructor(
 public data class EscapeMessageData(
   public val id: String,
   public val payload: EscapeSubscriptionResult,
-) : EscapeMessage, EscapeServerMessage
+) : EscapeServerMessage()
 
 /**
  * See GQL_ERROR
@@ -211,7 +189,7 @@ public data class EscapeMessageData(
 public data class EscapeMessageError(
   public val id: String,
   public val payload: EscapeErrorResult,
-) : EscapeMessage, EscapeServerMessage
+) : EscapeServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -227,7 +205,7 @@ public data class EscapeMessageError(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class EscapeMessageComplete @JsonCreator constructor(
   public val id: String,
-) : EscapeMessage, EscapeServerMessage
+) : EscapeServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
@@ -241,4 +219,5 @@ public data class EscapeMessageComplete @JsonCreator constructor(
   defaultImpl = EscapeMessageConnectionKeepAlive::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class EscapeMessageConnectionKeepAlive : EscapeMessage, EscapeServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class EscapeMessageConnectionKeepAlive : EscapeServerMessage()

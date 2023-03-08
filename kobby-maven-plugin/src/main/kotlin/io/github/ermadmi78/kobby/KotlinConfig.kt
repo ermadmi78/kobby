@@ -1,6 +1,7 @@
 package io.github.ermadmi78.kobby
 
 import io.github.ermadmi78.kobby.generator.kotlin.KotlinType
+import io.github.ermadmi78.kobby.generator.kotlin.SerializerType
 import org.apache.maven.plugins.annotations.Parameter
 import java.io.File
 
@@ -115,18 +116,40 @@ class KotlinTypeConfig {
     @Parameter
     var generics: List<KotlinTypeConfig> = listOf()
 
+    @Parameter
+    var serializer: SerializerTypeConfig? = null
+
     override fun toString(): String {
         return "KotlinTypeConfig(" +
                 "packageName=$packageName, " +
                 "className=$className, " +
                 "nullable=$nullable, " +
-                "generics=$generics" +
+                "generics=$generics, " +
+                "serializer=$serializer" +
+                ")"
+    }
+}
+
+class SerializerTypeConfig {
+    @Parameter(required = true)
+    lateinit var packageName: String
+
+    @Parameter(required = true)
+    lateinit var className: String
+
+    override fun toString(): String {
+        return "SerializerTypeConfig(" +
+                "packageName=$packageName, " +
+                "className=$className" +
                 ")"
     }
 }
 
 internal fun KotlinTypeConfig.toKotlinType(): KotlinType =
-    KotlinType(packageName, className, nullable, generics.map { it.toKotlinType() })
+    KotlinType(packageName, className, nullable, generics.map { it.toKotlinType() }, serializer?.toSerializerType())
+
+internal fun SerializerTypeConfig.toSerializerType(): SerializerType =
+    SerializerType(packageName, className)
 
 //**********************************************************************************************************************
 //                                                 Context Config
@@ -201,6 +224,9 @@ class KotlinDtoConfig {
     var applyPrimaryKeys: Boolean = false
 
     @Parameter
+    var serialization: KotlinDtoSerializationConfig = KotlinDtoSerializationConfig()
+
+    @Parameter
     var jackson: KotlinDtoJacksonConfig = KotlinDtoJacksonConfig()
 
     @Parameter
@@ -219,10 +245,38 @@ class KotlinDtoConfig {
                 "\n      inputPrefix=$inputPrefix, " +
                 "\n      inputPostfix=$inputPostfix, " +
                 "\n      applyPrimaryKeys=$applyPrimaryKeys, " +
+                "\n      serialization=$serialization, " +
                 "\n      jackson=$jackson, " +
                 "\n      builder=$builder, " +
                 "\n      graphQL=$graphQL" +
                 "\n    )"
+    }
+}
+
+class KotlinDtoSerializationConfig {
+    @Parameter
+    var enabled: Boolean? = null
+
+    @Parameter
+    var classDiscriminator: String = "__typename"
+
+    @Parameter
+    var ignoreUnknownKeys: Boolean = true
+
+    @Parameter
+    var encodeDefaults: Boolean = false
+
+    @Parameter
+    var prettyPrint: Boolean = false
+
+    override fun toString(): String {
+        return "KotlinDtoSerializationConfig(" +
+                "\n        enabled=$enabled," +
+                "\n        classDiscriminator='$classDiscriminator'," +
+                "\n        ignoreUnknownKeys=$ignoreUnknownKeys," +
+                "\n        encodeDefaults=$encodeDefaults," +
+                "\n        prettyPrint=$prettyPrint" +
+                "\n      )"
     }
 }
 

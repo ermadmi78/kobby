@@ -24,19 +24,13 @@ import kotlin.collections.Map
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface InvalidFieldIsRequredMessage
+public sealed class InvalidFieldIsRequredClientMessage
 
 /**
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface InvalidFieldIsRequredClientMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public interface InvalidFieldIsRequredServerMessage
+public sealed class InvalidFieldIsRequredServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -44,7 +38,7 @@ public interface InvalidFieldIsRequredServerMessage
  */
 public data class InvalidFieldIsRequredMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
-) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredClientMessage
+) : InvalidFieldIsRequredClientMessage()
 
 /**
  * See GQL_START
@@ -53,7 +47,7 @@ public data class InvalidFieldIsRequredMessageConnectionInit(
 public data class InvalidFieldIsRequredMessageStart(
   public val id: String,
   public val payload: InvalidFieldIsRequredRequest,
-) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredClientMessage
+) : InvalidFieldIsRequredClientMessage()
 
 /**
  * See GQL_STOP
@@ -61,14 +55,14 @@ public data class InvalidFieldIsRequredMessageStart(
  */
 public data class InvalidFieldIsRequredMessageStop(
   public val id: String,
-) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredClientMessage
+) : InvalidFieldIsRequredClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class InvalidFieldIsRequredMessageConnectionTerminate : InvalidFieldIsRequredMessage,
-    InvalidFieldIsRequredClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class InvalidFieldIsRequredMessageConnectionTerminate : InvalidFieldIsRequredClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -76,7 +70,7 @@ public class InvalidFieldIsRequredMessageConnectionTerminate : InvalidFieldIsReq
  */
 public data class InvalidFieldIsRequredMessageConnectionError(
   public val payload: Any? = null,
-) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
+) : InvalidFieldIsRequredServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -84,7 +78,7 @@ public data class InvalidFieldIsRequredMessageConnectionError(
  */
 public data class InvalidFieldIsRequredMessageConnectionAck(
   public val payload: Any? = null,
-) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
+) : InvalidFieldIsRequredServerMessage()
 
 /**
  * See GQL_DATA
@@ -93,7 +87,7 @@ public data class InvalidFieldIsRequredMessageConnectionAck(
 public data class InvalidFieldIsRequredMessageData(
   public val id: String,
   public val payload: InvalidFieldIsRequredSubscriptionResult,
-) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
+) : InvalidFieldIsRequredServerMessage()
 
 /**
  * See GQL_ERROR
@@ -102,7 +96,7 @@ public data class InvalidFieldIsRequredMessageData(
 public data class InvalidFieldIsRequredMessageError(
   public val id: String,
   public val payload: InvalidFieldIsRequredErrorResult,
-) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
+) : InvalidFieldIsRequredServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -110,11 +104,11 @@ public data class InvalidFieldIsRequredMessageError(
  */
 public data class InvalidFieldIsRequredMessageComplete(
   public val id: String,
-) : InvalidFieldIsRequredMessage, InvalidFieldIsRequredServerMessage
+) : InvalidFieldIsRequredServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class InvalidFieldIsRequredMessageConnectionKeepAlive : InvalidFieldIsRequredMessage,
-    InvalidFieldIsRequredServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class InvalidFieldIsRequredMessageConnectionKeepAlive : InvalidFieldIsRequredServerMessage()

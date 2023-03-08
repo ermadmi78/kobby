@@ -39,31 +39,8 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = CinemaMessageStart::class, name = "start"),
   JsonSubTypes.Type(value = CinemaMessageStop::class, name = "stop"),
   JsonSubTypes.Type(value = CinemaMessageConnectionTerminate::class, name = "connection_terminate"),
-  JsonSubTypes.Type(value = CinemaMessageConnectionError::class, name = "connection_error"),
-  JsonSubTypes.Type(value = CinemaMessageConnectionAck::class, name = "connection_ack"),
-  JsonSubTypes.Type(value = CinemaMessageData::class, name = "data"),
-  JsonSubTypes.Type(value = CinemaMessageError::class, name = "error"),
-  JsonSubTypes.Type(value = CinemaMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = CinemaMessageConnectionKeepAlive::class, name = "ka"),
 )
-public interface CinemaMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-)
-@JsonSubTypes(
-  JsonSubTypes.Type(value = CinemaMessageConnectionInit::class, name = "connection_init"),
-  JsonSubTypes.Type(value = CinemaMessageStart::class, name = "start"),
-  JsonSubTypes.Type(value = CinemaMessageStop::class, name = "stop"),
-  JsonSubTypes.Type(value = CinemaMessageConnectionTerminate::class, name = "connection_terminate"),
-)
-public interface CinemaClientMessage
+public sealed class CinemaClientMessage
 
 /**
  * Message protocol description see
@@ -82,7 +59,7 @@ public interface CinemaClientMessage
   JsonSubTypes.Type(value = CinemaMessageComplete::class, name = "complete"),
   JsonSubTypes.Type(value = CinemaMessageConnectionKeepAlive::class, name = "ka"),
 )
-public interface CinemaServerMessage
+public sealed class CinemaServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -98,7 +75,7 @@ public interface CinemaServerMessage
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageConnectionInit @JsonCreator constructor(
   public val payload: Map<String, Any?>? = null,
-) : CinemaMessage, CinemaClientMessage
+) : CinemaClientMessage()
 
 /**
  * See GQL_START
@@ -115,7 +92,7 @@ public data class CinemaMessageConnectionInit @JsonCreator constructor(
 public data class CinemaMessageStart(
   public val id: String,
   public val payload: CinemaRequest,
-) : CinemaMessage, CinemaClientMessage
+) : CinemaClientMessage()
 
 /**
  * See GQL_STOP
@@ -131,7 +108,7 @@ public data class CinemaMessageStart(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageStop @JsonCreator constructor(
   public val id: String,
-) : CinemaMessage, CinemaClientMessage
+) : CinemaClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
@@ -145,7 +122,8 @@ public data class CinemaMessageStop @JsonCreator constructor(
   defaultImpl = CinemaMessageConnectionTerminate::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class CinemaMessageConnectionTerminate : CinemaMessage, CinemaClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class CinemaMessageConnectionTerminate : CinemaClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -161,7 +139,7 @@ public class CinemaMessageConnectionTerminate : CinemaMessage, CinemaClientMessa
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageConnectionError @JsonCreator constructor(
   public val payload: Any? = null,
-) : CinemaMessage, CinemaServerMessage
+) : CinemaServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -177,7 +155,7 @@ public data class CinemaMessageConnectionError @JsonCreator constructor(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageConnectionAck @JsonCreator constructor(
   public val payload: Any? = null,
-) : CinemaMessage, CinemaServerMessage
+) : CinemaServerMessage()
 
 /**
  * See GQL_DATA
@@ -194,7 +172,7 @@ public data class CinemaMessageConnectionAck @JsonCreator constructor(
 public data class CinemaMessageData(
   public val id: String,
   public val payload: CinemaSubscriptionResult,
-) : CinemaMessage, CinemaServerMessage
+) : CinemaServerMessage()
 
 /**
  * See GQL_ERROR
@@ -211,7 +189,7 @@ public data class CinemaMessageData(
 public data class CinemaMessageError(
   public val id: String,
   public val payload: CinemaErrorResult,
-) : CinemaMessage, CinemaServerMessage
+) : CinemaServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -227,7 +205,7 @@ public data class CinemaMessageError(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class CinemaMessageComplete @JsonCreator constructor(
   public val id: String,
-) : CinemaMessage, CinemaServerMessage
+) : CinemaServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
@@ -241,4 +219,5 @@ public data class CinemaMessageComplete @JsonCreator constructor(
   defaultImpl = CinemaMessageConnectionKeepAlive::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class CinemaMessageConnectionKeepAlive : CinemaMessage, CinemaServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class CinemaMessageConnectionKeepAlive : CinemaServerMessage()

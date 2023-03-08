@@ -24,19 +24,13 @@ import kotlin.collections.Map
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface ContextInheritanceOnlyMessage
+public sealed class ContextInheritanceOnlyClientMessage
 
 /**
  * Message protocol description see
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public interface ContextInheritanceOnlyClientMessage
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public interface ContextInheritanceOnlyServerMessage
+public sealed class ContextInheritanceOnlyServerMessage
 
 /**
  * See GQL_CONNECTION_INIT
@@ -44,7 +38,7 @@ public interface ContextInheritanceOnlyServerMessage
  */
 public data class ContextInheritanceOnlyMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
-) : ContextInheritanceOnlyMessage, ContextInheritanceOnlyClientMessage
+) : ContextInheritanceOnlyClientMessage()
 
 /**
  * See GQL_START
@@ -53,7 +47,7 @@ public data class ContextInheritanceOnlyMessageConnectionInit(
 public data class ContextInheritanceOnlyMessageStart(
   public val id: String,
   public val payload: ContextInheritanceOnlyRequest,
-) : ContextInheritanceOnlyMessage, ContextInheritanceOnlyClientMessage
+) : ContextInheritanceOnlyClientMessage()
 
 /**
  * See GQL_STOP
@@ -61,14 +55,15 @@ public data class ContextInheritanceOnlyMessageStart(
  */
 public data class ContextInheritanceOnlyMessageStop(
   public val id: String,
-) : ContextInheritanceOnlyMessage, ContextInheritanceOnlyClientMessage
+) : ContextInheritanceOnlyClientMessage()
 
 /**
  * See GQL_CONNECTION_TERMINATE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class ContextInheritanceOnlyMessageConnectionTerminate : ContextInheritanceOnlyMessage,
-    ContextInheritanceOnlyClientMessage
+@Suppress("CanSealedSubClassBeObject")
+public class ContextInheritanceOnlyMessageConnectionTerminate :
+    ContextInheritanceOnlyClientMessage()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -76,7 +71,7 @@ public class ContextInheritanceOnlyMessageConnectionTerminate : ContextInheritan
  */
 public data class ContextInheritanceOnlyMessageConnectionError(
   public val payload: Any? = null,
-) : ContextInheritanceOnlyMessage, ContextInheritanceOnlyServerMessage
+) : ContextInheritanceOnlyServerMessage()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -84,7 +79,7 @@ public data class ContextInheritanceOnlyMessageConnectionError(
  */
 public data class ContextInheritanceOnlyMessageConnectionAck(
   public val payload: Any? = null,
-) : ContextInheritanceOnlyMessage, ContextInheritanceOnlyServerMessage
+) : ContextInheritanceOnlyServerMessage()
 
 /**
  * See GQL_DATA
@@ -93,7 +88,7 @@ public data class ContextInheritanceOnlyMessageConnectionAck(
 public data class ContextInheritanceOnlyMessageData(
   public val id: String,
   public val payload: ContextInheritanceOnlySubscriptionResult,
-) : ContextInheritanceOnlyMessage, ContextInheritanceOnlyServerMessage
+) : ContextInheritanceOnlyServerMessage()
 
 /**
  * See GQL_ERROR
@@ -102,7 +97,7 @@ public data class ContextInheritanceOnlyMessageData(
 public data class ContextInheritanceOnlyMessageError(
   public val id: String,
   public val payload: ContextInheritanceOnlyErrorResult,
-) : ContextInheritanceOnlyMessage, ContextInheritanceOnlyServerMessage
+) : ContextInheritanceOnlyServerMessage()
 
 /**
  * See GQL_COMPLETE
@@ -110,11 +105,12 @@ public data class ContextInheritanceOnlyMessageError(
  */
 public data class ContextInheritanceOnlyMessageComplete(
   public val id: String,
-) : ContextInheritanceOnlyMessage, ContextInheritanceOnlyServerMessage
+) : ContextInheritanceOnlyServerMessage()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
  * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
  */
-public class ContextInheritanceOnlyMessageConnectionKeepAlive : ContextInheritanceOnlyMessage,
-    ContextInheritanceOnlyServerMessage
+@Suppress("CanSealedSubClassBeObject")
+public class ContextInheritanceOnlyMessageConnectionKeepAlive :
+    ContextInheritanceOnlyServerMessage()

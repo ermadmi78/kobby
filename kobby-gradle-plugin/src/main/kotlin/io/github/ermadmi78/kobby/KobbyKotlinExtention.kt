@@ -93,7 +93,7 @@ open class KobbyKotlinExtension {
      * @return Kotlin type definition
      */
     fun typeOf(packageName: String, className: String, vararg arguments: KotlinType) =
-        KotlinType(packageName, className, false, arguments.toList())
+        KotlinType(packageName, className, false, arguments.toList(), null)
 
     /**
      * Define Kotlin type for scalar mapping
@@ -105,7 +105,7 @@ open class KobbyKotlinExtension {
      * @return Kotlin type definition
      */
     fun typeOf(packageName: String, className: String, nullable: Boolean, vararg arguments: KotlinType) =
-        KotlinType(packageName, className, nullable, arguments.toList())
+        KotlinType(packageName, className, nullable, arguments.toList(), null)
 
     /** kotlin.Any */
     val typeAny get() = KotlinTypes.ANY
@@ -323,11 +323,25 @@ open class KobbyKotlinDtoExtension {
      */
     var applyPrimaryKeys: Boolean? = null
 
+    internal val serializationExtension = lazy { KobbyKotlinDtoSerializationExtension() }
     internal val jacksonExtension = lazy { KobbyKotlinDtoJacksonExtension() }
     internal val builderExtension = lazy { KobbyKotlinDtoBuilderExtension() }
     internal val graphQLExtension = lazy { KobbyKotlinDtoGraphQLExtension() }
 
-    /** Configuration of Jackson annotations generation for DTO classes */
+    /**
+     * Configuration of Kotlinx Serialization support for DTO classes.
+     *
+     * Note that Kotlinx serialization and Jackson serialization are not supported simultaneously.
+     */
+    fun serialization(action: Action<KobbyKotlinDtoSerializationExtension>) {
+        action.execute(serializationExtension.value)
+    }
+
+    /**
+     * Configuration of Jackson annotations generation for DTO classes.
+     *
+     * Note that Kotlinx serialization and Jackson serialization are not supported simultaneously.
+     */
     fun jackson(action: Action<KobbyKotlinDtoJacksonExtension>) {
         action.execute(jacksonExtension.value)
     }
@@ -347,11 +361,57 @@ open class KobbyKotlinDtoExtension {
 
 // *********************************************************************************************************************
 
+/**
+ * Configuration of Kotlinx Serialization support for DTO classes.
+ *
+ * Note that Kotlinx serialization and Jackson serialization are not supported simultaneously.
+ */
+@Kobby
+open class KobbyKotlinDtoSerializationExtension {
+    /**
+     * Is Kotlinx Serialization enabled.
+     * Note that Kotlinx serialization and Jackson serialization are not supported simultaneously.
+     *
+     * By default, "true" if "org.jetbrains.kotlinx:kotlinx-serialization-json" artifact is in the project dependencies.
+     */
+    var enabled: Boolean? = null
+
+    /**
+     * Name of the class descriptor property for polymorphic serialization.
+     *
+     * Default: "__typename"
+     */
+    var classDiscriminator: String? = null
+
+    /**
+     * Specifies whether encounters of unknown properties in the input JSON should be ignored
+     * instead of throwing SerializationException.
+     *
+     * Default: true
+     */
+    var ignoreUnknownKeys: Boolean? = null
+
+    /**
+     * Specifies whether default values of Kotlin properties should be encoded to JSON.
+     *
+     * Default: false
+     */
+    var encodeDefaults: Boolean? = null
+
+    /**
+     * Specifies whether resulting JSON should be pretty-printed.
+     *
+     * Default: false
+     */
+    var prettyPrint: Boolean? = null
+}
+
 /** Configuration of Jackson annotations generation for DTO classes */
 @Kobby
 open class KobbyKotlinDtoJacksonExtension {
     /**
      * Is Jackson annotations generation enabled.
+     * Note that Kotlinx serialization and Jackson serialization are not supported simultaneously.
      *
      * By default, "true" if "com.fasterxml.jackson.core:jackson-annotations" artifact is in the project dependencies.
      */

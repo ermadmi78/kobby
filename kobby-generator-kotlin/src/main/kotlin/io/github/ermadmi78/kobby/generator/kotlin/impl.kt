@@ -381,7 +381,12 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
             }
             addSuperinterface(if (isQuery) field.queryClass else field.selectionClass)
             field.arguments.values.asSequence().filter { it.isInitialized }.forEach { arg ->
-                buildProperty(arg.name, arg.entityType) {
+                val argType = if (dto.serialization.enabled) {
+                    arg.entityTypeWithSerializer
+                } else {
+                    arg.entityType
+                }
+                buildProperty(arg.name, argType) {
                     mutable()
                     addModifiers(OVERRIDE)
                     initializer("null")
@@ -439,7 +444,12 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             field.arguments.values.asSequence()
                 .filter { !field.isSelection || !it.isInitialized }
                 .forEach { arg ->
-                    buildProperty(arg.innerName, arg.entityType.nullable()) {
+                    val argType = if (dto.serialization.enabled) {
+                        arg.entityTypeWithSerializer.nullable()
+                    } else {
+                        arg.entityType.nullable()
+                    }
+                    buildProperty(arg.innerName, argType) {
                         if (impl.internal) {
                             addModifiers(INTERNAL)
                         }
@@ -705,7 +715,15 @@ private fun FunSpecBuilder.writeFieldProjectionBuilderCode(field: KobbyField, la
                         buildAppendChain(body) { appendLiteral(", ") }
                     }
                     addStatement("val·arg·=·%S·+·$arguments.size", argPrefix)
-                    addStatement("$arguments[arg]·=·$argName!!")
+                    if (dto.serialization.enabled) {
+                        addStatement(
+                            "$arguments[arg]·=·%M.%M($argName!!)",
+                            context.jsonMember,
+                            MemberName("kotlinx.serialization.json", "encodeToJsonElement")
+                        )
+                    } else {
+                        addStatement("$arguments[arg]·=·$argName!!")
+                    }
                     buildAppendChain(body) {
                         appendLiteral(arg.name)
                         appendLiteral(": ")

@@ -34,6 +34,12 @@ class KobbySchema internal constructor(
     fun objects(action: (KobbyNode) -> Unit) = objects.values.forEach(action)
     fun interfaces(action: (KobbyNode) -> Unit) = interfaces.values.forEach(action)
     fun unions(action: (KobbyNode) -> Unit) = unions.values.forEach(action)
+
+    fun interfacesAndUnions(action: (KobbyNode) -> Unit) {
+        interfaces(action)
+        unions(action)
+    }
+
     fun enums(action: (KobbyNode) -> Unit) = enums.values.forEach(action)
     fun inputs(action: (KobbyNode) -> Unit) = inputs.values.forEach(action)
 
@@ -105,12 +111,14 @@ class KobbySchemaScope internal constructor() {
                     subObjectsIndex.append(it, node.name)
                 }
             }
+
             INTERFACE -> {
                 interfaces[node.name] = node
                 node._implements.forEach {
                     subObjectsIndex.append(it, node.name)
                 }
             }
+
             UNION -> unions[node.name] = node
             ENUM -> enums[node.name] = node
             INPUT -> inputs[node.name] = node

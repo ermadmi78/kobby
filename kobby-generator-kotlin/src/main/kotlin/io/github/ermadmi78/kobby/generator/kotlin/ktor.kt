@@ -117,12 +117,24 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                         addModifiers(PROTECTED)
                     }
 
-                    // protected val mapper: XXXMapper
-                    buildProperty(
-                        ktor.compositePropertyMapper,
-                        context.mapperClass
-                    ) {
-                        addModifiers(PROTECTED)
+                    // protected val mapper
+                    if (dto.serialization.enabled) {
+                        // protected val mapper: Json
+                        buildPropertyWithDefault(
+                            ktor.compositePropertyMapper,
+                            ClassName("kotlinx.serialization.json", "Json"),
+                            CodeBlock.of("%M", context.jsonMember)
+                        ) {
+                            addModifiers(PROTECTED)
+                        }
+                    } else {
+                        // protected val mapper: XXXMapper
+                        buildProperty(
+                            ktor.compositePropertyMapper,
+                            context.mapperClass
+                        ) {
+                            addModifiers(PROTECTED)
+                        }
                     }
 
                     // protected val requestHeaders ...
@@ -149,12 +161,13 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     }
 
                     // protected val subscriptionPayload ...
+                    //todo remove dynamicHttpHeaders
                     if (ktor.dynamicHttpHeaders) {
                         // protected val subscriptionPayload: suspend () -> Map<String, Any?>? = { null }
                         buildPropertyWithDefault(
                             ktor.compositePropertySubscriptionPayload,
                             LambdaTypeName
-                                .get(returnType = MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
+                                .get(returnType = compositePropertySubscriptionPayloadType)
                                 .copy(suspending = true),
                             CodeBlock.of("{·null·}")
                         ) {
@@ -164,7 +177,7 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                         // protected val subscriptionPayload: Map<String, Any?>? = null
                         buildProperty(
                             ktor.compositePropertySubscriptionPayload,
-                            MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+                            compositePropertySubscriptionPayloadType
                         ) {
                             addModifiers(PROTECTED)
                         }
@@ -244,10 +257,18 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     receiver(ClassName("io.ktor.websocket", "WebSocketSession"))
                     buildParameter(ktor.compositePropertyMessage, dto.graphql.clientMessageClass)
 
-                    addStatement(
-                        "val·${ktor.compositeValContent}·=·${ktor.compositePropertyMapper}" +
-                                ".${context.mapperFunSerialize}(${ktor.compositePropertyMessage})"
-                    )
+                    if (dto.serialization.enabled) {
+                        addStatement(
+                            "val·${ktor.compositeValContent}·=·${ktor.compositePropertyMapper}" +
+                                    ".%M(${ktor.compositePropertyMessage})",
+                            Serialization.encodeToString
+                        )
+                    } else {
+                        addStatement(
+                            "val·${ktor.compositeValContent}·=·${ktor.compositePropertyMapper}" +
+                                    ".${context.mapperFunSerialize}(${ktor.compositePropertyMessage})"
+                        )
+                    }
                     addStatement(
                         "%M(${ktor.compositeValContent})",
                         MemberName("io.ktor.websocket", "send")
@@ -280,9 +301,15 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                         ClassName("io.ktor.websocket", "Frame", "Text"),
                         MemberName("io.ktor.websocket", "readText")
                     )
-                    statement(dto.graphql.serverMessageClass) {
-                        "return·${ktor.compositePropertyMapper}" +
-                                ".${context.mapperFunDeserialize}(${ktor.compositeValContent}, %T::class)"
+                    if (dto.serialization.enabled) {
+                        statement(Serialization.decodeFromString, dto.graphql.serverMessageClass) {
+                            "return·${ktor.compositePropertyMapper}.%M<%T>(${ktor.compositeValContent})"
+                        }
+                    } else {
+                        statement(dto.graphql.serverMessageClass) {
+                            "return·${ktor.compositePropertyMapper}" +
+                                    ".${context.mapperFunDeserialize}(${ktor.compositeValContent}, %T::class)"
+                        }
                     }
                 }
             }
@@ -303,12 +330,12 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
         addModifiers(OVERRIDE)
         addModifiers(SUSPEND)
         buildParameter(context.adapterArgQuery)
-        buildParameter(context.adapterArgVariables)
+        buildParameter(adapterArgVariables)
         returns(node.dtoClass)
 
         val ktor = adapter.ktor
         statement(dto.graphql.requestClass) {
-            "val·${ktor.simpleValRequest}·=·%T(${context.adapterArgQuery.first}, ${context.adapterArgVariables.first})"
+            "val·${ktor.simpleValRequest}·=·%T(${context.adapterArgQuery.first}, ${adapterArgVariables.first})"
         }
         addStatement("${ktor.simplePropertyListener}(${ktor.simpleValRequest})")
         addStatement("")
@@ -375,13 +402,13 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
         addModifiers(OVERRIDE)
         addModifiers(SUSPEND)
         buildParameter(context.adapterArgQuery)
-        buildParameter(context.adapterArgVariables)
+        buildParameter(adapterArgVariables)
         returns(node.dtoClass)
 
         val ktor = adapter.ktor
         statement(dto.graphql.requestClass) {
             "val·${ktor.compositeValRequest}·=·" +
-                    "%T(${context.adapterArgQuery.first}, ${context.adapterArgVariables.first})"
+                    "%T(${context.adapterArgQuery.first}, ${adapterArgVariables.first})"
         }
         addStatement("${ktor.compositePropertyListener}(${ktor.compositeValRequest})")
         addStatement("")
@@ -395,11 +422,20 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
             "val·${ktor.compositeValContent}·=·${ktor.compositePropertyClient}.%M",
             MemberName("io.ktor.client.request", "post")
         ) {
-            addStatement(
-                "%M<%T>(${ktor.compositePropertyMapper}.${context.mapperFunSerialize}(${ktor.compositeValRequest}))",
-                MemberName("io.ktor.client.request", "setBody"),
-                STRING
-            )
+            if (dto.serialization.enabled) {
+                addStatement(
+                    "%M<%T>(${ktor.compositePropertyMapper}.%M(${ktor.compositeValRequest}))",
+                    MemberName("io.ktor.client.request", "setBody"),
+                    STRING,
+                    Serialization.encodeToString
+                )
+            } else {
+                addStatement(
+                    "%M<%T>(${ktor.compositePropertyMapper}.${context.mapperFunSerialize}(${ktor.compositeValRequest}))",
+                    MemberName("io.ktor.client.request", "setBody"),
+                    STRING
+                )
+            }
             addStatement(
                 "%M(%T.Application.Json)",
                 MemberName("io.ktor.http", "contentType"),
@@ -415,10 +451,17 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
         addStatement(".%M()", MemberName("io.ktor.client.statement", "bodyAsText"))
         addStatement("")
 
-        statement(graphQlResultClass) {
-            "val·${ktor.compositeValResult}·=·" +
-                    "${ktor.compositePropertyMapper}.${context.mapperFunDeserialize}(" +
-                    "${ktor.compositeValContent}, %T::class)"
+        if (dto.serialization.enabled) {
+            statement(Serialization.decodeFromString, graphQlResultClass) {
+                "val·${ktor.compositeValResult}·=·" +
+                        "${ktor.compositePropertyMapper}.%M<%T>(${ktor.compositeValContent})"
+            }
+        } else {
+            statement(graphQlResultClass) {
+                "val·${ktor.compositeValResult}·=·" +
+                        "${ktor.compositePropertyMapper}.${context.mapperFunDeserialize}(" +
+                        "${ktor.compositeValContent}, %T::class)"
+            }
         }
         addStatement("")
 
@@ -445,7 +488,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
         addModifiers(OVERRIDE)
         addModifiers(SUSPEND)
         buildParameter(context.adapterArgQuery)
-        buildParameter(context.adapterArgVariables)
+        buildParameter(adapterArgVariables)
         buildParameter(context.adapterArgBlock, schema.receiverSubscriptionDtoLambda)
         returns(UNIT)
 
@@ -459,7 +502,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
         addStatement(
             "val·${ktor.compositeValPayload}:·%T·=·${ktor.compositePropertySubscriptionPayload}"
                     + (if (ktor.dynamicHttpHeaders) "()" else ""),
-            MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+            compositePropertySubscriptionPayloadType
         )
         controlFlow(
             "${ktor.compositePropertyClient}.%M(\n⇥${ktor.compositePropertyWebSocketUrl},\n" +
@@ -470,7 +513,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
             MemberName("io.ktor.client.plugins.websocket", "webSocket"),
             Kotlin.forEach
         ) {
-            statement(MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
+            statement(compositePropertySubscriptionPayloadType) {
                 "var·${ktor.compositeValInitPayload}:·%T·=·${ktor.compositeValPayload}"
             }
             controlFlow(
@@ -479,7 +522,13 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
                 Kotlin.contains
             ) {
                 controlFlow("if (${ktor.compositeValInitPayload}·==·null)") {
-                    addStatement("${ktor.compositeValInitPayload} = %M()", Kotlin.mapOf)
+                    if (dto.serialization.enabled) {
+                        addStatement(
+                            "${ktor.compositeValInitPayload} = %T(%M())", SerializationJson.JSON_OBJECT, Kotlin.mapOf
+                        )
+                    } else {
+                        addStatement("${ktor.compositeValInitPayload} = %M()", Kotlin.mapOf)
+                    }
                 }
                 addStatement("")
 
@@ -488,16 +537,26 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
                             "%M ${ktor.compositeValInitPayload})",
                     Kotlin.notContains
                 ) {
-                    addStatement(
-                        "@%T(%S)",
-                        ClassName("kotlin", "Suppress"),
-                        "SuspiciousCollectionReassignment"
-                    )
-                    statement(Kotlin.plus, Kotlin.mapOf, Kotlin.to) {
-                        "${ktor.compositeValInitPayload} %M= " +
-                                "%M(${ktor.compositePropertyWebSocketTokenHeader} " +
-                                "%M ${ktor.compositeValHeaders}" +
-                                "[${ktor.compositePropertyHttpTokenHeader}])"
+                    if (dto.serialization.enabled) {
+                        // initPayload = JsonObject(initPayload + (webSocketAuthorizationTokenHeader to JsonPrimitive(httpHeaders[httpAuthorizationTokenHeader])))
+                        statement(
+                            SerializationJson.JSON_OBJECT,
+                            Kotlin.plus,
+                            Kotlin.to,
+                            SerializationJson.JSON_PRIMITIVE
+                        ) {
+                            "${ktor.compositeValInitPayload}·=·%T(${ktor.compositeValInitPayload}·%M·" +
+                                    "(${ktor.compositePropertyWebSocketTokenHeader}·%M·%T(${ktor.compositeValHeaders}" +
+                                    "[${ktor.compositePropertyHttpTokenHeader}])))"
+                        }
+                    } else {
+                        addStatement("@%T(%S)", KotlinAnnotations.SUPPRESS, "SuspiciousCollectionReassignment")
+                        statement(Kotlin.plus, Kotlin.mapOf, Kotlin.to) {
+                            "${ktor.compositeValInitPayload} %M= " +
+                                    "%M(${ktor.compositePropertyWebSocketTokenHeader} " +
+                                    "%M ${ktor.compositeValHeaders}" +
+                                    "[${ktor.compositePropertyHttpTokenHeader}])"
+                        }
                     }
                 }
             }
@@ -505,7 +564,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
 
             statement(dto.graphql.requestClass) {
                 "val·${ktor.compositeValRequest}·=·" +
-                        "%T(${context.adapterArgQuery.first}, ${context.adapterArgVariables.first})"
+                        "%T(${context.adapterArgQuery.first}, ${adapterArgVariables.first})"
             }
             addStatement("${ktor.compositePropertyListener}(${ktor.compositeValRequest})")
             addStatement("")
@@ -538,7 +597,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
     buildFunction(ktor.compositeFunExecuteSubscriptionImpl) {
         addModifiers(PROTECTED, OPEN, SUSPEND)
         receiver(ClassName("io.ktor.websocket", "WebSocketSession"))
-        buildParameter(initPayload, MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
+        buildParameter(initPayload, compositePropertySubscriptionPayloadType)
         buildParameter(request, graphql.requestClass)
         buildParameter(block, schema.receiverSubscriptionDtoLambda)
         returns(UNIT)
@@ -646,11 +705,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                     }
 
                     addStatement("")
-                    addStatement(
-                        "@%T(%S)",
-                        ClassName("kotlin", "Suppress"),
-                        "UNREACHABLE_CODE"
-                    )
+                    addStatement("@%T(%S)", KotlinAnnotations.SUPPRESS, "UNREACHABLE_CODE")
                     addStatement("%M(%S)", Kotlin.error, "Invalid algorithm")
                 }
 
@@ -703,4 +758,9 @@ private object Kotlin {
     val contains = MemberName("kotlin.collections", KOperator.CONTAINS)
     val notContains = MemberName("kotlin.collections", KOperator.NOT_CONTAINS)
     val plus = MemberName("kotlin.collections", KOperator.PLUS)
+}
+
+private object Serialization {
+    val encodeToString = MemberName("kotlinx.serialization", "encodeToString")
+    val decodeFromString = MemberName("kotlinx.serialization", "decodeFromString")
 }

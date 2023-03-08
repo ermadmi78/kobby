@@ -136,6 +136,23 @@ class KobbyPlugin : Plugin<Project> {
                     applyPrimaryKeys?.also {
                         kotlinTask.dtoApplyPrimaryKeys.convention(it)
                     }
+                    serializationExtension.valueOrNull?.apply {
+                        enabled?.also {
+                            kotlinTask.dtoSerializationEnabled.convention(it)
+                        }
+                        classDiscriminator?.also {
+                            kotlinTask.dtoSerializationClassDiscriminator.convention(it)
+                        }
+                        ignoreUnknownKeys?.also {
+                            kotlinTask.dtoSerializationIgnoreUnknownKeys.convention(it)
+                        }
+                        encodeDefaults?.also {
+                            kotlinTask.dtoSerializationEncodeDefaults.convention(it)
+                        }
+                        prettyPrint?.also {
+                            kotlinTask.dtoSerializationPrettyPrint.convention(it)
+                        }
+                    }
                     jacksonExtension.valueOrNull?.apply {
                         enabled?.also {
                             kotlinTask.dtoJacksonEnabled.convention(it)

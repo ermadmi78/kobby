@@ -40,32 +40,8 @@ import kotlin.collections.Map
   JsonSubTypes.Type(value = GPrefMessageStopGPost::class, name = "stop"),
   JsonSubTypes.Type(value = GPrefMessageConnectionTerminateGPost::class, name =
         "connection_terminate"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionErrorGPost::class, name = "connection_error"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionAckGPost::class, name = "connection_ack"),
-  JsonSubTypes.Type(value = GPrefMessageDataGPost::class, name = "data"),
-  JsonSubTypes.Type(value = GPrefMessageErrorGPost::class, name = "error"),
-  JsonSubTypes.Type(value = GPrefMessageCompleteGPost::class, name = "complete"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka"),
 )
-public interface GPrefMessageGPost
-
-/**
- * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-)
-@JsonSubTypes(
-  JsonSubTypes.Type(value = GPrefMessageConnectionInitGPost::class, name = "connection_init"),
-  JsonSubTypes.Type(value = GPrefMessageStartGPost::class, name = "start"),
-  JsonSubTypes.Type(value = GPrefMessageStopGPost::class, name = "stop"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionTerminateGPost::class, name =
-        "connection_terminate"),
-)
-public interface GPrefClientMessageGPost
+public sealed class GPrefClientMessageGPost
 
 /**
  * Message protocol description see
@@ -84,7 +60,7 @@ public interface GPrefClientMessageGPost
   JsonSubTypes.Type(value = GPrefMessageCompleteGPost::class, name = "complete"),
   JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka"),
 )
-public interface GPrefServerMessageGPost
+public sealed class GPrefServerMessageGPost
 
 /**
  * See GQL_CONNECTION_INIT
@@ -100,7 +76,7 @@ public interface GPrefServerMessageGPost
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageConnectionInitGPost @JsonCreator constructor(
   public val payload: Map<String, Any?>? = null,
-) : GPrefMessageGPost, GPrefClientMessageGPost
+) : GPrefClientMessageGPost()
 
 /**
  * See GQL_START
@@ -117,7 +93,7 @@ public data class GPrefMessageConnectionInitGPost @JsonCreator constructor(
 public data class GPrefMessageStartGPost(
   public val id: String,
   public val payload: GPrefRequestGPost,
-) : GPrefMessageGPost, GPrefClientMessageGPost
+) : GPrefClientMessageGPost()
 
 /**
  * See GQL_STOP
@@ -133,7 +109,7 @@ public data class GPrefMessageStartGPost(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageStopGPost @JsonCreator constructor(
   public val id: String,
-) : GPrefMessageGPost, GPrefClientMessageGPost
+) : GPrefClientMessageGPost()
 
 /**
  * See GQL_CONNECTION_TERMINATE
@@ -147,7 +123,8 @@ public data class GPrefMessageStopGPost @JsonCreator constructor(
   defaultImpl = GPrefMessageConnectionTerminateGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class GPrefMessageConnectionTerminateGPost : GPrefMessageGPost, GPrefClientMessageGPost
+@Suppress("CanSealedSubClassBeObject")
+public class GPrefMessageConnectionTerminateGPost : GPrefClientMessageGPost()
 
 /**
  * See GQL_CONNECTION_ERROR
@@ -163,7 +140,7 @@ public class GPrefMessageConnectionTerminateGPost : GPrefMessageGPost, GPrefClie
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageConnectionErrorGPost @JsonCreator constructor(
   public val payload: Any? = null,
-) : GPrefMessageGPost, GPrefServerMessageGPost
+) : GPrefServerMessageGPost()
 
 /**
  * See GQL_CONNECTION_ACK
@@ -179,7 +156,7 @@ public data class GPrefMessageConnectionErrorGPost @JsonCreator constructor(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageConnectionAckGPost @JsonCreator constructor(
   public val payload: Any? = null,
-) : GPrefMessageGPost, GPrefServerMessageGPost
+) : GPrefServerMessageGPost()
 
 /**
  * See GQL_DATA
@@ -196,7 +173,7 @@ public data class GPrefMessageConnectionAckGPost @JsonCreator constructor(
 public data class GPrefMessageDataGPost(
   public val id: String,
   public val payload: GPrefSubscriptionResultGPost,
-) : GPrefMessageGPost, GPrefServerMessageGPost
+) : GPrefServerMessageGPost()
 
 /**
  * See GQL_ERROR
@@ -213,7 +190,7 @@ public data class GPrefMessageDataGPost(
 public data class GPrefMessageErrorGPost(
   public val id: String,
   public val payload: GPrefErrorResultGPost,
-) : GPrefMessageGPost, GPrefServerMessageGPost
+) : GPrefServerMessageGPost()
 
 /**
  * See GQL_COMPLETE
@@ -229,7 +206,7 @@ public data class GPrefMessageErrorGPost(
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class GPrefMessageCompleteGPost @JsonCreator constructor(
   public val id: String,
-) : GPrefMessageGPost, GPrefServerMessageGPost
+) : GPrefServerMessageGPost()
 
 /**
  * See GQL_CONNECTION_KEEP_ALIVE
@@ -243,4 +220,5 @@ public data class GPrefMessageCompleteGPost @JsonCreator constructor(
   defaultImpl = GPrefMessageConnectionKeepAliveGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public class GPrefMessageConnectionKeepAliveGPost : GPrefMessageGPost, GPrefServerMessageGPost
+@Suppress("CanSealedSubClassBeObject")
+public class GPrefMessageConnectionKeepAliveGPost : GPrefServerMessageGPost()

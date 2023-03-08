@@ -49,6 +49,15 @@ data class KotlinLayout(
             }
         }.let { if (nullable) it.nullable() else it }
 
+    internal val KobbyType.dtoTypeWithSerializer: TypeName
+        get() = when (this) {
+            is KobbyListType -> LIST.parameterizedBy(nested.dtoTypeWithSerializer)
+            is KobbyNodeType -> when (node.kind) {
+                SCALAR -> getScalarType(node.name).typeNameWithSerializer
+                else -> node.dtoClass
+            }
+        }.let { if (nullable) it.nullable() else it }
+
     internal val KobbyNode.dtoName: String
         get() = when (kind) {
             ENUM -> name.decorate(dto.enumDecoration)
@@ -196,10 +205,22 @@ data class KotlinLayout(
     internal val KobbyArgument.entityType: TypeName
         get() = type.toEntityType(hasDefaultValue)
 
+    internal val KobbyArgument.entityTypeWithSerializer: TypeName
+        get() = type.toEntityTypeWithSerializer(hasDefaultValue)
+
     private fun KobbyType.toEntityType(makeNullable: Boolean): TypeName = when (this) {
         is KobbyListType -> LIST.parameterizedBy(nested.toEntityType(false))
         is KobbyNodeType -> when (node.kind) {
             SCALAR -> getScalarType(node.name).typeName
+            ENUM, INPUT -> node.dtoClass
+            else -> node.entityClass
+        }
+    }.let { if (nullable || makeNullable) it.nullable() else it }
+
+    private fun KobbyType.toEntityTypeWithSerializer(makeNullable: Boolean): TypeName = when (this) {
+        is KobbyListType -> LIST.parameterizedBy(nested.toEntityTypeWithSerializer(false))
+        is KobbyNodeType -> when (node.kind) {
+            SCALAR -> getScalarType(node.name).typeNameWithSerializer
             ENUM, INPUT -> node.dtoClass
             else -> node.entityClass
         }
@@ -387,6 +408,44 @@ data class KotlinLayout(
         }
 
     //******************************************************************************************************************
+    //                                     Kotlinx Serialization
+    //******************************************************************************************************************
+
+    internal fun TypeSpecBuilder.annotateSerializable(): TypeSpecBuilder {
+        if (dto.serialization.enabled) {
+            buildAnnotation(SerializationAnnotations.SERIALIZABLE)
+        }
+        return this
+    }
+
+    internal fun TypeSpecBuilder.annotateSerialName(name: String): TypeSpecBuilder {
+        if (dto.serialization.enabled) {
+            buildAnnotation(SerializationAnnotations.SERIAL_NAME) {
+                addMember("%S", name)
+            }
+        }
+        return this
+    }
+
+    internal fun TypeSpecBuilder.enableExperimentalSerializationApi(): TypeSpecBuilder {
+        if (dto.serialization.enabled) {
+            buildAnnotation(KotlinAnnotations.OPT_IN) {
+                addMember("%T::class", SerializationAnnotations.ExperimentalSerializationApi)
+            }
+        }
+        return this
+    }
+
+    internal fun TypeSpecBuilder.annotateJsonClassDiscriminator(discriminator: String): TypeSpecBuilder {
+        if (dto.serialization.enabled) {
+            buildAnnotation(SerializationAnnotations.JSON_CLASS_DISCRIMINATOR) {
+                addMember("%S", discriminator)
+            }
+        }
+        return this
+    }
+
+    //******************************************************************************************************************
     //                                          Jackson
     //******************************************************************************************************************
 
@@ -480,12 +539,21 @@ class KotlinDtoLayout(
     val enumDecoration: Decoration,
     val inputDecoration: Decoration,
     val applyPrimaryKeys: Boolean,
+    val serialization: KotlinDtoSerialization,
     val jackson: KotlinDtoJacksonLayout,
     val builder: KotlinDtoBuilderLayout,
     val graphql: KotlinDtoGraphQLLayout
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }
+
+class KotlinDtoSerialization(
+    val enabled: Boolean,
+    val classDiscriminator: String,
+    val ignoreUnknownKeys: Boolean,
+    val encodeDefaults: Boolean,
+    val prettyPrint: Boolean
+)
 
 data class KotlinDtoJacksonLayout(
     val enabled: Boolean,
@@ -597,21 +665,54 @@ class KotlinType(
     val allowNull: Boolean = false,
 
     /** List of generics */
-    val generics: List<KotlinType> = listOf()
+    val generics: List<KotlinType> = listOf(),
+
+    val serializer: SerializerType? = null
 ) : Serializable {
     val packageName: String = packageName.validateKotlinPath()
 
     val className: String = className.validateKotlinPath()
 
-    fun nullable(): KotlinType =
-        if (allowNull) this else KotlinType(packageName, className, true, generics)
+    fun nullable(): KotlinType = if (allowNull) this else KotlinType(
+        packageName,
+        className,
+        true,
+        generics,
+        serializer
+    )
 
-    fun parameterize(vararg arguments: KotlinType): KotlinType =
-        if (arguments.isEmpty()) this else KotlinType(packageName, className, allowNull, generics + arguments)
+    fun parameterize(vararg arguments: KotlinType): KotlinType = if (arguments.isEmpty()) this else KotlinType(
+        packageName,
+        className,
+        allowNull,
+        generics + arguments,
+        serializer
+    )
 
-    fun nested(nestedClassName: String): KotlinType =
-        KotlinType(packageName, "$className.$nestedClassName", allowNull, generics)
+    fun nested(nestedClassName: String): KotlinType = KotlinType(
+        packageName,
+        "$className.$nestedClassName",
+        allowNull,
+        generics,
+        serializer
+    )
 
+    /**
+     * Specify a custom serializer for this type.
+     */
+    fun serializer(
+        /** A fully-qualified package name.*/
+        packageName: String,
+
+        /** A fully-qualified class name.*/
+        className: String
+    ): KotlinType = KotlinType(
+        this.packageName,
+        this.className,
+        allowNull,
+        generics,
+        SerializerType(packageName, className)
+    )
 
     override fun toString(): String {
         return "$packageName.$className" +
@@ -635,6 +736,34 @@ class KotlinType(
         result = 31 * result + className.hashCode()
         result = 31 * result + allowNull.hashCode()
         result = 31 * result + generics.hashCode()
+        return result
+    }
+}
+
+class SerializerType(
+    /** A fully-qualified package name.*/
+    packageName: String,
+
+    /** A fully-qualified class name.*/
+    className: String
+) : Serializable {
+    val packageName: String = packageName.validateKotlinPath()
+
+    val className: String = className.validateKotlinPath()
+
+    override fun toString(): String = "$packageName.$className"
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as SerializerType
+        return packageName == other.packageName && className == other.className
+    }
+
+    override fun hashCode(): Int {
+        var result = packageName.hashCode()
+        result = 31 * result + className.hashCode()
         return result
     }
 }
