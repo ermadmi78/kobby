@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
 import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.ComplexMultiOverrideDto
@@ -228,7 +228,7 @@ internal open class ComplexMultiOverrideProjectionImpl : ComplexMultiOverridePro
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildNoOverride00(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -267,7 +267,7 @@ internal open class ComplexMultiOverrideProjectionImpl : ComplexMultiOverridePro
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildNoOverride11(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -306,7 +306,7 @@ internal open class ComplexMultiOverrideProjectionImpl : ComplexMultiOverridePro
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildNoOverride22(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -345,7 +345,7 @@ internal open class ComplexMultiOverrideProjectionImpl : ComplexMultiOverridePro
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildComplexMultiOverride3(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -384,7 +384,7 @@ internal open class ComplexMultiOverrideProjectionImpl : ComplexMultiOverridePro
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildIntermediateMultiOverride4(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -423,7 +423,7 @@ internal open class ComplexMultiOverrideProjectionImpl : ComplexMultiOverridePro
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildFinalField5(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -462,7 +462,7 @@ internal open class ComplexMultiOverrideProjectionImpl : ComplexMultiOverridePro
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

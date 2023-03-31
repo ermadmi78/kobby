@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.ActorDto
@@ -101,7 +101,7 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildFields1(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -140,7 +140,7 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

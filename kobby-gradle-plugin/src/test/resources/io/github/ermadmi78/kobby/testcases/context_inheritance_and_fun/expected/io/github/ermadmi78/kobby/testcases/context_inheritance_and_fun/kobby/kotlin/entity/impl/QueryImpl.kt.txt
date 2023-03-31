@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.ContextInheritanceAndFunContext
 import io.github.ermadmi78.kobby.testcases.context_inheritance_and_fun.kobby.kotlin.ContextInheritanceAndFunSubscriber
@@ -112,7 +112,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildAll0(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -154,7 +154,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

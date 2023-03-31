@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlyContext
 import io.github.ermadmi78.kobby.testcases.context_inheritance_only.kobby.kotlin.ContextInheritanceOnlySubscriber
@@ -307,7 +307,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildCountry0(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -349,7 +349,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildCountries1(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -422,7 +422,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildFilm2(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -464,7 +464,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildFilms3(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -537,7 +537,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildActor4(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -579,7 +579,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildActors5(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -667,7 +667,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildTaggable6(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -709,7 +709,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameContext
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.dto.UserDto
@@ -138,7 +138,7 @@ internal open class UserProjectionImpl : UserProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlContext
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyInput
@@ -93,7 +93,7 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildInsert0(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -132,7 +132,7 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.CountryContext
 import io.github.ermadmi78.kobby.testcases.customize_jackson.kobby.kotlin.dto.CountryDto
@@ -113,7 +113,7 @@ internal open class CountryProjectionImpl : CountryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

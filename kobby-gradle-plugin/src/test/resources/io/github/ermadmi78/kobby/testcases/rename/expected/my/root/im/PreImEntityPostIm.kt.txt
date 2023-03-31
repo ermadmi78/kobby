@@ -101,7 +101,7 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildFields1Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -140,7 +140,7 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerBuildPin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

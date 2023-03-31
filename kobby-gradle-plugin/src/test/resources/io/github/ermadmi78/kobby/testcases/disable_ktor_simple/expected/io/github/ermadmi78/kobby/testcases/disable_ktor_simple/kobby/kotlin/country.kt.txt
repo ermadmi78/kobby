@@ -24,10 +24,10 @@ import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.enti
 import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.QueryProjection
 import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.Subscription
 import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.SubscriptionProjection
-import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.impl.MutationProjectionImpl
-import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.impl.QueryProjectionImpl
-import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.impl.SubscriptionProjectionImpl
-import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.impl.buildEntity
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.`impl`.MutationProjectionImpl
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.`impl`.QueryProjectionImpl
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.`impl`.SubscriptionProjectionImpl
+import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.`impl`.buildEntity
 import kotlin.Any
 import kotlin.DslMarker
 import kotlin.NotImplementedError

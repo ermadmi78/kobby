@@ -268,7 +268,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildCreateCountry0Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -310,7 +310,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildCreateFilm1Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -367,7 +367,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildCreateActor2Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -424,7 +424,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildAssociate3Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -478,7 +478,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildTagFilm4Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -532,7 +532,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildTagActor5Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -586,7 +586,7 @@ public open class PreImPrePrMyMutationPostPrPostIm : PrePrMyMutationPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerBuildPin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

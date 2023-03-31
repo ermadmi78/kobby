@@ -24,10 +24,10 @@ import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyQuery
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MyQueryProjection
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MySubscription
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.MySubscriptionProjection
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl.MyMutationProjectionImpl
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl.MyQueryProjectionImpl
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl.MySubscriptionProjectionImpl
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.impl.buildEntity
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.`impl`.MyMutationProjectionImpl
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.`impl`.MyQueryProjectionImpl
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.`impl`.MySubscriptionProjectionImpl
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.entity.`impl`.buildEntity
 import kotlin.Any
 import kotlin.DslMarker
 import kotlin.NotImplementedError

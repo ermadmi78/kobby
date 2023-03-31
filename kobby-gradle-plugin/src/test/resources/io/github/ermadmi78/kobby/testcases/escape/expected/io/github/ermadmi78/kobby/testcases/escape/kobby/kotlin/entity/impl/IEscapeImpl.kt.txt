@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
 import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto.EscapeDto
@@ -101,7 +101,7 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildPoints2(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -158,7 +158,7 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

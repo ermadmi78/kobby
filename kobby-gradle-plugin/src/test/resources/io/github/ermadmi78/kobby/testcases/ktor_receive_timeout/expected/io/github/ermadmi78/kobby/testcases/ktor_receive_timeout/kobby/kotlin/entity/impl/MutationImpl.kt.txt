@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.ktor_receive_timeout.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.ktor_receive_timeout.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.ktor_receive_timeout.kobby.kotlin.CountryContext
 import io.github.ermadmi78.kobby.testcases.ktor_receive_timeout.kobby.kotlin.dto.MutationDto
@@ -97,7 +97,7 @@ internal open class MutationProjectionImpl : MutationProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildCreateCountry0(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -139,7 +139,7 @@ internal open class MutationProjectionImpl : MutationProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

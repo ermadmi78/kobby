@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.GraphqlContext
 import io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.dto.SubscriptionDto
@@ -92,7 +92,7 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

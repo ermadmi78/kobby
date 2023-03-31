@@ -158,7 +158,7 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildFilmCreated1Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -200,7 +200,7 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildActorCreated2Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -242,7 +242,7 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerBuildPin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

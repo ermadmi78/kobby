@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
 import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.dto.InterfaceMultiOverrideImplementationDto
@@ -176,7 +176,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildNoOverride10(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -215,7 +215,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildNoOverride21(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -254,7 +254,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildInterfaceMultiOverride2(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -293,7 +293,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun ____innerBuildFinalField3(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -332,7 +332,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

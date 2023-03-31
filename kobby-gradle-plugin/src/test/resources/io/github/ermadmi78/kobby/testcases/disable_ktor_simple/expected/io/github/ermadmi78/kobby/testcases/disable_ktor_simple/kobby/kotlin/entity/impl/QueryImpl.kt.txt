@@ -13,7 +13,7 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.impl
+package io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.CountryContext
 import io.github.ermadmi78.kobby.testcases.disable_ktor_simple.kobby.kotlin.dto.QueryDto
@@ -94,7 +94,7 @@ internal open class QueryProjectionImpl : QueryProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerBuild(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {

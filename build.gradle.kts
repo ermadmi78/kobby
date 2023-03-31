@@ -30,7 +30,7 @@ allprojects {
 }
 
 subprojects {
-    val kotlinJvmVersion: String by project
+    val kotlinJdkVersion: String by project
     val junitVersion: String by project
 
     val currentProject = this
@@ -41,22 +41,13 @@ subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
 
+    kotlin {
+        jvmToolchain(kotlinJdkVersion.toInt())
+    }
+
     println("${currentProject.group}:${currentProject.name}")
 
     tasks {
-        compileKotlin {
-            kotlinOptions {
-                jvmTarget = kotlinJvmVersion
-                freeCompilerArgs = listOf("-Xjsr305=strict")
-            }
-        }
-        compileTestKotlin {
-            kotlinOptions {
-                jvmTarget = kotlinJvmVersion
-                freeCompilerArgs = listOf("-Xjsr305=strict")
-            }
-        }
-
         jar {
             manifest {
                 attributes["Built-By"] = "https://github.com/ermadmi78"

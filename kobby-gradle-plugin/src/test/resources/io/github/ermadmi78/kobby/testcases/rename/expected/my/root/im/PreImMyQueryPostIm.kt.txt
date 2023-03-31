@@ -259,7 +259,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildCountry0Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -301,7 +301,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildCountries1Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -358,7 +358,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildFilm2Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -400,7 +400,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildFilms3Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -488,7 +488,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildActor4Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -530,7 +530,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   private fun __innerBuildActors5Pin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
@@ -618,7 +618,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   public fun _innerBuildPin(
     ignore: Set<String>,
-    header: StringBuilder,
+    `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
   ): Unit {
