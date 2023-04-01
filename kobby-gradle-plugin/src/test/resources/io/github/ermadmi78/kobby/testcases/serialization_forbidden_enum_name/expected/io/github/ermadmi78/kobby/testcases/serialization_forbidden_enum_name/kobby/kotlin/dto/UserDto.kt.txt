@@ -15,9 +15,6 @@
 
 package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto
 
-import com.fasterxml.jackson.`annotation`.JsonInclude
-import com.fasterxml.jackson.`annotation`.JsonTypeInfo
-import com.fasterxml.jackson.`annotation`.JsonTypeName
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameDSL
 import kotlin.Long
 import kotlin.Suppress
@@ -25,15 +22,11 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.let
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonTypeName(value = "User")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "__typename",
-  defaultImpl = UserDto::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+@Serializable
+@SerialName("User")
 public data class UserDto(
   public val id: Long? = null,
   public val update_column: user_update_column? = null,

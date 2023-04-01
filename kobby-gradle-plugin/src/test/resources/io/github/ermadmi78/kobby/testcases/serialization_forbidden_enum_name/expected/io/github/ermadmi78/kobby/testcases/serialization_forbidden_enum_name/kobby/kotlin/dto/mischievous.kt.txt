@@ -15,20 +15,20 @@
 
 package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto
 
-import com.fasterxml.jackson.`annotation`.JsonProperty
 import kotlin.Suppress
+import kotlinx.serialization.SerialName
 
 public enum class mischievous {
   /**
    * see https://github.com/ermadmi78/kobby/issues/21
    */
-  @JsonProperty("name")
+  @SerialName("name")
   ___name,
   __name,
   /**
    * see https://github.com/ermadmi78/kobby/issues/21
    */
-  @JsonProperty("ordinal")
+  @SerialName("ordinal")
   ___ordinal,
   __ordinal,
 }

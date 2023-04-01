@@ -12,6 +12,7 @@ buildscript {
 
 plugins {
     kotlin("jvm") version "testKotlinVersion"
+    kotlin("plugin.serialization") version "testKotlinVersion"
     id("io.github.ermadmi78.kobby")
 }
 
@@ -26,8 +27,8 @@ kobby {
 }
 
 dependencies {
-    // Add this dependency to enable Jackson annotation generation in DTO classes by Kobby
-    compileOnly("com.fasterxml.jackson.core:jackson-annotations:testJacksonVersion")
+    // Add this dependency to enable Kotlinx Serialization
+    compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:testSerializationVersion")
 
     implementation(kotlin("stdlib"))
 }

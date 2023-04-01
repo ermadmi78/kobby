@@ -21,7 +21,6 @@ import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kob
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.user_update_column
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.User
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.UserProjection
-import kotlin.Any
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
@@ -33,6 +32,7 @@ import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
+import kotlinx.serialization.json.JsonElement
 
 internal class UserImpl(
   internal val __innerContext: ForbiddenEnumNameContext,
@@ -140,7 +140,7 @@ internal open class UserProjectionImpl : UserProjection {
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>,
+    arguments: MutableMap<String, JsonElement>,
   ): Unit {
     body.append(' ').append('{')
 

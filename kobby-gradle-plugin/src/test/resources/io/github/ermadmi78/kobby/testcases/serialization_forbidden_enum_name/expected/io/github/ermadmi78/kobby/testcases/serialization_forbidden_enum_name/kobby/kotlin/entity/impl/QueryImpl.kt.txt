@@ -20,7 +20,7 @@ import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kob
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.user_update_column
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.Query
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.QueryProjection
-import kotlin.Any
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.forbiddenEnumNameJson
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
@@ -33,6 +33,8 @@ import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.encodeToJsonElement
 
 internal class QueryImpl(
   internal val __innerContext: ForbiddenEnumNameContext,
@@ -95,7 +97,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>,
+    arguments: MutableMap<String, JsonElement>,
   ): Unit {
     if ("user" !in ignore && __innerUser0) {
       body.append(' ').append("user")
@@ -111,7 +113,7 @@ internal open class QueryProjectionImpl : QueryProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = __innerUser0Id!!
+        arguments[arg] = forbiddenEnumNameJson.encodeToJsonElement(__innerUser0Id!!)
         body.append("id").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -134,7 +136,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>,
+    arguments: MutableMap<String, JsonElement>,
   ): Unit {
     body.append(' ').append('{')
 

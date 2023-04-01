@@ -15,8 +15,8 @@
 
 package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto
 
-import com.fasterxml.jackson.`annotation`.JsonProperty
 import kotlin.Suppress
+import kotlinx.serialization.SerialName
 
 /**
  *  update columns of table "user"
@@ -34,11 +34,11 @@ public enum class user_update_column {
    *  column name  
    * > see https://github.com/ermadmi78/kobby/issues/21
    */
-  @JsonProperty("name")
+  @SerialName("name")
   __name,
   /**
    * see https://github.com/ermadmi78/kobby/issues/21
    */
-  @JsonProperty("ordinal")
+  @SerialName("ordinal")
   __ordinal,
 }

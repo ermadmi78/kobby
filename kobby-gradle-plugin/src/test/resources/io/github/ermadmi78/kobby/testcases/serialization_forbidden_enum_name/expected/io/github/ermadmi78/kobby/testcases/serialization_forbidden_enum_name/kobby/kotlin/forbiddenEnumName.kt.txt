@@ -28,7 +28,6 @@ import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kob
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.`impl`.QueryProjectionImpl
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.`impl`.SubscriptionProjectionImpl
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.`impl`.buildEntity
-import kotlin.Any
 import kotlin.DslMarker
 import kotlin.NotImplementedError
 import kotlin.Pair
@@ -36,26 +35,41 @@ import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 import kotlin.apply
-import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import kotlin.collections.mutableMapOf
 import kotlin.collections.setOf
-import kotlin.reflect.KClass
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import kotlin.to
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.modules.SerializersModule
+
+/**
+ * Default entry point to work with JSON serialization.
+ */
+public val forbiddenEnumNameJson: Json = Json {
+  classDiscriminator = "__typename"
+  ignoreUnknownKeys = true
+  encodeDefaults = false
+  prettyPrint = false
+  serializersModule = SerializersModule {
+  }
+}
+
 
 public fun forbiddenEnumNameContextOf(adapter: ForbiddenEnumNameAdapter): ForbiddenEnumNameContext =
     ForbiddenEnumNameContextImpl(adapter)
 
 public fun buildForbiddenEnumNameQuery(__projection: QueryProjection.() -> Unit):
-    Pair<String, Map<String, Any>> {
+    Pair<String, JsonObject> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
   val body = StringBuilder(64)
-  val arguments: MutableMap<String, Any> = mutableMapOf()
+  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
   projectionRef.___innerBuild(setOf(), header, body, arguments)
 
   val query = buildString(header.length + body.length + 7) {
@@ -66,16 +80,16 @@ public fun buildForbiddenEnumNameQuery(__projection: QueryProjection.() -> Unit)
     append(body)
   }
 
-  return query to arguments
+  return query to JsonObject(arguments)
 }
 
 public fun buildForbiddenEnumNameMutation(__projection: MutationProjection.() -> Unit):
-    Pair<String, Map<String, Any>> {
+    Pair<String, JsonObject> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
   val body = StringBuilder(64)
-  val arguments: MutableMap<String, Any> = mutableMapOf()
+  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
   projectionRef.___innerBuild(setOf(), header, body, arguments)
 
   val mutation = buildString(header.length + body.length + 10) {
@@ -86,16 +100,16 @@ public fun buildForbiddenEnumNameMutation(__projection: MutationProjection.() ->
     append(body)
   }
 
-  return mutation to arguments
+  return mutation to JsonObject(arguments)
 }
 
 public fun buildForbiddenEnumNameSubscription(__projection: SubscriptionProjection.() -> Unit):
-    Pair<String, Map<String, Any>> {
+    Pair<String, JsonObject> {
   val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
   val body = StringBuilder(64)
-  val arguments: MutableMap<String, Any> = mutableMapOf()
+  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
   projectionRef.___innerBuild(setOf(), header, body, arguments)
 
   val subscription = buildString(header.length + body.length + 14) {
@@ -106,7 +120,7 @@ public fun buildForbiddenEnumNameSubscription(__projection: SubscriptionProjecti
     append(body)
   }
 
-  return subscription to arguments
+  return subscription to JsonObject(arguments)
 }
 
 public interface ForbiddenEnumNameContext {
@@ -128,15 +142,15 @@ public fun interface ForbiddenEnumNameReceiver<out T> {
 }
 
 public interface ForbiddenEnumNameAdapter {
-  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto =
+  public suspend fun executeQuery(query: String, variables: JsonObject): QueryDto =
       throw NotImplementedError("Adapter function executeQuery is not implemented")
 
-  public suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto =
+  public suspend fun executeMutation(query: String, variables: JsonObject): MutationDto =
       throw NotImplementedError("Adapter function executeMutation is not implemented")
 
   public suspend fun executeSubscription(
     query: String,
-    variables: Map<String, Any?>,
+    variables: JsonObject,
     block: suspend ForbiddenEnumNameReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
@@ -153,7 +167,7 @@ private class ForbiddenEnumNameContextImpl(
 
     val header = StringBuilder()
     val body = StringBuilder(64)
-    val arguments: MutableMap<String, Any> = mutableMapOf()
+    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
     projectionRef.___innerBuild(setOf(), header, body, arguments)
 
     val query = buildString(header.length + body.length + 7) {
@@ -164,7 +178,7 @@ private class ForbiddenEnumNameContextImpl(
       append(body)
     }
 
-    val queryDto: QueryDto = adapter.executeQuery(query, arguments)
+    val queryDto: QueryDto = adapter.executeQuery(query, JsonObject(arguments))
     return queryDto.buildEntity(this, projectionRef)
   }
 
@@ -177,7 +191,7 @@ private class ForbiddenEnumNameContextImpl(
 
     val header = StringBuilder()
     val body = StringBuilder(64)
-    val arguments: MutableMap<String, Any> = mutableMapOf()
+    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
     projectionRef.___innerBuild(setOf(), header, body, arguments)
 
     val mutation = buildString(header.length + body.length + 10) {
@@ -188,7 +202,7 @@ private class ForbiddenEnumNameContextImpl(
       append(body)
     }
 
-    val mutationDto: MutationDto = adapter.executeMutation(mutation, arguments)
+    val mutationDto: MutationDto = adapter.executeMutation(mutation, JsonObject(arguments))
     return mutationDto.buildEntity(this, projectionRef)
   }
 
@@ -198,7 +212,7 @@ private class ForbiddenEnumNameContextImpl(
 
     val header = StringBuilder()
     val body = StringBuilder(64)
-    val arguments: MutableMap<String, Any> = mutableMapOf()
+    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
     projectionRef.___innerBuild(setOf(), header, body, arguments)
 
     val subscription = buildString(header.length + body.length + 14) {
@@ -210,7 +224,7 @@ private class ForbiddenEnumNameContextImpl(
     }
 
     return ForbiddenEnumNameSubscriber<Subscription> {
-      adapter.executeSubscription(subscription, arguments) {
+      adapter.executeSubscription(subscription, JsonObject(arguments)) {
         it.invoke(object : ForbiddenEnumNameReceiver<Subscription> {
           public override suspend fun receive(): Subscription {
             val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
@@ -220,15 +234,6 @@ private class ForbiddenEnumNameContextImpl(
       }
     }
   }
-}
-
-/**
- * Helper interface for default adapter implementations
- */
-public interface ForbiddenEnumNameMapper {
-  public fun serialize(`value`: Any): String
-
-  public fun <T : Any> deserialize(content: String, contentType: KClass<T>): T
 }
 
 @DslMarker

@@ -15,17 +15,10 @@
 
 package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto
 
-import com.fasterxml.jackson.`annotation`.JsonInclude
-import com.fasterxml.jackson.`annotation`.JsonTypeInfo
-import com.fasterxml.jackson.`annotation`.JsonTypeName
 import kotlin.Suppress
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonTypeName(value = "Subscription")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "__typename",
-  defaultImpl = SubscriptionDto::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+@Serializable
+@SerialName("Subscription")
 public class SubscriptionDto()

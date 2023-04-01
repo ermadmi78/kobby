@@ -19,7 +19,6 @@ import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kob
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.SubscriptionDto
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.Subscription
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.SubscriptionProjection
-import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -28,6 +27,7 @@ import kotlin.collections.Set
 import kotlin.collections.setOf
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
+import kotlinx.serialization.json.JsonElement
 
 internal class SubscriptionImpl(
   internal val __innerContext: ForbiddenEnumNameContext,
@@ -61,7 +61,7 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, Any>,
+    arguments: MutableMap<String, JsonElement>,
   ): Unit {
     body.append(' ').append('{')
 
