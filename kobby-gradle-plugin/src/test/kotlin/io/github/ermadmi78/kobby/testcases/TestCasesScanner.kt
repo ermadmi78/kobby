@@ -28,6 +28,7 @@ class TestCasesScanner {
 
     private fun String.applyVersions(): String = this
         .replaceProperty("testKotlinVersion")
+        .replaceProperty("testSerializationVersion")
         .replaceProperty("testJacksonVersion")
         .replaceProperty("testKtorVersion")
         .replaceProperty("testKickstartGraphqlJavaToolsVersion")

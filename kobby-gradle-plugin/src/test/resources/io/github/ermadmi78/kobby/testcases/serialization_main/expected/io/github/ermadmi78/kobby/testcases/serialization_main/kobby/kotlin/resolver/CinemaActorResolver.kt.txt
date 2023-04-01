@@ -1,0 +1,63 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.resolver
+
+import graphql.kickstart.tools.GraphQLResolver
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.ActorDto
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.CountryDto
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.FilmDto
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.Genre
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlinx.serialization.json.JsonObject
+
+/**
+ * Actor entity.
+ * The actor belongs to one country and can play in several films.
+ */
+public interface CinemaActorResolver : GraphQLResolver<ActorDto> {
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   * @param keys List of field keys to load.
+   * If no keys specified all entity fields will be loaded.
+   */
+  public suspend fun fields(actor: ActorDto, keys: List<String>?): JsonObject
+
+  /**
+   * The country to which the actor belongs
+   */
+  public suspend fun country(actor: ActorDto): CountryDto
+
+  /**
+   * Find films of actor by title and genre.
+   * Returns empty list if not found.
+   * @param title Part of title of film to search
+   * @param genre Genre of film to search
+   * @param limit Limit of result list.
+   * Put -1 to be unlimited.
+   * @param offset Offset of result list.
+   */
+  public suspend fun films(
+    actor: ActorDto,
+    title: String?,
+    genre: Genre?,
+    limit: Int,
+    offset: Int,
+  ): List<FilmDto>
+}

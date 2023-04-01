@@ -1,0 +1,72 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+/**
+ * Type Tag is introduced for testing types with single value.
+ * See class TagDto.
+ */
+@Serializable
+@SerialName("Tag")
+public data class TagDto(
+  /**
+   * The tag value
+   */
+  public val `value`: String? = null,
+)
+
+public fun TagDto(block: TagDtoBuilder.() -> Unit): TagDto {
+  // TagDto builder DSL
+  return TagDtoBuilder().apply(block).let {
+    TagDto(
+          it.`value`
+        )
+  }
+}
+
+public fun TagDto.copy(block: TagDtoBuilder.() -> Unit): TagDto {
+  // TagDto copy DSL
+  return TagDtoBuilder().also {
+    it.`value` = this.`value`
+  }
+  .apply(block).let {
+    TagDto(
+          it.`value`
+        )
+  }
+}
+
+/**
+ * Type Tag is introduced for testing types with single value.
+ * See class TagDto.
+ */
+@CinemaDSL
+public class TagDtoBuilder {
+  /**
+   * The tag value
+   */
+  public var `value`: String? = null
+}
