@@ -1,0 +1,30 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    kotlin("jvm") version "testKotlinVersion"
+    kotlin("plugin.serialization") version "testKotlinVersion"
+    id("io.github.ermadmi78.kobby")
+}
+
+dependencies {
+    // Add this dependency to enable Kotlinx Serialization
+    compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:testSerializationVersion")
+
+    implementation(kotlin("stdlib"))
+}
+
+tasks {
+    jar {
+        enabled = false
+    }
+}

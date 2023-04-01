@@ -1,0 +1,33 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.SimpleContext
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.SimpleDSL
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Subscription {
+  public fun __context(): SimpleContext
+
+  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+}
+
+@SimpleDSL
+public interface SubscriptionProjection {
+  public fun __minimize(): Unit {
+  }
+}

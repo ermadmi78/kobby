@@ -1,0 +1,8 @@
+type Query {
+    simple(name: String): [Simple!]!
+}
+
+type Simple {
+    id: ID!
+    name: String!
+}

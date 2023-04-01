@@ -1,0 +1,164 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.SimpleContext
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.entity.Simple
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.entity.SimpleProjection
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.simpleJson
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.encodeToJsonElement
+
+internal class QueryImpl(
+  internal val __innerContext: SimpleContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto,
+) : Query {
+  public override val simple: List<Simple> by lazy {
+    if (__innerProjection.__innerSimple0 == null) {
+      error("Property [simple] is not available - add [simple] projection to switch on it")
+    }
+    __innerDto.resolveSimple(__innerContext, __innerProjection.__innerSimple0!!)
+  }
+
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerSimple0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("simple").append('=').append(simple)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): SimpleContext = __innerContext
+
+  public override fun QueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerSimple0: SimpleProjectionImpl? = null
+
+  internal var __innerSimple0Name: String? = null
+
+  public override fun simple(name: String?, __projection: SimpleProjection.() -> Unit): Unit {
+    __innerSimple0 = SimpleProjectionImpl().apply(__projection)
+    __innerSimple0Name = name
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+    if ("simple" !in ignore && __innerSimple0 != null) {
+      __projection.simple(__innerSimple0Name) {
+        this@QueryProjectionImpl.__innerSimple0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: simple
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildSimple0(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, JsonElement>,
+  ): Unit {
+    if ("simple" !in ignore && __innerSimple0 != null) {
+      body.append(' ').append("simple")
+      var counter = 0
+      val addBrackets = __innerSimple0Name != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: simple.name
+      if (__innerSimple0Name != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = simpleJson.encodeToJsonElement(__innerSimple0Name!!)
+        body.append("name").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Simple
+      __innerSimple0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, JsonElement>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: simple
+    ____innerBuildSimple0(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: SimpleContext,
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
+
+internal fun QueryDto.resolveSimple(__innerContext: SimpleContext,
+    __innerProjection: SimpleProjectionImpl): List<Simple> =
+    simple?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

@@ -1,0 +1,27 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.dto.SubscriptionDto
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlinx.serialization.Serializable
+
+@Serializable
+public data class SimpleSubscriptionResult(
+  public val `data`: SubscriptionDto? = null,
+  public val errors: List<SimpleError>? = null,
+)
