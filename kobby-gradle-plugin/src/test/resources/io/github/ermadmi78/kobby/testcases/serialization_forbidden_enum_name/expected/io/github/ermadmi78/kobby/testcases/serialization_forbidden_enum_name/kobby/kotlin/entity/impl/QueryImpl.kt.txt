@@ -1,0 +1,150 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameContext
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.user_update_column
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.QueryProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class QueryImpl(
+  internal val __innerContext: ForbiddenEnumNameContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto,
+) : Query {
+  public override val user: user_update_column?
+    get() {
+      if (!__innerProjection.__innerUser0) {
+        error("Property [user] is not available - add [user] projection to switch on it")
+      }
+      return __innerDto.user
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerUser0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("user").append('=').append(user)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): ForbiddenEnumNameContext = __innerContext
+
+  public override fun QueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerUser0: Boolean = false
+
+  internal var __innerUser0Id: Long? = null
+
+  public override fun user(id: Long): Unit {
+    __innerUser0 = true
+    __innerUser0Id = id
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+    if ("user" !in ignore && __innerUser0) {
+      __projection.user(__innerUser0Id!!)
+    }
+  }
+
+  /**
+   * Projection for field: user
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildUser0(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    if ("user" !in ignore && __innerUser0) {
+      body.append(' ').append("user")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: user.id
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerUser0Id!!
+        body.append("id").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: user
+    ____innerBuildUser0(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: ForbiddenEnumNameContext,
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)

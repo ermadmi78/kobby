@@ -1,0 +1,48 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameContext
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameDSL
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.mischievous
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.user_update_column
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface User {
+  public val id: Long
+
+  public val update_column: user_update_column
+
+  public val mischievous: mischievous?
+
+  public fun __context(): ForbiddenEnumNameContext
+
+  public fun UserProjection.__withCurrentProjection(): Unit
+}
+
+@ForbiddenEnumNameDSL
+public interface UserProjection {
+  public fun id(): Unit
+
+  public fun update_column(): Unit
+
+  public fun mischievous(): Unit
+
+  public fun __minimize(): Unit {
+  }
+}

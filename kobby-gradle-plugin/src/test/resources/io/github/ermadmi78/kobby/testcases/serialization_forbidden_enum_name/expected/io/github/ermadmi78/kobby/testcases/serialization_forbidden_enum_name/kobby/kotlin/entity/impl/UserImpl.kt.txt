@@ -1,0 +1,167 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameContext
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.UserDto
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.mischievous
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.user_update_column
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.User
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.entity.UserProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class UserImpl(
+  internal val __innerContext: ForbiddenEnumNameContext,
+  internal val __innerProjection: UserProjectionImpl,
+  internal val __innerDto: UserDto,
+) : User {
+  public override val id: Long
+    get() {
+      if (!__innerProjection.__innerId0) {
+        error("Property [id] is not available - add [id] projection to switch on it")
+      }
+      return __innerDto.id!!
+    }
+
+  public override val update_column: user_update_column
+    get() {
+      if (!__innerProjection.__innerUpdate_column1) {
+        error("Property [update_column] is not available - add [update_column] projection to switch on it")
+      }
+      return __innerDto.update_column!!
+    }
+
+  public override val mischievous: mischievous?
+    get() {
+      if (!__innerProjection.__innerMischievous2) {
+        error("Property [mischievous] is not available - add [mischievous] projection to switch on it")
+      }
+      return __innerDto.mischievous
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("User").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerId0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerUpdate_column1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("update_column").append('=').append(update_column)
+    }
+
+    if (__innerProjection.__innerMischievous2) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("mischievous").append('=').append(mischievous)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): ForbiddenEnumNameContext = __innerContext
+
+  public override fun UserProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class UserProjectionImpl : UserProjection {
+  internal var __innerId0: Boolean = false
+
+  internal var __innerUpdate_column1: Boolean = false
+
+  internal var __innerMischievous2: Boolean = false
+
+  public override fun id(): Unit {
+    __innerId0 = true
+  }
+
+  public override fun update_column(): Unit {
+    __innerUpdate_column1 = true
+  }
+
+  public override fun mischievous(): Unit {
+    __innerMischievous2 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: UserProjection): Unit {
+    if ("id" !in ignore && __innerId0) {
+      __projection.id()
+    }
+    if ("update_column" !in ignore && __innerUpdate_column1) {
+      __projection.update_column()
+    }
+    if ("mischievous" !in ignore && __innerMischievous2) {
+      __projection.mischievous()
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore && __innerId0) {
+      body.append(' ').append("id")
+    }
+
+    // Field: update_column
+    if ("update_column" !in ignore && __innerUpdate_column1) {
+      body.append(' ').append("update_column")
+    }
+
+    // Field: mischievous
+    if ("mischievous" !in ignore && __innerMischievous2) {
+      body.append(' ').append("mischievous")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun UserDto.buildEntity(__innerContext: ForbiddenEnumNameContext,
+    __innerProjection: UserProjectionImpl): User = UserImpl(__innerContext, __innerProjection, this)

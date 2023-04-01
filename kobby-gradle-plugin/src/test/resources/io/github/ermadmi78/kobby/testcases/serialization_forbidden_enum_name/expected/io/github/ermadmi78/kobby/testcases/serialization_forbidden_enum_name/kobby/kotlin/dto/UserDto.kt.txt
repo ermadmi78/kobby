@@ -1,0 +1,77 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameDSL
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.let
+
+@JsonTypeName(value = "User")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = UserDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class UserDto(
+  public val id: Long? = null,
+  public val update_column: user_update_column? = null,
+  public val mischievous: mischievous? = null,
+)
+
+public fun UserDto(block: UserDtoBuilder.() -> Unit): UserDto {
+  // UserDto builder DSL
+  return UserDtoBuilder().apply(block).let {
+    UserDto(
+          it.id,
+          it.update_column,
+          it.mischievous
+        )
+  }
+}
+
+public fun UserDto.copy(block: UserDtoBuilder.() -> Unit): UserDto {
+  // UserDto copy DSL
+  return UserDtoBuilder().also {
+    it.id = this.id
+    it.update_column = this.update_column
+    it.mischievous = this.mischievous
+  }
+  .apply(block).let {
+    UserDto(
+          it.id,
+          it.update_column,
+          it.mischievous
+        )
+  }
+}
+
+@ForbiddenEnumNameDSL
+public class UserDtoBuilder {
+  public var id: Long? = null
+
+  public var update_column: user_update_column? = null
+
+  public var mischievous: mischievous? = null
+}
