@@ -51,10 +51,10 @@ import kotlinx.serialization.modules.SerializersModule
  * Default entry point to work with JSON serialization.
  */
 public val simpleJson: Json = Json {
-  classDiscriminator = "__typename"
-  ignoreUnknownKeys = true
-  encodeDefaults = false
-  prettyPrint = false
+  classDiscriminator = "my_type_name"
+  ignoreUnknownKeys = false
+  encodeDefaults = true
+  prettyPrint = true
   serializersModule = SerializersModule {
   }
 }

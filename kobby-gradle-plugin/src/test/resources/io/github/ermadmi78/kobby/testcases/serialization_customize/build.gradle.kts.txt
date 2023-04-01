@@ -16,6 +16,19 @@ plugins {
     id("io.github.ermadmi78.kobby")
 }
 
+kobby {
+    kotlin {
+        dto {
+            serialization {
+                classDiscriminator = "my_type_name"
+                ignoreUnknownKeys = false
+                encodeDefaults = true
+                prettyPrint = true
+            }
+        }
+    }
+}
+
 dependencies {
     // Add this dependency to enable Kotlinx Serialization
     compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:testSerializationVersion")
