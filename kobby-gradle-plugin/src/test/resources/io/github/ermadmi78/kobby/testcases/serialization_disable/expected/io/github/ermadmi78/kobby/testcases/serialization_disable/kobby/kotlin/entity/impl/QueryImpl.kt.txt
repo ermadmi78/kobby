@@ -1,0 +1,274 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleContext
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.serializer.LocalDateSerializer
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.QuerySimpleQuery
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.QuerySimpleSelection
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.Simple
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.SimpleProjection
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.simpleJson
+import java.time.LocalDate
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.encodeToJsonElement
+
+internal class QueryImpl(
+  internal val __innerContext: SimpleContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto,
+) : Query {
+  public override val simple: List<Simple> by lazy {
+    if (__innerProjection.__innerSimple0 == null) {
+      error("Property [simple] is not available - add [simple] projection to switch on it")
+    }
+    __innerDto.resolveSimple(__innerContext, __innerProjection.__innerSimple0!!)
+  }
+
+
+  public override val simpleByDate: List<Simple>? by lazy {
+    if (__innerProjection.__innerSimpleByDate1 == null) {
+      error("Property [simpleByDate] is not available - add [simpleByDate] projection to switch on it")
+    }
+    __innerDto.resolveSimpleByDate(__innerContext, __innerProjection.__innerSimpleByDate1!!)
+  }
+
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerSimple0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("simple").append('=').append(simple)
+    }
+
+    if (__innerProjection.__innerSimpleByDate1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("simpleByDate").append('=').append(simpleByDate)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): SimpleContext = __innerContext
+
+  public override fun QueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerSimple0: QuerySimpleQueryImpl? = null
+
+  internal var __innerSimpleByDate1: SimpleProjectionImpl? = null
+
+  internal var __innerSimpleByDate1Date: @Serializable(with = LocalDateSerializer::class) LocalDate?
+      = null
+
+  public override fun simple(__query: QuerySimpleQuery.() -> Unit): Unit {
+    __innerSimple0 = QuerySimpleQueryImpl().apply(__query)
+  }
+
+  public override fun simpleByDate(date: LocalDate, __projection: SimpleProjection.() -> Unit):
+      Unit {
+    __innerSimpleByDate1 = SimpleProjectionImpl().apply(__projection)
+    __innerSimpleByDate1Date = date
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+    if ("simple" !in ignore && __innerSimple0 != null) {
+      __projection.simple {
+        this@QueryProjectionImpl.__innerSimple0!!.___innerRepeatProjection(setOf(), this)
+        this@QueryProjectionImpl.__innerSimple0!!.___innerRepeatSelection(this)
+      }
+    }
+    if ("simpleByDate" !in ignore && __innerSimpleByDate1 != null) {
+      __projection.simpleByDate(__innerSimpleByDate1Date!!) {
+        this@QueryProjectionImpl.__innerSimpleByDate1!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: simple
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildSimple0(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, JsonElement>,
+  ): Unit {
+    if ("simple" !in ignore && __innerSimple0 != null) {
+      body.append(' ').append("simple")
+      var counter = 0
+      val addBrackets = __innerSimple0!!.name != null || __innerSimple0!!.date != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: simple.name
+      if (__innerSimple0!!.name != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = simpleJson.encodeToJsonElement(__innerSimple0!!.name!!)
+        body.append("name").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String")
+      }
+
+      // Argument: simple.date
+      if (__innerSimple0!!.date != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = simpleJson.encodeToJsonElement(__innerSimple0!!.date!!)
+        body.append("date").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Date")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Simple
+      __innerSimple0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection for field: simpleByDate
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildSimpleByDate1(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, JsonElement>,
+  ): Unit {
+    if ("simpleByDate" !in ignore && __innerSimpleByDate1 != null) {
+      body.append(' ').append("simpleByDate")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: simpleByDate.date
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = simpleJson.encodeToJsonElement(__innerSimpleByDate1Date!!)
+        body.append("date").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Date!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Simple
+      __innerSimpleByDate1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, JsonElement>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: simple
+    ____innerBuildSimple0(ignore, header, body, arguments)
+
+    // Field: simpleByDate
+    ____innerBuildSimpleByDate1(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal class QuerySimpleQueryImpl : SimpleProjectionImpl(), QuerySimpleQuery {
+  public override var name: String? = null
+
+  public override var date: @Serializable(with = LocalDateSerializer::class) LocalDate? = null
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatSelection(__selection: QuerySimpleSelection): Unit {
+    __selection.name = name
+    __selection.date = date
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: SimpleContext,
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
+
+internal fun QueryDto.resolveSimple(__innerContext: SimpleContext,
+    __innerProjection: SimpleProjectionImpl): List<Simple> =
+    simple?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+
+internal fun QueryDto.resolveSimpleByDate(__innerContext: SimpleContext,
+    __innerProjection: SimpleProjectionImpl): List<Simple>? =
+    simpleByDate?.map { it.buildEntity(__innerContext, __innerProjection) }

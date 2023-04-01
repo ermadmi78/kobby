@@ -1,0 +1,145 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql
+
+import kotlin.OptIn
+import kotlin.String
+import kotlin.Suppress
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("type")
+public sealed class SimpleClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("type")
+public sealed class SimpleServerMessage
+
+/**
+ * See GQL_CONNECTION_INIT
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("connection_init")
+public data class SimpleMessageConnectionInit(
+  public val payload: JsonObject? = null,
+) : SimpleClientMessage()
+
+/**
+ * See GQL_START
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("start")
+public data class SimpleMessageStart(
+  public val id: String,
+  public val payload: SimpleRequest,
+) : SimpleClientMessage()
+
+/**
+ * See GQL_STOP
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("stop")
+public data class SimpleMessageStop(
+  public val id: String,
+) : SimpleClientMessage()
+
+/**
+ * See GQL_CONNECTION_TERMINATE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("connection_terminate")
+@Suppress("CanSealedSubClassBeObject")
+public class SimpleMessageConnectionTerminate : SimpleClientMessage()
+
+/**
+ * See GQL_CONNECTION_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("connection_error")
+public data class SimpleMessageConnectionError(
+  public val payload: JsonElement? = null,
+) : SimpleServerMessage()
+
+/**
+ * See GQL_CONNECTION_ACK
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("connection_ack")
+public data class SimpleMessageConnectionAck(
+  public val payload: JsonElement? = null,
+) : SimpleServerMessage()
+
+/**
+ * See GQL_DATA
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("data")
+public data class SimpleMessageData(
+  public val id: String,
+  public val payload: SimpleSubscriptionResult,
+) : SimpleServerMessage()
+
+/**
+ * See GQL_ERROR
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("error")
+public data class SimpleMessageError(
+  public val id: String,
+  public val payload: SimpleErrorResult,
+) : SimpleServerMessage()
+
+/**
+ * See GQL_COMPLETE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("complete")
+public data class SimpleMessageComplete(
+  public val id: String,
+) : SimpleServerMessage()
+
+/**
+ * See GQL_CONNECTION_KEEP_ALIVE
+ * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("ka")
+@Suppress("CanSealedSubClassBeObject")
+public class SimpleMessageConnectionKeepAlive : SimpleServerMessage()

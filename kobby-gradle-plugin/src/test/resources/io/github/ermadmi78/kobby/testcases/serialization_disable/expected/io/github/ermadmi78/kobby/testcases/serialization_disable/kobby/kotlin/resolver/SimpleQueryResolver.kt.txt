@@ -1,0 +1,29 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.resolver
+
+import graphql.kickstart.tools.GraphQLQueryResolver
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.SimpleDto
+import java.time.LocalDate
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+
+public interface SimpleQueryResolver : GraphQLQueryResolver {
+  public suspend fun simple(name: String?, date: LocalDate?): List<SimpleDto>
+
+  public suspend fun simpleByDate(date: LocalDate): List<SimpleDto>?
+}

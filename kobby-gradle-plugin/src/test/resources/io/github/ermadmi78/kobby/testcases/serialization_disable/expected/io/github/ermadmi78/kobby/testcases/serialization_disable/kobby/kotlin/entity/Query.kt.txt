@@ -1,0 +1,54 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleContext
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleDSL
+import java.time.LocalDate
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Query {
+  public val simple: List<Simple>
+
+  public val simpleByDate: List<Simple>?
+
+  public fun __context(): SimpleContext
+
+  public fun QueryProjection.__withCurrentProjection(): Unit
+}
+
+@SimpleDSL
+public interface QueryProjection {
+  public fun simple(__query: QuerySimpleQuery.() -> Unit): Unit
+
+  public fun simpleByDate(date: LocalDate, __projection: SimpleProjection.() -> Unit): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
+
+@SimpleDSL
+public interface QuerySimpleSelection {
+  public var name: String?
+
+  public var date: LocalDate?
+}
+
+@SimpleDSL
+public interface QuerySimpleQuery : QuerySimpleSelection, SimpleProjection

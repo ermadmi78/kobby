@@ -1,0 +1,23 @@
+directive @selection on FIELD_DEFINITION
+
+scalar Date
+
+type Query {
+    simple(name: String, date: Date): [Simple!]! @selection
+    simpleByDate(date: Date!): [Simple!]
+}
+
+type Mutation {
+    create(input: SimpleInput): Simple!
+}
+
+type Simple {
+    id: ID!
+    name: String!
+    date: Date
+}
+
+input SimpleInput {
+    name: String!
+    date: Date
+}

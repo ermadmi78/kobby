@@ -1,0 +1,163 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleContext
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.SimpleInput
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.Simple
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.SimpleProjection
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.simpleJson
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.encodeToJsonElement
+
+internal class MutationImpl(
+  internal val __innerContext: SimpleContext,
+  internal val __innerProjection: MutationProjectionImpl,
+  internal val __innerDto: MutationDto,
+) : Mutation {
+  public override val create: Simple by lazy {
+    if (__innerProjection.__innerCreate0 == null) {
+      error("Property [create] is not available - add [create] projection to switch on it")
+    }
+    __innerDto.resolveCreate(__innerContext, __innerProjection.__innerCreate0!!)
+  }
+
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Mutation").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCreate0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("create").append('=').append(create)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): SimpleContext = __innerContext
+
+  public override fun MutationProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class MutationProjectionImpl : MutationProjection {
+  internal var __innerCreate0: SimpleProjectionImpl? = null
+
+  internal var __innerCreate0Input: SimpleInput? = null
+
+  public override fun create(input: SimpleInput?, __projection: SimpleProjection.() -> Unit): Unit {
+    __innerCreate0 = SimpleProjectionImpl().apply(__projection)
+    __innerCreate0Input = input
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection):
+      Unit {
+    if ("create" !in ignore && __innerCreate0 != null) {
+      __projection.create(__innerCreate0Input) {
+        this@MutationProjectionImpl.__innerCreate0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: create
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCreate0(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, JsonElement>,
+  ): Unit {
+    if ("create" !in ignore && __innerCreate0 != null) {
+      body.append(' ').append("create")
+      var counter = 0
+      val addBrackets = __innerCreate0Input != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: create.input
+      if (__innerCreate0Input != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = simpleJson.encodeToJsonElement(__innerCreate0Input!!)
+        body.append("input").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("SimpleInput")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Simple
+      __innerCreate0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, JsonElement>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: create
+    ____innerBuildCreate0(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun MutationDto.buildEntity(__innerContext: SimpleContext,
+    __innerProjection: MutationProjectionImpl): Mutation =
+    MutationImpl(__innerContext, __innerProjection, this)
+
+internal fun MutationDto.resolveCreate(__innerContext: SimpleContext,
+    __innerProjection: SimpleProjectionImpl): Simple =
+    create?.buildEntity(__innerContext, __innerProjection)!!

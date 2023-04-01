@@ -1,0 +1,38 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleContext
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleDSL
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.SimpleInput
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Mutation {
+  public val create: Simple
+
+  public fun __context(): SimpleContext
+
+  public fun MutationProjection.__withCurrentProjection(): Unit
+}
+
+@SimpleDSL
+public interface MutationProjection {
+  public fun create(input: SimpleInput? = null, __projection: SimpleProjection.() -> Unit): Unit
+
+  public fun __minimize(): Unit {
+  }
+}

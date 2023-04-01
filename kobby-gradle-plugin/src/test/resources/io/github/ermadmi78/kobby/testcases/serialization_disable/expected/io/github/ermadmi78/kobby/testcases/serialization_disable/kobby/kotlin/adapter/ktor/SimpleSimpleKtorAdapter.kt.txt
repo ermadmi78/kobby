@@ -1,0 +1,100 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.adapter.ktor
+
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleAdapter
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleException
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMutationResult
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleQueryResult
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleRequest
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.collections.Map
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapOf
+import kotlin.let
+import kotlin.takeIf
+import kotlinx.serialization.json.JsonObject
+
+public open class SimpleSimpleKtorAdapter(
+  protected val client: HttpClient,
+  protected val url: String? = null,
+  protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
+  protected val listener: (SimpleRequest) -> Unit = {},
+) : SimpleAdapter {
+  public override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+    val request = SimpleRequest(query, variables)
+    listener(request)
+
+    val httpHeaders: Map<String, String> = headers()
+    val result = client.post {
+      setBody<SimpleRequest>(request)
+      contentType(ContentType.Application.Json)
+      this@SimpleSimpleKtorAdapter.url?.also {
+        url(it)
+      }
+      for (element in httpHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .body<SimpleQueryResult>()
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw SimpleException("GraphQL query failed", request, it)
+    }
+    return result.data ?: throw SimpleException(
+          "GraphQL query completes successfully but returns no data",
+          request
+        )
+  }
+
+  public override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+    val request = SimpleRequest(query, variables)
+    listener(request)
+
+    val httpHeaders: Map<String, String> = headers()
+    val result = client.post {
+      setBody<SimpleRequest>(request)
+      contentType(ContentType.Application.Json)
+      this@SimpleSimpleKtorAdapter.url?.also {
+        url(it)
+      }
+      for (element in httpHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .body<SimpleMutationResult>()
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw SimpleException("GraphQL mutation failed", request, it)
+    }
+    return result.data ?: throw SimpleException(
+          "GraphQL mutation completes successfully but returns no data",
+          request
+        )
+  }
+}

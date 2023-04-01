@@ -1,0 +1,62 @@
+import io.github.ermadmi78.kobby.kobby
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    kotlin("jvm") version "testKotlinVersion"
+    kotlin("plugin.serialization") version "testKotlinVersion"
+    id("io.github.ermadmi78.kobby")
+}
+
+kobby {
+    kotlin {
+        scalars = mapOf(
+            "Date" to typeOf("java.time", "LocalDate")
+                .serializer(
+                    "io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.serializer",
+                    "LocalDateSerializer"
+                )
+        )
+        dto {
+            serialization {
+                enabled = true
+            }
+        }
+    }
+}
+
+
+dependencies {
+    // Add this dependency to enable Kotlinx Serialization
+    compileOnly("org.jetbrains.kotlinx:kotlinx-serialization-json:testSerializationVersion")
+
+    // Add this dependency to enable default Ktor adapters generation
+    compileOnly("io.ktor:ktor-client-cio:testKtorVersion")
+
+    // Add this dependency to enable graphql-java-kickstart resolvers generation by Kobby
+    compileOnly("com.graphql-java-kickstart:graphql-java-tools:testKickstartGraphqlJavaToolsVersion")
+
+    // Add this dependency to enable subscription resolver publisher generation
+    compileOnly("org.reactivestreams:reactive-streams:testReactiveStreamsVersion")
+
+    // Add these dependencies to remove warning "Runtime JAR files in the classpath should have the same version"
+    compileOnly(kotlin("stdlib"))
+    compileOnly(kotlin("stdlib-jdk7"))
+    compileOnly(kotlin("reflect"))
+}
+
+tasks {
+    jar {
+        enabled = false
+    }
+}

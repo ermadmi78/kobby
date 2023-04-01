@@ -1,0 +1,29 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql
+
+import kotlin.RuntimeException
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.joinToString
+
+public class SimpleException(
+  message: String,
+  public val request: SimpleRequest,
+  public val errors: List<SimpleError>? = null,
+) : RuntimeException(message + (errors?.joinToString(",\n  ", "\n  ", "\n") { it.toString() } ?:
+    ""))

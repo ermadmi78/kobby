@@ -1,0 +1,65 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleDSL
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.serializer.LocalDateSerializer
+import java.time.LocalDate
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+import kotlin.let
+import kotlinx.serialization.Serializable
+
+@Serializable
+public data class SimpleInput(
+  public val name: String,
+  public val date: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
+)
+
+public fun SimpleInput(block: SimpleInputBuilder.() -> Unit): SimpleInput {
+  // SimpleInput builder DSL
+  return SimpleInputBuilder().apply(block).let {
+    SimpleInput(
+          it.name ?: error("SimpleInput: 'name' must not be null"),
+          it.date
+        )
+  }
+}
+
+public fun SimpleInput.copy(block: SimpleInputBuilder.() -> Unit): SimpleInput {
+  // SimpleInput copy DSL
+  return SimpleInputBuilder().also {
+    it.name = this.name
+    it.date = this.date
+  }
+  .apply(block).let {
+    SimpleInput(
+          it.name ?: error("SimpleInput: 'name' must not be null"),
+          it.date
+        )
+  }
+}
+
+@SimpleDSL
+public class SimpleInputBuilder {
+  public var name: String? = null
+
+  public var date: LocalDate? = null
+}

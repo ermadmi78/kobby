@@ -1,0 +1,74 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleContext
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlinx.serialization.json.JsonElement
+
+internal class SubscriptionImpl(
+  internal val __innerContext: SimpleContext,
+  internal val __innerProjection: SubscriptionProjectionImpl,
+  internal val __innerDto: SubscriptionDto,
+) : Subscription {
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Subscription").append('(')
+    append(')')
+  }
+
+  public override fun __context(): SimpleContext = __innerContext
+
+  public override fun SubscriptionProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class SubscriptionProjectionImpl : SubscriptionProjection {
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection):
+      Unit {
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, JsonElement>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun SubscriptionDto.buildEntity(__innerContext: SimpleContext,
+    __innerProjection: SubscriptionProjectionImpl): Subscription =
+    SubscriptionImpl(__innerContext, __innerProjection, this)
