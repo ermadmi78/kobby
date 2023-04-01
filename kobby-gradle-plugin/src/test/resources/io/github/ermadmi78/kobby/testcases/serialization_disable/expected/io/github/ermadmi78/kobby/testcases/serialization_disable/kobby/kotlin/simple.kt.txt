@@ -28,6 +28,7 @@ import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.en
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.`impl`.QueryProjectionImpl
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.`impl`.SubscriptionProjectionImpl
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.`impl`.buildEntity
+import kotlin.Any
 import kotlin.DslMarker
 import kotlin.NotImplementedError
 import kotlin.Pair
@@ -35,39 +36,25 @@ import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 import kotlin.apply
+import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import kotlin.collections.mutableMapOf
 import kotlin.collections.setOf
+import kotlin.reflect.KClass
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import kotlin.to
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.modules.SerializersModule
-
-/**
- * Default entry point to work with JSON serialization.
- */
-public val simpleJson: Json = Json {
-  classDiscriminator = "__typename"
-  ignoreUnknownKeys = true
-  encodeDefaults = false
-  prettyPrint = false
-  serializersModule = SerializersModule {
-  }
-}
-
 
 public fun simpleContextOf(adapter: SimpleAdapter): SimpleContext = SimpleContextImpl(adapter)
 
-public fun buildSimpleQuery(__projection: QueryProjection.() -> Unit): Pair<String, JsonObject> {
+public fun buildSimpleQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
   val projectionRef = QueryProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
   val body = StringBuilder(64)
-  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+  val arguments: MutableMap<String, Any> = mutableMapOf()
   projectionRef.___innerBuild(setOf(), header, body, arguments)
 
   val query = buildString(header.length + body.length + 7) {
@@ -78,16 +65,16 @@ public fun buildSimpleQuery(__projection: QueryProjection.() -> Unit): Pair<Stri
     append(body)
   }
 
-  return query to JsonObject(arguments)
+  return query to arguments
 }
 
 public fun buildSimpleMutation(__projection: MutationProjection.() -> Unit):
-    Pair<String, JsonObject> {
+    Pair<String, Map<String, Any>> {
   val projectionRef = MutationProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
   val body = StringBuilder(64)
-  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+  val arguments: MutableMap<String, Any> = mutableMapOf()
   projectionRef.___innerBuild(setOf(), header, body, arguments)
 
   val mutation = buildString(header.length + body.length + 10) {
@@ -98,16 +85,16 @@ public fun buildSimpleMutation(__projection: MutationProjection.() -> Unit):
     append(body)
   }
 
-  return mutation to JsonObject(arguments)
+  return mutation to arguments
 }
 
 public fun buildSimpleSubscription(__projection: SubscriptionProjection.() -> Unit):
-    Pair<String, JsonObject> {
+    Pair<String, Map<String, Any>> {
   val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
   val header = StringBuilder()
   val body = StringBuilder(64)
-  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+  val arguments: MutableMap<String, Any> = mutableMapOf()
   projectionRef.___innerBuild(setOf(), header, body, arguments)
 
   val subscription = buildString(header.length + body.length + 14) {
@@ -118,7 +105,7 @@ public fun buildSimpleSubscription(__projection: SubscriptionProjection.() -> Un
     append(body)
   }
 
-  return subscription to JsonObject(arguments)
+  return subscription to arguments
 }
 
 public interface SimpleContext {
@@ -140,15 +127,15 @@ public fun interface SimpleReceiver<out T> {
 }
 
 public interface SimpleAdapter {
-  public suspend fun executeQuery(query: String, variables: JsonObject): QueryDto =
+  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto =
       throw NotImplementedError("Adapter function executeQuery is not implemented")
 
-  public suspend fun executeMutation(query: String, variables: JsonObject): MutationDto =
+  public suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto =
       throw NotImplementedError("Adapter function executeMutation is not implemented")
 
   public suspend fun executeSubscription(
     query: String,
-    variables: JsonObject,
+    variables: Map<String, Any?>,
     block: suspend SimpleReceiver<SubscriptionDto>.() -> Unit,
   ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
 }
@@ -165,7 +152,7 @@ private class SimpleContextImpl(
 
     val header = StringBuilder()
     val body = StringBuilder(64)
-    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+    val arguments: MutableMap<String, Any> = mutableMapOf()
     projectionRef.___innerBuild(setOf(), header, body, arguments)
 
     val query = buildString(header.length + body.length + 7) {
@@ -176,7 +163,7 @@ private class SimpleContextImpl(
       append(body)
     }
 
-    val queryDto: QueryDto = adapter.executeQuery(query, JsonObject(arguments))
+    val queryDto: QueryDto = adapter.executeQuery(query, arguments)
     return queryDto.buildEntity(this, projectionRef)
   }
 
@@ -189,7 +176,7 @@ private class SimpleContextImpl(
 
     val header = StringBuilder()
     val body = StringBuilder(64)
-    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+    val arguments: MutableMap<String, Any> = mutableMapOf()
     projectionRef.___innerBuild(setOf(), header, body, arguments)
 
     val mutation = buildString(header.length + body.length + 10) {
@@ -200,7 +187,7 @@ private class SimpleContextImpl(
       append(body)
     }
 
-    val mutationDto: MutationDto = adapter.executeMutation(mutation, JsonObject(arguments))
+    val mutationDto: MutationDto = adapter.executeMutation(mutation, arguments)
     return mutationDto.buildEntity(this, projectionRef)
   }
 
@@ -210,7 +197,7 @@ private class SimpleContextImpl(
 
     val header = StringBuilder()
     val body = StringBuilder(64)
-    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+    val arguments: MutableMap<String, Any> = mutableMapOf()
     projectionRef.___innerBuild(setOf(), header, body, arguments)
 
     val subscription = buildString(header.length + body.length + 14) {
@@ -222,7 +209,7 @@ private class SimpleContextImpl(
     }
 
     return SimpleSubscriber<Subscription> {
-      adapter.executeSubscription(subscription, JsonObject(arguments)) {
+      adapter.executeSubscription(subscription, arguments) {
         it.invoke(object : SimpleReceiver<Subscription> {
           public override suspend fun receive(): Subscription {
             val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
@@ -232,6 +219,15 @@ private class SimpleContextImpl(
       }
     }
   }
+}
+
+/**
+ * Helper interface for default adapter implementations
+ */
+public interface SimpleMapper {
+  public fun serialize(`value`: Any): String
+
+  public fun <T : Any> deserialize(content: String, contentType: KClass<T>): T
 }
 
 @DslMarker

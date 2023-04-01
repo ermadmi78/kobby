@@ -17,15 +17,14 @@ package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.e
 
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleContext
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.QueryDto
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.serializer.LocalDateSerializer
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.Query
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.QueryProjection
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.QuerySimpleQuery
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.QuerySimpleSelection
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.Simple
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.SimpleProjection
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.simpleJson
 import java.time.LocalDate
+import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -40,9 +39,6 @@ import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.encodeToJsonElement
 
 internal class QueryImpl(
   internal val __innerContext: SimpleContext,
@@ -100,8 +96,7 @@ internal open class QueryProjectionImpl : QueryProjection {
 
   internal var __innerSimpleByDate1: SimpleProjectionImpl? = null
 
-  internal var __innerSimpleByDate1Date: @Serializable(with = LocalDateSerializer::class) LocalDate?
-      = null
+  internal var __innerSimpleByDate1Date: LocalDate? = null
 
   public override fun simple(__query: QuerySimpleQuery.() -> Unit): Unit {
     __innerSimple0 = QuerySimpleQueryImpl().apply(__query)
@@ -136,7 +131,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, JsonElement>,
+    arguments: MutableMap<String, Any>,
   ): Unit {
     if ("simple" !in ignore && __innerSimple0 != null) {
       body.append(' ').append("simple")
@@ -152,7 +147,7 @@ internal open class QueryProjectionImpl : QueryProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = simpleJson.encodeToJsonElement(__innerSimple0!!.name!!)
+        arguments[arg] = __innerSimple0!!.name!!
         body.append("name").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -167,7 +162,7 @@ internal open class QueryProjectionImpl : QueryProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = simpleJson.encodeToJsonElement(__innerSimple0!!.date!!)
+        arguments[arg] = __innerSimple0!!.date!!
         body.append("date").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -193,7 +188,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, JsonElement>,
+    arguments: MutableMap<String, Any>,
   ): Unit {
     if ("simpleByDate" !in ignore && __innerSimpleByDate1 != null) {
       body.append(' ').append("simpleByDate")
@@ -209,7 +204,7 @@ internal open class QueryProjectionImpl : QueryProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = simpleJson.encodeToJsonElement(__innerSimpleByDate1Date!!)
+        arguments[arg] = __innerSimpleByDate1Date!!
         body.append("date").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -235,7 +230,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, JsonElement>,
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 
@@ -252,7 +247,7 @@ internal open class QueryProjectionImpl : QueryProjection {
 internal class QuerySimpleQueryImpl : SimpleProjectionImpl(), QuerySimpleQuery {
   public override var name: String? = null
 
-  public override var date: @Serializable(with = LocalDateSerializer::class) LocalDate? = null
+  public override var date: LocalDate? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatSelection(__selection: QuerySimpleSelection): Unit {

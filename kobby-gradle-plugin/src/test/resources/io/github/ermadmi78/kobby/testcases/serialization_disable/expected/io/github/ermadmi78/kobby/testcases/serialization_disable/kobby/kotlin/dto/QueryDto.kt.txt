@@ -22,11 +22,7 @@ import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
 import kotlin.let
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable
-@SerialName("Query")
 public data class QueryDto(
   public val simple: List<SimpleDto>? = null,
   public val simpleByDate: List<SimpleDto>? = null,

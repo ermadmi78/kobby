@@ -18,9 +18,7 @@ package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.d
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.MutationDto
 import kotlin.Suppress
 import kotlin.collections.List
-import kotlinx.serialization.Serializable
 
-@Serializable
 public data class SimpleMutationResult(
   public val `data`: MutationDto? = null,
   public val errors: List<SimpleError>? = null,

@@ -29,6 +29,7 @@ import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -38,7 +39,6 @@ import kotlin.collections.isNotEmpty
 import kotlin.collections.mapOf
 import kotlin.let
 import kotlin.takeIf
-import kotlinx.serialization.json.JsonObject
 
 public open class SimpleSimpleKtorAdapter(
   protected val client: HttpClient,
@@ -46,7 +46,7 @@ public open class SimpleSimpleKtorAdapter(
   protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val listener: (SimpleRequest) -> Unit = {},
 ) : SimpleAdapter {
-  public override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
     val request = SimpleRequest(query, variables)
     listener(request)
 
@@ -72,7 +72,8 @@ public open class SimpleSimpleKtorAdapter(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+      MutationDto {
     val request = SimpleRequest(query, variables)
     listener(request)
 

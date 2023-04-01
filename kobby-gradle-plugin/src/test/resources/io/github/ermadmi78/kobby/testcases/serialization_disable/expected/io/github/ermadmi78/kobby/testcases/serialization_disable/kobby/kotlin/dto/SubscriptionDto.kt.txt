@@ -16,9 +16,5 @@
 package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto
 
 import kotlin.Suppress
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
-@Serializable
-@SerialName("Subscription")
 public class SubscriptionDto()

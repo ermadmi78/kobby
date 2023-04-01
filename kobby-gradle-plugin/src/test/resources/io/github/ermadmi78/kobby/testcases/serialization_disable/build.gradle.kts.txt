@@ -29,7 +29,7 @@ kobby {
         )
         dto {
             serialization {
-                enabled = true
+                enabled = false
             }
         }
     }

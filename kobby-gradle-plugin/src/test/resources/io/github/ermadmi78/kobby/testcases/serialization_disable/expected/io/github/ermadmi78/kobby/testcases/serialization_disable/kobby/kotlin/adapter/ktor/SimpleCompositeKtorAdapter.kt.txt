@@ -16,6 +16,7 @@
 package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.adapter.ktor
 
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleAdapter
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleMapper
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleReceiver
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.MutationDto
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.QueryDto
@@ -36,7 +37,6 @@ import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dt
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleQueryResult
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleRequest
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleServerMessage
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.simpleJson
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.post
@@ -49,6 +49,7 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
+import kotlin.Any
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
@@ -67,32 +68,27 @@ import kotlin.require
 import kotlin.takeIf
 import kotlin.to
 import kotlinx.coroutines.withTimeout
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 
 public open class SimpleCompositeKtorAdapter(
   protected val client: HttpClient,
   protected val httpUrl: String,
   protected val webSocketUrl: String,
-  protected val mapper: Json = simpleJson,
+  protected val mapper: SimpleMapper,
   protected val requestHeaders: suspend () -> Map<String, String> = { mapOf<String, String>() },
-  protected val subscriptionPayload: suspend () -> JsonObject? = { null },
+  protected val subscriptionPayload: suspend () -> Map<String, Any?>? = { null },
   protected val subscriptionReceiveTimeoutMillis: Long? = null,
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
   protected val listener: (SimpleRequest) -> Unit = {},
 ) : SimpleAdapter {
-  public override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
     val request = SimpleRequest(query, variables)
     listener(request)
 
     val httpHeaders: Map<String, String> = requestHeaders()
     val content = client.post {
-      setBody<String>(mapper.encodeToString(request))
+      setBody<String>(mapper.serialize(request))
       contentType(ContentType.Application.Json)
       url(httpUrl)
       for (element in httpHeaders) {
@@ -101,7 +97,7 @@ public open class SimpleCompositeKtorAdapter(
     }
     .bodyAsText()
 
-    val result = mapper.decodeFromString<SimpleQueryResult>(content)
+    val result = mapper.deserialize(content, SimpleQueryResult::class)
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw SimpleException("GraphQL query failed", request, it)
@@ -112,13 +108,14 @@ public open class SimpleCompositeKtorAdapter(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+      MutationDto {
     val request = SimpleRequest(query, variables)
     listener(request)
 
     val httpHeaders: Map<String, String> = requestHeaders()
     val content = client.post {
-      setBody<String>(mapper.encodeToString(request))
+      setBody<String>(mapper.serialize(request))
       contentType(ContentType.Application.Json)
       url(httpUrl)
       for (element in httpHeaders) {
@@ -127,7 +124,7 @@ public open class SimpleCompositeKtorAdapter(
     }
     .bodyAsText()
 
-    val result = mapper.decodeFromString<SimpleMutationResult>(content)
+    val result = mapper.deserialize(content, SimpleMutationResult::class)
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
       throw SimpleException("GraphQL mutation failed", request, it)
@@ -140,11 +137,11 @@ public open class SimpleCompositeKtorAdapter(
 
   public override suspend fun executeSubscription(
     query: String,
-    variables: JsonObject,
+    variables: Map<String, Any?>,
     block: suspend SimpleReceiver<SubscriptionDto>.() -> Unit,
   ): Unit {
     val httpHeaders: Map<String, String> = requestHeaders()
-    val payload: JsonObject? = subscriptionPayload()
+    val payload: Map<String, Any?>? = subscriptionPayload()
     client.webSocket(
       webSocketUrl,
       request = {
@@ -153,14 +150,16 @@ public open class SimpleCompositeKtorAdapter(
         }
       }
     ) {
-      var initPayload: JsonObject? = payload
+      var initPayload: Map<String, Any?>? = payload
       if (httpAuthorizationTokenHeader in httpHeaders) {
         if (initPayload == null) {
-          initPayload = JsonObject(mapOf())
+          initPayload = mapOf()
         }
 
         if (webSocketAuthorizationTokenHeader !in initPayload) {
-          initPayload = JsonObject(initPayload + (webSocketAuthorizationTokenHeader to JsonPrimitive(httpHeaders[httpAuthorizationTokenHeader])))
+          @Suppress("SuspiciousCollectionReassignment")
+          initPayload += mapOf(webSocketAuthorizationTokenHeader to
+              httpHeaders[httpAuthorizationTokenHeader])
         }
       }
 
@@ -172,7 +171,7 @@ public open class SimpleCompositeKtorAdapter(
   }
 
   protected open suspend fun WebSocketSession.executeSubscriptionImpl(
-    initPayload: JsonObject?,
+    initPayload: Map<String, Any?>?,
     request: SimpleRequest,
     block: suspend SimpleReceiver<SubscriptionDto>.() -> Unit,
   ): Unit {
@@ -247,7 +246,7 @@ public open class SimpleCompositeKtorAdapter(
   }
 
   protected open suspend fun WebSocketSession.sendMessage(message: SimpleClientMessage): Unit {
-    val content = mapper.encodeToString(message)
+    val content = mapper.serialize(message)
     send(content)
   }
 
@@ -262,6 +261,6 @@ public open class SimpleCompositeKtorAdapter(
     }
 
     val content = (message as Frame.Text).readText()
-    return mapper.decodeFromString<SimpleServerMessage>(content)
+    return mapper.deserialize(content, SimpleServerMessage::class)
   }
 }

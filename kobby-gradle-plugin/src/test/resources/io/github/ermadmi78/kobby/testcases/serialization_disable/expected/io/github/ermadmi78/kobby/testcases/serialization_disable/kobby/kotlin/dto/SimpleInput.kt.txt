@@ -16,7 +16,6 @@
 package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto
 
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleDSL
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.serializer.LocalDateSerializer
 import java.time.LocalDate
 import kotlin.String
 import kotlin.Suppress
@@ -25,12 +24,10 @@ import kotlin.also
 import kotlin.apply
 import kotlin.error
 import kotlin.let
-import kotlinx.serialization.Serializable
 
-@Serializable
 public data class SimpleInput(
   public val name: String,
-  public val date: @Serializable(with = LocalDateSerializer::class) LocalDate? = null,
+  public val date: LocalDate? = null,
 )
 
 public fun SimpleInput(block: SimpleInputBuilder.() -> Unit): SimpleInput {

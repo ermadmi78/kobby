@@ -20,6 +20,7 @@ import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dt
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.Simple
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.entity.SimpleProjection
 import java.time.LocalDate
+import kotlin.Any
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
@@ -31,7 +32,6 @@ import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
-import kotlinx.serialization.json.JsonElement
 
 internal class SimpleImpl(
   internal val __innerContext: SimpleContext,
@@ -139,7 +139,7 @@ internal open class SimpleProjectionImpl : SimpleProjection {
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
-    arguments: MutableMap<String, JsonElement>,
+    arguments: MutableMap<String, Any>,
   ): Unit {
     body.append(' ').append('{')
 
