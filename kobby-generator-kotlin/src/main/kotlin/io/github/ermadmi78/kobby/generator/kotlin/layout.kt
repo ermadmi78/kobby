@@ -627,7 +627,6 @@ class KotlinAdapterKtorLayout(
     val compositeEnabled: Boolean,
     packageName: String,
     val decoration: Decoration,
-    val dynamicHttpHeaders: Boolean,
     val receiveTimeoutMillis: Long?
 ) {
     val packageName: String = packageName.validateKotlinPath()

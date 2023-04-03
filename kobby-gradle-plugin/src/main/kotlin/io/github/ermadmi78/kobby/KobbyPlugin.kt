@@ -326,9 +326,6 @@ class KobbyPlugin : Plugin<Project> {
                         postfix?.also {
                             kotlinTask.adapterKtorPostfix.convention(it)
                         }
-                        dynamicHttpHeaders?.also {
-                            kotlinTask.adapterKtorDynamicHttpHeaders.convention(it)
-                        }
                         receiveTimeoutMillis?.also {
                             kotlinTask.adapterKtorReceiveTimeoutMillis.convention(it)
                         }

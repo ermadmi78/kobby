@@ -100,7 +100,6 @@ class SchemaValidationTest {
                 true,
                 "kobby.adapter.ktor",
                 Decoration("Kobby", "Adapter"),
-                false,
                 null
             )
         ),
