@@ -2,7 +2,6 @@ package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.KModifier.*
-import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.ermadmi78.kobby.model.*
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.INTERFACE
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.UNION
@@ -274,41 +273,6 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 }
 
                 buildAppendChain { appendLiteral(')') }
-            }
-        }
-
-        if (entity.contextInheritanceEnabled) {
-            // context query
-            buildFunction(context.query) {
-                addModifiers(OVERRIDE, SUSPEND)
-                buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
-                returns(node.schema.query.entityClass)
-
-                addStatement(
-                    "return·${impl.contextPropertyName}.${context.query}(${entity.projection.projectionArgument})"
-                )
-            }
-
-            // context mutation
-            buildFunction(context.mutation) {
-                addModifiers(OVERRIDE, SUSPEND)
-                buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
-                returns(node.schema.mutation.entityClass)
-
-                addStatement(
-                    "return·${impl.contextPropertyName}.${context.mutation}(${entity.projection.projectionArgument})"
-                )
-            }
-
-            // context subscription
-            buildFunction(context.subscription) {
-                addModifiers(OVERRIDE)
-                buildParameter(entity.projection.projectionArgument, node.schema.subscription.projectionLambda)
-                returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
-
-                addStatement(
-                    "return·${impl.contextPropertyName}.${context.subscription}(${entity.projection.projectionArgument})"
-                )
             }
         }
 

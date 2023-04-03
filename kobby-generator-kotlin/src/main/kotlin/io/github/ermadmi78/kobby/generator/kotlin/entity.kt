@@ -1,8 +1,8 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.KModifier.*
-import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.KModifier.ABSTRACT
+import com.squareup.kotlinpoet.KModifier.OVERRIDE
 import io.github.ermadmi78.kobby.model.KobbyNode
 import io.github.ermadmi78.kobby.model.KobbyNodeKind.OBJECT
 import io.github.ermadmi78.kobby.model.KobbySchema
@@ -57,37 +57,11 @@ internal fun generateEntity(schema: KobbySchema, layout: KotlinLayout): List<Fil
 
 private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) = with(layout) {
     buildInterface(node.entityName) {
-        if (entity.contextInheritanceEnabled) {
-            addSuperinterface(context.contextClass)
-        }
         node.implements {
             addSuperinterface(it.entityClass)
         }
         node.comments {
             addKdoc("%L", it)
-        }
-
-        if (entity.contextInheritanceEnabled) {
-            // context query
-            buildFunction(context.query) {
-                addModifiers(OVERRIDE, SUSPEND, ABSTRACT)
-                buildParameter(entity.projection.projectionArgument, node.schema.query.projectionLambda)
-                returns(node.schema.query.entityClass)
-            }
-
-            // context mutation
-            buildFunction(context.mutation) {
-                addModifiers(OVERRIDE, SUSPEND, ABSTRACT)
-                buildParameter(entity.projection.projectionArgument, node.schema.mutation.projectionLambda)
-                returns(node.schema.mutation.entityClass)
-            }
-
-            // context subscription
-            buildFunction(context.subscription) {
-                addModifiers(OVERRIDE, ABSTRACT)
-                buildParameter(entity.projection.projectionArgument, node.schema.subscription.projectionLambda)
-                returns(context.subscriberClass.parameterizedBy(node.schema.subscription.entityClass))
-            }
         }
 
         if (entity.contextFunEnabled) {

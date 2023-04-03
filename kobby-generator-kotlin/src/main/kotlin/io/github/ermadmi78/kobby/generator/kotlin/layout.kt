@@ -581,7 +581,6 @@ class KotlinEntityLayout(
     val enabled: Boolean,
     packageName: String,
     val decoration: Decoration,
-    val contextInheritanceEnabled: Boolean,
     val contextFunEnabled: Boolean,
     val contextFunName: String,
     val withCurrentProjectionFun: String,

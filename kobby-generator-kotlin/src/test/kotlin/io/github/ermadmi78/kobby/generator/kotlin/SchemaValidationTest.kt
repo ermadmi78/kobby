@@ -68,7 +68,6 @@ class SchemaValidationTest {
             "kobby.entity",
             Decoration(null, null),
             true,
-            false,
             "__context",
             "__withCurrentProjection",
             KotlinEntityProjectionLayout(

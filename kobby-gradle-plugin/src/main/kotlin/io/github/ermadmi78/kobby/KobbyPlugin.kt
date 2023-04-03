@@ -212,9 +212,6 @@ class KobbyPlugin : Plugin<Project> {
                     postfix?.also {
                         kotlinTask.entityPostfix.convention(it)
                     }
-                    contextInheritanceEnabled?.also {
-                        kotlinTask.entityContextInheritanceEnabled.convention(it)
-                    }
                     contextFunEnabled?.also {
                         kotlinTask.entityContextFunEnabled.convention(it)
                     }

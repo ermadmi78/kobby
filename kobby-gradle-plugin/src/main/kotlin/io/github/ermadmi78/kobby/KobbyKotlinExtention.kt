@@ -528,18 +528,10 @@ open class KobbyKotlinEntityExtension {
     var postfix: String? = null
 
     /**
-     * Inherit context interface in entity interface.
-     * [More details](https://github.com/ermadmi78/kobby/issues/20)
-     * [More details](https://github.com/ermadmi78/kobby/issues/29)
-     *
-     * Default: false
-     */
-    var contextInheritanceEnabled: Boolean? = null
-
-    /**
      * Generate context access function in entity interface.
      * [More details](https://github.com/ermadmi78/kobby/issues/20)
      * [More details](https://github.com/ermadmi78/kobby/issues/29)
+     * [More details](https://github.com/ermadmi78/kobby/issues/35)
      *
      * Default: true
      */
