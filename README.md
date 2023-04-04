@@ -19,7 +19,21 @@ customize generated DSL by means of GraphQL schema directives and Kotlin extensi
 * [Kobby Gradle Tutorial](https://github.com/ermadmi78/kobby-gradle-tutorial)
 * [Kobby Maven Tutorial](https://github.com/ermadmi78/kobby-maven-tutorial)
 
+### Kotlin Multiplatform
+
+Kobby [supports](https://github.com/ermadmi78/kobby/issues/7) Kotlinx Serialization
+to provide an ability to generate Kotlin Multiplatform GraphQL DSL Client since
+release [3.0.0-beta.01](https://github.com/ermadmi78/kobby/releases/tag/3.0.0-beta.01).
+
 ### Requirements
+
+#### Kobby 3.x.x
+
+* Gradle at least version 8.0 is required.
+* Maven at least version 3.9.1 is required.
+* Kotlin at least version 1.8.0 is required to compile generated client DSL.
+* Kotlinx Serialization at least version 1.5.0 is required.
+* Ktor at least version 2.0.0 is required to generate default adapters.
 
 #### Kobby 2.x.x
 
