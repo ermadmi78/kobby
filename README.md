@@ -95,7 +95,8 @@ schema file and put it in `src/main/resources/io/github/ermadmi78/kobby/cinema/a
 * Add Kobby plugin to your `build.gradle.kts`, to generate Kotlin DSL.
 * Configure Kotlin data types for scalars, defined in the GraphQL schema (more details about the scalar mapping
   see [here](https://github.com/ermadmi78/kobby/wiki/Gradle-GraphQL-Scalar-Mapping)).
-* Add Jackson dependency to generate Jackson annotations for DTO classes.
+* Add Jackson dependency to enable Jackson serialization or
+  configure [Kotlinx Serialization](https://github.com/ermadmi78/kobby/wiki/Gradle-Kotlinx-Serialization-Support).
 * Add Kotlin plugin to your `build.gradle.kts` to compile generated DSL.
 
 ```kotlin
@@ -167,6 +168,8 @@ dependencies {
 
 Rebuild the project, and Kobby will generate classes `CinemaSimpleKtorAdapter` and `CinemaCompositeKtorAdapter`
 in subpackage `adapter.ktor`. The prefix `<Cinema>` by default is the schema name.
+How to set up adapters for `Kotlinx Serialization` you can
+see [here](https://github.com/ermadmi78/kobby/wiki/Gradle-Kotlinx-Serialization-Support).
 
 The `CinemaSimpleKtorAdapter` is simple to configure, but it does not support GraphQL subscriptions - so we can use only
 queries and mutations:
