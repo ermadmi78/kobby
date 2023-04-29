@@ -21,7 +21,7 @@ customize generated DSL by means of GraphQL schema directives and Kotlin extensi
 
 ### Kotlin Multiplatform
 
-Kobby [supports](https://github.com/ermadmi78/kobby/issues/7) Kotlinx Serialization
+Kobby [supports](https://github.com/ermadmi78/kobby/wiki/Gradle-Kotlinx-Serialization-Support) Kotlinx Serialization
 to provide an ability to generate Kotlin Multiplatform GraphQL DSL Client since
 release [3.0.0-beta.01](https://github.com/ermadmi78/kobby/releases/tag/3.0.0-beta.01).
 
