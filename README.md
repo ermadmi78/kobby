@@ -168,6 +168,7 @@ dependencies {
 
 Rebuild the project, and Kobby will generate classes `CinemaSimpleKtorAdapter` and `CinemaCompositeKtorAdapter`
 in subpackage `adapter.ktor`. The prefix `<Cinema>` by default is the schema name.
+
 How to set up adapters for `Kotlinx Serialization` you can
 see [here](https://github.com/ermadmi78/kobby/wiki/Gradle-Kotlinx-Serialization-Support).
 
