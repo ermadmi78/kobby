@@ -47,6 +47,7 @@ subprojects {
 
     println("${currentProject.group}:${currentProject.name}")
 
+    val kobbyGradlePlugin: Boolean = (name == "kobby-gradle-plugin")
     tasks {
         jar {
             manifest {
@@ -61,7 +62,9 @@ subprojects {
 
             // NOTE: in order to run gradle and maven plugin integration tests
             // we need to have our build artifacts available in local repo
-            finalizedBy("publishToMavenLocal")
+            if (!kobbyGradlePlugin) {
+                finalizedBy("publishToMavenLocal")
+            }
         }
 
         test {
@@ -177,7 +180,9 @@ tasks {
         // our Gradle and Maven integration tests run in separate VMs that will need access to the generated artifacts
         // we will need to run them after artifacts are published to local m2 repo
         for (graphQLKotlinProject in project.childProjects) {
-            dependsOn(":${graphQLKotlinProject.key}:publishToMavenLocal")
+            if (graphQLKotlinProject.value.name != "kobby-gradle-plugin") {
+                dependsOn(":${graphQLKotlinProject.key}:publishToMavenLocal")
+            }
         }
     }
 }
