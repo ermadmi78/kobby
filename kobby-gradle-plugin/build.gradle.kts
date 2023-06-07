@@ -92,6 +92,11 @@ tasks {
     named("publishMavenJavaPublicationToMavenLocal") {
         dependsOn("signPluginMavenPublication")
     }
+    if (rootProject.extra["isReleaseVersion"] as Boolean) {
+        named("publishPluginMavenPublicationToMavenLocal") {
+            dependsOn("signMavenJavaPublication")
+        }
+    }
 
     register(testcasesTaskName) {
         doFirst {
