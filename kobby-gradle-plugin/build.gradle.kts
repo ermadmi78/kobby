@@ -89,6 +89,9 @@ tasks {
     named("pluginUnderTestMetadata") {
         dependsOn(":kobby-model:shadowJar")
     }
+    named("publishMavenJavaPublicationToMavenLocal") {
+        dependsOn("signPluginMavenPublication")
+    }
 
     register(testcasesTaskName) {
         doFirst {
