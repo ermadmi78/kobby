@@ -5,10 +5,6 @@ plugins {
 }
 
 tasks {
-    named("generateMavenPluginDescriptor") {
-        dependsOn(":kobby-model:shadowJar")
-    }
-
     publishing {
         publications {
             val mavenPublication = findByName("mavenJava") as? MavenPublication
