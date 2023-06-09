@@ -51,7 +51,9 @@ tasks {
     }
 
     test {
-        dependsOn(":resolveIntegrationTestDependencies")
+        dependsOn(":kobby-model:shadowJar")
+        dependsOn(":kobby-model:publishToMavenLocal")
+        dependsOn(":kobby-generator-kotlin:publishToMavenLocal")
 
         if (System.getProperty(testcasesActualizeProperty)?.trim() == "true") {
             val testcasesDir = Files.createTempDirectory("kobby_kotlin_testcases_").toString()

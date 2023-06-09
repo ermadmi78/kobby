@@ -10,6 +10,6 @@ dependencies {
 
 tasks {
     test {
-        dependsOn(":resolveIntegrationTestDependencies")
+        dependsOn(":kobby-model:shadowJar")
     }
 }

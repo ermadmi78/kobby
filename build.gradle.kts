@@ -58,10 +58,6 @@ subprojects {
                 attributes["Implementation-Title"] = currentProject.name
                 attributes["Implementation-Version"] = project.version
             }
-
-            // NOTE: in order to run gradle and maven plugin integration tests
-            // we need to have our build artifacts available in local repo
-            finalizedBy("publishToMavenLocal")
         }
 
         test {
@@ -120,12 +116,14 @@ subprojects {
                         }
                     }
                 }
-                create<MavenPublication>("mavenJava") {
-                    from(jarComponent)
-                    // no need to publish sources or javadocs for SNAPSHOT builds
-                    if (rootProject.extra["isReleaseVersion"] as Boolean) {
-                        artifact(sourcesJar.get())
-                        artifact(javadocJar.get())
+                if (currentProject.name != "kobby-gradle-plugin") {
+                    create<MavenPublication>("mavenJava") {
+                        from(jarComponent)
+                        // no need to publish sources or javadocs for SNAPSHOT builds
+                        if (rootProject.extra["isReleaseVersion"] as Boolean) {
+                            artifact(sourcesJar.get())
+                            artifact(javadocJar.get())
+                        }
                     }
                 }
             }
@@ -170,14 +168,6 @@ tasks {
                 maxRetries.set(60)
                 delayBetween.set(Duration.ofMillis(5000))
             }
-        }
-    }
-
-    register("resolveIntegrationTestDependencies") {
-        // our Gradle and Maven integration tests run in separate VMs that will need access to the generated artifacts
-        // we will need to run them after artifacts are published to local m2 repo
-        for (graphQLKotlinProject in project.childProjects) {
-            dependsOn(":${graphQLKotlinProject.key}:publishToMavenLocal")
         }
     }
 }

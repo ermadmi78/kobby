@@ -17,9 +17,8 @@ Before sending your pull requests, make sure you followed this list:
 
 Please follow the steps below in order to make the changes:
 
-1. Clone the repository
+1. Fork the repository
 1. Set the local java version to 11
-1. Create a new developing branch for an issue.
 1. Open repository in your favourite IDE.
 1. Make code changes to the Kobby Plugin.
 1. Build and install the Kobby Plugin locally.
@@ -27,7 +26,7 @@ Please follow the steps below in order to make the changes:
    ```shell script
    # This will build and install both the Gradle and the Maven plugin 
    # to your local maven repository without test execution.
-   ./gradlew clean build -x test --stacktrace
+   ./gradlew clean build publish -x test --stacktrace
    ```
 
 1. The easiest way to test and debug your changes is to use the Kobby Example Projects.
