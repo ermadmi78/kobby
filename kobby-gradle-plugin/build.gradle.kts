@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import java.nio.file.Files
 
 description = "Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema"
@@ -12,6 +14,8 @@ plugins {
 }
 
 gradlePlugin {
+    website.set("https://github.com/ermadmi78/kobby")
+    vcsUrl.set("https://github.com/ermadmi78/kobby")
     plugins {
         create("KobbyPlugin") {
             id = "io.github.ermadmi78.kobby"
@@ -21,21 +25,14 @@ gradlePlugin {
                     "The generated DSL supports execution of complex GraphQL queries, mutation and subscriptions " +
                     "in Kotlin with syntax similar to native GraphQL syntax. Moreover, you can customize " +
                     "generated DSL by means of GraphQL schema directives and Kotlin extension functions."
+            tags.set(
+                listOf(
+                    "graphql", "kotlin", "client", "dsl", "graphql-kotlin", "graphql-client",
+                    "codegeneration", "code-generation", "codegen", "generate"
+                )
+            )
         }
     }
-}
-
-pluginBundle {
-    website = "https://github.com/ermadmi78/kobby"
-    vcsUrl = "https://github.com/ermadmi78/kobby"
-    tags = listOf(
-        "graphql", "kotlin", "client", "dsl", "graphql-kotlin", "graphql-client",
-        "codegeneration", "code-generation", "codegen", "generate"
-    )
-    description = "Kobby is a codegen plugin of Kotlin DSL Client by GraphQL schema. " +
-            "The generated DSL supports execution of complex GraphQL queries, mutation and subscriptions " +
-            "in Kotlin with syntax similar to native GraphQL syntax. Moreover, you can customize " +
-            "generated DSL by means of GraphQL schema directives and Kotlin extension functions."
 }
 
 val testcasesTaskName = "kobbyTestcasesActualize"

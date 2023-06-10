@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 description = "Kobby Model"
@@ -22,16 +21,13 @@ plugins {
 }
 
 tasks {
-    val shadowJarTask = named("shadowJar", ShadowJar::class.java)
-    val relocateShadowJar = register("relocateShadowJar", ConfigureShadowRelocation::class.java) {
-        target = shadowJarTask.get()
-        prefix = "io.github.ermadmi78.kobby.model.shadow"
-    }
-    shadowJarTask.configure {
-        dependsOn(relocateShadowJar)
+    named<ShadowJar>("shadowJar") {
         archiveClassifier.set("")
         mergeServiceFiles()
         minimize()
         configurations = listOf(shadowImplementation)
+
+        isEnableRelocation = true
+        relocationPrefix = "io.github.ermadmi78.kobby.model.shadow"
     }
 }

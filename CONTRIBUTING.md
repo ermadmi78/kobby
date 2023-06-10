@@ -26,7 +26,7 @@ Please follow the steps below in order to make the changes:
    ```shell script
    # This will build and install both the Gradle and the Maven plugin 
    # to your local maven repository without test execution.
-   ./gradlew clean build publish -x test --stacktrace
+   ./gradlew clean build publishToMavenLocal -x test --stacktrace
    ```
 
 1. The easiest way to test and debug your changes is to use the Kobby Example Projects.
