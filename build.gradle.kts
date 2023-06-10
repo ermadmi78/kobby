@@ -116,7 +116,7 @@ subprojects {
                         }
                     }
                 }
-                //if (currentProject.name != "kobby-gradle-plugin") {
+                if (currentProject.name != "kobby-gradle-plugin") {
                     create<MavenPublication>("mavenJava") {
                         from(jarComponent)
                         // no need to publish sources or javadocs for SNAPSHOT builds
@@ -125,7 +125,7 @@ subprojects {
                             artifact(javadocJar.get())
                         }
                     }
-                //}
+                }
             }
         }
         signing {
