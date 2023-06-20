@@ -24,7 +24,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 @JsonTypeName(value = "User")
 @JsonTypeInfo(
@@ -40,32 +39,23 @@ public data class UserDto(
   public val mischievous: mischievous? = null,
 )
 
-public fun UserDto(block: UserDtoBuilder.() -> Unit): UserDto {
-  // UserDto builder DSL
-  return UserDtoBuilder().apply(block).let {
-    UserDto(
-          it.id,
-          it.update_column,
-          it.mischievous
-        )
-  }
+public fun UserDto.toBuilder(): UserDtoBuilder = UserDtoBuilder().also {
+  it.id = this.id
+  it.update_column = this.update_column
+  it.mischievous = this.mischievous
 }
 
-public fun UserDto.copy(block: UserDtoBuilder.() -> Unit): UserDto {
-  // UserDto copy DSL
-  return UserDtoBuilder().also {
-    it.id = this.id
-    it.update_column = this.update_column
-    it.mischievous = this.mischievous
-  }
-  .apply(block).let {
-    UserDto(
-          it.id,
-          it.update_column,
-          it.mischievous
-        )
-  }
-}
+public fun UserDtoBuilder.toDto(): UserDto = UserDto(
+  id,
+  update_column,
+  mischievous
+)
+
+public fun UserDto(block: UserDtoBuilder.() -> Unit): UserDto =
+    UserDtoBuilder().apply(block).toDto()
+
+public fun UserDto.copy(block: UserDtoBuilder.() -> Unit): UserDto =
+    toBuilder().apply(block).toDto()
 
 @ForbiddenEnumNameDSL
 public class UserDtoBuilder {

@@ -21,7 +21,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -38,26 +37,17 @@ public data class TagDto(
   public val `value`: String? = null,
 )
 
-public fun TagDto(block: TagDtoBuilder.() -> Unit): TagDto {
-  // TagDto builder DSL
-  return TagDtoBuilder().apply(block).let {
-    TagDto(
-          it.`value`
-        )
-  }
+public fun TagDto.toBuilder(): TagDtoBuilder = TagDtoBuilder().also {
+  it.`value` = this.`value`
 }
 
-public fun TagDto.copy(block: TagDtoBuilder.() -> Unit): TagDto {
-  // TagDto copy DSL
-  return TagDtoBuilder().also {
-    it.`value` = this.`value`
-  }
-  .apply(block).let {
-    TagDto(
-          it.`value`
-        )
-  }
-}
+public fun TagDtoBuilder.toDto(): TagDto = TagDto(
+  `value`
+)
+
+public fun TagDto(block: TagDtoBuilder.() -> Unit): TagDto = TagDtoBuilder().apply(block).toDto()
+
+public fun TagDto.copy(block: TagDtoBuilder.() -> Unit): TagDto = toBuilder().apply(block).toDto()
 
 /**
  * Type Tag is introduced for testing types with single value.

@@ -361,6 +361,30 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoBuilderToBuilderFun",
+        description = "Name of DTO based \"toBuilder\" function for DTO classes (default \"toBuilder\")"
+    )
+    val dtoBuilderToBuilderFun: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoBuilderToDtoFun",
+        description = "Name of builder based \"toDto\" function for DTO classes (default \"toDto\")"
+    )
+    val dtoBuilderToDtoFun: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoBuilderToInputFun",
+        description = "Name of builder based \"toInput\" function for DTO input classes (default \"toInput\")"
+    )
+    val dtoBuilderToInputFun: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoBuilderCopyFun",
         description = "Name of builder based \"copy\" function for DTO classes (default \"copy\")"
     )
@@ -830,6 +854,9 @@ open class KobbyKotlin : DefaultTask() {
 
         dtoBuilderEnabled.convention(true)
         dtoBuilderPostfix.convention("Builder")
+        dtoBuilderToBuilderFun.convention("toBuilder")
+        dtoBuilderToDtoFun.convention("toDto")
+        dtoBuilderToInputFun.convention("toInput")
         dtoBuilderCopyFun.convention("copy")
         dtoGraphQLEnabled.convention(true)
         dtoGraphQLPackageName.convention("graphql")
@@ -987,6 +1014,9 @@ open class KobbyKotlin : DefaultTask() {
                 KotlinDtoBuilderLayout(
                     dtoBuilderEnabled.get(),
                     Decoration(dtoBuilderPrefix.orNull, dtoBuilderPostfix.orNull),
+                    dtoBuilderToBuilderFun.get(),
+                    dtoBuilderToDtoFun.get(),
+                    dtoBuilderToInputFun.get(),
                     dtoBuilderCopyFun.get()
                 ),
                 KotlinDtoGraphQLLayout(

@@ -20,32 +20,24 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 public data class SubscriptionDto(
   public val countryCreated: CountryDto? = null,
 )
 
-public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {
-  // SubscriptionDto builder DSL
-  return SubscriptionDtoBuilder().apply(block).let {
-    SubscriptionDto(
-          it.countryCreated
-        )
-  }
+public fun SubscriptionDto.toBuilder(): SubscriptionDtoBuilder = SubscriptionDtoBuilder().also {
+  it.countryCreated = this.countryCreated
 }
 
-public fun SubscriptionDto.copy(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto {
-  // SubscriptionDto copy DSL
-  return SubscriptionDtoBuilder().also {
-    it.countryCreated = this.countryCreated
-  }
-  .apply(block).let {
-    SubscriptionDto(
-          it.countryCreated
-        )
-  }
-}
+public fun SubscriptionDtoBuilder.toDto(): SubscriptionDto = SubscriptionDto(
+  countryCreated
+)
+
+public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto =
+    SubscriptionDtoBuilder().apply(block).toDto()
+
+public fun SubscriptionDto.copy(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto =
+    toBuilder().apply(block).toDto()
 
 @GraphqlDSL
 public class SubscriptionDtoBuilder {

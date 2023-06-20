@@ -29,7 +29,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
-import kotlin.let
 
 @JsonTypeName(value = "Escape")
 @JsonTypeInfo(
@@ -65,50 +64,35 @@ public data class EscapeDto(
   public override fun hashCode(): Int = this.`if`?.hashCode() ?: 0
 }
 
-public fun EscapeDto(block: EscapeDtoBuilder.() -> Unit): EscapeDto {
-  // EscapeDto builder DSL
-  return EscapeDtoBuilder().apply(block).let {
-    EscapeDto(
-          it.`if`,
-          it.`is`,
-          it.`for`,
-          it.points,
-          it.it,
-          it.`in`,
-          it.`val`,
-          it.`var`,
-          it.`while`
-        )
-  }
+public fun EscapeDto.toBuilder(): EscapeDtoBuilder = EscapeDtoBuilder().also {
+  it.`if` = this.`if`
+  it.`is` = this.`is`
+  it.`for` = this.`for`
+  it.points = this.points
+  it.it = this.it
+  it.`in` = this.`in`
+  it.`val` = this.`val`
+  it.`var` = this.`var`
+  it.`while` = this.`while`
 }
 
-public fun EscapeDto.copy(block: EscapeDtoBuilder.() -> Unit): EscapeDto {
-  // EscapeDto copy DSL
-  return EscapeDtoBuilder().also {
-    it.`if` = this.`if`
-    it.`is` = this.`is`
-    it.`for` = this.`for`
-    it.points = this.points
-    it.it = this.it
-    it.`in` = this.`in`
-    it.`val` = this.`val`
-    it.`var` = this.`var`
-    it.`while` = this.`while`
-  }
-  .apply(block).let {
-    EscapeDto(
-          it.`if`,
-          it.`is`,
-          it.`for`,
-          it.points,
-          it.it,
-          it.`in`,
-          it.`val`,
-          it.`var`,
-          it.`while`
-        )
-  }
-}
+public fun EscapeDtoBuilder.toDto(): EscapeDto = EscapeDto(
+  `if`,
+  `is`,
+  `for`,
+  points,
+  it,
+  `in`,
+  `val`,
+  `var`,
+  `while`
+)
+
+public fun EscapeDto(block: EscapeDtoBuilder.() -> Unit): EscapeDto =
+    EscapeDtoBuilder().apply(block).toDto()
+
+public fun EscapeDto.copy(block: EscapeDtoBuilder.() -> Unit): EscapeDto =
+    toBuilder().apply(block).toDto()
 
 @EscapeDSL
 public class EscapeDtoBuilder {

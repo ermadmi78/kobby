@@ -28,7 +28,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 @JsonTypeName(value = "SeveralPrimaryKeys")
 @JsonTypeInfo(
@@ -94,46 +93,32 @@ public data class SeveralPrimaryKeysDto(
   }
 }
 
-public fun SeveralPrimaryKeysDto(block: SeveralPrimaryKeysDtoBuilder.() -> Unit):
-    SeveralPrimaryKeysDto {
-  // SeveralPrimaryKeysDto builder DSL
-  return SeveralPrimaryKeysDtoBuilder().apply(block).let {
-    SeveralPrimaryKeysDto(
-          it.`if`,
-          it.`do`,
-          it.`while`,
-          it.it,
-          it.other,
-          it.result,
-          it.block
-        )
-  }
+public fun SeveralPrimaryKeysDto.toBuilder(): SeveralPrimaryKeysDtoBuilder =
+    SeveralPrimaryKeysDtoBuilder().also {
+  it.`if` = this.`if`
+  it.`do` = this.`do`
+  it.`while` = this.`while`
+  it.it = this.it
+  it.other = this.other
+  it.result = this.result
+  it.block = this.block
 }
 
+public fun SeveralPrimaryKeysDtoBuilder.toDto(): SeveralPrimaryKeysDto = SeveralPrimaryKeysDto(
+  `if`,
+  `do`,
+  `while`,
+  it,
+  other,
+  result,
+  block
+)
+
+public fun SeveralPrimaryKeysDto(block: SeveralPrimaryKeysDtoBuilder.() -> Unit):
+    SeveralPrimaryKeysDto = SeveralPrimaryKeysDtoBuilder().apply(block).toDto()
+
 public fun SeveralPrimaryKeysDto.copy(block: SeveralPrimaryKeysDtoBuilder.() -> Unit):
-    SeveralPrimaryKeysDto {
-  // SeveralPrimaryKeysDto copy DSL
-  return SeveralPrimaryKeysDtoBuilder().also {
-    it.`if` = this.`if`
-    it.`do` = this.`do`
-    it.`while` = this.`while`
-    it.it = this.it
-    it.other = this.other
-    it.result = this.result
-    it.block = this.block
-  }
-  .apply(block).let {
-    SeveralPrimaryKeysDto(
-          it.`if`,
-          it.`do`,
-          it.`while`,
-          it.it,
-          it.other,
-          it.result,
-          it.block
-        )
-  }
-}
+    SeveralPrimaryKeysDto = toBuilder().apply(block).toDto()
 
 @EscapeDSL
 public class SeveralPrimaryKeysDtoBuilder {

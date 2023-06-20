@@ -21,7 +21,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 public data class InterfaceMultiOverrideImplementationDto(
   public override val noOverride1: String? = null,
@@ -30,39 +29,31 @@ public data class InterfaceMultiOverrideImplementationDto(
   public val finalField: String? = null,
 ) : InterfaceMultiOverrideDto, InterfaceBase1Dto, InterfaceBase2Dto
 
+public fun InterfaceMultiOverrideImplementationDto.toBuilder():
+    InterfaceMultiOverrideImplementationDtoBuilder =
+    InterfaceMultiOverrideImplementationDtoBuilder().also {
+  it.noOverride1 = this.noOverride1
+  it.noOverride2 = this.noOverride2
+  it.interfaceMultiOverride = this.interfaceMultiOverride
+  it.finalField = this.finalField
+}
+
+public fun InterfaceMultiOverrideImplementationDtoBuilder.toDto():
+    InterfaceMultiOverrideImplementationDto = InterfaceMultiOverrideImplementationDto(
+  noOverride1,
+  noOverride2,
+  interfaceMultiOverride,
+  finalField
+)
+
 public
     fun InterfaceMultiOverrideImplementationDto(block: InterfaceMultiOverrideImplementationDtoBuilder.() -> Unit):
-    InterfaceMultiOverrideImplementationDto {
-  // InterfaceMultiOverrideImplementationDto builder DSL
-  return InterfaceMultiOverrideImplementationDtoBuilder().apply(block).let {
-    InterfaceMultiOverrideImplementationDto(
-          it.noOverride1,
-          it.noOverride2,
-          it.interfaceMultiOverride,
-          it.finalField
-        )
-  }
-}
+    InterfaceMultiOverrideImplementationDto =
+    InterfaceMultiOverrideImplementationDtoBuilder().apply(block).toDto()
 
 public
     fun InterfaceMultiOverrideImplementationDto.copy(block: InterfaceMultiOverrideImplementationDtoBuilder.() -> Unit):
-    InterfaceMultiOverrideImplementationDto {
-  // InterfaceMultiOverrideImplementationDto copy DSL
-  return InterfaceMultiOverrideImplementationDtoBuilder().also {
-    it.noOverride1 = this.noOverride1
-    it.noOverride2 = this.noOverride2
-    it.interfaceMultiOverride = this.interfaceMultiOverride
-    it.finalField = this.finalField
-  }
-  .apply(block).let {
-    InterfaceMultiOverrideImplementationDto(
-          it.noOverride1,
-          it.noOverride2,
-          it.interfaceMultiOverride,
-          it.finalField
-        )
-  }
-}
+    InterfaceMultiOverrideImplementationDto = toBuilder().apply(block).toDto()
 
 @MultiOverrideDSL
 public class InterfaceMultiOverrideImplementationDtoBuilder {

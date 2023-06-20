@@ -24,7 +24,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 @JsonTypeName(value = "MySubscription")
 @JsonTypeInfo(
@@ -38,26 +37,20 @@ public data class MySubscriptionDto @JsonCreator constructor(
   public val onInsert: MyEventDto? = null,
 )
 
-public fun MySubscriptionDto(block: MySubscriptionDtoBuilder.() -> Unit): MySubscriptionDto {
-  // MySubscriptionDto builder DSL
-  return MySubscriptionDtoBuilder().apply(block).let {
-    MySubscriptionDto(
-          it.onInsert
-        )
-  }
+public fun MySubscriptionDto.toBuilder(): MySubscriptionDtoBuilder =
+    MySubscriptionDtoBuilder().also {
+  it.onInsert = this.onInsert
 }
 
-public fun MySubscriptionDto.copy(block: MySubscriptionDtoBuilder.() -> Unit): MySubscriptionDto {
-  // MySubscriptionDto copy DSL
-  return MySubscriptionDtoBuilder().also {
-    it.onInsert = this.onInsert
-  }
-  .apply(block).let {
-    MySubscriptionDto(
-          it.onInsert
-        )
-  }
-}
+public fun MySubscriptionDtoBuilder.toDto(): MySubscriptionDto = MySubscriptionDto(
+  onInsert
+)
+
+public fun MySubscriptionDto(block: MySubscriptionDtoBuilder.() -> Unit): MySubscriptionDto =
+    MySubscriptionDtoBuilder().apply(block).toDto()
+
+public fun MySubscriptionDto.copy(block: MySubscriptionDtoBuilder.() -> Unit): MySubscriptionDto =
+    toBuilder().apply(block).toDto()
 
 @GraphqlDSL
 public class MySubscriptionDtoBuilder {

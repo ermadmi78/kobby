@@ -120,21 +120,42 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
             // Build object DTO builder
             if (dto.builder.enabled && node.fields.isNotEmpty()) {
+                // toBuilder function
+                buildFunction(dto.builder.toBuilderFun) {
+                    receiver(node.dtoClass)
+                    returns(node.builderClass)
+
+                    controlFlow(
+                        "return·%T().%M",
+                        node.builderClass,
+                        MemberName("kotlin", "also")
+                    ) {
+                        node.fields { field ->
+                            addStatement("it.${field.name.escape()}·=·this.${field.name.escape()}")
+                        }
+                    }
+                }
+
+                // toDto function
+                buildFunction(dto.builder.toDtoFun) {
+                    receiver(node.builderClass)
+                    returns(node.dtoClass)
+
+                    val arguments = node.fields.values.joinToString(",\n") { it.name.escape() }
+                    addStatement("return·%T(\n⇥$arguments⇤\n)", node.dtoClass)
+                }
+
                 // Builder function
                 buildFunction(node.dtoName) {
                     addParameter("block", node.builderLambda)
                     returns(node.dtoClass)
 
-                    addStatement("// ${node.dtoName} builder DSL")
-                    controlFlow(
-                        "return·%T().%T(block).%T",
+                    addStatement(
+                        "return·%T().%M(block).%M()",
                         node.builderClass,
-                        ClassName("kotlin", "apply"),
-                        ClassName("kotlin", "let")
-                    ) {
-                        val arguments = node.fields.values.joinToString(",\n") { "it.${it.name.escape()}" }
-                        addStatement("%T(\n⇥$arguments⇤\n)", node.dtoClass)
-                    }
+                        MemberName("kotlin", "apply"),
+                        MemberName(dto.packageName, dto.builder.toDtoFun)
+                    )
                 }
 
                 // Copy function
@@ -143,24 +164,12 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     addParameter("block", node.builderLambda)
                     returns(node.dtoClass)
 
-                    addStatement("//·${node.dtoName}·${dto.builder.copyFun}·DSL")
-                    controlFlow(
-                        "return·%T().%T",
-                        node.builderClass,
-                        ClassName("kotlin", "also")
-                    ) {
-                        node.fields { field ->
-                            addStatement("it.${field.name.escape()} = this.${field.name.escape()}")
-                        }
-                    }
-                    controlFlow(
-                        ".%T(block).%T",
-                        ClassName("kotlin", "apply"),
-                        ClassName("kotlin", "let")
-                    ) {
-                        val arguments = node.fields.values.joinToString(",\n") { "it.${it.name.escape()}" }
-                        addStatement("%T(\n⇥$arguments⇤\n)", node.dtoClass)
-                    }
+                    addStatement(
+                        "return·%M().%M(block).%M()",
+                        MemberName(dto.packageName, dto.builder.toBuilderFun),
+                        MemberName("kotlin", "apply"),
+                        MemberName(dto.packageName, dto.builder.toDtoFun)
+                    )
                 }
 
                 // Builder class
@@ -309,29 +318,50 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
             // Build input DTO builder
             if (dto.builder.enabled && node.fields.isNotEmpty()) {
+                // toBuilder function
+                buildFunction(dto.builder.toBuilderFun) {
+                    receiver(node.dtoClass)
+                    returns(node.builderClass)
+
+                    controlFlow(
+                        "return·%T().%M",
+                        node.builderClass,
+                        MemberName("kotlin", "also")
+                    ) {
+                        node.fields { field ->
+                            addStatement("it.${field.name.escape()}·=·this.${field.name.escape()}")
+                        }
+                    }
+                }
+
+                // toInput function
+                buildFunction(dto.builder.toInputFun) {
+                    receiver(node.builderClass)
+                    returns(node.dtoClass)
+
+                    val types: MutableList<Any> = mutableListOf(node.dtoClass)
+                    val arguments = node.fields.values.joinToString(",\n") {
+                        if (it.type.nullable || it.hasDefaultValue) {
+                            it.name.escape()
+                        } else {
+                            types += MemberName("kotlin", "error")
+                            "${it.name.escape()}·?:·%M(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
+                        }
+                    }
+                    addStatement("return·%T(\n⇥$arguments⇤\n)", *types.toTypedArray())
+                }
+
                 // Builder function
                 buildFunction(node.dtoName) {
                     addParameter("block", node.builderLambda)
                     returns(node.dtoClass)
 
-                    addStatement("// ${node.dtoName} builder DSL")
-                    controlFlow(
-                        "return·%T().%T(block).%T",
+                    addStatement(
+                        "return·%T().%M(block).%M()",
                         node.builderClass,
-                        ClassName("kotlin", "apply"),
-                        ClassName("kotlin", "let")
-                    ) {
-                        val types: MutableList<ClassName> = mutableListOf(node.dtoClass)
-                        val arguments = node.fields.values.joinToString(",\n") {
-                            if (it.type.nullable || it.hasDefaultValue) {
-                                "it.${it.name.escape()}"
-                            } else {
-                                types += ClassName("kotlin", "error")
-                                "it.${it.name.escape()}·?:·%T(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
-                            }
-                        }
-                        addStatement("%T(\n⇥$arguments⇤\n)", *types.toTypedArray())
-                    }
+                        MemberName("kotlin", "apply"),
+                        MemberName(dto.packageName, dto.builder.toInputFun)
+                    )
                 }
 
                 // Copy function
@@ -340,32 +370,12 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     addParameter("block", node.builderLambda)
                     returns(node.dtoClass)
 
-                    addStatement("//·${node.dtoName}·${dto.builder.copyFun}·DSL")
-                    controlFlow(
-                        "return·%T().%T",
-                        node.builderClass,
-                        ClassName("kotlin", "also")
-                    ) {
-                        node.fields { field ->
-                            addStatement("it.${field.name.escape()} = this.${field.name.escape()}")
-                        }
-                    }
-                    controlFlow(
-                        ".%T(block).%T",
-                        ClassName("kotlin", "apply"),
-                        ClassName("kotlin", "let")
-                    ) {
-                        val types: MutableList<ClassName> = mutableListOf(node.dtoClass)
-                        val arguments = node.fields.values.joinToString(",\n") {
-                            if (it.type.nullable || it.hasDefaultValue) {
-                                "it.${it.name.escape()}"
-                            } else {
-                                types += ClassName("kotlin", "error")
-                                "it.${it.name.escape()}·?:·%T(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
-                            }
-                        }
-                        addStatement("%T(\n⇥$arguments⇤\n)", *types.toTypedArray())
-                    }
+                    addStatement(
+                        "return·%M().%M(block).%M()",
+                        MemberName(dto.packageName, dto.builder.toBuilderFun),
+                        MemberName("kotlin", "apply"),
+                        MemberName(dto.packageName, dto.builder.toInputFun)
+                    )
                 }
 
                 // Builder class

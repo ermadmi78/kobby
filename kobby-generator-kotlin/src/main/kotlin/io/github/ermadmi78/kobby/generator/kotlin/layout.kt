@@ -566,6 +566,9 @@ data class KotlinDtoJacksonLayout(
 data class KotlinDtoBuilderLayout(
     val enabled: Boolean,
     val decoration: Decoration,
+    val toBuilderFun: String,
+    val toDtoFun: String,
+    val toInputFun: String,
     val copyFun: String
 )
 

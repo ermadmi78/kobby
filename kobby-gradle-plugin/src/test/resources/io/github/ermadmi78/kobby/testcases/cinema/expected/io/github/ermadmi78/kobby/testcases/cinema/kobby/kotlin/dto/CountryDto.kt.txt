@@ -28,7 +28,6 @@ import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
 import kotlin.collections.Map
-import kotlin.let
 
 /**
  * Country entity.
@@ -86,50 +85,35 @@ public data class CountryDto(
   public val native: List<NativeDto>? = null,
 ) : EntityDto
 
-public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto {
-  // CountryDto builder DSL
-  return CountryDtoBuilder().apply(block).let {
-    CountryDto(
-          it.id,
-          it.fields,
-          it.name,
-          it.film,
-          it.films,
-          it.actor,
-          it.actors,
-          it.taggable,
-          it.native
-        )
-  }
+public fun CountryDto.toBuilder(): CountryDtoBuilder = CountryDtoBuilder().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.name = this.name
+  it.film = this.film
+  it.films = this.films
+  it.actor = this.actor
+  it.actors = this.actors
+  it.taggable = this.taggable
+  it.native = this.native
 }
 
-public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto {
-  // CountryDto copy DSL
-  return CountryDtoBuilder().also {
-    it.id = this.id
-    it.fields = this.fields
-    it.name = this.name
-    it.film = this.film
-    it.films = this.films
-    it.actor = this.actor
-    it.actors = this.actors
-    it.taggable = this.taggable
-    it.native = this.native
-  }
-  .apply(block).let {
-    CountryDto(
-          it.id,
-          it.fields,
-          it.name,
-          it.film,
-          it.films,
-          it.actor,
-          it.actors,
-          it.taggable,
-          it.native
-        )
-  }
-}
+public fun CountryDtoBuilder.toDto(): CountryDto = CountryDto(
+  id,
+  fields,
+  name,
+  film,
+  films,
+  actor,
+  actors,
+  taggable,
+  native
+)
+
+public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto =
+    CountryDtoBuilder().apply(block).toDto()
+
+public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto =
+    toBuilder().apply(block).toDto()
 
 /**
  * Country entity.

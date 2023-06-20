@@ -469,6 +469,27 @@ open class KobbyKotlinDtoBuilderExtension {
     var postfix: String? = null
 
     /**
+     * Name of DTO based "toBuilder" function for DTO classes
+     *
+     * Default: "toBuilder"
+     */
+    var toBuilderFun: String? = null
+
+    /**
+     * Name of builder based "toDto" function for DTO classes
+     *
+     * Default "toDto"
+     */
+    var toDtoFun: String? = null
+
+    /**
+     * Name of builder based "toInput" function for DTO input classes
+     *
+     * Default "toInput"
+     */
+    var toInputFun: String? = null
+
+    /**
      * Name of builder based "copy" function for DTO classes
      *
      * Default: "copy"

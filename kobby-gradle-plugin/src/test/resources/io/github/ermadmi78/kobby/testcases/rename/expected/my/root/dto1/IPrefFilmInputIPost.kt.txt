@@ -22,7 +22,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.error
-import kotlin.let
 import my.root.ctx.PrefCtxDSLPostCtx
 
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
@@ -34,31 +33,22 @@ public data class IPrefFilmInputIPost(
   public val genre: EPrefGenreEPost = EPrefGenreEPost.DRAMA,
 )
 
-public fun IPrefFilmInputIPost(block: BPrefIPrefFilmInputIPostBPost.() -> Unit):
-    IPrefFilmInputIPost {
-  // IPrefFilmInputIPost builder DSL
-  return BPrefIPrefFilmInputIPostBPost().apply(block).let {
-    IPrefFilmInputIPost(
-          it.title ?: error("IPrefFilmInputIPost: 'title' must not be null"),
-          it.genre
-        )
-  }
+public fun IPrefFilmInputIPost.myBuilder1(): BPrefIPrefFilmInputIPostBPost =
+    BPrefIPrefFilmInputIPostBPost().also {
+  it.title = this.title
+  it.genre = this.genre
 }
 
+public fun BPrefIPrefFilmInputIPostBPost.myInput3(): IPrefFilmInputIPost = IPrefFilmInputIPost(
+  title ?: error("IPrefFilmInputIPost: 'title' must not be null"),
+  genre
+)
+
+public fun IPrefFilmInputIPost(block: BPrefIPrefFilmInputIPostBPost.() -> Unit): IPrefFilmInputIPost
+    = BPrefIPrefFilmInputIPostBPost().apply(block).myInput3()
+
 public fun IPrefFilmInputIPost.replicate(block: BPrefIPrefFilmInputIPostBPost.() -> Unit):
-    IPrefFilmInputIPost {
-  // IPrefFilmInputIPost replicate DSL
-  return BPrefIPrefFilmInputIPostBPost().also {
-    it.title = this.title
-    it.genre = this.genre
-  }
-  .apply(block).let {
-    IPrefFilmInputIPost(
-          it.title ?: error("IPrefFilmInputIPost: 'title' must not be null"),
-          it.genre
-        )
-  }
-}
+    IPrefFilmInputIPost = myBuilder1().apply(block).myInput3()
 
 @PrefCtxDSLPostCtx
 public class BPrefIPrefFilmInputIPostBPost {

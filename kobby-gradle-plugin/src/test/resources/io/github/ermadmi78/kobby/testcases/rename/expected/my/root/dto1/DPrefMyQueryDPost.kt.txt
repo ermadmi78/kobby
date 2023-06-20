@@ -23,7 +23,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
-import kotlin.let
 import my.root.ctx.PrefCtxDSLPostCtx
 
 @JsonTypeName(value = "MyQuery")
@@ -43,42 +42,30 @@ public data class DPrefMyQueryDPost(
   public val actors: List<DPrefActorDPost>? = null,
 )
 
-public fun DPrefMyQueryDPost(block: BPrefDPrefMyQueryDPostBPost.() -> Unit): DPrefMyQueryDPost {
-  // DPrefMyQueryDPost builder DSL
-  return BPrefDPrefMyQueryDPostBPost().apply(block).let {
-    DPrefMyQueryDPost(
-          it.country,
-          it.countries,
-          it.film,
-          it.films,
-          it.actor,
-          it.actors
-        )
-  }
+public fun DPrefMyQueryDPost.myBuilder1(): BPrefDPrefMyQueryDPostBPost =
+    BPrefDPrefMyQueryDPostBPost().also {
+  it.country = this.country
+  it.countries = this.countries
+  it.film = this.film
+  it.films = this.films
+  it.actor = this.actor
+  it.actors = this.actors
 }
 
+public fun BPrefDPrefMyQueryDPostBPost.myDto2(): DPrefMyQueryDPost = DPrefMyQueryDPost(
+  country,
+  countries,
+  film,
+  films,
+  actor,
+  actors
+)
+
+public fun DPrefMyQueryDPost(block: BPrefDPrefMyQueryDPostBPost.() -> Unit): DPrefMyQueryDPost =
+    BPrefDPrefMyQueryDPostBPost().apply(block).myDto2()
+
 public fun DPrefMyQueryDPost.replicate(block: BPrefDPrefMyQueryDPostBPost.() -> Unit):
-    DPrefMyQueryDPost {
-  // DPrefMyQueryDPost replicate DSL
-  return BPrefDPrefMyQueryDPostBPost().also {
-    it.country = this.country
-    it.countries = this.countries
-    it.film = this.film
-    it.films = this.films
-    it.actor = this.actor
-    it.actors = this.actors
-  }
-  .apply(block).let {
-    DPrefMyQueryDPost(
-          it.country,
-          it.countries,
-          it.film,
-          it.films,
-          it.actor,
-          it.actors
-        )
-  }
-}
+    DPrefMyQueryDPost = myBuilder1().apply(block).myDto2()
 
 @PrefCtxDSLPostCtx
 public class BPrefDPrefMyQueryDPostBPost {

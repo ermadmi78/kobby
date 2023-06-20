@@ -55,6 +55,9 @@ kobby {
             builder {
                 prefix = "BPref"
                 postfix = "BPost"
+                toBuilderFun = "myBuilder1"
+                toDtoFun = "myDto2"
+                toInputFun = "myInput3"
                 copyFun = "replicate"
             }
 

@@ -23,36 +23,27 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.error
-import kotlin.let
 
 public data class SimpleInput(
   public val name: String,
   public val date: LocalDate? = null,
 )
 
-public fun SimpleInput(block: SimpleInputBuilder.() -> Unit): SimpleInput {
-  // SimpleInput builder DSL
-  return SimpleInputBuilder().apply(block).let {
-    SimpleInput(
-          it.name ?: error("SimpleInput: 'name' must not be null"),
-          it.date
-        )
-  }
+public fun SimpleInput.toBuilder(): SimpleInputBuilder = SimpleInputBuilder().also {
+  it.name = this.name
+  it.date = this.date
 }
 
-public fun SimpleInput.copy(block: SimpleInputBuilder.() -> Unit): SimpleInput {
-  // SimpleInput copy DSL
-  return SimpleInputBuilder().also {
-    it.name = this.name
-    it.date = this.date
-  }
-  .apply(block).let {
-    SimpleInput(
-          it.name ?: error("SimpleInput: 'name' must not be null"),
-          it.date
-        )
-  }
-}
+public fun SimpleInputBuilder.toInput(): SimpleInput = SimpleInput(
+  name ?: error("SimpleInput: 'name' must not be null"),
+  date
+)
+
+public fun SimpleInput(block: SimpleInputBuilder.() -> Unit): SimpleInput =
+    SimpleInputBuilder().apply(block).toInput()
+
+public fun SimpleInput.copy(block: SimpleInputBuilder.() -> Unit): SimpleInput =
+    toBuilder().apply(block).toInput()
 
 @SimpleDSL
 public class SimpleInputBuilder {

@@ -25,7 +25,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 @JsonTypeName(value = "Film")
 @JsonTypeInfo(
@@ -41,32 +40,23 @@ public data class FilmDto(
   public val country: CountryDto? = null,
 )
 
-public fun FilmDto(block: FilmDtoBuilder.() -> Unit): FilmDto {
-  // FilmDto builder DSL
-  return FilmDtoBuilder().apply(block).let {
-    FilmDto(
-          it.id,
-          it.title,
-          it.country
-        )
-  }
+public fun FilmDto.toBuilder(): FilmDtoBuilder = FilmDtoBuilder().also {
+  it.id = this.id
+  it.title = this.title
+  it.country = this.country
 }
 
-public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto {
-  // FilmDto copy DSL
-  return FilmDtoBuilder().also {
-    it.id = this.id
-    it.title = this.title
-    it.country = this.country
-  }
-  .apply(block).let {
-    FilmDto(
-          it.id,
-          it.title,
-          it.country
-        )
-  }
-}
+public fun FilmDtoBuilder.toDto(): FilmDto = FilmDto(
+  id,
+  title,
+  country
+)
+
+public fun FilmDto(block: FilmDtoBuilder.() -> Unit): FilmDto =
+    FilmDtoBuilder().apply(block).toDto()
+
+public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto =
+    toBuilder().apply(block).toDto()
 
 @CinemaDSL
 public class FilmDtoBuilder {

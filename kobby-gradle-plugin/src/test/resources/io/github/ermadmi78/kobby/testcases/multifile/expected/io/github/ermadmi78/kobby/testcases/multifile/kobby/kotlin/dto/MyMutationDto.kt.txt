@@ -25,7 +25,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 @JsonTypeName(value = "MyMutation")
 @JsonTypeInfo(
@@ -39,26 +38,19 @@ public data class MyMutationDto @JsonCreator constructor(
   public val insert: Boolean? = null,
 )
 
-public fun MyMutationDto(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto {
-  // MyMutationDto builder DSL
-  return MyMutationDtoBuilder().apply(block).let {
-    MyMutationDto(
-          it.insert
-        )
-  }
+public fun MyMutationDto.toBuilder(): MyMutationDtoBuilder = MyMutationDtoBuilder().also {
+  it.insert = this.insert
 }
 
-public fun MyMutationDto.copy(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto {
-  // MyMutationDto copy DSL
-  return MyMutationDtoBuilder().also {
-    it.insert = this.insert
-  }
-  .apply(block).let {
-    MyMutationDto(
-          it.insert
-        )
-  }
-}
+public fun MyMutationDtoBuilder.toDto(): MyMutationDto = MyMutationDto(
+  insert
+)
+
+public fun MyMutationDto(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto =
+    MyMutationDtoBuilder().apply(block).toDto()
+
+public fun MyMutationDto.copy(block: MyMutationDtoBuilder.() -> Unit): MyMutationDto =
+    toBuilder().apply(block).toDto()
 
 @GraphqlDSL
 public class MyMutationDtoBuilder {

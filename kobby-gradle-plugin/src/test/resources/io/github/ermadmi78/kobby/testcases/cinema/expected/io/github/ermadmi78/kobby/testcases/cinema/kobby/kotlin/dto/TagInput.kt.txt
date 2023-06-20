@@ -24,7 +24,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.error
-import kotlin.let
 
 /**
  * Input TagInput is introduced for testing inputs with single value.
@@ -38,26 +37,19 @@ public data class TagInput @JsonCreator constructor(
   public val `value`: String,
 )
 
-public fun TagInput(block: TagInputBuilder.() -> Unit): TagInput {
-  // TagInput builder DSL
-  return TagInputBuilder().apply(block).let {
-    TagInput(
-          it.`value` ?: error("TagInput: 'value' must not be null")
-        )
-  }
+public fun TagInput.toBuilder(): TagInputBuilder = TagInputBuilder().also {
+  it.`value` = this.`value`
 }
 
-public fun TagInput.copy(block: TagInputBuilder.() -> Unit): TagInput {
-  // TagInput copy DSL
-  return TagInputBuilder().also {
-    it.`value` = this.`value`
-  }
-  .apply(block).let {
-    TagInput(
-          it.`value` ?: error("TagInput: 'value' must not be null")
-        )
-  }
-}
+public fun TagInputBuilder.toInput(): TagInput = TagInput(
+  `value` ?: error("TagInput: 'value' must not be null")
+)
+
+public fun TagInput(block: TagInputBuilder.() -> Unit): TagInput =
+    TagInputBuilder().apply(block).toInput()
+
+public fun TagInput.copy(block: TagInputBuilder.() -> Unit): TagInput =
+    toBuilder().apply(block).toInput()
 
 /**
  * Input TagInput is introduced for testing inputs with single value.

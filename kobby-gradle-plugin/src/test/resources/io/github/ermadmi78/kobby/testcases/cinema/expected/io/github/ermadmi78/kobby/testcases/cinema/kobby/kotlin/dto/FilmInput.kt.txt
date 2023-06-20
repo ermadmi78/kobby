@@ -23,7 +23,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.error
-import kotlin.let
 
 /**
  * Film input data %
@@ -41,29 +40,21 @@ public data class FilmInput(
   public val genre: Genre = Genre.DRAMA,
 )
 
-public fun FilmInput(block: FilmInputBuilder.() -> Unit): FilmInput {
-  // FilmInput builder DSL
-  return FilmInputBuilder().apply(block).let {
-    FilmInput(
-          it.title ?: error("FilmInput: 'title' must not be null"),
-          it.genre
-        )
-  }
+public fun FilmInput.toBuilder(): FilmInputBuilder = FilmInputBuilder().also {
+  it.title = this.title
+  it.genre = this.genre
 }
 
-public fun FilmInput.copy(block: FilmInputBuilder.() -> Unit): FilmInput {
-  // FilmInput copy DSL
-  return FilmInputBuilder().also {
-    it.title = this.title
-    it.genre = this.genre
-  }
-  .apply(block).let {
-    FilmInput(
-          it.title ?: error("FilmInput: 'title' must not be null"),
-          it.genre
-        )
-  }
-}
+public fun FilmInputBuilder.toInput(): FilmInput = FilmInput(
+  title ?: error("FilmInput: 'title' must not be null"),
+  genre
+)
+
+public fun FilmInput(block: FilmInputBuilder.() -> Unit): FilmInput =
+    FilmInputBuilder().apply(block).toInput()
+
+public fun FilmInput.copy(block: FilmInputBuilder.() -> Unit): FilmInput =
+    toBuilder().apply(block).toInput()
 
 /**
  * Film input data %

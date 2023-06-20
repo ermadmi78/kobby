@@ -24,7 +24,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.error
-import kotlin.let
 
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class MyInput(
@@ -32,29 +31,21 @@ public data class MyInput(
   public val name: String? = null,
 )
 
-public fun MyInput(block: MyInputBuilder.() -> Unit): MyInput {
-  // MyInput builder DSL
-  return MyInputBuilder().apply(block).let {
-    MyInput(
-          it.id ?: error("MyInput: 'id' must not be null"),
-          it.name
-        )
-  }
+public fun MyInput.toBuilder(): MyInputBuilder = MyInputBuilder().also {
+  it.id = this.id
+  it.name = this.name
 }
 
-public fun MyInput.copy(block: MyInputBuilder.() -> Unit): MyInput {
-  // MyInput copy DSL
-  return MyInputBuilder().also {
-    it.id = this.id
-    it.name = this.name
-  }
-  .apply(block).let {
-    MyInput(
-          it.id ?: error("MyInput: 'id' must not be null"),
-          it.name
-        )
-  }
-}
+public fun MyInputBuilder.toInput(): MyInput = MyInput(
+  id ?: error("MyInput: 'id' must not be null"),
+  name
+)
+
+public fun MyInput(block: MyInputBuilder.() -> Unit): MyInput =
+    MyInputBuilder().apply(block).toInput()
+
+public fun MyInput.copy(block: MyInputBuilder.() -> Unit): MyInput =
+    toBuilder().apply(block).toInput()
 
 @GraphqlDSL
 public class MyInputBuilder {

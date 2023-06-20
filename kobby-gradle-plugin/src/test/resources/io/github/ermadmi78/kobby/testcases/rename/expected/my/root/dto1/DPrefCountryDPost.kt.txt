@@ -28,7 +28,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
-import kotlin.let
 import my.root.ctx.PrefCtxDSLPostCtx
 
 @JsonTypeName(value = "Country")
@@ -64,48 +63,34 @@ public data class DPrefCountryDPost(
   public override fun hashCode(): Int = this.id?.hashCode() ?: 0
 }
 
-public fun DPrefCountryDPost(block: BPrefDPrefCountryDPostBPost.() -> Unit): DPrefCountryDPost {
-  // DPrefCountryDPost builder DSL
-  return BPrefDPrefCountryDPostBPost().apply(block).let {
-    DPrefCountryDPost(
-          it.id,
-          it.fields,
-          it.name,
-          it.film,
-          it.films,
-          it.actor,
-          it.actors,
-          it.native
-        )
-  }
+public fun DPrefCountryDPost.myBuilder1(): BPrefDPrefCountryDPostBPost =
+    BPrefDPrefCountryDPostBPost().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.name = this.name
+  it.film = this.film
+  it.films = this.films
+  it.actor = this.actor
+  it.actors = this.actors
+  it.native = this.native
 }
 
+public fun BPrefDPrefCountryDPostBPost.myDto2(): DPrefCountryDPost = DPrefCountryDPost(
+  id,
+  fields,
+  name,
+  film,
+  films,
+  actor,
+  actors,
+  native
+)
+
+public fun DPrefCountryDPost(block: BPrefDPrefCountryDPostBPost.() -> Unit): DPrefCountryDPost =
+    BPrefDPrefCountryDPostBPost().apply(block).myDto2()
+
 public fun DPrefCountryDPost.replicate(block: BPrefDPrefCountryDPostBPost.() -> Unit):
-    DPrefCountryDPost {
-  // DPrefCountryDPost replicate DSL
-  return BPrefDPrefCountryDPostBPost().also {
-    it.id = this.id
-    it.fields = this.fields
-    it.name = this.name
-    it.film = this.film
-    it.films = this.films
-    it.actor = this.actor
-    it.actors = this.actors
-    it.native = this.native
-  }
-  .apply(block).let {
-    DPrefCountryDPost(
-          it.id,
-          it.fields,
-          it.name,
-          it.film,
-          it.films,
-          it.actor,
-          it.actors,
-          it.native
-        )
-  }
-}
+    DPrefCountryDPost = myBuilder1().apply(block).myDto2()
 
 @PrefCtxDSLPostCtx
 public class BPrefDPrefCountryDPostBPost {

@@ -22,7 +22,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 import my.root.ctx.PrefCtxDSLPostCtx
 
 @JsonTypeName(value = "MySubscription")
@@ -39,34 +38,25 @@ public data class DPrefMySubscriptionDPost(
   public val actorCreated: DPrefActorDPost? = null,
 )
 
-public fun DPrefMySubscriptionDPost(block: BPrefDPrefMySubscriptionDPostBPost.() -> Unit):
-    DPrefMySubscriptionDPost {
-  // DPrefMySubscriptionDPost builder DSL
-  return BPrefDPrefMySubscriptionDPostBPost().apply(block).let {
-    DPrefMySubscriptionDPost(
-          it.countryCreated,
-          it.filmCreated,
-          it.actorCreated
-        )
-  }
+public fun DPrefMySubscriptionDPost.myBuilder1(): BPrefDPrefMySubscriptionDPostBPost =
+    BPrefDPrefMySubscriptionDPostBPost().also {
+  it.countryCreated = this.countryCreated
+  it.filmCreated = this.filmCreated
+  it.actorCreated = this.actorCreated
 }
 
-public fun DPrefMySubscriptionDPost.replicate(block: BPrefDPrefMySubscriptionDPostBPost.() -> Unit):
-    DPrefMySubscriptionDPost {
-  // DPrefMySubscriptionDPost replicate DSL
-  return BPrefDPrefMySubscriptionDPostBPost().also {
-    it.countryCreated = this.countryCreated
-    it.filmCreated = this.filmCreated
-    it.actorCreated = this.actorCreated
-  }
-  .apply(block).let {
+public fun BPrefDPrefMySubscriptionDPostBPost.myDto2(): DPrefMySubscriptionDPost =
     DPrefMySubscriptionDPost(
-          it.countryCreated,
-          it.filmCreated,
-          it.actorCreated
-        )
-  }
-}
+  countryCreated,
+  filmCreated,
+  actorCreated
+)
+
+public fun DPrefMySubscriptionDPost(block: BPrefDPrefMySubscriptionDPostBPost.() -> Unit):
+    DPrefMySubscriptionDPost = BPrefDPrefMySubscriptionDPostBPost().apply(block).myDto2()
+
+public fun DPrefMySubscriptionDPost.replicate(block: BPrefDPrefMySubscriptionDPostBPost.() -> Unit):
+    DPrefMySubscriptionDPost = myBuilder1().apply(block).myDto2()
 
 @PrefCtxDSLPostCtx
 public class BPrefDPrefMySubscriptionDPostBPost {

@@ -28,7 +28,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
-import kotlin.let
 import my.root.ctx.PrefCtxDSLPostCtx
 
 @JsonTypeName(value = "Film")
@@ -63,44 +62,31 @@ public data class DPrefFilmDPost(
   public override fun hashCode(): Int = this.id?.hashCode() ?: 0
 }
 
-public fun DPrefFilmDPost(block: BPrefDPrefFilmDPostBPost.() -> Unit): DPrefFilmDPost {
-  // DPrefFilmDPost builder DSL
-  return BPrefDPrefFilmDPostBPost().apply(block).let {
-    DPrefFilmDPost(
-          it.id,
-          it.fields,
-          it.title,
-          it.genre,
-          it.countryId,
-          it.country,
-          it.actors
-        )
-  }
+public fun DPrefFilmDPost.myBuilder1(): BPrefDPrefFilmDPostBPost = BPrefDPrefFilmDPostBPost().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.title = this.title
+  it.genre = this.genre
+  it.countryId = this.countryId
+  it.country = this.country
+  it.actors = this.actors
 }
 
-public fun DPrefFilmDPost.replicate(block: BPrefDPrefFilmDPostBPost.() -> Unit): DPrefFilmDPost {
-  // DPrefFilmDPost replicate DSL
-  return BPrefDPrefFilmDPostBPost().also {
-    it.id = this.id
-    it.fields = this.fields
-    it.title = this.title
-    it.genre = this.genre
-    it.countryId = this.countryId
-    it.country = this.country
-    it.actors = this.actors
-  }
-  .apply(block).let {
-    DPrefFilmDPost(
-          it.id,
-          it.fields,
-          it.title,
-          it.genre,
-          it.countryId,
-          it.country,
-          it.actors
-        )
-  }
-}
+public fun BPrefDPrefFilmDPostBPost.myDto2(): DPrefFilmDPost = DPrefFilmDPost(
+  id,
+  fields,
+  title,
+  genre,
+  countryId,
+  country,
+  actors
+)
+
+public fun DPrefFilmDPost(block: BPrefDPrefFilmDPostBPost.() -> Unit): DPrefFilmDPost =
+    BPrefDPrefFilmDPostBPost().apply(block).myDto2()
+
+public fun DPrefFilmDPost.replicate(block: BPrefDPrefFilmDPostBPost.() -> Unit): DPrefFilmDPost =
+    myBuilder1().apply(block).myDto2()
 
 @PrefCtxDSLPostCtx
 public class BPrefDPrefFilmDPostBPost {

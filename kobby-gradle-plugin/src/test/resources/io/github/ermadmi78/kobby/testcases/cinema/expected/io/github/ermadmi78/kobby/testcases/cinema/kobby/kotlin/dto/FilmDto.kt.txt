@@ -28,7 +28,6 @@ import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
 import kotlin.collections.Map
-import kotlin.let
 
 /**
  * Film entity.
@@ -79,47 +78,33 @@ public data class FilmDto(
   public val actors: List<ActorDto>? = null,
 ) : EntityDto, TaggableDto, NativeDto
 
-public fun FilmDto(block: FilmDtoBuilder.() -> Unit): FilmDto {
-  // FilmDto builder DSL
-  return FilmDtoBuilder().apply(block).let {
-    FilmDto(
-          it.id,
-          it.fields,
-          it.tags,
-          it.title,
-          it.genre,
-          it.countryId,
-          it.country,
-          it.actors
-        )
-  }
+public fun FilmDto.toBuilder(): FilmDtoBuilder = FilmDtoBuilder().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.tags = this.tags
+  it.title = this.title
+  it.genre = this.genre
+  it.countryId = this.countryId
+  it.country = this.country
+  it.actors = this.actors
 }
 
-public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto {
-  // FilmDto copy DSL
-  return FilmDtoBuilder().also {
-    it.id = this.id
-    it.fields = this.fields
-    it.tags = this.tags
-    it.title = this.title
-    it.genre = this.genre
-    it.countryId = this.countryId
-    it.country = this.country
-    it.actors = this.actors
-  }
-  .apply(block).let {
-    FilmDto(
-          it.id,
-          it.fields,
-          it.tags,
-          it.title,
-          it.genre,
-          it.countryId,
-          it.country,
-          it.actors
-        )
-  }
-}
+public fun FilmDtoBuilder.toDto(): FilmDto = FilmDto(
+  id,
+  fields,
+  tags,
+  title,
+  genre,
+  countryId,
+  country,
+  actors
+)
+
+public fun FilmDto(block: FilmDtoBuilder.() -> Unit): FilmDto =
+    FilmDtoBuilder().apply(block).toDto()
+
+public fun FilmDto.copy(block: FilmDtoBuilder.() -> Unit): FilmDto =
+    toBuilder().apply(block).toDto()
 
 /**
  * Film entity.

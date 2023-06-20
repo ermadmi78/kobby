@@ -20,32 +20,24 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 public data class MutationDto(
   public val createCountry: CountryDto? = null,
 )
 
-public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto {
-  // MutationDto builder DSL
-  return MutationDtoBuilder().apply(block).let {
-    MutationDto(
-          it.createCountry
-        )
-  }
+public fun MutationDto.toBuilder(): MutationDtoBuilder = MutationDtoBuilder().also {
+  it.createCountry = this.createCountry
 }
 
-public fun MutationDto.copy(block: MutationDtoBuilder.() -> Unit): MutationDto {
-  // MutationDto copy DSL
-  return MutationDtoBuilder().also {
-    it.createCountry = this.createCountry
-  }
-  .apply(block).let {
-    MutationDto(
-          it.createCountry
-        )
-  }
-}
+public fun MutationDtoBuilder.toDto(): MutationDto = MutationDto(
+  createCountry
+)
+
+public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto =
+    MutationDtoBuilder().apply(block).toDto()
+
+public fun MutationDto.copy(block: MutationDtoBuilder.() -> Unit): MutationDto =
+    toBuilder().apply(block).toDto()
 
 @GraphqlDSL
 public class MutationDtoBuilder {

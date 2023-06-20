@@ -55,6 +55,9 @@ class SchemaValidationTest {
             KotlinDtoBuilderLayout(
                 true,
                 Decoration(null, "Builder"),
+                "toBuilder",
+                "toDto",
+                "toInput",
                 "copy"
             ),
             KotlinDtoGraphQLLayout(

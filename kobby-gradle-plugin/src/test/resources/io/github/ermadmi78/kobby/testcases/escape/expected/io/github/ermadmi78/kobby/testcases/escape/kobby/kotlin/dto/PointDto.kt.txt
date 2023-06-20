@@ -24,7 +24,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 @JsonTypeName(value = "Point")
 @JsonTypeInfo(
@@ -39,29 +38,21 @@ public data class PointDto(
   public val y: Int? = null,
 )
 
-public fun PointDto(block: PointDtoBuilder.() -> Unit): PointDto {
-  // PointDto builder DSL
-  return PointDtoBuilder().apply(block).let {
-    PointDto(
-          it.x,
-          it.y
-        )
-  }
+public fun PointDto.toBuilder(): PointDtoBuilder = PointDtoBuilder().also {
+  it.x = this.x
+  it.y = this.y
 }
 
-public fun PointDto.copy(block: PointDtoBuilder.() -> Unit): PointDto {
-  // PointDto copy DSL
-  return PointDtoBuilder().also {
-    it.x = this.x
-    it.y = this.y
-  }
-  .apply(block).let {
-    PointDto(
-          it.x,
-          it.y
-        )
-  }
-}
+public fun PointDtoBuilder.toDto(): PointDto = PointDto(
+  x,
+  y
+)
+
+public fun PointDto(block: PointDtoBuilder.() -> Unit): PointDto =
+    PointDtoBuilder().apply(block).toDto()
+
+public fun PointDto.copy(block: PointDtoBuilder.() -> Unit): PointDto =
+    toBuilder().apply(block).toDto()
 
 @EscapeDSL
 public class PointDtoBuilder {

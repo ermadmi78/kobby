@@ -26,7 +26,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
-import kotlin.let
 
 @JsonTypeName(value = "Country")
 @JsonTypeInfo(
@@ -42,32 +41,23 @@ public data class CountryDto(
   public val films: List<FilmDto>? = null,
 )
 
-public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto {
-  // CountryDto builder DSL
-  return CountryDtoBuilder().apply(block).let {
-    CountryDto(
-          it.id,
-          it.name,
-          it.films
-        )
-  }
+public fun CountryDto.toBuilder(): CountryDtoBuilder = CountryDtoBuilder().also {
+  it.id = this.id
+  it.name = this.name
+  it.films = this.films
 }
 
-public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto {
-  // CountryDto copy DSL
-  return CountryDtoBuilder().also {
-    it.id = this.id
-    it.name = this.name
-    it.films = this.films
-  }
-  .apply(block).let {
-    CountryDto(
-          it.id,
-          it.name,
-          it.films
-        )
-  }
-}
+public fun CountryDtoBuilder.toDto(): CountryDto = CountryDto(
+  id,
+  name,
+  films
+)
+
+public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto =
+    CountryDtoBuilder().apply(block).toDto()
+
+public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto =
+    toBuilder().apply(block).toDto()
 
 @CinemaDSL
 public class CountryDtoBuilder {

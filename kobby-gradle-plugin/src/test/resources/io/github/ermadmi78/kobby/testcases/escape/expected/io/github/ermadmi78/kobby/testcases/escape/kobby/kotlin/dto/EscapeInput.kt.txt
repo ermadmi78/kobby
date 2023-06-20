@@ -23,7 +23,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.error
-import kotlin.let
 
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class EscapeInput(
@@ -32,32 +31,23 @@ public data class EscapeInput(
   public val `in`: String? = null,
 )
 
-public fun EscapeInput(block: EscapeInputBuilder.() -> Unit): EscapeInput {
-  // EscapeInput builder DSL
-  return EscapeInputBuilder().apply(block).let {
-    EscapeInput(
-          it.`is` ?: error("EscapeInput: 'is' must not be null"),
-          it.it ?: error("EscapeInput: 'it' must not be null"),
-          it.`in`
-        )
-  }
+public fun EscapeInput.toBuilder(): EscapeInputBuilder = EscapeInputBuilder().also {
+  it.`is` = this.`is`
+  it.it = this.it
+  it.`in` = this.`in`
 }
 
-public fun EscapeInput.copy(block: EscapeInputBuilder.() -> Unit): EscapeInput {
-  // EscapeInput copy DSL
-  return EscapeInputBuilder().also {
-    it.`is` = this.`is`
-    it.it = this.it
-    it.`in` = this.`in`
-  }
-  .apply(block).let {
-    EscapeInput(
-          it.`is` ?: error("EscapeInput: 'is' must not be null"),
-          it.it ?: error("EscapeInput: 'it' must not be null"),
-          it.`in`
-        )
-  }
-}
+public fun EscapeInputBuilder.toInput(): EscapeInput = EscapeInput(
+  `is` ?: error("EscapeInput: 'is' must not be null"),
+  it ?: error("EscapeInput: 'it' must not be null"),
+  `in`
+)
+
+public fun EscapeInput(block: EscapeInputBuilder.() -> Unit): EscapeInput =
+    EscapeInputBuilder().apply(block).toInput()
+
+public fun EscapeInput.copy(block: EscapeInputBuilder.() -> Unit): EscapeInput =
+    toBuilder().apply(block).toInput()
 
 @EscapeDSL
 public class EscapeInputBuilder {

@@ -180,6 +180,15 @@ class KobbyPlugin : Plugin<Project> {
                         postfix?.also {
                             kotlinTask.dtoBuilderPostfix.convention(it)
                         }
+                        toBuilderFun?.also {
+                            kotlinTask.dtoBuilderToBuilderFun.convention(it)
+                        }
+                        toDtoFun?.also {
+                            kotlinTask.dtoBuilderToDtoFun.convention(it)
+                        }
+                        toInputFun?.also {
+                            kotlinTask.dtoBuilderToInputFun.convention(it)
+                        }
                         copyFun?.also {
                             kotlinTask.dtoBuilderCopyFun.convention(it)
                         }

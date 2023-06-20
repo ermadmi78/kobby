@@ -23,7 +23,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 public data class SimpleDto(
   public val id: Long? = null,
@@ -31,32 +30,23 @@ public data class SimpleDto(
   public val date: LocalDate? = null,
 )
 
-public fun SimpleDto(block: SimpleDtoBuilder.() -> Unit): SimpleDto {
-  // SimpleDto builder DSL
-  return SimpleDtoBuilder().apply(block).let {
-    SimpleDto(
-          it.id,
-          it.name,
-          it.date
-        )
-  }
+public fun SimpleDto.toBuilder(): SimpleDtoBuilder = SimpleDtoBuilder().also {
+  it.id = this.id
+  it.name = this.name
+  it.date = this.date
 }
 
-public fun SimpleDto.copy(block: SimpleDtoBuilder.() -> Unit): SimpleDto {
-  // SimpleDto copy DSL
-  return SimpleDtoBuilder().also {
-    it.id = this.id
-    it.name = this.name
-    it.date = this.date
-  }
-  .apply(block).let {
-    SimpleDto(
-          it.id,
-          it.name,
-          it.date
-        )
-  }
-}
+public fun SimpleDtoBuilder.toDto(): SimpleDto = SimpleDto(
+  id,
+  name,
+  date
+)
+
+public fun SimpleDto(block: SimpleDtoBuilder.() -> Unit): SimpleDto =
+    SimpleDtoBuilder().apply(block).toDto()
+
+public fun SimpleDto.copy(block: SimpleDtoBuilder.() -> Unit): SimpleDto =
+    toBuilder().apply(block).toDto()
 
 @SimpleDSL
 public class SimpleDtoBuilder {

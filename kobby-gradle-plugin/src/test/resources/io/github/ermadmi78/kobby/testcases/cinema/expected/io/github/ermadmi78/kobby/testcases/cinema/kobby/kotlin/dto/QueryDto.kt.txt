@@ -24,7 +24,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
-import kotlin.let
 
 @JsonTypeName(value = "Query")
 @JsonTypeInfo(
@@ -71,44 +70,31 @@ public data class QueryDto(
   public val taggable: List<TaggableDto>? = null,
 )
 
-public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto {
-  // QueryDto builder DSL
-  return QueryDtoBuilder().apply(block).let {
-    QueryDto(
-          it.country,
-          it.countries,
-          it.film,
-          it.films,
-          it.actor,
-          it.actors,
-          it.taggable
-        )
-  }
+public fun QueryDto.toBuilder(): QueryDtoBuilder = QueryDtoBuilder().also {
+  it.country = this.country
+  it.countries = this.countries
+  it.film = this.film
+  it.films = this.films
+  it.actor = this.actor
+  it.actors = this.actors
+  it.taggable = this.taggable
 }
 
-public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto {
-  // QueryDto copy DSL
-  return QueryDtoBuilder().also {
-    it.country = this.country
-    it.countries = this.countries
-    it.film = this.film
-    it.films = this.films
-    it.actor = this.actor
-    it.actors = this.actors
-    it.taggable = this.taggable
-  }
-  .apply(block).let {
-    QueryDto(
-          it.country,
-          it.countries,
-          it.film,
-          it.films,
-          it.actor,
-          it.actors,
-          it.taggable
-        )
-  }
-}
+public fun QueryDtoBuilder.toDto(): QueryDto = QueryDto(
+  country,
+  countries,
+  film,
+  films,
+  actor,
+  actors,
+  taggable
+)
+
+public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    QueryDtoBuilder().apply(block).toDto()
+
+public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    toBuilder().apply(block).toDto()
 
 @CinemaDSL
 public class QueryDtoBuilder {

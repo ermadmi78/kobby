@@ -236,6 +236,9 @@ class GenerateKotlinMojo : AbstractMojo() {
                 KotlinDtoBuilderLayout(
                     dto.builder.enabled,
                     Decoration(dto.builder.prefix, dto.builder.postfix),
+                    dto.builder.toBuilderFun,
+                    dto.builder.toDtoFun,
+                    dto.builder.toInputFun,
                     dto.builder.copyFun
                 ),
                 KotlinDtoGraphQLLayout(

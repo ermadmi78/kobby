@@ -318,6 +318,15 @@ class KotlinDtoBuilderConfig {
     var postfix: String? = "Builder"
 
     @Parameter
+    var toBuilderFun: String = "toBuilder"
+
+    @Parameter
+    var toDtoFun: String = "toDto"
+
+    @Parameter
+    var toInputFun: String = "toInput"
+
+    @Parameter
     var copyFun: String = "copy"
 
     override fun toString(): String {
@@ -325,6 +334,9 @@ class KotlinDtoBuilderConfig {
                 "\n        enabled=$enabled, " +
                 "\n        prefix=$prefix, " +
                 "\n        postfix=$postfix, " +
+                "\n        toBuilderFun=$toBuilderFun, " +
+                "\n        toDtoFun=$toDtoFun, " +
+                "\n        toInputFun=$toInputFun, " +
                 "\n        copyFun=$copyFun" +
                 "\n      )"
     }

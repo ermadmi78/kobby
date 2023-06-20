@@ -25,7 +25,6 @@ import kotlin.Unit
 import kotlin.also
 import kotlin.apply
 import kotlin.collections.List
-import kotlin.let
 
 @JsonTypeName(value = "MyQuery")
 @JsonTypeInfo(
@@ -39,26 +38,19 @@ public data class MyQueryDto @JsonCreator constructor(
   public val find: List<MyResultDto>? = null,
 )
 
-public fun MyQueryDto(block: MyQueryDtoBuilder.() -> Unit): MyQueryDto {
-  // MyQueryDto builder DSL
-  return MyQueryDtoBuilder().apply(block).let {
-    MyQueryDto(
-          it.find
-        )
-  }
+public fun MyQueryDto.toBuilder(): MyQueryDtoBuilder = MyQueryDtoBuilder().also {
+  it.find = this.find
 }
 
-public fun MyQueryDto.copy(block: MyQueryDtoBuilder.() -> Unit): MyQueryDto {
-  // MyQueryDto copy DSL
-  return MyQueryDtoBuilder().also {
-    it.find = this.find
-  }
-  .apply(block).let {
-    MyQueryDto(
-          it.find
-        )
-  }
-}
+public fun MyQueryDtoBuilder.toDto(): MyQueryDto = MyQueryDto(
+  find
+)
+
+public fun MyQueryDto(block: MyQueryDtoBuilder.() -> Unit): MyQueryDto =
+    MyQueryDtoBuilder().apply(block).toDto()
+
+public fun MyQueryDto.copy(block: MyQueryDtoBuilder.() -> Unit): MyQueryDto =
+    toBuilder().apply(block).toDto()
 
 @GraphqlDSL
 public class MyQueryDtoBuilder {

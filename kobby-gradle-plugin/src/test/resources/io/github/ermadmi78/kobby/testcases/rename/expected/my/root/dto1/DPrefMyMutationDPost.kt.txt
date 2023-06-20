@@ -23,7 +23,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 import my.root.ctx.PrefCtxDSLPostCtx
 
 @JsonTypeName(value = "MyMutation")
@@ -43,43 +42,30 @@ public data class DPrefMyMutationDPost(
   public val tagActor: Boolean? = null,
 )
 
-public fun DPrefMyMutationDPost(block: BPrefDPrefMyMutationDPostBPost.() -> Unit):
-    DPrefMyMutationDPost {
-  // DPrefMyMutationDPost builder DSL
-  return BPrefDPrefMyMutationDPostBPost().apply(block).let {
-    DPrefMyMutationDPost(
-          it.createCountry,
-          it.createFilm,
-          it.createActor,
-          it.associate,
-          it.tagFilm,
-          it.tagActor
-        )
-  }
+public fun DPrefMyMutationDPost.myBuilder1(): BPrefDPrefMyMutationDPostBPost =
+    BPrefDPrefMyMutationDPostBPost().also {
+  it.createCountry = this.createCountry
+  it.createFilm = this.createFilm
+  it.createActor = this.createActor
+  it.associate = this.associate
+  it.tagFilm = this.tagFilm
+  it.tagActor = this.tagActor
 }
 
+public fun BPrefDPrefMyMutationDPostBPost.myDto2(): DPrefMyMutationDPost = DPrefMyMutationDPost(
+  createCountry,
+  createFilm,
+  createActor,
+  associate,
+  tagFilm,
+  tagActor
+)
+
+public fun DPrefMyMutationDPost(block: BPrefDPrefMyMutationDPostBPost.() -> Unit):
+    DPrefMyMutationDPost = BPrefDPrefMyMutationDPostBPost().apply(block).myDto2()
+
 public fun DPrefMyMutationDPost.replicate(block: BPrefDPrefMyMutationDPostBPost.() -> Unit):
-    DPrefMyMutationDPost {
-  // DPrefMyMutationDPost replicate DSL
-  return BPrefDPrefMyMutationDPostBPost().also {
-    it.createCountry = this.createCountry
-    it.createFilm = this.createFilm
-    it.createActor = this.createActor
-    it.associate = this.associate
-    it.tagFilm = this.tagFilm
-    it.tagActor = this.tagActor
-  }
-  .apply(block).let {
-    DPrefMyMutationDPost(
-          it.createCountry,
-          it.createFilm,
-          it.createActor,
-          it.associate,
-          it.tagFilm,
-          it.tagActor
-        )
-  }
-}
+    DPrefMyMutationDPost = myBuilder1().apply(block).myDto2()
 
 @PrefCtxDSLPostCtx
 public class BPrefDPrefMyMutationDPostBPost {

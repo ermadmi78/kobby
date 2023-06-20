@@ -21,7 +21,6 @@ import kotlin.Suppress
 import kotlin.Unit
 import kotlin.also
 import kotlin.apply
-import kotlin.let
 
 public data class IntermediateMultiOverrideDto(
   public override val noOverride0: String? = null,
@@ -32,43 +31,31 @@ public data class IntermediateMultiOverrideDto(
   public val finalField: String? = null,
 ) : ComplexIntermediateBase1Dto, ComplexBase1Dto, IntermediateBaseDto
 
-public fun IntermediateMultiOverrideDto(block: IntermediateMultiOverrideDtoBuilder.() -> Unit):
-    IntermediateMultiOverrideDto {
-  // IntermediateMultiOverrideDto builder DSL
-  return IntermediateMultiOverrideDtoBuilder().apply(block).let {
-    IntermediateMultiOverrideDto(
-          it.noOverride0,
-          it.noOverride1,
-          it.complexMultiOverride,
-          it.intermediateNoOverride,
-          it.intermediateMultiOverride,
-          it.finalField
-        )
-  }
+public fun IntermediateMultiOverrideDto.toBuilder(): IntermediateMultiOverrideDtoBuilder =
+    IntermediateMultiOverrideDtoBuilder().also {
+  it.noOverride0 = this.noOverride0
+  it.noOverride1 = this.noOverride1
+  it.complexMultiOverride = this.complexMultiOverride
+  it.intermediateNoOverride = this.intermediateNoOverride
+  it.intermediateMultiOverride = this.intermediateMultiOverride
+  it.finalField = this.finalField
 }
 
-public fun IntermediateMultiOverrideDto.copy(block: IntermediateMultiOverrideDtoBuilder.() -> Unit):
-    IntermediateMultiOverrideDto {
-  // IntermediateMultiOverrideDto copy DSL
-  return IntermediateMultiOverrideDtoBuilder().also {
-    it.noOverride0 = this.noOverride0
-    it.noOverride1 = this.noOverride1
-    it.complexMultiOverride = this.complexMultiOverride
-    it.intermediateNoOverride = this.intermediateNoOverride
-    it.intermediateMultiOverride = this.intermediateMultiOverride
-    it.finalField = this.finalField
-  }
-  .apply(block).let {
+public fun IntermediateMultiOverrideDtoBuilder.toDto(): IntermediateMultiOverrideDto =
     IntermediateMultiOverrideDto(
-          it.noOverride0,
-          it.noOverride1,
-          it.complexMultiOverride,
-          it.intermediateNoOverride,
-          it.intermediateMultiOverride,
-          it.finalField
-        )
-  }
-}
+  noOverride0,
+  noOverride1,
+  complexMultiOverride,
+  intermediateNoOverride,
+  intermediateMultiOverride,
+  finalField
+)
+
+public fun IntermediateMultiOverrideDto(block: IntermediateMultiOverrideDtoBuilder.() -> Unit):
+    IntermediateMultiOverrideDto = IntermediateMultiOverrideDtoBuilder().apply(block).toDto()
+
+public fun IntermediateMultiOverrideDto.copy(block: IntermediateMultiOverrideDtoBuilder.() -> Unit):
+    IntermediateMultiOverrideDto = toBuilder().apply(block).toDto()
 
 @MultiOverrideDSL
 public class IntermediateMultiOverrideDtoBuilder {
