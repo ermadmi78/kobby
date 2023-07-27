@@ -16,6 +16,7 @@ customize generated DSL by means of GraphQL schema directives and Kotlin extensi
 ### Tutorials
 
 * [How to generate Kotlin DSL Client by GraphQL schema](https://blog.kotlin-academy.com/how-to-generate-kotlin-dsl-client-by-graphql-schema-707fd0c55284)
+* [Генерируем Kotlin клиент по GraphQL схеме](https://habr.com/ru/articles/587388/)
 * [Kobby Gradle Tutorial](https://github.com/ermadmi78/kobby-gradle-tutorial)
 * [Kobby Maven Tutorial](https://github.com/ermadmi78/kobby-maven-tutorial)
 
