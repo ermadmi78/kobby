@@ -522,6 +522,11 @@ internal object JacksonAnnotations {
         "com.fasterxml.jackson.annotation",
         "JsonProperty"
     )
+
+    val JSON_IGNORE_PROPERTIES = ClassName(
+        "com.fasterxml.jackson.annotation",
+        "JsonIgnoreProperties"
+    )
 }
 
 internal enum class JacksonInclude {

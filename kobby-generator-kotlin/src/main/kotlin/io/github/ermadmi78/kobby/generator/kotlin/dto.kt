@@ -3,6 +3,7 @@ package io.github.ermadmi78.kobby.generator.kotlin
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.KModifier.SEALED
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_IGNORE_PROPERTIES
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_INCLUDE
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_PROPERTY
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES
@@ -553,22 +554,6 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             }
         }
 
-        // GraphQL ErrorResult
-        files += buildFile(dto.graphql.packageName, dto.graphql.errorResultName) {
-            buildClass(dto.graphql.errorResultName) {
-                annotateSerializable()
-                addModifiers(KModifier.DATA)
-                buildPrimaryConstructorProperties {
-                    buildProperty(argErrors) {
-                        jacksonIncludeNonEmpty()
-                    }
-                    customizeConstructor {
-                        jacksonizeConstructor()
-                    }
-                }
-            }
-        }
-
         // GraphQL Messaging
         files += buildFile(dto.graphql.packageName, "messaging") {
             buildClass(dto.graphql.clientMessageName) {
@@ -576,7 +561,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 addKdoc(
                     "%L",
                     "Message protocol description see [here]" +
-                            "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
+                            "(https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)"
                 )
 
                 annotateSerializable()
@@ -591,7 +576,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     }
 
                     buildAnnotation(JSON_SUB_TYPES) {
-                        for (message in GqlMessage.values()) {
+                        for (message in WsMessage.values()) {
                             if (message.client) {
                                 buildAnnotation(JSON_SUB_TYPES_TYPE) {
                                     addMember("value = %T::class", dto.graphql.messageImplClass(message))
@@ -599,6 +584,10 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 }
                             }
                         }
+                    }
+
+                    buildAnnotation(JSON_IGNORE_PROPERTIES) {
+                        addMember("ignoreUnknown = true")
                     }
                 }
             }
@@ -608,7 +597,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 addKdoc(
                     "%L",
                     "Message protocol description see [here]" +
-                            "(https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
+                            "(https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)"
                 )
 
                 annotateSerializable()
@@ -623,8 +612,8 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     }
 
                     buildAnnotation(JSON_SUB_TYPES) {
-                        for (message in GqlMessage.values()) {
-                            if (message.server) {
+                        for (message in WsMessage.values()) {
+                            if (!message.client) {
                                 buildAnnotation(JSON_SUB_TYPES_TYPE) {
                                     addMember("value = %T::class", dto.graphql.messageImplClass(message))
                                     addMember("name = %S", message.type)
@@ -632,10 +621,14 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             }
                         }
                     }
+
+                    buildAnnotation(JSON_IGNORE_PROPERTIES) {
+                        addMember("ignoreUnknown = true")
+                    }
                 }
             }
 
-            GqlMessage.values().forEach { message ->
+            WsMessage.values().forEach { message ->
                 buildClass(dto.graphql.messageImplName(message)) {
                     annotateSerializable()
                     annotateSerialName(message.type)
@@ -659,18 +652,17 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                     addKdoc(
                         "%L",
-                        "See ${message.name} [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)"
+                        "See ${message.docName} [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)"
                     )
 
                     if (message.client) {
                         superclass(dto.graphql.clientMessageClass)
-                    }
-                    if (message.server) {
+                    } else {
                         superclass(dto.graphql.serverMessageClass)
                     }
 
                     when (message) {
-                        GqlMessage.GQL_CONNECTION_INIT -> {
+                        WsMessage.WS_CLIENT_MESSAGE_CONNECTION_INIT -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
                                 if (dto.serialization.enabled) {
@@ -684,7 +676,77 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             }
                         }
 
-                        GqlMessage.GQL_START -> {
+                        WsMessage.WS_SERVER_MESSAGE_CONNECTION_ACK -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                if (dto.serialization.enabled) {
+                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
+                                } else {
+                                    buildProperty("payload", ANY.nullable())
+                                    customizeConstructor {
+                                        jacksonizeConstructor()
+                                    }
+                                }
+                            }
+                        }
+
+                        WsMessage.WS_CLIENT_MESSAGE_PING -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                if (dto.serialization.enabled) {
+                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
+                                } else {
+                                    buildProperty("payload", ANY.nullable())
+                                    customizeConstructor {
+                                        jacksonizeConstructor()
+                                    }
+                                }
+                            }
+                        }
+
+                        WsMessage.WS_CLIENT_MESSAGE_PONG -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                if (dto.serialization.enabled) {
+                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
+                                } else {
+                                    buildProperty("payload", ANY.nullable())
+                                    customizeConstructor {
+                                        jacksonizeConstructor()
+                                    }
+                                }
+                            }
+                        }
+
+                        WsMessage.WS_SERVER_MESSAGE_PING -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                if (dto.serialization.enabled) {
+                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
+                                } else {
+                                    buildProperty("payload", ANY.nullable())
+                                    customizeConstructor {
+                                        jacksonizeConstructor()
+                                    }
+                                }
+                            }
+                        }
+
+                        WsMessage.WS_SERVER_MESSAGE_PONG -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                if (dto.serialization.enabled) {
+                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
+                                } else {
+                                    buildProperty("payload", ANY.nullable())
+                                    customizeConstructor {
+                                        jacksonizeConstructor()
+                                    }
+                                }
+                            }
+                        }
+
+                        WsMessage.WS_CLIENT_MESSAGE_SUBSCRIBE -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
                                 buildProperty("id", STRING)
@@ -692,51 +754,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             }
                         }
 
-                        GqlMessage.GQL_STOP -> {
-                            addModifiers(KModifier.DATA)
-                            buildPrimaryConstructorProperties {
-                                buildProperty("id", STRING)
-                                customizeConstructor {
-                                    jacksonizeConstructor()
-                                }
-                            }
-                        }
-
-                        GqlMessage.GQL_CONNECTION_TERMINATE -> {
-                            buildAnnotation(KotlinAnnotations.SUPPRESS) {
-                                addMember("%S", "CanSealedSubClassBeObject")
-                            }
-                        }
-
-                        GqlMessage.GQL_CONNECTION_ERROR -> {
-                            addModifiers(KModifier.DATA)
-                            buildPrimaryConstructorProperties {
-                                if (dto.serialization.enabled) {
-                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
-                                } else {
-                                    buildProperty("payload", ANY.nullable())
-                                    customizeConstructor {
-                                        jacksonizeConstructor()
-                                    }
-                                }
-                            }
-                        }
-
-                        GqlMessage.GQL_CONNECTION_ACK -> {
-                            addModifiers(KModifier.DATA)
-                            buildPrimaryConstructorProperties {
-                                if (dto.serialization.enabled) {
-                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
-                                } else {
-                                    buildProperty("payload", ANY.nullable())
-                                    customizeConstructor {
-                                        jacksonizeConstructor()
-                                    }
-                                }
-                            }
-                        }
-
-                        GqlMessage.GQL_DATA -> {
+                        WsMessage.WS_SERVER_MESSAGE_NEXT -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
                                 buildProperty("id", STRING)
@@ -744,15 +762,20 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             }
                         }
 
-                        GqlMessage.GQL_ERROR -> {
+                        WsMessage.WS_SERVER_MESSAGE_ERROR -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
                                 buildProperty("id", STRING)
-                                buildProperty("payload", dto.graphql.errorResultClass)
+                                buildProperty(
+                                    "payload",
+                                    LIST.parameterizedBy(dto.graphql.errorClass).nullable()
+                                ) {
+                                    jacksonIncludeNonEmpty()
+                                }
                             }
                         }
 
-                        GqlMessage.GQL_COMPLETE -> {
+                        WsMessage.WS_CLIENT_MESSAGE_COMPLETE -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
                                 buildProperty("id", STRING)
@@ -762,9 +785,13 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             }
                         }
 
-                        GqlMessage.GQL_CONNECTION_KEEP_ALIVE -> {
-                            buildAnnotation(KotlinAnnotations.SUPPRESS) {
-                                addMember("%S", "CanSealedSubClassBeObject")
+                        WsMessage.WS_SERVER_MESSAGE_COMPLETE -> {
+                            addModifiers(KModifier.DATA)
+                            buildPrimaryConstructorProperties {
+                                buildProperty("id", STRING)
+                                customizeConstructor {
+                                    jacksonizeConstructor()
+                                }
                             }
                         }
                     }

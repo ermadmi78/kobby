@@ -159,12 +159,6 @@ internal val KotlinDtoGraphQLLayout.subscriptionResultName: String
 internal val KotlinDtoGraphQLLayout.subscriptionResultClass: ClassName
     get() = ClassName(packageName, subscriptionResultName)
 
-internal val KotlinDtoGraphQLLayout.errorResultName: String
-    get() = "ErrorResult".decorate(decoration)
-
-internal val KotlinDtoGraphQLLayout.errorResultClass: ClassName
-    get() = ClassName(packageName, errorResultName)
-
 //******************************************************************************************************************
 //                                   Messaging
 //******************************************************************************************************************
@@ -181,23 +175,24 @@ internal val KotlinDtoGraphQLLayout.serverMessageName: String
 internal val KotlinDtoGraphQLLayout.serverMessageClass: ClassName
     get() = ClassName(packageName, serverMessageName)
 
-internal enum class GqlMessage(val type: String, internal val _name: String, val client: Boolean, val server: Boolean) {
-    GQL_CONNECTION_INIT("connection_init", "ConnectionInit", true, false),
-    GQL_START("start", "Start", true, false),
-    GQL_STOP("stop", "Stop", true, false),
-    GQL_CONNECTION_TERMINATE("connection_terminate", "ConnectionTerminate", true, false),
-    GQL_CONNECTION_ERROR("connection_error", "ConnectionError", false, true),
-    GQL_CONNECTION_ACK("connection_ack", "ConnectionAck", false, true),
-    GQL_DATA("data", "Data", false, true),
-    GQL_ERROR("error", "Error", false, true),
-    GQL_COMPLETE("complete", "Complete", false, true),
-    GQL_CONNECTION_KEEP_ALIVE("ka", "ConnectionKeepAlive", false, true)
+internal enum class WsMessage(val type: String, internal val docName: String, val client: Boolean) {
+    WS_CLIENT_MESSAGE_CONNECTION_INIT("connection_init", "ConnectionInit", true),
+    WS_SERVER_MESSAGE_CONNECTION_ACK("connection_ack", "ConnectionAck", false),
+    WS_CLIENT_MESSAGE_PING("ping", "Ping", true),
+    WS_CLIENT_MESSAGE_PONG("pong", "Pong", true),
+    WS_SERVER_MESSAGE_PING("ping", "Ping", false),
+    WS_SERVER_MESSAGE_PONG("pong", "Pong", false),
+    WS_CLIENT_MESSAGE_SUBSCRIBE("subscribe", "Subscribe", true),
+    WS_SERVER_MESSAGE_NEXT("next", "Next", false),
+    WS_SERVER_MESSAGE_ERROR("error", "Error", false),
+    WS_CLIENT_MESSAGE_COMPLETE("complete", "Complete", true),
+    WS_SERVER_MESSAGE_COMPLETE("complete", "Complete", false)
 }
 
-internal fun KotlinDtoGraphQLLayout.messageImplName(massage: GqlMessage) =
-    "Message${massage._name}".decorate(decoration)
+internal fun KotlinDtoGraphQLLayout.messageImplName(massage: WsMessage) =
+    "${if (massage.client) "ClientMessage" else "ServerMessage"}${massage.docName}".decorate(decoration)
 
-internal fun KotlinDtoGraphQLLayout.messageImplClass(massage: GqlMessage) =
+internal fun KotlinDtoGraphQLLayout.messageImplClass(massage: WsMessage) =
     ClassName(packageName, messageImplName(massage))
 
 //******************************************************************************************************************
@@ -417,6 +412,7 @@ internal val KotlinAdapterKtorLayout.compositeValReply: String get() = "reply"
 internal val KotlinAdapterKtorLayout.compositeValSubscriptionId: String get() = "subscriptionId"
 
 internal val KotlinAdapterKtorLayout.compositeFunSendMessage: String get() = "sendMessage"
+internal val KotlinAdapterKtorLayout.compositePropertySocket: String get() = "socket"
 internal val KotlinAdapterKtorLayout.compositePropertyMessage: String get() = "message"
 internal val KotlinAdapterKtorLayout.compositeFunReceiveMessage: String get() = "receiveMessage"
 

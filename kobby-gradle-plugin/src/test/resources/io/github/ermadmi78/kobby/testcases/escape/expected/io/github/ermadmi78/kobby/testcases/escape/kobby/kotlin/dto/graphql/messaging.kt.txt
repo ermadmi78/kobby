@@ -16,6 +16,7 @@
 package io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.dto.graphql
 
 import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonIgnoreProperties
 import com.fasterxml.jackson.`annotation`.JsonInclude
 import com.fasterxml.jackson.`annotation`.JsonSubTypes
 import com.fasterxml.jackson.`annotation`.JsonTypeInfo
@@ -23,11 +24,12 @@ import com.fasterxml.jackson.`annotation`.JsonTypeName
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
+import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -35,16 +37,18 @@ import kotlin.collections.Map
   property = "type",
 )
 @JsonSubTypes(
-  JsonSubTypes.Type(value = EscapeMessageConnectionInit::class, name = "connection_init"),
-  JsonSubTypes.Type(value = EscapeMessageStart::class, name = "start"),
-  JsonSubTypes.Type(value = EscapeMessageStop::class, name = "stop"),
-  JsonSubTypes.Type(value = EscapeMessageConnectionTerminate::class, name = "connection_terminate"),
+  JsonSubTypes.Type(value = EscapeClientMessageConnectionInit::class, name = "connection_init"),
+  JsonSubTypes.Type(value = EscapeClientMessagePing::class, name = "ping"),
+  JsonSubTypes.Type(value = EscapeClientMessagePong::class, name = "pong"),
+  JsonSubTypes.Type(value = EscapeClientMessageSubscribe::class, name = "subscribe"),
+  JsonSubTypes.Type(value = EscapeClientMessageComplete::class, name = "complete"),
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public sealed class EscapeClientMessage
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -52,172 +56,181 @@ public sealed class EscapeClientMessage
   property = "type",
 )
 @JsonSubTypes(
-  JsonSubTypes.Type(value = EscapeMessageConnectionError::class, name = "connection_error"),
-  JsonSubTypes.Type(value = EscapeMessageConnectionAck::class, name = "connection_ack"),
-  JsonSubTypes.Type(value = EscapeMessageData::class, name = "data"),
-  JsonSubTypes.Type(value = EscapeMessageError::class, name = "error"),
-  JsonSubTypes.Type(value = EscapeMessageComplete::class, name = "complete"),
-  JsonSubTypes.Type(value = EscapeMessageConnectionKeepAlive::class, name = "ka"),
+  JsonSubTypes.Type(value = EscapeServerMessageConnectionAck::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = EscapeServerMessagePing::class, name = "ping"),
+  JsonSubTypes.Type(value = EscapeServerMessagePong::class, name = "pong"),
+  JsonSubTypes.Type(value = EscapeServerMessageNext::class, name = "next"),
+  JsonSubTypes.Type(value = EscapeServerMessageError::class, name = "error"),
+  JsonSubTypes.Type(value = EscapeServerMessageComplete::class, name = "complete"),
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public sealed class EscapeServerMessage
 
 /**
- * See GQL_CONNECTION_INIT
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeName(value = "connection_init")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = EscapeMessageConnectionInit::class,
+  defaultImpl = EscapeClientMessageConnectionInit::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class EscapeMessageConnectionInit @JsonCreator constructor(
+public data class EscapeClientMessageConnectionInit @JsonCreator constructor(
   public val payload: Map<String, Any?>? = null,
 ) : EscapeClientMessage()
 
 /**
- * See GQL_START
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeName(value = "start")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-  defaultImpl = EscapeMessageStart::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class EscapeMessageStart(
-  public val id: String,
-  public val payload: EscapeRequest,
-) : EscapeClientMessage()
-
-/**
- * See GQL_STOP
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeName(value = "stop")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-  defaultImpl = EscapeMessageStop::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class EscapeMessageStop @JsonCreator constructor(
-  public val id: String,
-) : EscapeClientMessage()
-
-/**
- * See GQL_CONNECTION_TERMINATE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeName(value = "connection_terminate")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-  defaultImpl = EscapeMessageConnectionTerminate::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-@Suppress("CanSealedSubClassBeObject")
-public class EscapeMessageConnectionTerminate : EscapeClientMessage()
-
-/**
- * See GQL_CONNECTION_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeName(value = "connection_error")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-  defaultImpl = EscapeMessageConnectionError::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class EscapeMessageConnectionError @JsonCreator constructor(
-  public val payload: Any? = null,
-) : EscapeServerMessage()
-
-/**
- * See GQL_CONNECTION_ACK
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeName(value = "connection_ack")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = EscapeMessageConnectionAck::class,
+  defaultImpl = EscapeServerMessageConnectionAck::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class EscapeMessageConnectionAck @JsonCreator constructor(
+public data class EscapeServerMessageConnectionAck @JsonCreator constructor(
   public val payload: Any? = null,
 ) : EscapeServerMessage()
 
 /**
- * See GQL_DATA
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-@JsonTypeName(value = "data")
+@JsonTypeName(value = "ping")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = EscapeMessageData::class,
+  defaultImpl = EscapeClientMessagePing::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class EscapeMessageData(
+public data class EscapeClientMessagePing @JsonCreator constructor(
+  public val payload: Any? = null,
+) : EscapeClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "pong")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = EscapeClientMessagePong::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class EscapeClientMessagePong @JsonCreator constructor(
+  public val payload: Any? = null,
+) : EscapeClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ping")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = EscapeServerMessagePing::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class EscapeServerMessagePing @JsonCreator constructor(
+  public val payload: Any? = null,
+) : EscapeServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "pong")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = EscapeServerMessagePong::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class EscapeServerMessagePong @JsonCreator constructor(
+  public val payload: Any? = null,
+) : EscapeServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "subscribe")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = EscapeClientMessageSubscribe::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class EscapeClientMessageSubscribe(
+  public val id: String,
+  public val payload: EscapeRequest,
+) : EscapeClientMessage()
+
+/**
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "next")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = EscapeServerMessageNext::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class EscapeServerMessageNext(
   public val id: String,
   public val payload: EscapeSubscriptionResult,
 ) : EscapeServerMessage()
 
 /**
- * See GQL_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeName(value = "error")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = EscapeMessageError::class,
+  defaultImpl = EscapeServerMessageError::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class EscapeMessageError(
+public data class EscapeServerMessageError(
   public val id: String,
-  public val payload: EscapeErrorResult,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val payload: List<EscapeError>? = null,
 ) : EscapeServerMessage()
 
 /**
- * See GQL_COMPLETE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeName(value = "complete")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = EscapeMessageComplete::class,
+  defaultImpl = EscapeClientMessageComplete::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class EscapeMessageComplete @JsonCreator constructor(
+public data class EscapeClientMessageComplete @JsonCreator constructor(
   public val id: String,
-) : EscapeServerMessage()
+) : EscapeClientMessage()
 
 /**
- * See GQL_CONNECTION_KEEP_ALIVE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-@JsonTypeName(value = "ka")
+@JsonTypeName(value = "complete")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = EscapeMessageConnectionKeepAlive::class,
+  defaultImpl = EscapeServerMessageComplete::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-@Suppress("CanSealedSubClassBeObject")
-public class EscapeMessageConnectionKeepAlive : EscapeServerMessage()
+public data class EscapeServerMessageComplete @JsonCreator constructor(
+  public val id: String,
+) : EscapeServerMessage()

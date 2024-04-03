@@ -18,97 +18,97 @@ package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.gra
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
+import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 public sealed class CountryClientMessage
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 public sealed class CountryServerMessage
 
 /**
- * See GQL_CONNECTION_INIT
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class CountryMessageConnectionInit(
+public data class CountryClientMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
 ) : CountryClientMessage()
 
 /**
- * See GQL_START
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class CountryMessageStart(
+public data class CountryServerMessageConnectionAck(
+  public val payload: Any? = null,
+) : CountryServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryClientMessagePing(
+  public val payload: Any? = null,
+) : CountryClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryClientMessagePong(
+  public val payload: Any? = null,
+) : CountryClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryServerMessagePing(
+  public val payload: Any? = null,
+) : CountryServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryServerMessagePong(
+  public val payload: Any? = null,
+) : CountryServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class CountryClientMessageSubscribe(
   public val id: String,
   public val payload: CountryRequest,
 ) : CountryClientMessage()
 
 /**
- * See GQL_STOP
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class CountryMessageStop(
-  public val id: String,
-) : CountryClientMessage()
-
-/**
- * See GQL_CONNECTION_TERMINATE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@Suppress("CanSealedSubClassBeObject")
-public class CountryMessageConnectionTerminate : CountryClientMessage()
-
-/**
- * See GQL_CONNECTION_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class CountryMessageConnectionError(
-  public val payload: Any? = null,
-) : CountryServerMessage()
-
-/**
- * See GQL_CONNECTION_ACK
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class CountryMessageConnectionAck(
-  public val payload: Any? = null,
-) : CountryServerMessage()
-
-/**
- * See GQL_DATA
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class CountryMessageData(
+public data class CountryServerMessageNext(
   public val id: String,
   public val payload: CountrySubscriptionResult,
 ) : CountryServerMessage()
 
 /**
- * See GQL_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class CountryMessageError(
+public data class CountryServerMessageError(
   public val id: String,
-  public val payload: CountryErrorResult,
+  public val payload: List<CountryError>? = null,
 ) : CountryServerMessage()
 
 /**
- * See GQL_COMPLETE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class CountryMessageComplete(
+public data class CountryClientMessageComplete(
   public val id: String,
-) : CountryServerMessage()
+) : CountryClientMessage()
 
 /**
- * See GQL_CONNECTION_KEEP_ALIVE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-@Suppress("CanSealedSubClassBeObject")
-public class CountryMessageConnectionKeepAlive : CountryServerMessage()
+public data class CountryServerMessageComplete(
+  public val id: String,
+) : CountryServerMessage()

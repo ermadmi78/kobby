@@ -3,7 +3,7 @@ package io.github.ermadmi78.kobby.generator.kotlin
 import com.squareup.kotlinpoet.*
 import com.squareup.kotlinpoet.KModifier.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import io.github.ermadmi78.kobby.generator.kotlin.GqlMessage.*
+import io.github.ermadmi78.kobby.generator.kotlin.WsMessage.*
 import io.github.ermadmi78.kobby.model.KobbyNode
 import io.github.ermadmi78.kobby.model.KobbySchema
 
@@ -218,7 +218,10 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
 
                 buildFunction(ktor.compositeFunSendMessage) {
                     addModifiers(PROTECTED, OPEN, SUSPEND)
-                    receiver(ClassName("io.ktor.websocket", "WebSocketSession"))
+                    buildParameter(
+                        ktor.compositePropertySocket,
+                        ClassName("io.ktor.websocket", "WebSocketSession")
+                    )
                     buildParameter(ktor.compositePropertyMessage, dto.graphql.clientMessageClass)
 
                     if (dto.serialization.enabled) {
@@ -234,29 +237,37 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                         )
                     }
                     addStatement(
-                        "%M(${ktor.compositeValContent})",
+                        "${ktor.compositePropertySocket}.%M(${ktor.compositeValContent})",
                         MemberName("io.ktor.websocket", "send")
                     )
                 }
 
                 buildFunction(ktor.compositeFunReceiveMessage) {
                     addModifiers(PROTECTED, OPEN, SUSPEND)
-                    receiver(ClassName("io.ktor.websocket", "WebSocketSession"))
-                    returns(dto.graphql.serverMessageClass)
+                    buildParameter(
+                        ktor.compositePropertySocket,
+                        ClassName("io.ktor.websocket", "WebSocketSession")
+                    )
+                    returns(dto.graphql.serverMessageClass.nullable())
 
                     controlFlow(
                         "val·${ktor.compositeValMessage}·=·" +
                                 "if·(${ktor.compositePropertySubscriptionReceiveTimeoutMillis}·==·null)"
                     ) {
-                        addStatement("incoming.receive()")
+                        addStatement("${ktor.compositePropertySocket}.incoming.receive()")
                     }
                     controlFlow("else") {
                         controlFlow(
                             "%T(${ktor.compositePropertySubscriptionReceiveTimeoutMillis})",
-                            ClassName("kotlinx.coroutines", "withTimeout")
+                            ClassName("kotlinx.coroutines", "withTimeoutOrNull")
                         ) {
-                            addStatement("incoming.receive()")
+                            addStatement("${ktor.compositePropertySocket}.incoming.receive()")
                         }
+                    }
+                    addStatement("")
+
+                    controlFlow("if·(${ktor.compositeValMessage}·==·null)") {
+                        addStatement("return·null")
                     }
 
                     addStatement("")
@@ -541,7 +552,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
     val ktor = adapter.ktor
     val graphql = dto.graphql
 
-    val message: (GqlMessage) -> ClassName = {
+    val message: (WsMessage) -> ClassName = {
         graphql.messageImplClass(it)
     }
 
@@ -562,145 +573,157 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
         buildParameter(block, schema.receiverSubscriptionDtoLambda)
         returns(UNIT)
 
-        buildSendMessage(layout, GQL_CONNECTION_INIT) {
+        addStatement("val·${ktor.compositePropertySocket}·=·this")
+        buildSendMessage(layout, WS_CLIENT_MESSAGE_CONNECTION_INIT) {
             initPayload
         }
-        controlFlow("try") {
-            controlFlow("while·(true)") {
-                controlFlow("when·(val·$reply·=·$receiveMessage())") {
-                    controlFlow("is·%T·->", message(GQL_CONNECTION_KEEP_ALIVE)) {
-                        addStatement("continue")
-                    }
-                    controlFlow("is·%T·->", message(GQL_CONNECTION_ACK)) {
-                        addStatement("break")
-                    }
-                    controlFlow("is·%T·->", message(GQL_CONNECTION_ERROR)) {
-                        addStatement(
-                            "throw·%T(%P, $request)",
-                            graphql.exceptionClass,
-                            "Connection error: \${$reply.payload}"
-                        )
-                    }
-                    controlFlow("else·->") {
-                        addStatement(
-                            "throw·%T(%P, $request)",
-                            graphql.exceptionClass,
-                            "Invalid protocol - unexpected reply: \$$reply"
-                        )
-                    }
+
+        addStatement("")
+        controlFlow("while·(true)") {
+            controlFlow(
+                "when·(val·$reply·=·$receiveMessage(${ktor.compositePropertySocket})·?:·throw·%T(%P, $request))",
+                graphql.exceptionClass,
+                "Receive timeout expired (\$${ktor.compositePropertySubscriptionReceiveTimeoutMillis} millis)"
+            ) {
+                controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_CONNECTION_ACK)) {
+                    addStatement("break")
                 }
-            }
-
-            addStatement("")
-            addStatement("val·$subscriptionId·=·${ktor.compositePropertyIdGenerator}()")
-            buildSendMessage(layout, GQL_START) {
-                "$subscriptionId, $request"
-            }
-            addStatement("")
-
-            buildAnonymousClass {
-                addSuperinterface(context.receiverClass.parameterizedBy(schema.subscription.dtoClass))
-
-                buildFunction(context.receiverFunReceive) {
-                    addModifiers(SUSPEND, OVERRIDE)
-                    returns(schema.subscription.dtoClass)
-
-                    controlFlow("while·(true)") {
-                        controlFlow("when·(val·$reply·=·$receiveMessage())") {
-                            controlFlow("is·%T·->", message(GQL_DATA)) {
-                                addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
-                                addStatement("")
-
-                                addStatement("val·$result·=·$reply.payload")
-                                controlFlow(
-                                    "$result.errors?.%M·{ it.%M() }?.%M",
-                                    Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
-                                ) {
-                                    addStatement(
-                                        "throw·%T(%S, $request, it)",
-                                        graphql.exceptionClass,
-                                        "GraphQL subscription failed"
-                                    )
-                                }
-                                addStatement(
-                                    "return·$result.data ?: throw·%T(\n⇥%S,\n$request⇤\n)",
-                                    graphql.exceptionClass,
-                                    "GraphQL subscription completes successfully but returns no data"
-                                )
-                            }
-
-                            controlFlow("is·%T·->", message(GQL_ERROR)) {
-                                addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
-                                addStatement(
-                                    "throw·%T(%S, $request, $reply.payload.errors)",
-                                    graphql.exceptionClass,
-                                    "Subscription failed"
-                                )
-                            }
-
-                            controlFlow("is·%T·->", message(GQL_COMPLETE)) {
-                                addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
-                                addStatement(
-                                    "throw·%T(%S)",
-                                    ClassName(
-                                        "kotlin.coroutines.cancellation",
-                                        "CancellationException"
-                                    ),
-                                    "Subscription finished"
-                                )
-                            }
-
-                            controlFlow("is·%T·->", message(GQL_CONNECTION_KEEP_ALIVE)) {
-                                addStatement("continue")
-                            }
-
-                            controlFlow("else·->") {
-                                addStatement(
-                                    "throw·%T(%P, $request)",
-                                    graphql.exceptionClass,
-                                    "Invalid protocol - unexpected reply: \$$reply"
-                                )
-                            }
-                        }
-                    }
-
-                    addStatement("")
-                    addStatement("@%T(%S)", KotlinAnnotations.SUPPRESS, "UNREACHABLE_CODE")
-                    addStatement("%M(%S)", Kotlin.error, "Invalid algorithm")
+                controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_PING)) {
+                    buildSendMessage(layout, WS_CLIENT_MESSAGE_PONG)
+                    addStatement("continue")
                 }
-
-                if (context.commitEnabled) {
-                    buildFunction(context.receiverFunCommit) {
-                        addModifiers(SUSPEND, OVERRIDE)
-                        returns(UNIT)
-
-                        addStatement("//·Do·nothing")
-                    }
-                }
-            }.also {
-                controlFlow("try") {
-                    addStatement("$block.invoke(%L)", it)
-                }
-                controlFlow("finally") {
-                    buildSendMessage(layout, GQL_STOP) {
-                        subscriptionId
-                    }
+                controlFlow("else·->") {
+                    addStatement(
+                        "throw·%T(%P, $request)",
+                        graphql.exceptionClass,
+                        "Invalid protocol - unexpected reply: \$$reply"
+                    )
                 }
             }
         }
-        controlFlow("finally") {
-            buildSendMessage(layout, GQL_CONNECTION_TERMINATE)
+
+        addStatement("")
+        addStatement("val·$subscriptionId·=·${ktor.compositePropertyIdGenerator}()")
+        buildSendMessage(layout, WS_CLIENT_MESSAGE_SUBSCRIBE) {
+            "$subscriptionId, $request"
+        }
+        addStatement("")
+
+        buildAnonymousClass {
+            addSuperinterface(context.receiverClass.parameterizedBy(schema.subscription.dtoClass))
+
+            buildFunction(context.receiverFunReceive) {
+                addModifiers(SUSPEND, OVERRIDE)
+                returns(schema.subscription.dtoClass)
+
+                controlFlow("while·(true)") {
+                    addStatement("var·$reply·=·$receiveMessage(${ktor.compositePropertySocket})")
+                    controlFlow("if·($reply·==·null)") {
+                        buildSendMessage(layout, WS_CLIENT_MESSAGE_PING)
+                        addStatement(
+                            "$reply·=·$receiveMessage(${ktor.compositePropertySocket})·?:·throw·%T(%P, $request)",
+                            graphql.exceptionClass,
+                            "Receive timeout expired (\$${ktor.compositePropertySubscriptionReceiveTimeoutMillis} millis)"
+                        )
+                    }
+
+                    controlFlow("when·($reply)") {
+                        controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_NEXT)) {
+                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
+                            addStatement("")
+
+                            addStatement("val·$result·=·$reply.payload")
+                            controlFlow(
+                                "$result.errors?.%M·{ it.%M() }?.%M",
+                                Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
+                            ) {
+                                addStatement(
+                                    "throw·%T(%S, $request, it)",
+                                    graphql.exceptionClass,
+                                    "GraphQL subscription failed"
+                                )
+                            }
+                            addStatement(
+                                "return·$result.data ?: throw·%T(\n⇥%S,\n$request⇤\n)",
+                                graphql.exceptionClass,
+                                "GraphQL subscription completes successfully but returns no data"
+                            )
+                        }
+
+                        controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_ERROR)) {
+                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
+                            addStatement(
+                                "throw·%T(%S, $request, $reply.payload)",
+                                graphql.exceptionClass,
+                                "Subscription failed"
+                            )
+                        }
+
+                        controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_COMPLETE)) {
+                            addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
+                            addStatement(
+                                "throw·%T(%S)",
+                                ClassName(
+                                    "kotlin.coroutines.cancellation",
+                                    "CancellationException"
+                                ),
+                                "Subscription finished"
+                            )
+                        }
+
+                        controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_PING)) {
+                            buildSendMessage(layout, WS_CLIENT_MESSAGE_PONG)
+                            addStatement("continue")
+                        }
+
+                        controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_PONG)) {
+                            addStatement("continue")
+                        }
+
+                        controlFlow("else·->") {
+                            addStatement(
+                                "throw·%T(%P, $request)",
+                                graphql.exceptionClass,
+                                "Invalid protocol - unexpected reply: \$$reply"
+                            )
+                        }
+                    }
+                }
+
+                addStatement("")
+                addStatement("@%T(%S)", KotlinAnnotations.SUPPRESS, "UNREACHABLE_CODE")
+                addStatement("%M(%S)", Kotlin.error, "Invalid algorithm")
+            }
+
+            if (context.commitEnabled) {
+                buildFunction(context.receiverFunCommit) {
+                    addModifiers(SUSPEND, OVERRIDE)
+                    returns(UNIT)
+
+                    addStatement("//·Do·nothing")
+                }
+            }
+        }.also {
+            controlFlow("try") {
+                addStatement("$block.invoke(%L)", it)
+            }
+            controlFlow("finally") {
+                buildSendMessage(layout, WS_CLIENT_MESSAGE_COMPLETE) {
+                    subscriptionId
+                }
+            }
         }
     }
 }
 
 private fun FunSpecBuilder.buildSendMessage(
     layout: KotlinLayout,
-    message: GqlMessage,
+    message: WsMessage,
     vararg args: Any,
     block: () -> String = { "" }
 ) = statement(layout.dto.graphql.messageImplClass(message), *args) {
-    "${layout.adapter.ktor.compositeFunSendMessage}(%T(${block()}))"
+    val ktor = layout.adapter.ktor
+    "${ktor.compositeFunSendMessage}(${ktor.compositePropertySocket},·%T(${block()}))"
 }
 
 private object Kotlin {

@@ -22,21 +22,22 @@ import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dt
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.QueryDto
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.SubscriptionDto
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleClientMessage
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleClientMessageComplete
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleClientMessageConnectionInit
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleClientMessagePing
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleClientMessagePong
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleClientMessageSubscribe
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleException
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageComplete
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageConnectionAck
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageConnectionError
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageConnectionInit
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageConnectionKeepAlive
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageConnectionTerminate
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageData
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageError
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageStart
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMessageStop
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMutationResult
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleQueryResult
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleRequest
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleServerMessage
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleServerMessageComplete
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleServerMessageConnectionAck
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleServerMessageError
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleServerMessageNext
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleServerMessagePing
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleServerMessagePong
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.post
@@ -67,7 +68,7 @@ import kotlin.random.Random
 import kotlin.require
 import kotlin.takeIf
 import kotlin.to
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 
 public open class SimpleCompositeKtorAdapter(
   protected val client: HttpClient,
@@ -175,89 +176,100 @@ public open class SimpleCompositeKtorAdapter(
     request: SimpleRequest,
     block: suspend SimpleReceiver<SubscriptionDto>.() -> Unit,
   ): Unit {
-    sendMessage(SimpleMessageConnectionInit(initPayload))
-    try {
-      while (true) {
-        when (val reply = receiveMessage()) {
-          is SimpleMessageConnectionKeepAlive -> {
-            continue
-          }
-          is SimpleMessageConnectionAck -> {
-            break
-          }
-          is SimpleMessageConnectionError -> {
-            throw SimpleException("""Connection error: ${reply.payload}""", request)
-          }
-          else -> {
-            throw SimpleException("""Invalid protocol - unexpected reply: $reply""", request)
-          }
+    val socket = this
+    sendMessage(socket, SimpleClientMessageConnectionInit(initPayload))
+
+    while (true) {
+      when (val reply = receiveMessage(socket) ?: throw SimpleException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+          request)) {
+        is SimpleServerMessageConnectionAck -> {
+          break
+        }
+        is SimpleServerMessagePing -> {
+          sendMessage(socket, SimpleClientMessagePong())
+          continue
+        }
+        else -> {
+          throw SimpleException("""Invalid protocol - unexpected reply: $reply""", request)
         }
       }
+    }
 
-      val subscriptionId = idGenerator()
-      sendMessage(SimpleMessageStart(subscriptionId, request))
+    val subscriptionId = idGenerator()
+    sendMessage(socket, SimpleClientMessageSubscribe(subscriptionId, request))
 
-      try {
-        block.invoke(object : SimpleReceiver<SubscriptionDto> {
-          public override suspend fun receive(): SubscriptionDto {
-            while (true) {
-              when (val reply = receiveMessage()) {
-                is SimpleMessageData -> {
-                  require(reply.id == subscriptionId)
+    try {
+      block.invoke(object : SimpleReceiver<SubscriptionDto> {
+        public override suspend fun receive(): SubscriptionDto {
+          while (true) {
+            var reply = receiveMessage(socket)
+            if (reply == null) {
+              sendMessage(socket, SimpleClientMessagePing())
+              reply = receiveMessage(socket) ?: throw SimpleException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+                  request)
+            }
+            when (reply) {
+              is SimpleServerMessageNext -> {
+                require(reply.id == subscriptionId)
 
-                  val result = reply.payload
-                  result.errors?.takeIf { it.isNotEmpty() }?.let {
-                    throw SimpleException("GraphQL subscription failed", request, it)
-                  }
-                  return result.data ?: throw SimpleException(
-                        "GraphQL subscription completes successfully but returns no data",
-                        request
-                      )
+                val result = reply.payload
+                result.errors?.takeIf { it.isNotEmpty() }?.let {
+                  throw SimpleException("GraphQL subscription failed", request, it)
                 }
-                is SimpleMessageError -> {
-                  require(reply.id == subscriptionId)
-                  throw SimpleException("Subscription failed", request, reply.payload.errors)
-                }
-                is SimpleMessageComplete -> {
-                  require(reply.id == subscriptionId)
-                  throw CancellationException("Subscription finished")
-                }
-                is SimpleMessageConnectionKeepAlive -> {
-                  continue
-                }
-                else -> {
-                  throw SimpleException("""Invalid protocol - unexpected reply: $reply""", request)
-                }
+                return result.data ?: throw SimpleException(
+                      "GraphQL subscription completes successfully but returns no data",
+                      request
+                    )
+              }
+              is SimpleServerMessageError -> {
+                require(reply.id == subscriptionId)
+                throw SimpleException("Subscription failed", request, reply.payload)
+              }
+              is SimpleServerMessageComplete -> {
+                require(reply.id == subscriptionId)
+                throw CancellationException("Subscription finished")
+              }
+              is SimpleServerMessagePing -> {
+                sendMessage(socket, SimpleClientMessagePong())
+                continue
+              }
+              is SimpleServerMessagePong -> {
+                continue
+              }
+              else -> {
+                throw SimpleException("""Invalid protocol - unexpected reply: $reply""", request)
               }
             }
-
-            @Suppress("UNREACHABLE_CODE")
-            error("Invalid algorithm")
           }
-        })
-      }
-      finally {
-        sendMessage(SimpleMessageStop(subscriptionId))
-      }
+
+          @Suppress("UNREACHABLE_CODE")
+          error("Invalid algorithm")
+        }
+      })
     }
     finally {
-      sendMessage(SimpleMessageConnectionTerminate())
+      sendMessage(socket, SimpleClientMessageComplete(subscriptionId))
     }
   }
 
-  protected open suspend fun WebSocketSession.sendMessage(message: SimpleClientMessage): Unit {
+  protected open suspend fun sendMessage(socket: WebSocketSession, message: SimpleClientMessage):
+      Unit {
     val content = mapper.serialize(message)
-    send(content)
+    socket.send(content)
   }
 
-  protected open suspend fun WebSocketSession.receiveMessage(): SimpleServerMessage {
+  protected open suspend fun receiveMessage(socket: WebSocketSession): SimpleServerMessage? {
     val message = if (subscriptionReceiveTimeoutMillis == null) {
-      incoming.receive()
+      socket.incoming.receive()
     }
     else {
-      withTimeout(subscriptionReceiveTimeoutMillis) {
-        incoming.receive()
+      withTimeoutOrNull(subscriptionReceiveTimeoutMillis) {
+        socket.incoming.receive()
       }
+    }
+
+    if (message == null) {
+      return null
     }
 
     val content = (message as Frame.Text).readText()

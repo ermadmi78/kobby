@@ -18,97 +18,97 @@ package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotli
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
+import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 public sealed class InvalidFieldIsRequredClientMessage
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 public sealed class InvalidFieldIsRequredServerMessage
 
 /**
- * See GQL_CONNECTION_INIT
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class InvalidFieldIsRequredMessageConnectionInit(
+public data class InvalidFieldIsRequredClientMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
 ) : InvalidFieldIsRequredClientMessage()
 
 /**
- * See GQL_START
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class InvalidFieldIsRequredMessageStart(
+public data class InvalidFieldIsRequredServerMessageConnectionAck(
+  public val payload: Any? = null,
+) : InvalidFieldIsRequredServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class InvalidFieldIsRequredClientMessagePing(
+  public val payload: Any? = null,
+) : InvalidFieldIsRequredClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class InvalidFieldIsRequredClientMessagePong(
+  public val payload: Any? = null,
+) : InvalidFieldIsRequredClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class InvalidFieldIsRequredServerMessagePing(
+  public val payload: Any? = null,
+) : InvalidFieldIsRequredServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class InvalidFieldIsRequredServerMessagePong(
+  public val payload: Any? = null,
+) : InvalidFieldIsRequredServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class InvalidFieldIsRequredClientMessageSubscribe(
   public val id: String,
   public val payload: InvalidFieldIsRequredRequest,
 ) : InvalidFieldIsRequredClientMessage()
 
 /**
- * See GQL_STOP
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class InvalidFieldIsRequredMessageStop(
-  public val id: String,
-) : InvalidFieldIsRequredClientMessage()
-
-/**
- * See GQL_CONNECTION_TERMINATE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@Suppress("CanSealedSubClassBeObject")
-public class InvalidFieldIsRequredMessageConnectionTerminate : InvalidFieldIsRequredClientMessage()
-
-/**
- * See GQL_CONNECTION_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class InvalidFieldIsRequredMessageConnectionError(
-  public val payload: Any? = null,
-) : InvalidFieldIsRequredServerMessage()
-
-/**
- * See GQL_CONNECTION_ACK
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class InvalidFieldIsRequredMessageConnectionAck(
-  public val payload: Any? = null,
-) : InvalidFieldIsRequredServerMessage()
-
-/**
- * See GQL_DATA
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class InvalidFieldIsRequredMessageData(
+public data class InvalidFieldIsRequredServerMessageNext(
   public val id: String,
   public val payload: InvalidFieldIsRequredSubscriptionResult,
 ) : InvalidFieldIsRequredServerMessage()
 
 /**
- * See GQL_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class InvalidFieldIsRequredMessageError(
+public data class InvalidFieldIsRequredServerMessageError(
   public val id: String,
-  public val payload: InvalidFieldIsRequredErrorResult,
+  public val payload: List<InvalidFieldIsRequredError>? = null,
 ) : InvalidFieldIsRequredServerMessage()
 
 /**
- * See GQL_COMPLETE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class InvalidFieldIsRequredMessageComplete(
+public data class InvalidFieldIsRequredClientMessageComplete(
   public val id: String,
-) : InvalidFieldIsRequredServerMessage()
+) : InvalidFieldIsRequredClientMessage()
 
 /**
- * See GQL_CONNECTION_KEEP_ALIVE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-@Suppress("CanSealedSubClassBeObject")
-public class InvalidFieldIsRequredMessageConnectionKeepAlive : InvalidFieldIsRequredServerMessage()
+public data class InvalidFieldIsRequredServerMessageComplete(
+  public val id: String,
+) : InvalidFieldIsRequredServerMessage()

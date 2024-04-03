@@ -18,6 +18,7 @@ package io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin
 import kotlin.OptIn
 import kotlin.String
 import kotlin.Suppress
+import kotlin.collections.List
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -27,7 +28,7 @@ import kotlinx.serialization.json.JsonObject
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @Serializable
 @OptIn(ExperimentalSerializationApi::class)
@@ -36,7 +37,7 @@ public sealed class SimpleClientMessage
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @Serializable
 @OptIn(ExperimentalSerializationApi::class)
@@ -44,102 +45,103 @@ public sealed class SimpleClientMessage
 public sealed class SimpleServerMessage
 
 /**
- * See GQL_CONNECTION_INIT
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @Serializable
 @SerialName("connection_init")
-public data class SimpleMessageConnectionInit(
+public data class SimpleClientMessageConnectionInit(
   public val payload: JsonObject? = null,
 ) : SimpleClientMessage()
 
 /**
- * See GQL_START
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @Serializable
-@SerialName("start")
-public data class SimpleMessageStart(
+@SerialName("connection_ack")
+public data class SimpleServerMessageConnectionAck(
+  public val payload: JsonElement? = null,
+) : SimpleServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("ping")
+public data class SimpleClientMessagePing(
+  public val payload: JsonElement? = null,
+) : SimpleClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("pong")
+public data class SimpleClientMessagePong(
+  public val payload: JsonElement? = null,
+) : SimpleClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("ping")
+public data class SimpleServerMessagePing(
+  public val payload: JsonElement? = null,
+) : SimpleServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("pong")
+public data class SimpleServerMessagePong(
+  public val payload: JsonElement? = null,
+) : SimpleServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("subscribe")
+public data class SimpleClientMessageSubscribe(
   public val id: String,
   public val payload: SimpleRequest,
 ) : SimpleClientMessage()
 
 /**
- * See GQL_STOP
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @Serializable
-@SerialName("stop")
-public data class SimpleMessageStop(
-  public val id: String,
-) : SimpleClientMessage()
-
-/**
- * See GQL_CONNECTION_TERMINATE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@Serializable
-@SerialName("connection_terminate")
-@Suppress("CanSealedSubClassBeObject")
-public class SimpleMessageConnectionTerminate : SimpleClientMessage()
-
-/**
- * See GQL_CONNECTION_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@Serializable
-@SerialName("connection_error")
-public data class SimpleMessageConnectionError(
-  public val payload: JsonElement? = null,
-) : SimpleServerMessage()
-
-/**
- * See GQL_CONNECTION_ACK
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@Serializable
-@SerialName("connection_ack")
-public data class SimpleMessageConnectionAck(
-  public val payload: JsonElement? = null,
-) : SimpleServerMessage()
-
-/**
- * See GQL_DATA
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@Serializable
-@SerialName("data")
-public data class SimpleMessageData(
+@SerialName("next")
+public data class SimpleServerMessageNext(
   public val id: String,
   public val payload: SimpleSubscriptionResult,
 ) : SimpleServerMessage()
 
 /**
- * See GQL_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @Serializable
 @SerialName("error")
-public data class SimpleMessageError(
+public data class SimpleServerMessageError(
   public val id: String,
-  public val payload: SimpleErrorResult,
+  public val payload: List<SimpleError>? = null,
 ) : SimpleServerMessage()
 
 /**
- * See GQL_COMPLETE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @Serializable
 @SerialName("complete")
-public data class SimpleMessageComplete(
+public data class SimpleClientMessageComplete(
   public val id: String,
-) : SimpleServerMessage()
+) : SimpleClientMessage()
 
 /**
- * See GQL_CONNECTION_KEEP_ALIVE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @Serializable
-@SerialName("ka")
-@Suppress("CanSealedSubClassBeObject")
-public class SimpleMessageConnectionKeepAlive : SimpleServerMessage()
+@SerialName("complete")
+public data class SimpleServerMessageComplete(
+  public val id: String,
+) : SimpleServerMessage()

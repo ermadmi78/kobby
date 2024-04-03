@@ -18,97 +18,97 @@ package io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.dto.graphq
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
+import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 public sealed class GraphqlClientMessage
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 public sealed class GraphqlServerMessage
 
 /**
- * See GQL_CONNECTION_INIT
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class GraphqlMessageConnectionInit(
+public data class GraphqlClientMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
 ) : GraphqlClientMessage()
 
 /**
- * See GQL_START
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class GraphqlMessageStart(
+public data class GraphqlServerMessageConnectionAck(
+  public val payload: Any? = null,
+) : GraphqlServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlClientMessagePing(
+  public val payload: Any? = null,
+) : GraphqlClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlClientMessagePong(
+  public val payload: Any? = null,
+) : GraphqlClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlServerMessagePing(
+  public val payload: Any? = null,
+) : GraphqlServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlServerMessagePong(
+  public val payload: Any? = null,
+) : GraphqlServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class GraphqlClientMessageSubscribe(
   public val id: String,
   public val payload: GraphqlRequest,
 ) : GraphqlClientMessage()
 
 /**
- * See GQL_STOP
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class GraphqlMessageStop(
-  public val id: String,
-) : GraphqlClientMessage()
-
-/**
- * See GQL_CONNECTION_TERMINATE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@Suppress("CanSealedSubClassBeObject")
-public class GraphqlMessageConnectionTerminate : GraphqlClientMessage()
-
-/**
- * See GQL_CONNECTION_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class GraphqlMessageConnectionError(
-  public val payload: Any? = null,
-) : GraphqlServerMessage()
-
-/**
- * See GQL_CONNECTION_ACK
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class GraphqlMessageConnectionAck(
-  public val payload: Any? = null,
-) : GraphqlServerMessage()
-
-/**
- * See GQL_DATA
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class GraphqlMessageData(
+public data class GraphqlServerMessageNext(
   public val id: String,
   public val payload: GraphqlSubscriptionResult,
 ) : GraphqlServerMessage()
 
 /**
- * See GQL_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class GraphqlMessageError(
+public data class GraphqlServerMessageError(
   public val id: String,
-  public val payload: GraphqlErrorResult,
+  public val payload: List<GraphqlError>? = null,
 ) : GraphqlServerMessage()
 
 /**
- * See GQL_COMPLETE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class GraphqlMessageComplete(
+public data class GraphqlClientMessageComplete(
   public val id: String,
-) : GraphqlServerMessage()
+) : GraphqlClientMessage()
 
 /**
- * See GQL_CONNECTION_KEEP_ALIVE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-@Suppress("CanSealedSubClassBeObject")
-public class GraphqlMessageConnectionKeepAlive : GraphqlServerMessage()
+public data class GraphqlServerMessageComplete(
+  public val id: String,
+) : GraphqlServerMessage()

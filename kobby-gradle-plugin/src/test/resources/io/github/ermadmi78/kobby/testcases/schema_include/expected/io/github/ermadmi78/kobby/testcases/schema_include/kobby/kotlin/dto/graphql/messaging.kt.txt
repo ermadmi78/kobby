@@ -18,97 +18,97 @@ package io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.dto.grap
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
+import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 public sealed class QueryClientMessage
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 public sealed class QueryServerMessage
 
 /**
- * See GQL_CONNECTION_INIT
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class QueryMessageConnectionInit(
+public data class QueryClientMessageConnectionInit(
   public val payload: Map<String, Any?>? = null,
 ) : QueryClientMessage()
 
 /**
- * See GQL_START
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class QueryMessageStart(
+public data class QueryServerMessageConnectionAck(
+  public val payload: Any? = null,
+) : QueryServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class QueryClientMessagePing(
+  public val payload: Any? = null,
+) : QueryClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class QueryClientMessagePong(
+  public val payload: Any? = null,
+) : QueryClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class QueryServerMessagePing(
+  public val payload: Any? = null,
+) : QueryServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class QueryServerMessagePong(
+  public val payload: Any? = null,
+) : QueryServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class QueryClientMessageSubscribe(
   public val id: String,
   public val payload: QueryRequest,
 ) : QueryClientMessage()
 
 /**
- * See GQL_STOP
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class QueryMessageStop(
-  public val id: String,
-) : QueryClientMessage()
-
-/**
- * See GQL_CONNECTION_TERMINATE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@Suppress("CanSealedSubClassBeObject")
-public class QueryMessageConnectionTerminate : QueryClientMessage()
-
-/**
- * See GQL_CONNECTION_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class QueryMessageConnectionError(
-  public val payload: Any? = null,
-) : QueryServerMessage()
-
-/**
- * See GQL_CONNECTION_ACK
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class QueryMessageConnectionAck(
-  public val payload: Any? = null,
-) : QueryServerMessage()
-
-/**
- * See GQL_DATA
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-public data class QueryMessageData(
+public data class QueryServerMessageNext(
   public val id: String,
   public val payload: QuerySubscriptionResult,
 ) : QueryServerMessage()
 
 /**
- * See GQL_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class QueryMessageError(
+public data class QueryServerMessageError(
   public val id: String,
-  public val payload: QueryErrorResult,
+  public val payload: List<QueryError>? = null,
 ) : QueryServerMessage()
 
 /**
- * See GQL_COMPLETE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-public data class QueryMessageComplete(
+public data class QueryClientMessageComplete(
   public val id: String,
-) : QueryServerMessage()
+) : QueryClientMessage()
 
 /**
- * See GQL_CONNECTION_KEEP_ALIVE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-@Suppress("CanSealedSubClassBeObject")
-public class QueryMessageConnectionKeepAlive : QueryServerMessage()
+public data class QueryServerMessageComplete(
+  public val id: String,
+) : QueryServerMessage()

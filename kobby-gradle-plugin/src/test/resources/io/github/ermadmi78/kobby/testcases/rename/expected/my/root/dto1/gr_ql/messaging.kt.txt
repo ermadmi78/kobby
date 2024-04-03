@@ -16,6 +16,7 @@
 package my.root.dto1.gr_ql
 
 import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonIgnoreProperties
 import com.fasterxml.jackson.`annotation`.JsonInclude
 import com.fasterxml.jackson.`annotation`.JsonSubTypes
 import com.fasterxml.jackson.`annotation`.JsonTypeInfo
@@ -23,11 +24,12 @@ import com.fasterxml.jackson.`annotation`.JsonTypeName
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
+import kotlin.collections.List
 import kotlin.collections.Map
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -35,17 +37,18 @@ import kotlin.collections.Map
   property = "type",
 )
 @JsonSubTypes(
-  JsonSubTypes.Type(value = GPrefMessageConnectionInitGPost::class, name = "connection_init"),
-  JsonSubTypes.Type(value = GPrefMessageStartGPost::class, name = "start"),
-  JsonSubTypes.Type(value = GPrefMessageStopGPost::class, name = "stop"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionTerminateGPost::class, name =
-        "connection_terminate"),
+  JsonSubTypes.Type(value = GPrefClientMessageConnectionInitGPost::class, name = "connection_init"),
+  JsonSubTypes.Type(value = GPrefClientMessagePingGPost::class, name = "ping"),
+  JsonSubTypes.Type(value = GPrefClientMessagePongGPost::class, name = "pong"),
+  JsonSubTypes.Type(value = GPrefClientMessageSubscribeGPost::class, name = "subscribe"),
+  JsonSubTypes.Type(value = GPrefClientMessageCompleteGPost::class, name = "complete"),
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public sealed class GPrefClientMessageGPost
 
 /**
  * Message protocol description see
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
@@ -53,172 +56,181 @@ public sealed class GPrefClientMessageGPost
   property = "type",
 )
 @JsonSubTypes(
-  JsonSubTypes.Type(value = GPrefMessageConnectionErrorGPost::class, name = "connection_error"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionAckGPost::class, name = "connection_ack"),
-  JsonSubTypes.Type(value = GPrefMessageDataGPost::class, name = "data"),
-  JsonSubTypes.Type(value = GPrefMessageErrorGPost::class, name = "error"),
-  JsonSubTypes.Type(value = GPrefMessageCompleteGPost::class, name = "complete"),
-  JsonSubTypes.Type(value = GPrefMessageConnectionKeepAliveGPost::class, name = "ka"),
+  JsonSubTypes.Type(value = GPrefServerMessageConnectionAckGPost::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = GPrefServerMessagePingGPost::class, name = "ping"),
+  JsonSubTypes.Type(value = GPrefServerMessagePongGPost::class, name = "pong"),
+  JsonSubTypes.Type(value = GPrefServerMessageNextGPost::class, name = "next"),
+  JsonSubTypes.Type(value = GPrefServerMessageErrorGPost::class, name = "error"),
+  JsonSubTypes.Type(value = GPrefServerMessageCompleteGPost::class, name = "complete"),
 )
+@JsonIgnoreProperties(ignoreUnknown = true)
 public sealed class GPrefServerMessageGPost
 
 /**
- * See GQL_CONNECTION_INIT
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeName(value = "connection_init")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageConnectionInitGPost::class,
+  defaultImpl = GPrefClientMessageConnectionInitGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class GPrefMessageConnectionInitGPost @JsonCreator constructor(
+public data class GPrefClientMessageConnectionInitGPost @JsonCreator constructor(
   public val payload: Map<String, Any?>? = null,
 ) : GPrefClientMessageGPost()
 
 /**
- * See GQL_START
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeName(value = "start")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-  defaultImpl = GPrefMessageStartGPost::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class GPrefMessageStartGPost(
-  public val id: String,
-  public val payload: GPrefRequestGPost,
-) : GPrefClientMessageGPost()
-
-/**
- * See GQL_STOP
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeName(value = "stop")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-  defaultImpl = GPrefMessageStopGPost::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class GPrefMessageStopGPost @JsonCreator constructor(
-  public val id: String,
-) : GPrefClientMessageGPost()
-
-/**
- * See GQL_CONNECTION_TERMINATE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeName(value = "connection_terminate")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-  defaultImpl = GPrefMessageConnectionTerminateGPost::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-@Suppress("CanSealedSubClassBeObject")
-public class GPrefMessageConnectionTerminateGPost : GPrefClientMessageGPost()
-
-/**
- * See GQL_CONNECTION_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
- */
-@JsonTypeName(value = "connection_error")
-@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY,
-  property = "type",
-  defaultImpl = GPrefMessageConnectionErrorGPost::class,
-)
-@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class GPrefMessageConnectionErrorGPost @JsonCreator constructor(
-  public val payload: Any? = null,
-) : GPrefServerMessageGPost()
-
-/**
- * See GQL_CONNECTION_ACK
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeName(value = "connection_ack")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageConnectionAckGPost::class,
+  defaultImpl = GPrefServerMessageConnectionAckGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class GPrefMessageConnectionAckGPost @JsonCreator constructor(
+public data class GPrefServerMessageConnectionAckGPost @JsonCreator constructor(
   public val payload: Any? = null,
 ) : GPrefServerMessageGPost()
 
 /**
- * See GQL_DATA
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-@JsonTypeName(value = "data")
+@JsonTypeName(value = "ping")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageDataGPost::class,
+  defaultImpl = GPrefClientMessagePingGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class GPrefMessageDataGPost(
+public data class GPrefClientMessagePingGPost @JsonCreator constructor(
+  public val payload: Any? = null,
+) : GPrefClientMessageGPost()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "pong")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefClientMessagePongGPost::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefClientMessagePongGPost @JsonCreator constructor(
+  public val payload: Any? = null,
+) : GPrefClientMessageGPost()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ping")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefServerMessagePingGPost::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefServerMessagePingGPost @JsonCreator constructor(
+  public val payload: Any? = null,
+) : GPrefServerMessageGPost()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "pong")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefServerMessagePongGPost::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefServerMessagePongGPost @JsonCreator constructor(
+  public val payload: Any? = null,
+) : GPrefServerMessageGPost()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "subscribe")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefClientMessageSubscribeGPost::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefClientMessageSubscribeGPost(
+  public val id: String,
+  public val payload: GPrefRequestGPost,
+) : GPrefClientMessageGPost()
+
+/**
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "next")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = GPrefServerMessageNextGPost::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class GPrefServerMessageNextGPost(
   public val id: String,
   public val payload: GPrefSubscriptionResultGPost,
 ) : GPrefServerMessageGPost()
 
 /**
- * See GQL_ERROR
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeName(value = "error")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageErrorGPost::class,
+  defaultImpl = GPrefServerMessageErrorGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class GPrefMessageErrorGPost(
+public data class GPrefServerMessageErrorGPost(
   public val id: String,
-  public val payload: GPrefErrorResultGPost,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val payload: List<GPrefErrorGPost>? = null,
 ) : GPrefServerMessageGPost()
 
 /**
- * See GQL_COMPLETE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
 @JsonTypeName(value = "complete")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageCompleteGPost::class,
+  defaultImpl = GPrefClientMessageCompleteGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-public data class GPrefMessageCompleteGPost @JsonCreator constructor(
+public data class GPrefClientMessageCompleteGPost @JsonCreator constructor(
   public val id: String,
-) : GPrefServerMessageGPost()
+) : GPrefClientMessageGPost()
 
 /**
- * See GQL_CONNECTION_KEEP_ALIVE
- * [here](https://github.com/apollographql/subscriptions-transport-ws/blob/master/PROTOCOL.md)
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
  */
-@JsonTypeName(value = "ka")
+@JsonTypeName(value = "complete")
 @JsonTypeInfo(
   use = JsonTypeInfo.Id.NAME,
   include = JsonTypeInfo.As.PROPERTY,
   property = "type",
-  defaultImpl = GPrefMessageConnectionKeepAliveGPost::class,
+  defaultImpl = GPrefServerMessageCompleteGPost::class,
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
-@Suppress("CanSealedSubClassBeObject")
-public class GPrefMessageConnectionKeepAliveGPost : GPrefServerMessageGPost()
+public data class GPrefServerMessageCompleteGPost @JsonCreator constructor(
+  public val id: String,
+) : GPrefServerMessageGPost()
