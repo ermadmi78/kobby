@@ -88,10 +88,6 @@ class KobbyNode internal constructor(
     val isMutation: Boolean = schema.operations[Operation.MUTATION] == name
     val isSubscription: Boolean = schema.operations[Operation.SUBSCRIPTION] == name
 
-    val isResolve: Boolean by lazy {
-        kind == OBJECT && (isOperation || fields.values.any { it.isResolve })
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -160,7 +156,6 @@ class KobbyNodeScope internal constructor(
         required: Boolean,
         default: Boolean,
         selection: Boolean,
-        resolve: Boolean,
         block: KobbyFieldScope.() -> Unit
     ) = KobbyFieldScope(
         schema,
@@ -172,8 +167,7 @@ class KobbyNodeScope internal constructor(
         primaryKey,
         required,
         default,
-        selection,
-        resolve
+        selection
     ).apply(block).build().also {
         fields[it.name] = it
     }

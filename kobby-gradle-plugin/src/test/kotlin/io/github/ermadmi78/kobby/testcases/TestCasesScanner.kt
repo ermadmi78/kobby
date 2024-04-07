@@ -31,8 +31,6 @@ class TestCasesScanner {
         .replaceProperty("testSerializationVersion")
         .replaceProperty("testJacksonVersion")
         .replaceProperty("testKtorVersion")
-        .replaceProperty("testKickstartGraphqlJavaToolsVersion")
-        .replaceProperty("testReactiveStreamsVersion")
 
     @Test
     fun scan(@TempDir tempDir: Path) {

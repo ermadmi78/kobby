@@ -44,9 +44,6 @@ class KotlinConfig {
     @Parameter
     var adapter: KotlinAdapterConfig = KotlinAdapterConfig()
 
-    @Parameter
-    var resolver: KotlinResolverConfig = KotlinResolverConfig()
-
     override fun toString(): String {
         return "KotlinConfig(" +
                 "\n    enabled=$enabled, " +
@@ -58,8 +55,7 @@ class KotlinConfig {
                 "\n    dto=$dto, " +
                 "\n    entity=$entity, " +
                 "\n    impl=$impl, " +
-                "\n    adapter=$adapter, " +
-                "\n    resolver=$resolver" +
+                "\n    adapter=$adapter" +
                 "\n  )"
     }
 }
@@ -584,44 +580,5 @@ class KotlinAdapterKtorConfig {
                 "\n        postfix=$postfix, " +
                 "\n        receiveTimeoutMillis=$receiveTimeoutMillis" +
                 "\n      )"
-    }
-}
-
-//**********************************************************************************************************************
-//                                                 Resolver Config
-//**********************************************************************************************************************
-
-class KotlinResolverConfig {
-    @Parameter
-    var enabled: Boolean? = null
-
-    @Parameter
-    var publisherEnabled: Boolean? = null
-
-    @Parameter
-    var packageName: String? = "resolver"
-
-    @Parameter
-    var prefix: String? = null
-
-    @Parameter
-    var postfix: String? = "Resolver"
-
-    @Parameter
-    var argument: String? = null
-
-    @Parameter
-    var toDoMessage: String? = null
-
-    override fun toString(): String {
-        return "KotlinResolverConfig(" +
-                "\n      enabled=$enabled, " +
-                "\n      publisherEnabled=$publisherEnabled, " +
-                "\n      packageName=$packageName, " +
-                "\n      prefix=$prefix, " +
-                "\n      postfix=$postfix, " +
-                "\n      argument=$argument, " +
-                "\n      toDoMessage=$toDoMessage" +
-                "\n    )"
     }
 }

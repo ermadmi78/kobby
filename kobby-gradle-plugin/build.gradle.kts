@@ -75,15 +75,11 @@ tasks {
         val testSerializationVersion: String by project
         val testJacksonVersion: String by project
         val testKtorVersion: String by project
-        val testKickstartGraphqlJavaToolsVersion: String by project
-        val testReactiveStreamsVersion: String by project
 
         systemProperty("testKotlinVersion", testKotlinVersion)
         systemProperty("testSerializationVersion", testSerializationVersion)
         systemProperty("testJacksonVersion", testJacksonVersion)
         systemProperty("testKtorVersion", testKtorVersion)
-        systemProperty("testKickstartGraphqlJavaToolsVersion", testKickstartGraphqlJavaToolsVersion)
-        systemProperty("testReactiveStreamsVersion", testReactiveStreamsVersion)
     }
     named("pluginUnderTestMetadata") {
         dependsOn(":kobby-model:shadowJar")

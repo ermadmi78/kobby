@@ -113,12 +113,5 @@ open class KobbySchemaDirectiveExtension {
      * Default: "selection"
      */
     var selection: String? = null
-
-    /**
-     * Name of "resolve" directive
-     *
-     * Default: "resolve"
-     */
-    var resolve: String? = null
 }
 

@@ -24,7 +24,6 @@ kobby {
             required = "myRequired"
             default = "myDefault"
             selection = "mySelection"
-            resolve = "myResolve"
         }
     }
 
@@ -118,14 +117,6 @@ kobby {
                 postfix = "KtoPo"
             }
         }
-
-        resolver {
-            packageName = "re"
-            prefix = "RePr"
-            postfix = "RePo"
-            argument = "bean"
-            toDoMessage = "ToDo"
-        }
     }
 }
 
@@ -135,12 +126,6 @@ dependencies {
 
     // Add this dependency to enable default Ktor adapters generation
     compileOnly("io.ktor:ktor-client-cio:testKtorVersion")
-
-    // Add this dependency to enable graphql-java-kickstart resolvers generation by Kobby
-    compileOnly("com.graphql-java-kickstart:graphql-java-tools:testKickstartGraphqlJavaToolsVersion")
-
-    // Add this dependency to enable subscription resolver publisher generation
-    compileOnly("org.reactivestreams:reactive-streams:testReactiveStreamsVersion")
 
     // Add this dependencies to remove warning "Runtime JAR files in the classpath should have the same version"
     compileOnly(kotlin("stdlib"))

@@ -19,7 +19,6 @@ class KobbyField internal constructor(
     private val required: Boolean,
     private val default: Boolean,
     private val selection: Boolean,
-    private val resolve: Boolean,
     private val _comments: List<String>,
     val arguments: Map<String, KobbyArgument>
 ) {
@@ -80,12 +79,8 @@ class KobbyField internal constructor(
         overriddenField?.isSelection ?: (selection && arguments.values.any { it.isInitialized })
     }
 
-    val isResolve: Boolean by lazy {
-        node.isOperation || (overriddenField?.isResolve ?: (resolve || arguments.isNotEmpty()))
-    }
-
     internal fun validate(warnings: MutableList<String>) {
-        if (!primaryKey && !required && !default && !selection && !resolve) {
+        if (!primaryKey && !required && !default && !selection) {
             return
         }
         val topOverriddenField = findTopOverriddenField(node)
@@ -130,12 +125,6 @@ class KobbyField internal constructor(
             }
             topOverriddenField?.takeIf { !it.selection }?.also {
                 warnings.addOverriddenWarning(KobbyDirective.SELECTION, it)
-            }
-        }
-
-        if (resolve && !node.isOperation) {
-            topOverriddenField?.takeIf { !it.resolve }?.also {
-                warnings.addOverriddenWarning(KobbyDirective.RESOLVE, it)
             }
         }
     }
@@ -197,8 +186,7 @@ class KobbyFieldScope internal constructor(
     primaryKey: Boolean,
     required: Boolean,
     default: Boolean,
-    selection: Boolean,
-    resolve: Boolean
+    selection: Boolean
 ) {
     private val comments = mutableListOf<String>()
     private val arguments = mutableMapOf<String, KobbyArgument>()
@@ -213,7 +201,6 @@ class KobbyFieldScope internal constructor(
         required,
         default,
         selection,
-        resolve,
         comments,
         arguments
     )

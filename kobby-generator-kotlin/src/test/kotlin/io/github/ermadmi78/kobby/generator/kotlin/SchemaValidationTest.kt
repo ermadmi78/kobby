@@ -104,14 +104,6 @@ class SchemaValidationTest {
                 Decoration("Kobby", "Adapter"),
                 null
             )
-        ),
-        KotlinResolverLayout(
-            true,
-            true,
-            "resolvers",
-            Decoration("IGraphQL", "Resolver"),
-            null,
-            "Not implemented yet"
         )
     )
 

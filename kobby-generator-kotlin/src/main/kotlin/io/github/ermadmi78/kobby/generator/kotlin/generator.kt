@@ -231,9 +231,6 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
             files += generateKtorAdapter(schema, layout)
         }
     }
-    if (resolver.enabled) {
-        files += generateResolver(schema, layout)
-    }
 
     files.map { it.toKotlinFile() }
 }

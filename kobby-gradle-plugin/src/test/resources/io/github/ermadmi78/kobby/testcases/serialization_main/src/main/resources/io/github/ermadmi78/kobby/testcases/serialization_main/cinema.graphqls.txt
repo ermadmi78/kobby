@@ -2,7 +2,6 @@ directive @primaryKey on FIELD_DEFINITION
 directive @required on FIELD_DEFINITION
 directive @default on FIELD_DEFINITION
 directive @selection on FIELD_DEFINITION
-directive @resolve on FIELD_DEFINITION
 
 scalar JSON
 scalar Date
@@ -298,7 +297,7 @@ type Country implements Entity {
     taggable(tag: String!): [Taggable!]!
 
     """Find native entities of this country"""
-    native: [Native!]! @resolve
+    native: [Native!]!
 }
 
 """
@@ -320,7 +319,7 @@ type Film implements Entity & Taggable {
     countryId: ID! @required
 
     """The country to which the film belongs"""
-    country: Country! @resolve
+    country: Country!
 
     """
     Find actors of film by firstName, lastName, birthday and gender.
@@ -412,7 +411,7 @@ type Actor implements Entity & Taggable {
     countryId: ID! @primaryKey
 
     """The country to which the actor belongs"""
-    country: Country! @resolve
+    country: Country!
 
     """
     Find films of actor by title and genre.

@@ -27,8 +27,7 @@ data class KotlinLayout(
     val dto: KotlinDtoLayout,
     val entity: KotlinEntityLayout,
     val impl: KotlinImplLayout,
-    val adapter: KotlinAdapterLayout,
-    val resolver: KotlinResolverLayout
+    val adapter: KotlinAdapterLayout
 ) {
     private fun getScalarType(name: String): KotlinType = scalars[name]
         ?: throw IllegalStateException(
@@ -395,18 +394,6 @@ data class KotlinLayout(
             UNIT
         ).copy(suspending = true)
 
-    // *****************************************************************************************************************
-    //                                          Resolver
-    // *****************************************************************************************************************
-
-    internal val KobbyNode.resolverName: String
-        get() = name.decorate(resolver.decoration)
-
-    internal val KobbyField.resolverArgument: String
-        get() = (resolver.argument ?: node.name._decapitalize()).let {
-            if (it in arguments) it.decorate(impl.innerDecoration) else it
-        }
-
     //******************************************************************************************************************
     //                                     Kotlinx Serialization
     //******************************************************************************************************************
@@ -630,17 +617,6 @@ class KotlinAdapterKtorLayout(
     packageName: String,
     val decoration: Decoration,
     val receiveTimeoutMillis: Long?
-) {
-    val packageName: String = packageName.validateKotlinPath()
-}
-
-class KotlinResolverLayout(
-    val enabled: Boolean,
-    val publisherEnabled: Boolean,
-    packageName: String,
-    val decoration: Decoration,
-    val argument: String?, // null - generate argument name from bean name
-    val toDoMessage: String?
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }

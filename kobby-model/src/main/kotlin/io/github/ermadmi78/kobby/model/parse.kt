@@ -15,7 +15,6 @@ object KobbyDirective {
     const val REQUIRED: String = "required"
     const val DEFAULT: String = "default"
     const val SELECTION: String = "selection"
-    const val RESOLVE: String = "resolve"
 }
 
 fun parseSchema(
@@ -76,8 +75,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.isPrimaryKey(),
                         field.isRequired(),
                         field.isDefault(),
-                        field.isSelection(),
-                        field.isResolve()
+                        field.isSelection()
                     ) {
                         field.description?.content?.also {
                             addComment(it)
@@ -116,8 +114,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         field.isPrimaryKey(),
                         field.isRequired(),
                         field.isDefault(),
-                        field.isSelection(),
-                        field.isResolve()
+                        field.isSelection()
                     ) {
                         field.description?.content?.also {
                             addComment(it)
@@ -179,8 +176,7 @@ private fun RegistryScope.parseSchemaImpl() = KobbySchema {
                         primaryKey = false,
                         required = false,
                         default = false,
-                        selection = false,
-                        resolve = false
+                        selection = false
                     ) {
                         input.description?.content?.also {
                             addComment(it)
@@ -250,10 +246,6 @@ private class RegistryScope(
 
     fun FieldDefinition.isSelection(): Boolean = directives.firstOrNull {
         it.name == (directiveLayout[KobbyDirective.SELECTION] ?: KobbyDirective.SELECTION)
-    } != null
-
-    fun FieldDefinition.isResolve(): Boolean = directives.firstOrNull {
-        it.name == (directiveLayout[KobbyDirective.RESOLVE] ?: KobbyDirective.RESOLVE)
     } != null
 }
 

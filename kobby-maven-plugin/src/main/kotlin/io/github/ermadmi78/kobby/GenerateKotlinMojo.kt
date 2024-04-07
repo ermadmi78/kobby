@@ -102,7 +102,6 @@ class GenerateKotlinMojo : AbstractMojo() {
         val entity = kotlin.entity
         val impl = kotlin.impl
         val ktor = kotlin.adapter.ktor
-        val resolver = kotlin.resolver
 
         dto.serialization.apply {
             if (enabled == null) {
@@ -125,14 +124,6 @@ class GenerateKotlinMojo : AbstractMojo() {
                 }
             }
         }
-        resolver.apply {
-            if (enabled == null) {
-                enabled = "com.graphql-java-kickstart:graphql-java-tools" in dependencies
-            }
-            if (publisherEnabled == null) {
-                publisherEnabled = "org.reactivestreams:reactive-streams" in dependencies
-            }
-        }
 
         log.info("[Kobby] Kotlin DSL generating...")
 
@@ -144,8 +135,7 @@ class GenerateKotlinMojo : AbstractMojo() {
             KobbyDirective.PRIMARY_KEY to schema.directive.primaryKey,
             KobbyDirective.REQUIRED to schema.directive.required,
             KobbyDirective.DEFAULT to schema.directive.default,
-            KobbyDirective.SELECTION to schema.directive.selection,
-            KobbyDirective.RESOLVE to schema.directive.resolve
+            KobbyDirective.SELECTION to schema.directive.selection
         )
 
         val contextName = (context.name ?: schema.files.singleOrNull()?.contextName)
@@ -195,11 +185,6 @@ class GenerateKotlinMojo : AbstractMojo() {
         val adapterKtorPackage: List<String> = mutableListOf<String>().also { list ->
             list += rootPackage
             ktor.packageName?.forEachPackage { list += it }
-        }
-
-        val resolverPackage: List<String> = mutableListOf<String>().also { list ->
-            list += rootPackage
-            resolver.packageName?.forEachPackage { list += it }
         }
 
         val layout = KotlinLayout(
@@ -294,18 +279,6 @@ class GenerateKotlinMojo : AbstractMojo() {
                     ),
                     ktor.receiveTimeoutMillis
                 )
-            ),
-            KotlinResolverLayout(
-                resolver.enabled!!,
-                resolver.publisherEnabled!!,
-                resolverPackage.toPackageName(),
-                Decoration(
-                    (resolver.prefix?.trim() ?: capitalizedContextName).let {
-                        if (it == "GraphQL") "IGraphQL" else it
-                    }, resolver.postfix
-                ),
-                resolver.argument,
-                resolver.toDoMessage
             )
         )
 

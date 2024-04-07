@@ -50,7 +50,6 @@ open class KobbyKotlinExtension {
     internal val entityExtension = lazy { KobbyKotlinEntityExtension() }
     internal val implExtension = lazy { KobbyKotlinImplExtension() }
     internal val adapterExtension = lazy { KobbyKotlinAdapterExtension() }
-    internal val resolverExtension = lazy { KobbyKotlinResolverExtension() }
 
     /** Configuration of DSL context generation (entry point to DSL) */
     fun context(action: Action<KobbyKotlinContextExtension>) {
@@ -75,11 +74,6 @@ open class KobbyKotlinExtension {
     /** Configuration of adapter classes generation */
     fun adapter(action: Action<KobbyKotlinAdapterExtension>) {
         action.execute(adapterExtension.value)
-    }
-
-    /** Configuration of resolver interfaces generation */
-    fun resolver(action: Action<KobbyKotlinResolverExtension>) {
-        action.execute(resolverExtension.value)
     }
 
     // *****************************************************************************************************************
@@ -798,60 +792,4 @@ open class KobbyKotlinAdapterKtorExtension {
      * Default: null
      */
     var receiveTimeoutMillis: Long? = null
-}
-
-/**
- * Configuration of resolver interfaces generation
- */
-@Kobby
-open class KobbyKotlinResolverExtension {
-    /**
-     * Is resolver interfaces generation enabled
-     *
-     * By default, "true" if "com.graphql-java-kickstart:graphql-java-tools" artifact is in the project dependencies
-     */
-    var enabled: Boolean? = null
-
-    /**
-     * Is wrap subscription resolver functions result in "org.reactivestreams.Publisher"
-     *
-     * By default, "true" if "org.reactivestreams:reactive-streams" artifact is in the project dependencies
-     */
-    var publisherEnabled: Boolean? = null
-
-    /**
-     * Package name for resolver interfaces relative to root package name
-     *
-     * Default: "resolver"
-     */
-    var packageName: String? = null
-
-    /**
-     * Prefix for resolver interfaces
-     *
-     * By default, is capitalized context name
-     */
-    var prefix: String? = null
-
-    /**
-     * Postfix for resolver interfaces
-     *
-     * Default: "Resolver"
-     */
-    var postfix: String? = null
-
-    /**
-     * Name for parent object argument
-     *
-     * By default, is de-capitalized name of parent object type
-     */
-    var argument: String? = null
-
-    /**
-     * If not null, Kobby will generate default implementation
-     * for functions in resolver interfaces that looks like: TODO("$toDoMessage")
-     *
-     * Default: null
-     */
-    var toDoMessage: String? = null
 }

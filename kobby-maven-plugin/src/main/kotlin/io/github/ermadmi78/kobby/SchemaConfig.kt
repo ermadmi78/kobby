@@ -54,16 +54,12 @@ class DirectiveConfig {
     @Parameter
     var selection: String = "selection"
 
-    @Parameter
-    var resolve: String = "resolve"
-
     override fun toString(): String {
         return "DirectiveConfig(" +
                 "\n      primaryKey=$primaryKey, " +
                 "\n      required=$required, " +
                 "\n      default=$default, " +
-                "\n      selection=$selection, " +
-                "\n      resolve=$resolve" +
+                "\n      selection=$selection" +
                 "\n    )"
     }
 }

@@ -67,9 +67,6 @@ class KobbyPlugin : Plugin<Project> {
                     selection?.also {
                         kotlinTask.schemaDirectiveSelection.convention(it)
                     }
-                    resolve?.also {
-                        kotlinTask.schemaDirectiveResolve.convention(it)
-                    }
                 }
             }
             extension.kotlinExtension.valueOrNull?.also { kotlinExtension ->
@@ -335,29 +332,6 @@ class KobbyPlugin : Plugin<Project> {
                         receiveTimeoutMillis?.also {
                             kotlinTask.adapterKtorReceiveTimeoutMillis.convention(it)
                         }
-                    }
-                }
-                kotlinExtension.resolverExtension.valueOrNull?.apply {
-                    enabled?.also {
-                        kotlinTask.resolverEnabled.convention(it)
-                    }
-                    publisherEnabled?.also {
-                        kotlinTask.resolverPublisherEnabled.convention(it)
-                    }
-                    packageName?.also {
-                        kotlinTask.resolverPackageName.convention(it)
-                    }
-                    prefix?.also {
-                        kotlinTask.resolverPrefix.convention(it)
-                    }
-                    postfix?.also {
-                        kotlinTask.resolverPostfix.convention(it)
-                    }
-                    argument?.also {
-                        kotlinTask.resolverArgument.convention(it)
-                    }
-                    toDoMessage?.also {
-                        kotlinTask.resolverToDoMessage.convention(it)
                     }
                 }
             }

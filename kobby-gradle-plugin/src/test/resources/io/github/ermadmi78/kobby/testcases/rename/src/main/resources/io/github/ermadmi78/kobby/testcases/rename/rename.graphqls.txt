@@ -2,7 +2,6 @@ directive @myPrimaryKey on FIELD_DEFINITION
 directive @myRequired on FIELD_DEFINITION
 directive @myDefault on FIELD_DEFINITION
 directive @mySelection on FIELD_DEFINITION
-directive @myResolve on FIELD_DEFINITION
 
 schema {
     query: MyQuery
@@ -99,7 +98,7 @@ type Country implements Entity {
         offset: Int! = 0
     ): [Actor!]! @mySelection
 
-    native: [Native!]! @myResolve
+    native: [Native!]!
 }
 
 type Film implements Entity {
@@ -109,7 +108,7 @@ type Film implements Entity {
     title: String! @myDefault
     genre: Genre!
     countryId: ID! @myRequired
-    country: Country! @myResolve
+    country: Country!
 
     actors(
         firstName: String,
@@ -141,7 +140,7 @@ type Actor implements Entity {
     gender: Gender!
 
     countryId: ID! @myPrimaryKey
-    country: Country! @myResolve
+    country: Country!
 
     films(
         title: String,

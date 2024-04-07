@@ -51,12 +51,6 @@ class DirectiveValidationTest {
         )
         "selection_can_override".shouldViolate()
         "selection_override".shouldViolate()
-
-        "resolve_cannot_override".shouldViolate(
-            "Restriction violated [Country.base]: The [@resolve] directive cannot be applied to overridden fields. Please, apply [@resolve] directive to [Base.base] field."
-        )
-        "resolve_can_override".shouldViolate()
-        "resolve_override".shouldViolate()
     }
 
     private fun String.shouldViolate(vararg warnings: String) {
