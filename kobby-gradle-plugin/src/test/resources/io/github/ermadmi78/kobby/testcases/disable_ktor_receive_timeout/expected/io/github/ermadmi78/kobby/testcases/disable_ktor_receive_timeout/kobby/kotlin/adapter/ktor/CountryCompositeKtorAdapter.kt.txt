@@ -13,31 +13,31 @@
   "KotlinRedundantDiagnosticSuppress",
 )
 
-package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.adapter.ktor
+package io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.adapter.ktor
 
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountryAdapter
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountryMapper
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountryReceiver
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.MutationDto
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.QueryDto
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.SubscriptionDto
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryClientMessage
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryClientMessageComplete
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryClientMessageConnectionInit
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryClientMessagePing
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryClientMessagePong
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryClientMessageSubscribe
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryException
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryMutationResult
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryQueryResult
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryRequest
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryServerMessage
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryServerMessageComplete
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryServerMessageConnectionAck
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryServerMessageError
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryServerMessageNext
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryServerMessagePing
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryServerMessagePong
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.CountryAdapter
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.CountryMapper
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.CountryReceiver
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryClientMessage
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryClientMessageComplete
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryClientMessageConnectionInit
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryClientMessagePing
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryClientMessagePong
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryClientMessageSubscribe
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryException
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryMutationResult
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryQueryResult
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryRequest
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryServerMessage
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryServerMessageComplete
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryServerMessageConnectionAck
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryServerMessageError
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryServerMessageNext
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryServerMessagePing
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.dto.graphql.CountryServerMessagePong
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.post
@@ -77,7 +77,7 @@ public open class CountryCompositeKtorAdapter(
   protected val mapper: CountryMapper,
   protected val requestHeaders: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val subscriptionPayload: suspend () -> Map<String, Any?>? = { null },
-  protected val subscriptionReceiveTimeoutMillis: Long? = 10000,
+  protected val subscriptionReceiveTimeoutMillis: Long? = null,
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },

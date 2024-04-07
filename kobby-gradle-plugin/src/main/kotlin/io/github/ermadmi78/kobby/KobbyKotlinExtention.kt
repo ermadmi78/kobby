@@ -789,7 +789,7 @@ open class KobbyKotlinAdapterKtorExtension {
     /**
      * Default receive message timeout in milliseconds for subscriptions in Ktor composite adapter
      *
-     * Default: null
+     * Default: 10000 milliseconds. Set it to zero or a negative value to disable it.
      */
     var receiveTimeoutMillis: Long? = null
 }

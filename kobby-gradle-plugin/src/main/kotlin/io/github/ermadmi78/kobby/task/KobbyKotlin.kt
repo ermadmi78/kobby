@@ -726,7 +726,7 @@ open class KobbyKotlin : DefaultTask() {
     @Option(
         option = "adapterKtorReceiveTimeoutMillis",
         description = "Default receive message timeout in milliseconds for subscriptions " +
-                "in Ktor composite adapter (default null)"
+                "in Ktor composite adapter (default 10000). Set it to zero or a negative value to disable it."
     )
     val adapterKtorReceiveTimeoutMillis: Property<Long> = project.objects.property(Long::class.java)
 
@@ -824,6 +824,7 @@ open class KobbyKotlin : DefaultTask() {
         })
         adapterKtorPackageName.convention("adapter.ktor")
         adapterKtorPostfix.convention("KtorAdapter")
+        adapterKtorReceiveTimeoutMillis.convention(10_000L)
 
         outputDirectory.convention(project.layout.buildDirectory.dir("generated/sources/kobby/main/kotlin"))
     }
@@ -985,7 +986,7 @@ open class KobbyKotlin : DefaultTask() {
                         adapterKtorPrefix.orNull?.trim() ?: capitalizedContextName,
                         adapterKtorPostfix.orNull
                     ),
-                    adapterKtorReceiveTimeoutMillis.orNull
+                    adapterKtorReceiveTimeoutMillis.orNull?.takeIf { it > 0L }
                 )
             )
         )

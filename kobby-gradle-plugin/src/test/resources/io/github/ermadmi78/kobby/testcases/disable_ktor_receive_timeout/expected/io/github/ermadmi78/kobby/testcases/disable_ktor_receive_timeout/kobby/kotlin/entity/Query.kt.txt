@@ -1,0 +1,38 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.disable_ktor_receive_timeout.kobby.kotlin.CountryDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Query {
+  public val countries: List<Country>
+
+  public fun __context(): CountryContext
+
+  public fun QueryProjection.__withCurrentProjection(): Unit
+}
+
+@CountryDSL
+public interface QueryProjection {
+  public fun countries(__projection: CountryProjection.() -> Unit): Unit
+
+  public fun __minimize(): Unit {
+  }
+}
