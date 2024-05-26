@@ -1037,7 +1037,9 @@ open class KobbyKotlin : DefaultTask() {
 
     private fun Project.resolveDependencies(): Sequence<ResolvedDependency> = this.configurations.asSequence()
         .filter { it.isCanBeResolved }
-        .flatMap { it.resolvedConfiguration.firstLevelModuleDependencies }
+        .map { it.resolvedConfiguration }
+        .map { it.lenientConfiguration }
+        .flatMap { it.firstLevelModuleDependencies }
         .flatMap {
             sequence {
                 yield(it)
