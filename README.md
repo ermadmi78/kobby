@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen)](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
-[![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v4.0.0-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
-[![Maven Central](https://img.shields.io/badge/Maven%20Central-v4.0.0-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
+[![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v4.0.1-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
+[![Maven Central](https://img.shields.io/badge/Maven%20Central-v4.0.1-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
 [![Discussions](https://img.shields.io/badge/Discussions-On%20GitHub-blue)](https://github.com/ermadmi78/kobby/discussions)
 
 [![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)](https://github.com/ermadmi78/kobby/wiki)
@@ -32,7 +32,7 @@ release [3.0.0](https://github.com/ermadmi78/kobby/releases/tag/3.0.0).
 
 * Gradle at least version 8.0 is required.
 * Maven at least version 3.9.1 is required.
-* Kotlin at least version 1.8.0 is required to compile generated client DSL.
+* Kotlin at least version 1.8.0 is required to compile generated client DSL (use Kobby at least [4.0.1](https://github.com/ermadmi78/kobby/releases/tag/4.0.1) for Kotlin 2.x).
 * Kotlinx Serialization at least version 1.5.0 is required.
 * Ktor at least version 2.0.0 is required to generate default adapters.
 * [graphql-ws](https://github.com/enisdenjo/graphql-ws) GraphQL Websocket protocol.
@@ -70,7 +70,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ```kotlin
 plugins {
-    id("io.github.ermadmi78.kobby") version "4.0.0"
+    id("io.github.ermadmi78.kobby") version "4.0.1"
 }
 ```
 
@@ -83,7 +83,7 @@ plugins {
         <plugin>
             <groupId>io.github.ermadmi78</groupId>
             <artifactId>kobby-maven-plugin</artifactId>
-            <version>4.0.0</version>
+            <version>4.0.1</version>
             <executions>
                 <execution>
                     <phase>generate-sources</phase>
