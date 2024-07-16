@@ -1,0 +1,102 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.ForbiddenProjectionNamesDSL
+import kotlin.Boolean
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+
+@JsonTypeName(value = "Query")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = QueryDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class QueryDto(
+  public val getClass: Boolean? = null,
+  public val hashCode: Boolean? = null,
+  public val equals: Boolean? = null,
+  public val clone: Boolean? = null,
+  public val toString: Boolean? = null,
+  public val notify: Boolean? = null,
+  public val notifyAll: Boolean? = null,
+  public val wait: Boolean? = null,
+  public val finalize: Boolean? = null,
+  public val normal: Boolean? = null,
+)
+
+public fun QueryDto.toBuilder(): QueryDtoBuilder = QueryDtoBuilder().also {
+  it.getClass = this.getClass
+  it.hashCode = this.hashCode
+  it.equals = this.equals
+  it.clone = this.clone
+  it.toString = this.toString
+  it.notify = this.notify
+  it.notifyAll = this.notifyAll
+  it.wait = this.wait
+  it.finalize = this.finalize
+  it.normal = this.normal
+}
+
+public fun QueryDtoBuilder.toDto(): QueryDto = QueryDto(
+  getClass,
+  hashCode,
+  equals,
+  clone,
+  toString,
+  notify,
+  notifyAll,
+  wait,
+  finalize,
+  normal
+)
+
+public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    QueryDtoBuilder().apply(block).toDto()
+
+public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    toBuilder().apply(block).toDto()
+
+@ForbiddenProjectionNamesDSL
+public class QueryDtoBuilder {
+  public var getClass: Boolean? = null
+
+  public var hashCode: Boolean? = null
+
+  public var equals: Boolean? = null
+
+  public var clone: Boolean? = null
+
+  public var toString: Boolean? = null
+
+  public var notify: Boolean? = null
+
+  public var notifyAll: Boolean? = null
+
+  public var wait: Boolean? = null
+
+  public var finalize: Boolean? = null
+
+  public var normal: Boolean? = null
+}

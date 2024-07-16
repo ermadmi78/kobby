@@ -1,0 +1,33 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.ForbiddenProjectionNamesContext
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.ForbiddenProjectionNamesDSL
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Subscription {
+  public fun __context(): ForbiddenProjectionNamesContext
+
+  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+}
+
+@ForbiddenProjectionNamesDSL
+public interface SubscriptionProjection {
+  public fun __minimize(): Unit {
+  }
+}

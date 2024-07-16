@@ -106,3 +106,16 @@ internal fun String.rename(occupied: Set<String>): String {
 
     error("Cannot rename '$this' to avoid conflict with $occupied")
 }
+
+// All the methods of java.lang.Object
+internal val FORBIDDEN_PROJECTION_NAMES = setOf(
+    "getClass",
+    "hashCode",
+    "equals",
+    "clone",
+    "toString",
+    "notify",
+    "notifyAll",
+    "wait",
+    "finalize"
+)

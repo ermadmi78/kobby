@@ -247,10 +247,19 @@ data class KotlinLayout(
         get() = LambdaTypeName.get(qualifiedProjectionClass, emptyList(), UNIT)
 
     internal val KobbyField.projectionFieldName: String
-        get() = if (isDefault)
-            name.decorate(entity.projection.withoutDecoration)
-        else
-            name.decorate(entity.projection.withDecoration)
+        get() {
+            var res = if (isDefault) {
+                name.decorate(entity.projection.withoutDecoration)
+            } else {
+                name.decorate(entity.projection.withDecoration)
+            }
+
+            if (res in FORBIDDEN_PROJECTION_NAMES) {
+                res = "__$res"
+            }
+
+            return res
+        }
 
     internal val KobbyNode.qualificationName: String
         get() = when (kind) {

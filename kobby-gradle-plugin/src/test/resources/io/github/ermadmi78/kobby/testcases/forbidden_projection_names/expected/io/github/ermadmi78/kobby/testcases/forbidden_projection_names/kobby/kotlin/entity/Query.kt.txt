@@ -1,0 +1,74 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.ForbiddenProjectionNamesContext
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.ForbiddenProjectionNamesDSL
+import kotlin.Boolean
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Query {
+  public val getClass: Boolean
+
+  public val hashCode: Boolean
+
+  public val equals: Boolean
+
+  public val clone: Boolean
+
+  public val toString: Boolean
+
+  public val notify: Boolean
+
+  public val notifyAll: Boolean
+
+  public val wait: Boolean
+
+  public val finalize: Boolean
+
+  public val normal: Boolean
+
+  public fun __context(): ForbiddenProjectionNamesContext
+
+  public fun QueryProjection.__withCurrentProjection(): Unit
+}
+
+@ForbiddenProjectionNamesDSL
+public interface QueryProjection {
+  public fun __getClass(): Unit
+
+  public fun __hashCode(): Unit
+
+  public fun __equals(): Unit
+
+  public fun __clone(): Unit
+
+  public fun __toString(): Unit
+
+  public fun __notify(): Unit
+
+  public fun __notifyAll(): Unit
+
+  public fun __wait(): Unit
+
+  public fun __finalize(): Unit
+
+  public fun normal(): Unit
+
+  public fun __minimize(): Unit {
+  }
+}

@@ -1,0 +1,13 @@
+type Query {
+    getClass: Boolean!
+    hashCode: Boolean!
+    equals: Boolean!
+    clone: Boolean!
+    toString: Boolean!
+    notify: Boolean!
+    notifyAll: Boolean!
+    wait: Boolean!
+    finalize: Boolean!
+
+    normal: Boolean!
+}

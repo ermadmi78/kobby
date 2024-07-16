@@ -1,0 +1,368 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.ForbiddenProjectionNamesContext
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.entity.QueryProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class QueryImpl(
+  internal val __innerContext: ForbiddenProjectionNamesContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto,
+) : Query {
+  public override val getClass: Boolean
+    get() {
+      if (!__innerProjection.__innerGetClass0) {
+        error("Property [getClass] is not available - add [__getClass] projection to switch on it")
+      }
+      return __innerDto.getClass!!
+    }
+
+  public override val hashCode: Boolean
+    get() {
+      if (!__innerProjection.__innerHashCode1) {
+        error("Property [hashCode] is not available - add [__hashCode] projection to switch on it")
+      }
+      return __innerDto.hashCode!!
+    }
+
+  public override val equals: Boolean
+    get() {
+      if (!__innerProjection.__innerEquals2) {
+        error("Property [equals] is not available - add [__equals] projection to switch on it")
+      }
+      return __innerDto.equals!!
+    }
+
+  public override val clone: Boolean
+    get() {
+      if (!__innerProjection.__innerClone3) {
+        error("Property [clone] is not available - add [__clone] projection to switch on it")
+      }
+      return __innerDto.clone!!
+    }
+
+  public override val toString: Boolean
+    get() {
+      if (!__innerProjection.__innerToString4) {
+        error("Property [toString] is not available - add [__toString] projection to switch on it")
+      }
+      return __innerDto.toString!!
+    }
+
+  public override val notify: Boolean
+    get() {
+      if (!__innerProjection.__innerNotify5) {
+        error("Property [notify] is not available - add [__notify] projection to switch on it")
+      }
+      return __innerDto.notify!!
+    }
+
+  public override val notifyAll: Boolean
+    get() {
+      if (!__innerProjection.__innerNotifyAll6) {
+        error("Property [notifyAll] is not available - add [__notifyAll] projection to switch on it")
+      }
+      return __innerDto.notifyAll!!
+    }
+
+  public override val wait: Boolean
+    get() {
+      if (!__innerProjection.__innerWait7) {
+        error("Property [wait] is not available - add [__wait] projection to switch on it")
+      }
+      return __innerDto.wait!!
+    }
+
+  public override val finalize: Boolean
+    get() {
+      if (!__innerProjection.__innerFinalize8) {
+        error("Property [finalize] is not available - add [__finalize] projection to switch on it")
+      }
+      return __innerDto.finalize!!
+    }
+
+  public override val normal: Boolean
+    get() {
+      if (!__innerProjection.__innerNormal9) {
+        error("Property [normal] is not available - add [normal] projection to switch on it")
+      }
+      return __innerDto.normal!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  public override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerGetClass0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("getClass").append('=').append(getClass)
+    }
+
+    if (__innerProjection.__innerHashCode1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("hashCode").append('=').append(hashCode)
+    }
+
+    if (__innerProjection.__innerEquals2) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("equals").append('=').append(equals)
+    }
+
+    if (__innerProjection.__innerClone3) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("clone").append('=').append(clone)
+    }
+
+    if (__innerProjection.__innerToString4) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("toString").append('=').append(toString)
+    }
+
+    if (__innerProjection.__innerNotify5) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("notify").append('=').append(notify)
+    }
+
+    if (__innerProjection.__innerNotifyAll6) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("notifyAll").append('=').append(notifyAll)
+    }
+
+    if (__innerProjection.__innerWait7) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("wait").append('=').append(wait)
+    }
+
+    if (__innerProjection.__innerFinalize8) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("finalize").append('=').append(finalize)
+    }
+
+    if (__innerProjection.__innerNormal9) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("normal").append('=').append(normal)
+    }
+
+    append(')')
+  }
+
+  public override fun __context(): ForbiddenProjectionNamesContext = __innerContext
+
+  public override fun QueryProjection.__withCurrentProjection(): Unit {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerGetClass0: Boolean = false
+
+  internal var __innerHashCode1: Boolean = false
+
+  internal var __innerEquals2: Boolean = false
+
+  internal var __innerClone3: Boolean = false
+
+  internal var __innerToString4: Boolean = false
+
+  internal var __innerNotify5: Boolean = false
+
+  internal var __innerNotifyAll6: Boolean = false
+
+  internal var __innerWait7: Boolean = false
+
+  internal var __innerFinalize8: Boolean = false
+
+  internal var __innerNormal9: Boolean = false
+
+  public override fun __getClass(): Unit {
+    __innerGetClass0 = true
+  }
+
+  public override fun __hashCode(): Unit {
+    __innerHashCode1 = true
+  }
+
+  public override fun __equals(): Unit {
+    __innerEquals2 = true
+  }
+
+  public override fun __clone(): Unit {
+    __innerClone3 = true
+  }
+
+  public override fun __toString(): Unit {
+    __innerToString4 = true
+  }
+
+  public override fun __notify(): Unit {
+    __innerNotify5 = true
+  }
+
+  public override fun __notifyAll(): Unit {
+    __innerNotifyAll6 = true
+  }
+
+  public override fun __wait(): Unit {
+    __innerWait7 = true
+  }
+
+  public override fun __finalize(): Unit {
+    __innerFinalize8 = true
+  }
+
+  public override fun normal(): Unit {
+    __innerNormal9 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+    if ("getClass" !in ignore && __innerGetClass0) {
+      __projection.__getClass()
+    }
+    if ("hashCode" !in ignore && __innerHashCode1) {
+      __projection.__hashCode()
+    }
+    if ("equals" !in ignore && __innerEquals2) {
+      __projection.__equals()
+    }
+    if ("clone" !in ignore && __innerClone3) {
+      __projection.__clone()
+    }
+    if ("toString" !in ignore && __innerToString4) {
+      __projection.__toString()
+    }
+    if ("notify" !in ignore && __innerNotify5) {
+      __projection.__notify()
+    }
+    if ("notifyAll" !in ignore && __innerNotifyAll6) {
+      __projection.__notifyAll()
+    }
+    if ("wait" !in ignore && __innerWait7) {
+      __projection.__wait()
+    }
+    if ("finalize" !in ignore && __innerFinalize8) {
+      __projection.__finalize()
+    }
+    if ("normal" !in ignore && __innerNormal9) {
+      __projection.normal()
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ): Unit {
+    body.append(' ').append('{')
+
+    // Field: getClass
+    if ("getClass" !in ignore && __innerGetClass0) {
+      body.append(' ').append("getClass")
+    }
+
+    // Field: hashCode
+    if ("hashCode" !in ignore && __innerHashCode1) {
+      body.append(' ').append("hashCode")
+    }
+
+    // Field: equals
+    if ("equals" !in ignore && __innerEquals2) {
+      body.append(' ').append("equals")
+    }
+
+    // Field: clone
+    if ("clone" !in ignore && __innerClone3) {
+      body.append(' ').append("clone")
+    }
+
+    // Field: toString
+    if ("toString" !in ignore && __innerToString4) {
+      body.append(' ').append("toString")
+    }
+
+    // Field: notify
+    if ("notify" !in ignore && __innerNotify5) {
+      body.append(' ').append("notify")
+    }
+
+    // Field: notifyAll
+    if ("notifyAll" !in ignore && __innerNotifyAll6) {
+      body.append(' ').append("notifyAll")
+    }
+
+    // Field: wait
+    if ("wait" !in ignore && __innerWait7) {
+      body.append(' ').append("wait")
+    }
+
+    // Field: finalize
+    if ("finalize" !in ignore && __innerFinalize8) {
+      body.append(' ').append("finalize")
+    }
+
+    // Field: normal
+    if ("normal" !in ignore && __innerNormal9) {
+      body.append(' ').append("normal")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: ForbiddenProjectionNamesContext,
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
