@@ -1,0 +1,46 @@
+import io.github.ermadmi78.kobby.kobby
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    kotlin("jvm") version "testKotlinVersion"
+    id("io.github.ermadmi78.kobby")
+}
+
+kobby {
+    kotlin {
+        dto {
+            maxNumberOfFieldsForImmutableDtoClass = 16
+            maxNumberOfFieldsForImmutableInputClass = 13
+            graphQL {
+                enabled = false
+            }
+        }
+        entity {
+            enabled = false
+        }
+    }
+}
+
+dependencies {
+    // Add this dependencies to remove warning "Runtime JAR files in the classpath should have the same version"
+    compileOnly(kotlin("stdlib"))
+    compileOnly(kotlin("stdlib-jdk7"))
+    compileOnly(kotlin("reflect"))
+}
+
+tasks {
+    jar {
+        enabled = false
+    }
+}

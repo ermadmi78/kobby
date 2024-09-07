@@ -1,0 +1,144 @@
+type Query {
+    entities: [Entity!]!
+    all: [All]
+}
+
+type Mutation {
+    applyImmutable(immutable: ImmutableInput!): Boolean!
+    applyMutable(mutable: MutableInput): Boolean
+}
+
+interface Entity {
+    title: String!
+
+    immutableV: ImmutableEntity!
+    immutableN: ImmutableEntity
+    immutableListVV: [ImmutableEntity!]!
+    immutableListNV: [ImmutableEntity]!
+    immutableListVN: [ImmutableEntity!]
+    immutableListNN: [ImmutableEntity]
+
+    mutableV: MutableEntity!
+    mutableN: MutableEntity
+    mutableListVV: [MutableEntity!]!
+    mutableListNV: [MutableEntity]!
+    mutableListVN: [MutableEntity!]
+    mutableListNN: [MutableEntity]
+}
+
+type ImmutableEntity implements Entity {
+    title: String!
+
+    immutableV: ImmutableEntity!
+    immutableN: ImmutableEntity
+    immutableListVV: [ImmutableEntity!]!
+    immutableListNV: [ImmutableEntity]!
+    immutableListVN: [ImmutableEntity!]
+    immutableListNN: [ImmutableEntity]
+
+    mutableV: MutableEntity!
+    mutableN: MutableEntity
+    mutableListVV: [MutableEntity!]!
+    mutableListNV: [MutableEntity]!
+    mutableListVN: [MutableEntity!]
+    mutableListNN: [MutableEntity]
+
+    additional1: Boolean!
+    additional2: Boolean!
+    additional3: Boolean!
+}
+
+type MutableEntity implements Entity {
+    id: ID!
+    title: String!
+
+    immutableV: ImmutableEntity!
+    immutableN: ImmutableEntity
+    immutableListVV: [ImmutableEntity!]!
+    immutableListNV: [ImmutableEntity]!
+    immutableListVN: [ImmutableEntity!]
+    immutableListNN: [ImmutableEntity]
+
+    mutableV: MutableEntity!
+    mutableN: MutableEntity
+    mutableListVV: [MutableEntity!]!
+    mutableListNV: [MutableEntity]!
+    mutableListVN: [MutableEntity!]
+    mutableListNN: [MutableEntity]
+
+    additional1: Boolean!
+    additional2: Boolean!
+    additional3: Boolean!
+}
+
+union All = ImmutableEntity | MutableEntity
+
+input ImmutableTargetInput {
+    value01: String!
+    value02: String!
+    value03: String!
+    value04: String!
+    value05: String!
+    value06: String!
+    value07: String!
+    value08: String!
+    value09: String!
+    value10: String!
+    value11: String!
+    value12: String!
+    value13: String!
+}
+
+input MutableTargetInput {
+    value01: String!
+    value02: String!
+    value03: String!
+    value04: String!
+    value05: String!
+    value06: String!
+    value07: String!
+    value08: String!
+    value09: String!
+    value10: String!
+    value11: String!
+    value12: String!
+    value13: String!
+    value14: String!
+}
+
+input ImmutableInput {
+    title: String! = "immutable"
+
+    immutableV: ImmutableTargetInput!
+    immutableN: ImmutableTargetInput
+    immutableLisVV: [ImmutableTargetInput!]!
+    immutableLisNV: [ImmutableTargetInput]!
+    immutableLisVN: [ImmutableTargetInput!]
+    immutableLisNN: [ImmutableTargetInput]
+
+    mutableV: MutableTargetInput!
+    mutableN: MutableTargetInput
+    mutableListVV: [MutableTargetInput!]!
+    mutableListNV: [MutableTargetInput]!
+    mutableListVN: [MutableTargetInput!]
+    mutableListNN: [MutableTargetInput]
+}
+
+input MutableInput {
+    id: ID!
+    title: String! = "mutable"
+
+    immutableV: ImmutableTargetInput!
+    immutableN: ImmutableTargetInput
+    immutableLisVV: [ImmutableTargetInput!]!
+    immutableLisNV: [ImmutableTargetInput]!
+    immutableLisVN: [ImmutableTargetInput!]
+    immutableLisNN: [ImmutableTargetInput]
+
+    mutableV: MutableTargetInput!
+    mutableN: MutableTargetInput
+    mutableListVV: [MutableTargetInput!]!
+    mutableListNV: [MutableTargetInput]!
+    mutableListVN: [MutableTargetInput!]
+    mutableListNN: [MutableTargetInput]
+}

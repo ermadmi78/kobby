@@ -1,0 +1,106 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_jackson.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_jackson.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.text.buildString
+
+@JsonTypeName(value = "Query")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = QueryDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+@CinemaDSL
+public class QueryDto {
+  /**
+   * Find country by id.
+   * Returns null if not found.
+   */
+  public var country: CountryDto? = null
+
+  /**
+   * Find countries by name.
+   * Returns empty list if not found.
+   */
+  public var countries: List<CountryDto>? = null
+
+  /**
+   * Find film by id.
+   * Returns null if not found.
+   */
+  public var film: FilmDto? = null
+
+  /**
+   * Find films by title and genre.
+   * Returns empty list if not found.
+   */
+  public var films: List<FilmDto>? = null
+
+  /**
+   * Find actor by id.
+   * Returns null if not found.
+   */
+  public var actor: ActorDto? = null
+
+  /**
+   * Find actors by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public var actors: List<ActorDto>? = null
+
+  /**
+   * Find entities by tag
+   */
+  public var taggable: List<TaggableDto>? = null
+
+  public override fun toString(): String = buildString {
+    append("QueryDto").append('(')
+    append("country").append('=').append(country)
+    append(", ").append("countries").append('=').append(countries)
+    append(", ").append("film").append('=').append(film)
+    append(", ").append("films").append('=').append(films)
+    append(", ").append("actor").append('=').append(actor)
+    append(", ").append("actors").append('=').append(actors)
+    append(", ").append("taggable").append('=').append(taggable)
+    append(')')
+  }
+}
+
+public fun QueryDto(block: QueryDto.() -> Unit): QueryDto = QueryDto().apply(block)
+
+public fun QueryDto.copy(): QueryDto = QueryDto().also {
+  it.country = this.country
+  it.countries = this.countries
+  it.film = this.film
+  it.films = this.films
+  it.actor = this.actor
+  it.actors = this.actors
+  it.taggable = this.taggable
+}
+
+public fun QueryDto.copy(block: QueryDto.() -> Unit): QueryDto = copy().apply(block)

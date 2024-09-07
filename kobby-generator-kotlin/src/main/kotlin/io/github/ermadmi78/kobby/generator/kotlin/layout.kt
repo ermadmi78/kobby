@@ -67,6 +67,9 @@ data class KotlinLayout(
     internal val KobbyNode.dtoClass: ClassName
         get() = ClassName(dto.packageName, dtoName)
 
+    internal val KobbyNode.dtoLambda: LambdaTypeName
+        get() = LambdaTypeName.get(dtoClass, emptyList(), UNIT)
+
     internal val KobbyNode.builderName: String
         get() = dtoName.decorate(dto.builder.decoration)
 
@@ -535,6 +538,8 @@ class KotlinDtoLayout(
     val enumDecoration: Decoration,
     val inputDecoration: Decoration,
     val applyPrimaryKeys: Boolean,
+    val maxNumberOfFieldsForImmutableDtoClass: Int,
+    val maxNumberOfFieldsForImmutableInputClass: Int,
     val serialization: KotlinDtoSerialization,
     val jackson: KotlinDtoJacksonLayout,
     val builder: KotlinDtoBuilderLayout,

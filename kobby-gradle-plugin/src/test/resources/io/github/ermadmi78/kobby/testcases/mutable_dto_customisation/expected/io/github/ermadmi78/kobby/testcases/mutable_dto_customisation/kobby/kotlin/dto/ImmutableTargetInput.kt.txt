@@ -1,0 +1,108 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.MutableDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+
+public data class ImmutableTargetInput(
+  public val value01: String,
+  public val value02: String,
+  public val value03: String,
+  public val value04: String,
+  public val value05: String,
+  public val value06: String,
+  public val value07: String,
+  public val value08: String,
+  public val value09: String,
+  public val value10: String,
+  public val value11: String,
+  public val value12: String,
+  public val value13: String,
+)
+
+public fun ImmutableTargetInput.toBuilder(): ImmutableTargetInputBuilder =
+    ImmutableTargetInputBuilder().also {
+  it.value01 = this.value01
+  it.value02 = this.value02
+  it.value03 = this.value03
+  it.value04 = this.value04
+  it.value05 = this.value05
+  it.value06 = this.value06
+  it.value07 = this.value07
+  it.value08 = this.value08
+  it.value09 = this.value09
+  it.value10 = this.value10
+  it.value11 = this.value11
+  it.value12 = this.value12
+  it.value13 = this.value13
+}
+
+public fun ImmutableTargetInputBuilder.toInput(): ImmutableTargetInput = ImmutableTargetInput(
+  value01 ?: error("ImmutableTargetInput: 'value01' must not be null"),
+  value02 ?: error("ImmutableTargetInput: 'value02' must not be null"),
+  value03 ?: error("ImmutableTargetInput: 'value03' must not be null"),
+  value04 ?: error("ImmutableTargetInput: 'value04' must not be null"),
+  value05 ?: error("ImmutableTargetInput: 'value05' must not be null"),
+  value06 ?: error("ImmutableTargetInput: 'value06' must not be null"),
+  value07 ?: error("ImmutableTargetInput: 'value07' must not be null"),
+  value08 ?: error("ImmutableTargetInput: 'value08' must not be null"),
+  value09 ?: error("ImmutableTargetInput: 'value09' must not be null"),
+  value10 ?: error("ImmutableTargetInput: 'value10' must not be null"),
+  value11 ?: error("ImmutableTargetInput: 'value11' must not be null"),
+  value12 ?: error("ImmutableTargetInput: 'value12' must not be null"),
+  value13 ?: error("ImmutableTargetInput: 'value13' must not be null")
+)
+
+public fun ImmutableTargetInput(block: ImmutableTargetInputBuilder.() -> Unit): ImmutableTargetInput
+    = ImmutableTargetInputBuilder().apply(block).toInput()
+
+public fun ImmutableTargetInput.copy(block: ImmutableTargetInputBuilder.() -> Unit):
+    ImmutableTargetInput = toBuilder().apply(block).toInput()
+
+@MutableDSL
+public class ImmutableTargetInputBuilder {
+  public var value01: String? = null
+
+  public var value02: String? = null
+
+  public var value03: String? = null
+
+  public var value04: String? = null
+
+  public var value05: String? = null
+
+  public var value06: String? = null
+
+  public var value07: String? = null
+
+  public var value08: String? = null
+
+  public var value09: String? = null
+
+  public var value10: String? = null
+
+  public var value11: String? = null
+
+  public var value12: String? = null
+
+  public var value13: String? = null
+}

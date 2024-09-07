@@ -1,0 +1,127 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.CinemaDSL
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.serializer.LocalDateSerializer
+import java.time.LocalDate
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.text.buildString
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
+
+/**
+ * Actor entity.
+ * The actor belongs to one country and can play in several films.
+ */
+@Serializable
+@SerialName("Actor")
+@CinemaDSL
+public class ActorDto : EntityDto, TaggableDto, NativeDto {
+  /**
+   * Unique identifier of actor
+   */
+  public override var id: Long? = null
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public override var fields: JsonObject? = null
+
+  /**
+   * Tags of entity
+   */
+  public override var tags: List<TagDto>? = null
+
+  /**
+   * First name of actor.
+   * I assume all actors have a first name - so field is not null.
+   */
+  public var firstName: String? = null
+
+  /**
+   * Surname of the actor.
+   * This field is nullable because the actor can use an alias and not have a last name.
+   */
+  public var lastName: String? = null
+
+  /**
+   * Actor's birthday
+   */
+  public var birthday: @Serializable(with = LocalDateSerializer::class) LocalDate? = null
+
+  /**
+   * Actor's gender
+   */
+  public var gender: Gender? = null
+
+  /**
+   * ID of the country to which the actor belongs
+   * (@primaryKey added to test complex primary keys)
+   */
+  public var countryId: Long? = null
+
+  /**
+   * The country to which the actor belongs
+   */
+  public var country: CountryDto? = null
+
+  /**
+   * Find films of actor by title and genre.
+   * Returns empty list if not found.
+   */
+  public var films: List<FilmDto>? = null
+
+  public override fun toString(): String = buildString {
+    append("ActorDto").append('(')
+    append("id").append('=').append(id)
+    append(", ").append("fields").append('=').append(fields)
+    append(", ").append("tags").append('=').append(tags)
+    append(", ").append("firstName").append('=').append(firstName)
+    append(", ").append("lastName").append('=').append(lastName)
+    append(", ").append("birthday").append('=').append(birthday)
+    append(", ").append("gender").append('=').append(gender)
+    append(", ").append("countryId").append('=').append(countryId)
+    append(", ").append("country").append('=').append(country)
+    append(", ").append("films").append('=').append(films)
+    append(')')
+  }
+}
+
+public fun ActorDto(block: ActorDto.() -> Unit): ActorDto = ActorDto().apply(block)
+
+public fun ActorDto.copy(): ActorDto = ActorDto().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.tags = this.tags
+  it.firstName = this.firstName
+  it.lastName = this.lastName
+  it.birthday = this.birthday
+  it.gender = this.gender
+  it.countryId = this.countryId
+  it.country = this.country
+  it.films = this.films
+}
+
+public fun ActorDto.copy(block: ActorDto.() -> Unit): ActorDto = copy().apply(block)

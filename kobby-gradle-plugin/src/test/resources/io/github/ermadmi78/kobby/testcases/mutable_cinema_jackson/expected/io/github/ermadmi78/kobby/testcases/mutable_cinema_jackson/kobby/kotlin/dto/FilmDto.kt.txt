@@ -1,0 +1,116 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_jackson.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_jackson.kobby.kotlin.CinemaDSL
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.text.buildString
+
+/**
+ * Film entity.
+ * The film belongs to one country and can be played by several actors.
+ */
+@JsonTypeName(value = "Film")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = FilmDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+@CinemaDSL
+public class FilmDto : EntityDto, TaggableDto, NativeDto {
+  /**
+   * Unique identifier of entity %
+   */
+  public override var id: Long? = null
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public override var fields: Map<String, Any?>? = null
+
+  /**
+   * Tags of entity
+   */
+  public override var tags: List<TagDto>? = null
+
+  /**
+   * Title of film
+   */
+  public var title: String? = null
+
+  /**
+   * Genre of film.
+   */
+  public var genre: Genre? = null
+
+  /**
+   * ID of the country to which the film belongs
+   */
+  public var countryId: Long? = null
+
+  /**
+   * The country to which the film belongs
+   */
+  public var country: CountryDto? = null
+
+  /**
+   * Find actors of film by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public var actors: List<ActorDto>? = null
+
+  public override fun toString(): String = buildString {
+    append("FilmDto").append('(')
+    append("id").append('=').append(id)
+    append(", ").append("fields").append('=').append(fields)
+    append(", ").append("tags").append('=').append(tags)
+    append(", ").append("title").append('=').append(title)
+    append(", ").append("genre").append('=').append(genre)
+    append(", ").append("countryId").append('=').append(countryId)
+    append(", ").append("country").append('=').append(country)
+    append(", ").append("actors").append('=').append(actors)
+    append(')')
+  }
+}
+
+public fun FilmDto(block: FilmDto.() -> Unit): FilmDto = FilmDto().apply(block)
+
+public fun FilmDto.copy(): FilmDto = FilmDto().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.tags = this.tags
+  it.title = this.title
+  it.genre = this.genre
+  it.countryId = this.countryId
+  it.country = this.country
+  it.actors = this.actors
+}
+
+public fun FilmDto.copy(block: FilmDto.() -> Unit): FilmDto = copy().apply(block)

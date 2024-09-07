@@ -247,6 +247,22 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "dtoMaxNumberOfFieldsForImmutableDtoClass",
+        description = "Generate immutable DTO class if number of GraphQL type fields <= property value (default 245)"
+    )
+    val dtoMaxNumberOfFieldsForImmutableDtoClass: Property<Int> = project.objects.property(Int::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "dtoMaxNumberOfFieldsForImmutableInputClass",
+        description = "Generate immutable Input class if number of GraphQL Input type fields <= property value (default 245)"
+    )
+    val dtoMaxNumberOfFieldsForImmutableInputClass: Property<Int> = project.objects.property(Int::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "dtoSerializationEnabled",
         description = "Enable Kotlinx Serialization in generated DTO classes (default false)"
     )
@@ -768,6 +784,8 @@ open class KobbyKotlin : DefaultTask() {
         dtoPackageName.convention("dto")
         dtoPostfix.convention("Dto")
         dtoApplyPrimaryKeys.convention(false)
+        dtoMaxNumberOfFieldsForImmutableDtoClass.convention(245)
+        dtoMaxNumberOfFieldsForImmutableInputClass.convention(245)
 
         dtoSerializationEnabled.convention(project.provider {
             project.hasDependency("org.jetbrains.kotlinx", "kotlinx-serialization-json")
@@ -916,6 +934,8 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(dtoEnumPrefix.orNull, dtoEnumPostfix.orNull),
                 Decoration(dtoInputPrefix.orNull, dtoInputPostfix.orNull),
                 dtoApplyPrimaryKeys.get(),
+                dtoMaxNumberOfFieldsForImmutableDtoClass.get(),
+                dtoMaxNumberOfFieldsForImmutableInputClass.get(),
                 KotlinDtoSerialization(
                     dtoSerializationEnabled.get(),
                     dtoSerializationClassDiscriminator.get(),

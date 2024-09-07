@@ -1,0 +1,51 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.MutableDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+
+public data class QueryDto(
+  public val entities: List<EntityDto>? = null,
+  public val all: List<AllDto?>? = null,
+)
+
+public fun QueryDto.toBuilder(): QueryDtoBuilder = QueryDtoBuilder().also {
+  it.entities = this.entities
+  it.all = this.all
+}
+
+public fun QueryDtoBuilder.toDto(): QueryDto = QueryDto(
+  entities,
+  all
+)
+
+public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    QueryDtoBuilder().apply(block).toDto()
+
+public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    toBuilder().apply(block).toDto()
+
+@MutableDSL
+public class QueryDtoBuilder {
+  public var entities: List<EntityDto>? = null
+
+  public var all: List<AllDto?>? = null
+}

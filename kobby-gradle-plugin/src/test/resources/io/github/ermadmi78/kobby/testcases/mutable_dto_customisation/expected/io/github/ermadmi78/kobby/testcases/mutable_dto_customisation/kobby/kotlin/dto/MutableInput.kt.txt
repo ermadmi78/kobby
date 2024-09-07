@@ -1,0 +1,100 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.MutableDSL
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.text.buildString
+
+@MutableDSL
+public class MutableInput {
+  public var id: Long? = null
+
+  /**
+   * Default: "mutable"
+   */
+  public var title: String? = "mutable"
+
+  public var immutableV: ImmutableTargetInput? = null
+
+  public var immutableN: ImmutableTargetInput? = null
+
+  public var immutableLisVV: List<ImmutableTargetInput>? = null
+
+  public var immutableLisNV: List<ImmutableTargetInput?>? = null
+
+  public var immutableLisVN: List<ImmutableTargetInput>? = null
+
+  public var immutableLisNN: List<ImmutableTargetInput?>? = null
+
+  public var mutableV: MutableTargetInput? = null
+
+  public var mutableN: MutableTargetInput? = null
+
+  public var mutableListVV: List<MutableTargetInput>? = null
+
+  public var mutableListNV: List<MutableTargetInput?>? = null
+
+  public var mutableListVN: List<MutableTargetInput>? = null
+
+  public var mutableListNN: List<MutableTargetInput?>? = null
+
+  public override fun toString(): String = buildString {
+    append("MutableInput").append('(')
+    append("id").append('=').append(id)
+    append(", ").append("title").append('=').append(title)
+    append(", ").append("immutableV").append('=').append(immutableV)
+    append(", ").append("immutableN").append('=').append(immutableN)
+    append(", ").append("immutableLisVV").append('=').append(immutableLisVV)
+    append(", ").append("immutableLisNV").append('=').append(immutableLisNV)
+    append(", ").append("immutableLisVN").append('=').append(immutableLisVN)
+    append(", ").append("immutableLisNN").append('=').append(immutableLisNN)
+    append(", ").append("mutableV").append('=').append(mutableV)
+    append(", ").append("mutableN").append('=').append(mutableN)
+    append(", ").append("mutableListVV").append('=').append(mutableListVV)
+    append(", ").append("mutableListNV").append('=').append(mutableListNV)
+    append(", ").append("mutableListVN").append('=').append(mutableListVN)
+    append(", ").append("mutableListNN").append('=').append(mutableListNN)
+    append(')')
+  }
+}
+
+public fun MutableInput(block: MutableInput.() -> Unit): MutableInput = MutableInput().apply(block)
+
+public fun MutableInput.copy(): MutableInput = MutableInput().also {
+  it.id = this.id
+  it.title = this.title
+  it.immutableV = this.immutableV
+  it.immutableN = this.immutableN
+  it.immutableLisVV = this.immutableLisVV
+  it.immutableLisNV = this.immutableLisNV
+  it.immutableLisVN = this.immutableLisVN
+  it.immutableLisNN = this.immutableLisNN
+  it.mutableV = this.mutableV
+  it.mutableN = this.mutableN
+  it.mutableListVV = this.mutableListVV
+  it.mutableListNV = this.mutableListNV
+  it.mutableListVN = this.mutableListVN
+  it.mutableListNN = this.mutableListNN
+}
+
+public fun MutableInput.copy(block: MutableInput.() -> Unit): MutableInput = copy().apply(block)

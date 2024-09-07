@@ -1,0 +1,97 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.MutableDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.text.buildString
+
+@MutableDSL
+public class MutableTargetInput {
+  public var value01: String? = null
+
+  public var value02: String? = null
+
+  public var value03: String? = null
+
+  public var value04: String? = null
+
+  public var value05: String? = null
+
+  public var value06: String? = null
+
+  public var value07: String? = null
+
+  public var value08: String? = null
+
+  public var value09: String? = null
+
+  public var value10: String? = null
+
+  public var value11: String? = null
+
+  public var value12: String? = null
+
+  public var value13: String? = null
+
+  public var value14: String? = null
+
+  public override fun toString(): String = buildString {
+    append("MutableTargetInput").append('(')
+    append("value01").append('=').append(value01)
+    append(", ").append("value02").append('=').append(value02)
+    append(", ").append("value03").append('=').append(value03)
+    append(", ").append("value04").append('=').append(value04)
+    append(", ").append("value05").append('=').append(value05)
+    append(", ").append("value06").append('=').append(value06)
+    append(", ").append("value07").append('=').append(value07)
+    append(", ").append("value08").append('=').append(value08)
+    append(", ").append("value09").append('=').append(value09)
+    append(", ").append("value10").append('=').append(value10)
+    append(", ").append("value11").append('=').append(value11)
+    append(", ").append("value12").append('=').append(value12)
+    append(", ").append("value13").append('=').append(value13)
+    append(", ").append("value14").append('=').append(value14)
+    append(')')
+  }
+}
+
+public fun MutableTargetInput(block: MutableTargetInput.() -> Unit): MutableTargetInput =
+    MutableTargetInput().apply(block)
+
+public fun MutableTargetInput.copy(): MutableTargetInput = MutableTargetInput().also {
+  it.value01 = this.value01
+  it.value02 = this.value02
+  it.value03 = this.value03
+  it.value04 = this.value04
+  it.value05 = this.value05
+  it.value06 = this.value06
+  it.value07 = this.value07
+  it.value08 = this.value08
+  it.value09 = this.value09
+  it.value10 = this.value10
+  it.value11 = this.value11
+  it.value12 = this.value12
+  it.value13 = this.value13
+  it.value14 = this.value14
+}
+
+public fun MutableTargetInput.copy(block: MutableTargetInput.() -> Unit): MutableTargetInput =
+    copy().apply(block)

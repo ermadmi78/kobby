@@ -220,6 +220,12 @@ class KotlinDtoConfig {
     var applyPrimaryKeys: Boolean = false
 
     @Parameter
+    var maxNumberOfFieldsForImmutableDtoClass: Int = 245
+
+    @Parameter
+    var maxNumberOfFieldsForImmutableInputClass: Int = 245
+
+    @Parameter
     var serialization: KotlinDtoSerializationConfig = KotlinDtoSerializationConfig()
 
     @Parameter
@@ -241,6 +247,8 @@ class KotlinDtoConfig {
                 "\n      inputPrefix=$inputPrefix, " +
                 "\n      inputPostfix=$inputPostfix, " +
                 "\n      applyPrimaryKeys=$applyPrimaryKeys, " +
+                "\n      maxNumberOfFieldsForImmutableDtoClass=$maxNumberOfFieldsForImmutableDtoClass, " +
+                "\n      maxNumberOfFieldsForImmutableInputClass=$maxNumberOfFieldsForImmutableInputClass, " +
                 "\n      serialization=$serialization, " +
                 "\n      jackson=$jackson, " +
                 "\n      builder=$builder, " +

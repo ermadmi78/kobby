@@ -204,6 +204,8 @@ class GenerateKotlinMojo : AbstractMojo() {
                 Decoration(dto.enumPrefix, dto.enumPostfix),
                 Decoration(dto.inputPrefix, dto.inputPostfix),
                 dto.applyPrimaryKeys,
+                dto.maxNumberOfFieldsForImmutableDtoClass,
+                dto.maxNumberOfFieldsForImmutableInputClass,
                 KotlinDtoSerialization(
                     dto.serialization.enabled!!,
                     dto.serialization.classDiscriminator,

@@ -1,0 +1,43 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto
+
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlinx.serialization.json.JsonObject
+
+/**
+ * Entity with tags.
+ * Introduced for testing complex inheritance.
+ */
+public interface TaggableDto : EntityDto {
+  /**
+   * Unique identifier of entity
+   */
+  public override val id: Long?
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public override val fields: JsonObject?
+
+  /**
+   * Tags of entity
+   */
+  public val tags: List<TagDto>?
+}

@@ -1,0 +1,59 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_jackson.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_jackson.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.text.buildString
+
+/**
+ * Film input data %
+ */
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+@CinemaDSL
+public class FilmInput {
+  /**
+   * Title of film %
+   */
+  public var title: String? = null
+
+  /**
+   * Genre of film  
+   * > Default: DRAMA
+   */
+  public var genre: Genre? = Genre.DRAMA
+
+  public override fun toString(): String = buildString {
+    append("FilmInput").append('(')
+    append("title").append('=').append(title)
+    append(", ").append("genre").append('=').append(genre)
+    append(')')
+  }
+}
+
+public fun FilmInput(block: FilmInput.() -> Unit): FilmInput = FilmInput().apply(block)
+
+public fun FilmInput.copy(): FilmInput = FilmInput().also {
+  it.title = this.title
+  it.genre = this.genre
+}
+
+public fun FilmInput.copy(block: FilmInput.() -> Unit): FilmInput = copy().apply(block)

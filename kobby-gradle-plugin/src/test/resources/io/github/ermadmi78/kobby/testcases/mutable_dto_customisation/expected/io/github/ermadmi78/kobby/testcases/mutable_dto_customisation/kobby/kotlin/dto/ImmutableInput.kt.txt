@@ -1,0 +1,114 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.MutableDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.error
+
+public data class ImmutableInput(
+  /**
+   * Default: "immutable"
+   */
+  public val title: String = "immutable",
+  public val immutableV: ImmutableTargetInput,
+  public val immutableN: ImmutableTargetInput? = null,
+  public val immutableLisVV: List<ImmutableTargetInput>,
+  public val immutableLisNV: List<ImmutableTargetInput?>,
+  public val immutableLisVN: List<ImmutableTargetInput>? = null,
+  public val immutableLisNN: List<ImmutableTargetInput?>? = null,
+  public val mutableV: MutableTargetInput,
+  public val mutableN: MutableTargetInput? = null,
+  public val mutableListVV: List<MutableTargetInput>,
+  public val mutableListNV: List<MutableTargetInput?>,
+  public val mutableListVN: List<MutableTargetInput>? = null,
+  public val mutableListNN: List<MutableTargetInput?>? = null,
+)
+
+public fun ImmutableInput.toBuilder(): ImmutableInputBuilder = ImmutableInputBuilder().also {
+  it.title = this.title
+  it.immutableV = this.immutableV
+  it.immutableN = this.immutableN
+  it.immutableLisVV = this.immutableLisVV
+  it.immutableLisNV = this.immutableLisNV
+  it.immutableLisVN = this.immutableLisVN
+  it.immutableLisNN = this.immutableLisNN
+  it.mutableV = this.mutableV
+  it.mutableN = this.mutableN
+  it.mutableListVV = this.mutableListVV
+  it.mutableListNV = this.mutableListNV
+  it.mutableListVN = this.mutableListVN
+  it.mutableListNN = this.mutableListNN
+}
+
+public fun ImmutableInputBuilder.toInput(): ImmutableInput = ImmutableInput(
+  title,
+  immutableV ?: error("ImmutableInput: 'immutableV' must not be null"),
+  immutableN,
+  immutableLisVV ?: error("ImmutableInput: 'immutableLisVV' must not be null"),
+  immutableLisNV ?: error("ImmutableInput: 'immutableLisNV' must not be null"),
+  immutableLisVN,
+  immutableLisNN,
+  mutableV ?: error("ImmutableInput: 'mutableV' must not be null"),
+  mutableN,
+  mutableListVV ?: error("ImmutableInput: 'mutableListVV' must not be null"),
+  mutableListNV ?: error("ImmutableInput: 'mutableListNV' must not be null"),
+  mutableListVN,
+  mutableListNN
+)
+
+public fun ImmutableInput(block: ImmutableInputBuilder.() -> Unit): ImmutableInput =
+    ImmutableInputBuilder().apply(block).toInput()
+
+public fun ImmutableInput.copy(block: ImmutableInputBuilder.() -> Unit): ImmutableInput =
+    toBuilder().apply(block).toInput()
+
+@MutableDSL
+public class ImmutableInputBuilder {
+  /**
+   * Default: "immutable"
+   */
+  public var title: String = "immutable"
+
+  public var immutableV: ImmutableTargetInput? = null
+
+  public var immutableN: ImmutableTargetInput? = null
+
+  public var immutableLisVV: List<ImmutableTargetInput>? = null
+
+  public var immutableLisNV: List<ImmutableTargetInput?>? = null
+
+  public var immutableLisVN: List<ImmutableTargetInput>? = null
+
+  public var immutableLisNN: List<ImmutableTargetInput?>? = null
+
+  public var mutableV: MutableTargetInput? = null
+
+  public var mutableN: MutableTargetInput? = null
+
+  public var mutableListVV: List<MutableTargetInput>? = null
+
+  public var mutableListNV: List<MutableTargetInput?>? = null
+
+  public var mutableListVN: List<MutableTargetInput>? = null
+
+  public var mutableListNN: List<MutableTargetInput?>? = null
+}

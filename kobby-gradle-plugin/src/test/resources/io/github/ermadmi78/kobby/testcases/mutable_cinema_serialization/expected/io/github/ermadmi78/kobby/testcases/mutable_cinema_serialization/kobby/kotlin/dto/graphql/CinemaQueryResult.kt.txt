@@ -1,0 +1,27 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto.QueryDto
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlinx.serialization.Serializable
+
+@Serializable
+public data class CinemaQueryResult(
+  public val `data`: QueryDto? = null,
+  public val errors: List<CinemaError>? = null,
+)

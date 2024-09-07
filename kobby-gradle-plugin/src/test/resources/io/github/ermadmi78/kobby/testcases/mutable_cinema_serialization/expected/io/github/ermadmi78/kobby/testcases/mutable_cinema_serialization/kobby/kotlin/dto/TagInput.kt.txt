@@ -1,0 +1,52 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.text.buildString
+import kotlinx.serialization.Serializable
+
+/**
+ * Input TagInput is introduced for testing inputs with single value.
+ * See class TagInput.
+ */
+@Serializable
+@CinemaDSL
+public class TagInput {
+  /**
+   * The tag value
+   */
+  public var `value`: String? = null
+
+  public override fun toString(): String = buildString {
+    append("TagInput").append('(')
+    append("value").append('=').append(`value`)
+    append(')')
+  }
+}
+
+public fun TagInput(block: TagInput.() -> Unit): TagInput = TagInput().apply(block)
+
+public fun TagInput.copy(): TagInput = TagInput().also {
+  it.`value` = this.`value`
+}
+
+public fun TagInput.copy(block: TagInput.() -> Unit): TagInput = copy().apply(block)

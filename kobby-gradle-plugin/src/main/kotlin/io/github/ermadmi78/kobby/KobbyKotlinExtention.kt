@@ -317,6 +317,26 @@ open class KobbyKotlinDtoExtension {
      */
     var applyPrimaryKeys: Boolean? = null
 
+    /**
+     * Generate immutable DTO class if number of GraphQL type fields <= property value.
+     * Otherwise, generate a mutable DTO class.
+     * Set the property value to 0 to always generate mutable DTO classes.
+     * [More details](https://github.com/ermadmi78/kobby/issues/43)
+     *
+     * Default: 245
+     */
+    var maxNumberOfFieldsForImmutableDtoClass: Int? = null
+
+    /**
+     * Generate immutable Input class if number of GraphQL Input type fields <= property value.
+     * Otherwise, generate a mutable Input class.
+     * Set the property value to 0 to always generate mutable Input classes.
+     * [More details](https://github.com/ermadmi78/kobby/issues/43)
+     *
+     * Default: 245
+     */
+    var maxNumberOfFieldsForImmutableInputClass: Int? = null
+
     internal val serializationExtension = lazy { KobbyKotlinDtoSerializationExtension() }
     internal val jacksonExtension = lazy { KobbyKotlinDtoJacksonExtension() }
     internal val builderExtension = lazy { KobbyKotlinDtoBuilderExtension() }

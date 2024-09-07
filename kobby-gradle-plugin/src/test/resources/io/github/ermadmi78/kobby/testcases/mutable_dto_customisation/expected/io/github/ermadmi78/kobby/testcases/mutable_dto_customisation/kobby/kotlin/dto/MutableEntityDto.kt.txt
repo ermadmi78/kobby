@@ -1,0 +1,112 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.MutableDSL
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.text.buildString
+
+@MutableDSL
+public class MutableEntityDto : EntityDto, AllDto {
+  public var id: Long? = null
+
+  public override var title: String? = null
+
+  public override var immutableV: ImmutableEntityDto? = null
+
+  public override var immutableN: ImmutableEntityDto? = null
+
+  public override var immutableListVV: List<ImmutableEntityDto>? = null
+
+  public override var immutableListNV: List<ImmutableEntityDto?>? = null
+
+  public override var immutableListVN: List<ImmutableEntityDto>? = null
+
+  public override var immutableListNN: List<ImmutableEntityDto?>? = null
+
+  public override var mutableV: MutableEntityDto? = null
+
+  public override var mutableN: MutableEntityDto? = null
+
+  public override var mutableListVV: List<MutableEntityDto>? = null
+
+  public override var mutableListNV: List<MutableEntityDto?>? = null
+
+  public override var mutableListVN: List<MutableEntityDto>? = null
+
+  public override var mutableListNN: List<MutableEntityDto?>? = null
+
+  public var additional1: Boolean? = null
+
+  public var additional2: Boolean? = null
+
+  public var additional3: Boolean? = null
+
+  public override fun toString(): String = buildString {
+    append("MutableEntityDto").append('(')
+    append("id").append('=').append(id)
+    append(", ").append("title").append('=').append(title)
+    append(", ").append("immutableV").append('=').append(immutableV)
+    append(", ").append("immutableN").append('=').append(immutableN)
+    append(", ").append("immutableListVV").append('=').append(immutableListVV)
+    append(", ").append("immutableListNV").append('=').append(immutableListNV)
+    append(", ").append("immutableListVN").append('=').append(immutableListVN)
+    append(", ").append("immutableListNN").append('=').append(immutableListNN)
+    append(", ").append("mutableV").append('=').append(mutableV)
+    append(", ").append("mutableN").append('=').append(mutableN)
+    append(", ").append("mutableListVV").append('=').append(mutableListVV)
+    append(", ").append("mutableListNV").append('=').append(mutableListNV)
+    append(", ").append("mutableListVN").append('=').append(mutableListVN)
+    append(", ").append("mutableListNN").append('=').append(mutableListNN)
+    append(", ").append("additional1").append('=').append(additional1)
+    append(", ").append("additional2").append('=').append(additional2)
+    append(", ").append("additional3").append('=').append(additional3)
+    append(')')
+  }
+}
+
+public fun MutableEntityDto(block: MutableEntityDto.() -> Unit): MutableEntityDto =
+    MutableEntityDto().apply(block)
+
+public fun MutableEntityDto.copy(): MutableEntityDto = MutableEntityDto().also {
+  it.id = this.id
+  it.title = this.title
+  it.immutableV = this.immutableV
+  it.immutableN = this.immutableN
+  it.immutableListVV = this.immutableListVV
+  it.immutableListNV = this.immutableListNV
+  it.immutableListVN = this.immutableListVN
+  it.immutableListNN = this.immutableListNN
+  it.mutableV = this.mutableV
+  it.mutableN = this.mutableN
+  it.mutableListVV = this.mutableListVV
+  it.mutableListNV = this.mutableListNV
+  it.mutableListVN = this.mutableListVN
+  it.mutableListNN = this.mutableListNN
+  it.additional1 = this.additional1
+  it.additional2 = this.additional2
+  it.additional3 = this.additional3
+}
+
+public fun MutableEntityDto.copy(block: MutableEntityDto.() -> Unit): MutableEntityDto =
+    copy().apply(block)

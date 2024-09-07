@@ -133,6 +133,12 @@ class KobbyPlugin : Plugin<Project> {
                     applyPrimaryKeys?.also {
                         kotlinTask.dtoApplyPrimaryKeys.convention(it)
                     }
+                    maxNumberOfFieldsForImmutableDtoClass?.also {
+                        kotlinTask.dtoMaxNumberOfFieldsForImmutableDtoClass.convention(it)
+                    }
+                    maxNumberOfFieldsForImmutableInputClass?.also {
+                        kotlinTask.dtoMaxNumberOfFieldsForImmutableInputClass.convention(it)
+                    }
                     serializationExtension.valueOrNull?.apply {
                         enabled?.also {
                             kotlinTask.dtoSerializationEnabled.convention(it)

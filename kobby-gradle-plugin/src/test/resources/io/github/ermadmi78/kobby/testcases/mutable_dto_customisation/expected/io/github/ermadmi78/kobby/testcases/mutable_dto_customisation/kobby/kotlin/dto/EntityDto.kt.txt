@@ -1,0 +1,48 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.dto
+
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+
+public interface EntityDto {
+  public val title: String?
+
+  public val immutableV: ImmutableEntityDto?
+
+  public val immutableN: ImmutableEntityDto?
+
+  public val immutableListVV: List<ImmutableEntityDto>?
+
+  public val immutableListNV: List<ImmutableEntityDto?>?
+
+  public val immutableListVN: List<ImmutableEntityDto>?
+
+  public val immutableListNN: List<ImmutableEntityDto?>?
+
+  public val mutableV: MutableEntityDto?
+
+  public val mutableN: MutableEntityDto?
+
+  public val mutableListVV: List<MutableEntityDto>?
+
+  public val mutableListNV: List<MutableEntityDto?>?
+
+  public val mutableListVN: List<MutableEntityDto>?
+
+  public val mutableListNN: List<MutableEntityDto?>?
+}

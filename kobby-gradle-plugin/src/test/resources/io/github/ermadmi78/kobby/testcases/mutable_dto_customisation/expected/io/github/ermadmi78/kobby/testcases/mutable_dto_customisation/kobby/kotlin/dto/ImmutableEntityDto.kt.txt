@@ -1,0 +1,124 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_dto_customisation.kobby.kotlin.MutableDSL
+import kotlin.Boolean
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+
+public data class ImmutableEntityDto(
+  public override val title: String? = null,
+  public override val immutableV: ImmutableEntityDto? = null,
+  public override val immutableN: ImmutableEntityDto? = null,
+  public override val immutableListVV: List<ImmutableEntityDto>? = null,
+  public override val immutableListNV: List<ImmutableEntityDto?>? = null,
+  public override val immutableListVN: List<ImmutableEntityDto>? = null,
+  public override val immutableListNN: List<ImmutableEntityDto?>? = null,
+  public override val mutableV: MutableEntityDto? = null,
+  public override val mutableN: MutableEntityDto? = null,
+  public override val mutableListVV: List<MutableEntityDto>? = null,
+  public override val mutableListNV: List<MutableEntityDto?>? = null,
+  public override val mutableListVN: List<MutableEntityDto>? = null,
+  public override val mutableListNN: List<MutableEntityDto?>? = null,
+  public val additional1: Boolean? = null,
+  public val additional2: Boolean? = null,
+  public val additional3: Boolean? = null,
+) : EntityDto, AllDto
+
+public fun ImmutableEntityDto.toBuilder(): ImmutableEntityDtoBuilder =
+    ImmutableEntityDtoBuilder().also {
+  it.title = this.title
+  it.immutableV = this.immutableV
+  it.immutableN = this.immutableN
+  it.immutableListVV = this.immutableListVV
+  it.immutableListNV = this.immutableListNV
+  it.immutableListVN = this.immutableListVN
+  it.immutableListNN = this.immutableListNN
+  it.mutableV = this.mutableV
+  it.mutableN = this.mutableN
+  it.mutableListVV = this.mutableListVV
+  it.mutableListNV = this.mutableListNV
+  it.mutableListVN = this.mutableListVN
+  it.mutableListNN = this.mutableListNN
+  it.additional1 = this.additional1
+  it.additional2 = this.additional2
+  it.additional3 = this.additional3
+}
+
+public fun ImmutableEntityDtoBuilder.toDto(): ImmutableEntityDto = ImmutableEntityDto(
+  title,
+  immutableV,
+  immutableN,
+  immutableListVV,
+  immutableListNV,
+  immutableListVN,
+  immutableListNN,
+  mutableV,
+  mutableN,
+  mutableListVV,
+  mutableListNV,
+  mutableListVN,
+  mutableListNN,
+  additional1,
+  additional2,
+  additional3
+)
+
+public fun ImmutableEntityDto(block: ImmutableEntityDtoBuilder.() -> Unit): ImmutableEntityDto =
+    ImmutableEntityDtoBuilder().apply(block).toDto()
+
+public fun ImmutableEntityDto.copy(block: ImmutableEntityDtoBuilder.() -> Unit): ImmutableEntityDto
+    = toBuilder().apply(block).toDto()
+
+@MutableDSL
+public class ImmutableEntityDtoBuilder {
+  public var title: String? = null
+
+  public var immutableV: ImmutableEntityDto? = null
+
+  public var immutableN: ImmutableEntityDto? = null
+
+  public var immutableListVV: List<ImmutableEntityDto>? = null
+
+  public var immutableListNV: List<ImmutableEntityDto?>? = null
+
+  public var immutableListVN: List<ImmutableEntityDto>? = null
+
+  public var immutableListNN: List<ImmutableEntityDto?>? = null
+
+  public var mutableV: MutableEntityDto? = null
+
+  public var mutableN: MutableEntityDto? = null
+
+  public var mutableListVV: List<MutableEntityDto>? = null
+
+  public var mutableListNV: List<MutableEntityDto?>? = null
+
+  public var mutableListVN: List<MutableEntityDto>? = null
+
+  public var mutableListNN: List<MutableEntityDto?>? = null
+
+  public var additional1: Boolean? = null
+
+  public var additional2: Boolean? = null
+
+  public var additional3: Boolean? = null
+}

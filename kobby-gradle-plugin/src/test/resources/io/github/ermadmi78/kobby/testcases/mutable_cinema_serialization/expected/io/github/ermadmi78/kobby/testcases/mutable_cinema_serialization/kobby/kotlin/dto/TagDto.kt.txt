@@ -1,0 +1,54 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.text.buildString
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+/**
+ * Type Tag is introduced for testing types with single value.
+ * See class TagDto.
+ */
+@Serializable
+@SerialName("Tag")
+@CinemaDSL
+public class TagDto {
+  /**
+   * The tag value
+   */
+  public var `value`: String? = null
+
+  public override fun toString(): String = buildString {
+    append("TagDto").append('(')
+    append("value").append('=').append(`value`)
+    append(')')
+  }
+}
+
+public fun TagDto(block: TagDto.() -> Unit): TagDto = TagDto().apply(block)
+
+public fun TagDto.copy(): TagDto = TagDto().also {
+  it.`value` = this.`value`
+}
+
+public fun TagDto.copy(block: TagDto.() -> Unit): TagDto = copy().apply(block)

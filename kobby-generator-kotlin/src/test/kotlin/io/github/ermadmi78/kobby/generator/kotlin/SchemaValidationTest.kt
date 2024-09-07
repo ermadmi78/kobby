@@ -38,6 +38,8 @@ class SchemaValidationTest {
             Decoration(null, null),
             Decoration(null, null),
             true,
+            245,
+            245,
             KotlinDtoSerialization(
                 true,
                 "serialization",

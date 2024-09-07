@@ -1,0 +1,100 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.adapter.ktor
+
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.CinemaAdapter
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto.graphql.CinemaException
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto.graphql.CinemaMutationResult
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto.graphql.CinemaQueryResult
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_serialization.kobby.kotlin.dto.graphql.CinemaRequest
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.collections.Map
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapOf
+import kotlin.let
+import kotlin.takeIf
+import kotlinx.serialization.json.JsonObject
+
+public open class CinemaSimpleKtorAdapter(
+  protected val client: HttpClient,
+  protected val url: String? = null,
+  protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
+  protected val listener: (CinemaRequest) -> Unit = {},
+) : CinemaAdapter {
+  public override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+    val request = CinemaRequest(query, variables)
+    listener(request)
+
+    val httpHeaders: Map<String, String> = headers()
+    val result = client.post {
+      setBody<CinemaRequest>(request)
+      contentType(ContentType.Application.Json)
+      this@CinemaSimpleKtorAdapter.url?.also {
+        url(it)
+      }
+      for (element in httpHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .body<CinemaQueryResult>()
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw CinemaException("GraphQL query failed", request, it)
+    }
+    return result.data ?: throw CinemaException(
+          "GraphQL query completes successfully but returns no data",
+          request
+        )
+  }
+
+  public override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+    val request = CinemaRequest(query, variables)
+    listener(request)
+
+    val httpHeaders: Map<String, String> = headers()
+    val result = client.post {
+      setBody<CinemaRequest>(request)
+      contentType(ContentType.Application.Json)
+      this@CinemaSimpleKtorAdapter.url?.also {
+        url(it)
+      }
+      for (element in httpHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .body<CinemaMutationResult>()
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw CinemaException("GraphQL mutation failed", request, it)
+    }
+    return result.data ?: throw CinemaException(
+          "GraphQL mutation completes successfully but returns no data",
+          request
+        )
+  }
+}

@@ -1,6 +1,7 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.KModifier.OVERRIDE
 import com.squareup.kotlinpoet.KModifier.SEALED
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_IGNORE_PROPERTIES
@@ -10,6 +11,7 @@ import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TY
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_SUB_TYPES_TYPE
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_INFO
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_NAME
+import io.github.ermadmi78.kobby.model.KobbyNode
 import io.github.ermadmi78.kobby.model.KobbySchema
 
 /**
@@ -25,6 +27,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
     //******************************************************************************************************************
     schema.objects { node ->
         files += buildFile(dto.packageName, node.dtoName) {
+            // See https://github.com/ermadmi78/kobby/issues/43
+            val immutable: Boolean = node.fields.size <= dto.maxNumberOfFieldsForImmutableDtoClass
+
             // Build object DTO class
             buildClass(node.dtoName) {
                 annotateSerializable()
@@ -32,7 +37,11 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
 
                 jacksonizeClass(node)
                 if (node.fields.isNotEmpty()) {
-                    addModifiers(KModifier.DATA)
+                    if (immutable) {
+                        addModifiers(KModifier.DATA)
+                    } else {
+                        addAnnotation(context.dslClass)
+                    }
                 }
                 node.comments {
                     addKdoc("%L", it)
@@ -40,7 +49,28 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 node.implements {
                     addSuperinterface(it.dtoClass)
                 }
-                buildPrimaryConstructorProperties {
+                if (immutable) {
+                    buildPrimaryConstructorProperties {
+                        node.fields { field ->
+                            val fieldType = if (dto.serialization.enabled) {
+                                field.type.dtoTypeWithSerializer.nullable()
+                            } else {
+                                field.type.dtoType.nullable()
+                            }
+                            buildProperty(field.name, fieldType) {
+                                field.comments {
+                                    addKdoc("%L", it)
+                                }
+                                if (field.isOverride) {
+                                    addModifiers(OVERRIDE)
+                                }
+                            }
+                        }
+                        customizeConstructor {
+                            jacksonizeConstructor()
+                        }
+                    }
+                } else {
                     node.fields { field ->
                         val fieldType = if (dto.serialization.enabled) {
                             field.type.dtoTypeWithSerializer.nullable()
@@ -52,19 +82,18 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 addKdoc("%L", it)
                             }
                             if (field.isOverride) {
-                                addModifiers(KModifier.OVERRIDE)
+                                addModifiers(OVERRIDE)
                             }
+                            mutable()
+                            initializer("null")
                         }
-                    }
-                    customizeConstructor {
-                        jacksonizeConstructor()
                     }
                 }
 
                 // DTO equals and hashCode generation by @primaryKey directive
                 if (dto.applyPrimaryKeys && node.primaryKeysCount > 0) {
                     buildFunction(EQUALS_FUN) {
-                        addModifiers(KModifier.OVERRIDE)
+                        addModifiers(OVERRIDE)
                         buildParameter(EQUALS_ARG, ANY.nullable())
                         returns(BOOLEAN)
 
@@ -96,7 +125,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     }
 
                     buildFunction(HASH_CODE_FUN) {
-                        addModifiers(KModifier.OVERRIDE)
+                        addModifiers(OVERRIDE)
                         returns(INT)
 
                         if (node.primaryKeysCount == 1) {
@@ -117,77 +146,45 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         }
                     }
                 }
+
+                // Generate toString function for mutable DTO
+                if (!immutable) {
+                    buildFunction(TO_STRING_FUN) {
+                        addModifiers(OVERRIDE)
+                        returns(STRING)
+
+                        controlFlow("return·%M", MemberName("kotlin.text", "buildString")) {
+                            buildAppendChain {
+                                appendLiteral(node.dtoName)
+                                appendLiteral('(')
+                            }
+
+                            var counter = 0
+                            node.fields { field ->
+                                buildAppendChain {
+                                    if (counter++ > 0) {
+                                        appendLiteral(", ")
+                                    }
+                                    appendLiteral(field.name)
+                                    appendLiteral('=')
+                                    appendExactly(field.name.escape())
+                                }
+                            }
+
+                            buildAppendChain { appendLiteral(')') }
+                        }
+                    }
+                }
             }
 
             // Build object DTO builder
             if (dto.builder.enabled && node.fields.isNotEmpty()) {
-                // toBuilder function
-                buildFunction(dto.builder.toBuilderFun) {
-                    receiver(node.dtoClass)
-                    returns(node.builderClass)
-
-                    controlFlow(
-                        "return·%T().%M",
-                        node.builderClass,
-                        MemberName("kotlin", "also")
-                    ) {
-                        node.fields { field ->
-                            addStatement("it.${field.name.escape()}·=·this.${field.name.escape()}")
-                        }
-                    }
-                }
-
-                // toDto function
-                buildFunction(dto.builder.toDtoFun) {
-                    receiver(node.builderClass)
-                    returns(node.dtoClass)
-
-                    val arguments = node.fields.values.joinToString(",\n") { it.name.escape() }
-                    addStatement("return·%T(\n⇥$arguments⇤\n)", node.dtoClass)
-                }
-
-                // Builder function
-                buildFunction(node.dtoName) {
-                    addParameter("block", node.builderLambda)
-                    returns(node.dtoClass)
-
-                    addStatement(
-                        "return·%T().%M(block).%M()",
-                        node.builderClass,
-                        MemberName("kotlin", "apply"),
-                        MemberName(dto.packageName, dto.builder.toDtoFun)
-                    )
-                }
-
-                // Copy function
-                buildFunction(dto.builder.copyFun) {
-                    receiver(node.dtoClass)
-                    addParameter("block", node.builderLambda)
-                    returns(node.dtoClass)
-
-                    addStatement(
-                        "return·%M().%M(block).%M()",
-                        MemberName(dto.packageName, dto.builder.toBuilderFun),
-                        MemberName("kotlin", "apply"),
-                        MemberName(dto.packageName, dto.builder.toDtoFun)
-                    )
-                }
-
-                // Builder class
-                buildClass(node.builderName) {
-                    addAnnotation(context.dslClass)
-                    node.comments {
-                        addKdoc("%L", it)
-                    }
-                    node.fields { field ->
-                        buildProperty(field.name, field.type.dtoType.nullable()) {
-                            field.comments {
-                                addKdoc("%L", it)
-                            }
-                            mutable()
-                            initializer("null")
-                        }
-                    }
+                if (immutable) {
+                    // Immutable builder functions
+                    buildImmutableDtoBuilderFunctions(node, layout)
+                } else {
+                    // Mutable builder functions
+                    buildMutableDtoBuilderFunctions(node, layout)
                 }
             }
         }
@@ -212,7 +209,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             addKdoc("%L", it)
                         }
                         if (field.isOverride) {
-                            addModifiers(KModifier.OVERRIDE)
+                            addModifiers(OVERRIDE)
                         }
                     }
                 }
@@ -278,28 +275,66 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
     //******************************************************************************************************************
     schema.inputs { node ->
         files += buildFile(dto.packageName, node.dtoName) {
+            // See https://github.com/ermadmi78/kobby/issues/43
+            val immutable: Boolean = node.fields.size <= dto.maxNumberOfFieldsForImmutableInputClass
+
             // Build input DTO class
             buildClass(node.dtoName) {
                 annotateSerializable()
 
                 jacksonizeClass(node)
-                addModifiers(KModifier.DATA)
+                if (node.fields.isNotEmpty()) {
+                    if (immutable) {
+                        addModifiers(KModifier.DATA)
+                    } else {
+                        addAnnotation(context.dslClass)
+                    }
+                }
                 node.comments {
                     addKdoc("%L", it)
                 }
-                buildPrimaryConstructorProperties {
+                if (immutable) {
+                    buildPrimaryConstructorProperties {
+                        node.fields { field ->
+                            val fieldType = if (dto.serialization.enabled) {
+                                field.type.dtoTypeWithSerializer
+                            } else {
+                                field.type.dtoType
+                            }
+                            val defaultValue: CodeBlock? = field.defaultValue?.let { literal ->
+                                val args = mutableListOf<Any?>()
+                                val format = literal.buildInitializer(field.type, args)
+                                CodeBlock.of(format, *args.toTypedArray())
+                            }
+                            buildPropertyWithDefault(field.name, fieldType, defaultValue) {
+                                field.comments {
+                                    addKdoc("%L", it)
+                                }
+                                field.defaultValue?.also { literal ->
+                                    if (field.comments.isNotEmpty()) {
+                                        addKdoc("%L", "  \n> ")
+                                    }
+                                    addKdoc("%L", "Default: $literal")
+                                }
+                            }
+                        }
+                        customizeConstructor {
+                            jacksonizeConstructor()
+                        }
+                    }
+                } else {
                     node.fields { field ->
                         val fieldType = if (dto.serialization.enabled) {
-                            field.type.dtoTypeWithSerializer
+                            field.type.dtoTypeWithSerializer.nullable()
                         } else {
-                            field.type.dtoType
+                            field.type.dtoType.nullable()
                         }
                         val defaultValue: CodeBlock? = field.defaultValue?.let { literal ->
                             val args = mutableListOf<Any?>()
                             val format = literal.buildInitializer(field.type, args)
                             CodeBlock.of(format, *args.toTypedArray())
                         }
-                        buildPropertyWithDefault(field.name, fieldType, defaultValue) {
+                        buildProperty(field.name, fieldType) {
                             field.comments {
                                 addKdoc("%L", it)
                             }
@@ -309,107 +344,52 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                                 }
                                 addKdoc("%L", "Default: $literal")
                             }
+                            mutable()
+                            if (defaultValue == null) {
+                                initializer("null")
+                            } else {
+                                initializer(defaultValue)
+                            }
                         }
                     }
-                    customizeConstructor {
-                        jacksonizeConstructor()
+
+                    // Generate toString function for mutable Input
+                    buildFunction(TO_STRING_FUN) {
+                        addModifiers(OVERRIDE)
+                        returns(STRING)
+
+                        controlFlow("return·%M", MemberName("kotlin.text", "buildString")) {
+                            buildAppendChain {
+                                appendLiteral(node.dtoName)
+                                appendLiteral('(')
+                            }
+
+                            var counter = 0
+                            node.fields { field ->
+                                buildAppendChain {
+                                    if (counter++ > 0) {
+                                        appendLiteral(", ")
+                                    }
+                                    appendLiteral(field.name)
+                                    appendLiteral('=')
+                                    appendExactly(field.name.escape())
+                                }
+                            }
+
+                            buildAppendChain { appendLiteral(')') }
+                        }
                     }
                 }
             }
 
             // Build input DTO builder
             if (dto.builder.enabled && node.fields.isNotEmpty()) {
-                // toBuilder function
-                buildFunction(dto.builder.toBuilderFun) {
-                    receiver(node.dtoClass)
-                    returns(node.builderClass)
-
-                    controlFlow(
-                        "return·%T().%M",
-                        node.builderClass,
-                        MemberName("kotlin", "also")
-                    ) {
-                        node.fields { field ->
-                            addStatement("it.${field.name.escape()}·=·this.${field.name.escape()}")
-                        }
-                    }
-                }
-
-                // toInput function
-                buildFunction(dto.builder.toInputFun) {
-                    receiver(node.builderClass)
-                    returns(node.dtoClass)
-
-                    val types: MutableList<Any> = mutableListOf(node.dtoClass)
-                    val arguments = node.fields.values.joinToString(",\n") {
-                        if (it.type.nullable || it.hasDefaultValue) {
-                            it.name.escape()
-                        } else {
-                            types += MemberName("kotlin", "error")
-                            "${it.name.escape()}·?:·%M(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
-                        }
-                    }
-                    addStatement("return·%T(\n⇥$arguments⇤\n)", *types.toTypedArray())
-                }
-
-                // Builder function
-                buildFunction(node.dtoName) {
-                    addParameter("block", node.builderLambda)
-                    returns(node.dtoClass)
-
-                    addStatement(
-                        "return·%T().%M(block).%M()",
-                        node.builderClass,
-                        MemberName("kotlin", "apply"),
-                        MemberName(dto.packageName, dto.builder.toInputFun)
-                    )
-                }
-
-                // Copy function
-                buildFunction(dto.builder.copyFun) {
-                    receiver(node.dtoClass)
-                    addParameter("block", node.builderLambda)
-                    returns(node.dtoClass)
-
-                    addStatement(
-                        "return·%M().%M(block).%M()",
-                        MemberName(dto.packageName, dto.builder.toBuilderFun),
-                        MemberName("kotlin", "apply"),
-                        MemberName(dto.packageName, dto.builder.toInputFun)
-                    )
-                }
-
-                // Builder class
-                buildClass(node.builderName) {
-                    addAnnotation(context.dslClass)
-                    node.comments {
-                        addKdoc("%L", it)
-                    }
-                    node.fields { field ->
-                        buildProperty(
-                            field.name,
-                            if (field.hasDefaultValue) field.type.dtoType else field.type.dtoType.nullable()
-                        ) {
-                            field.comments {
-                                addKdoc("%L", it)
-                            }
-                            mutable()
-
-                            val literal = field.defaultValue
-                            if (literal == null) {
-                                initializer("null")
-                            } else {
-                                if (field.comments.isNotEmpty()) {
-                                    addKdoc("%L", "  \n> ")
-                                }
-                                addKdoc("%L", "Default: $literal")
-
-                                val args = mutableListOf<Any?>()
-                                val format = literal.buildInitializer(field.type, args)
-                                initializer(CodeBlock.of(format, *args.toTypedArray()))
-                            }
-                        }
-                    }
+                if (immutable) {
+                    // Immutable builder functions
+                    buildImmutableInputBuilderFunctions(node, layout)
+                } else {
+                    // Mutable builder functions
+                    buildMutableInputBuilderFunctions(node, layout)
                 }
             }
         }
@@ -802,4 +782,280 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
     //******************************************************************************************************************
 
     files
+}
+
+/**
+ * Immutable DTO builder functions
+ */
+private fun FileSpecBuilder.buildImmutableDtoBuilderFunctions(
+    node: KobbyNode,
+    layout: KotlinLayout
+) = with(layout) {
+    // toBuilder function
+    buildFunction(dto.builder.toBuilderFun) {
+        receiver(node.dtoClass)
+        returns(node.builderClass)
+
+        controlFlow(
+            "return·%T().%M",
+            node.builderClass,
+            MemberName("kotlin", "also")
+        ) {
+            node.fields { field ->
+                addStatement("it.${field.name.escape()}·=·this.${field.name.escape()}")
+            }
+        }
+    }
+
+    // toDto function
+    buildFunction(dto.builder.toDtoFun) {
+        receiver(node.builderClass)
+        returns(node.dtoClass)
+
+        val arguments = node.fields.values.joinToString(",\n") { it.name.escape() }
+        addStatement("return·%T(\n⇥$arguments⇤\n)", node.dtoClass)
+    }
+
+    // Builder function
+    buildFunction(node.dtoName) {
+        addParameter("block", node.builderLambda)
+        returns(node.dtoClass)
+
+        addStatement(
+            "return·%T().%M(block).%M()",
+            node.builderClass,
+            MemberName("kotlin", "apply"),
+            MemberName(dto.packageName, dto.builder.toDtoFun)
+        )
+    }
+
+    // Copy function
+    buildFunction(dto.builder.copyFun) {
+        receiver(node.dtoClass)
+        addParameter("block", node.builderLambda)
+        returns(node.dtoClass)
+
+        addStatement(
+            "return·%M().%M(block).%M()",
+            MemberName(dto.packageName, dto.builder.toBuilderFun),
+            MemberName("kotlin", "apply"),
+            MemberName(dto.packageName, dto.builder.toDtoFun)
+        )
+    }
+
+    // Builder class
+    buildClass(node.builderName) {
+        addAnnotation(context.dslClass)
+        node.comments {
+            addKdoc("%L", it)
+        }
+        node.fields { field ->
+            buildProperty(field.name, field.type.dtoType.nullable()) {
+                field.comments {
+                    addKdoc("%L", it)
+                }
+                mutable()
+                initializer("null")
+            }
+        }
+    }
+}
+
+/**
+ * Mutable DTO builder functions
+ */
+private fun FileSpecBuilder.buildMutableDtoBuilderFunctions(
+    node: KobbyNode,
+    layout: KotlinLayout
+) = with(layout) {
+    // Builder function
+    buildFunction(node.dtoName) {
+        addParameter("block", node.dtoLambda)
+        returns(node.dtoClass)
+
+        addStatement(
+            "return·%T().%M(block)",
+            node.dtoClass,
+            MemberName("kotlin", "apply")
+        )
+    }
+
+    // Simple copy function
+    buildFunction(dto.builder.copyFun) {
+        receiver(node.dtoClass)
+        returns(node.dtoClass)
+
+        controlFlow(
+            "return·%T().%M",
+            node.dtoClass,
+            MemberName("kotlin", "also")
+        ) {
+            node.fields { field ->
+                addStatement("it.${field.name.escape()}·=·this.${field.name.escape()}")
+            }
+        }
+    }
+
+    // Mutable copy function
+    buildFunction(dto.builder.copyFun) {
+        receiver(node.dtoClass)
+        addParameter("block", node.dtoLambda)
+        returns(node.dtoClass)
+
+        addStatement(
+            "return·%M().%M(block)",
+            MemberName(dto.packageName, dto.builder.copyFun),
+            MemberName("kotlin", "apply")
+        )
+    }
+}
+
+/**
+ * Immutable Input builder functions
+ */
+private fun FileSpecBuilder.buildImmutableInputBuilderFunctions(
+    node: KobbyNode,
+    layout: KotlinLayout
+) = with(layout) {
+    // toBuilder function
+    buildFunction(dto.builder.toBuilderFun) {
+        receiver(node.dtoClass)
+        returns(node.builderClass)
+
+        controlFlow(
+            "return·%T().%M",
+            node.builderClass,
+            MemberName("kotlin", "also")
+        ) {
+            node.fields { field ->
+                addStatement("it.${field.name.escape()}·=·this.${field.name.escape()}")
+            }
+        }
+    }
+
+    // toInput function
+    buildFunction(dto.builder.toInputFun) {
+        receiver(node.builderClass)
+        returns(node.dtoClass)
+
+        val types: MutableList<Any> = mutableListOf(node.dtoClass)
+        val arguments = node.fields.values.joinToString(",\n") {
+            if (it.type.nullable || it.hasDefaultValue) {
+                it.name.escape()
+            } else {
+                types += MemberName("kotlin", "error")
+                "${it.name.escape()}·?:·%M(\"${node.dtoName}:·'${it.name}'·must·not·be·null\")"
+            }
+        }
+        addStatement("return·%T(\n⇥$arguments⇤\n)", *types.toTypedArray())
+    }
+
+    // Builder function
+    buildFunction(node.dtoName) {
+        addParameter("block", node.builderLambda)
+        returns(node.dtoClass)
+
+        addStatement(
+            "return·%T().%M(block).%M()",
+            node.builderClass,
+            MemberName("kotlin", "apply"),
+            MemberName(dto.packageName, dto.builder.toInputFun)
+        )
+    }
+
+    // Copy function
+    buildFunction(dto.builder.copyFun) {
+        receiver(node.dtoClass)
+        addParameter("block", node.builderLambda)
+        returns(node.dtoClass)
+
+        addStatement(
+            "return·%M().%M(block).%M()",
+            MemberName(dto.packageName, dto.builder.toBuilderFun),
+            MemberName("kotlin", "apply"),
+            MemberName(dto.packageName, dto.builder.toInputFun)
+        )
+    }
+
+    // Builder class
+    buildClass(node.builderName) {
+        addAnnotation(context.dslClass)
+        node.comments {
+            addKdoc("%L", it)
+        }
+        node.fields { field ->
+            buildProperty(
+                field.name,
+                if (field.hasDefaultValue) field.type.dtoType else field.type.dtoType.nullable()
+            ) {
+                field.comments {
+                    addKdoc("%L", it)
+                }
+                mutable()
+
+                val literal = field.defaultValue
+                if (literal == null) {
+                    initializer("null")
+                } else {
+                    if (field.comments.isNotEmpty()) {
+                        addKdoc("%L", "  \n> ")
+                    }
+                    addKdoc("%L", "Default: $literal")
+
+                    val args = mutableListOf<Any?>()
+                    val format = literal.buildInitializer(field.type, args)
+                    initializer(CodeBlock.of(format, *args.toTypedArray()))
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Mutable Input builder functions
+ */
+private fun FileSpecBuilder.buildMutableInputBuilderFunctions(
+    node: KobbyNode,
+    layout: KotlinLayout
+) = with(layout) {
+    // Builder function
+    buildFunction(node.dtoName) {
+        addParameter("block", node.dtoLambda)
+        returns(node.dtoClass)
+
+        addStatement(
+            "return·%T().%M(block)",
+            node.dtoClass,
+            MemberName("kotlin", "apply")
+        )
+    }
+
+    // Simple copy function
+    buildFunction(dto.builder.copyFun) {
+        receiver(node.dtoClass)
+        returns(node.dtoClass)
+
+        controlFlow(
+            "return·%T().%M",
+            node.dtoClass,
+            MemberName("kotlin", "also")
+        ) {
+            node.fields { field ->
+                addStatement("it.${field.name.escape()}·=·this.${field.name.escape()}")
+            }
+        }
+    }
+
+    // Mutable copy function
+    buildFunction(dto.builder.copyFun) {
+        receiver(node.dtoClass)
+        addParameter("block", node.dtoLambda)
+        returns(node.dtoClass)
+
+        addStatement(
+            "return·%M().%M(block)",
+            MemberName(dto.packageName, dto.builder.copyFun),
+            MemberName("kotlin", "apply")
+        )
+    }
 }

@@ -1,0 +1,126 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.mutable_cinema_jackson.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.mutable_cinema_jackson.kobby.kotlin.CinemaDSL
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.text.buildString
+
+/**
+ * Country entity.
+ * The country can be home to several films and several actors. %
+ */
+@JsonTypeName(value = "Country")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = CountryDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+@CinemaDSL
+public class CountryDto : EntityDto {
+  /**
+   * Unique identifier of entity %
+   */
+  public override var id: Long? = null
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public override var fields: Map<String, Any?>? = null
+
+  /**
+   * The name of the country %
+   */
+  public var name: String? = null
+
+  /**
+   * Find film by id.
+   * Returns null if not found.
+   */
+  public var film: FilmDto? = null
+
+  /**
+   * Find films of country by title and genre.
+   * Returns empty list if not found.
+   */
+  public var films: List<FilmDto>? = null
+
+  /**
+   * Find actor by id.
+   * Returns null if not found.
+   */
+  public var actor: ActorDto? = null
+
+  /**
+   * Find actors of country by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public var actors: List<ActorDto>? = null
+
+  /**
+   * Find entities of this country by tag
+   */
+  public var taggable: List<TaggableDto>? = null
+
+  /**
+   * Find native entities of this country
+   */
+  public var native: List<NativeDto>? = null
+
+  public override fun toString(): String = buildString {
+    append("CountryDto").append('(')
+    append("id").append('=').append(id)
+    append(", ").append("fields").append('=').append(fields)
+    append(", ").append("name").append('=').append(name)
+    append(", ").append("film").append('=').append(film)
+    append(", ").append("films").append('=').append(films)
+    append(", ").append("actor").append('=').append(actor)
+    append(", ").append("actors").append('=').append(actors)
+    append(", ").append("taggable").append('=').append(taggable)
+    append(", ").append("native").append('=').append(native)
+    append(')')
+  }
+}
+
+public fun CountryDto(block: CountryDto.() -> Unit): CountryDto = CountryDto().apply(block)
+
+public fun CountryDto.copy(): CountryDto = CountryDto().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.name = this.name
+  it.film = this.film
+  it.films = this.films
+  it.actor = this.actor
+  it.actors = this.actors
+  it.taggable = this.taggable
+  it.native = this.native
+}
+
+public fun CountryDto.copy(block: CountryDto.() -> Unit): CountryDto = copy().apply(block)
