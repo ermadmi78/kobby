@@ -21,9 +21,9 @@ import kotlin.Suppress
 public interface ComplexIntermediateBase1Dto : ComplexBase1Dto {
   public val noOverride0: String?
 
-  public override val noOverride1: String?
+  override val noOverride1: String?
 
-  public override val complexMultiOverride: String?
+  override val complexMultiOverride: String?
 
   public val intermediateMultiOverride: String?
 }

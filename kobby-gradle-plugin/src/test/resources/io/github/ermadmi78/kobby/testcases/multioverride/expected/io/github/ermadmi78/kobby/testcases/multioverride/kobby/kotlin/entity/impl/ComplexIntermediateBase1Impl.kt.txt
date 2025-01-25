@@ -65,7 +65,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
   internal val ___inner__onIntermediateMultiOverride: IntermediateMultiOverrideProjectionImpl =
       IntermediateMultiOverrideProjectionImpl()
 
-  public override fun noOverride0(size: Int?): Unit {
+  override fun noOverride0(size: Int?) {
     __innerNoOverride00 = true
     __innerNoOverride00Size = size
 
@@ -78,7 +78,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     ___innerIgnore += "noOverride0"
   }
 
-  public override fun noOverride1(size: Int?): Unit {
+  override fun noOverride1(size: Int?) {
     __innerNoOverride11 = true
     __innerNoOverride11Size = size
 
@@ -91,7 +91,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     ___innerIgnore += "noOverride1"
   }
 
-  public override fun complexMultiOverride(size: Int?): Unit {
+  override fun complexMultiOverride(size: Int?) {
     __innerComplexMultiOverride2 = true
     __innerComplexMultiOverride2Size = size
 
@@ -104,7 +104,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     ___innerIgnore += "complexMultiOverride"
   }
 
-  public override fun intermediateMultiOverride(size: Int?): Unit {
+  override fun intermediateMultiOverride(size: Int?) {
     __innerIntermediateMultiOverride3 = true
     __innerIntermediateMultiOverride3Size = size
 
@@ -117,20 +117,18 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     ___innerIgnore += "intermediateMultiOverride"
   }
 
-  public override
-      fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit): Unit {
+  override fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit) {
     ComplexMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onComplexMultiOverride)
   }
 
-  public override
-      fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit):
-      Unit {
+  override
+      fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit) {
     IntermediateMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onIntermediateMultiOverride)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: ComplexIntermediateBase1QualifiedProjection): Unit {
+      __projection: ComplexIntermediateBase1QualifiedProjection) {
     if ("noOverride0" !in ignore && __innerNoOverride00) {
       __projection.noOverride0(__innerNoOverride00Size)
     }
@@ -160,7 +158,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride0" !in ignore && __innerNoOverride00) {
       body.append(' ').append("noOverride0")
       var counter = 0
@@ -199,7 +197,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride1" !in ignore && __innerNoOverride11) {
       body.append(' ').append("noOverride1")
       var counter = 0
@@ -238,7 +236,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("complexMultiOverride" !in ignore && __innerComplexMultiOverride2) {
       body.append(' ').append("complexMultiOverride")
       var counter = 0
@@ -277,7 +275,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("intermediateMultiOverride" !in ignore && __innerIntermediateMultiOverride3) {
       body.append(' ').append("intermediateMultiOverride")
       var counter = 0
@@ -316,7 +314,7 @@ internal open class ComplexIntermediateBase1QualifiedProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: noOverride0

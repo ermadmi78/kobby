@@ -20,28 +20,27 @@ import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Country : Base {
-  public override val id: Long
+  override val id: Long
 
-  public override val name: String
+  override val name: String
 
-  public override val description: String?
+  override val description: String?
 
-  public override fun __context(): InvalidFieldIsRequredContext
+  override fun __context(): InvalidFieldIsRequredContext
 
-  public fun CountryProjection.__withCurrentProjection(): Unit
+  public fun CountryProjection.__withCurrentProjection()
 }
 
 @InvalidFieldIsRequredDSL
 public interface CountryProjection : BaseProjection {
-  public override fun id(): Unit
+  override fun id()
 
-  public override fun name(): Unit
+  override fun name()
 
-  public override fun description(): Unit
+  override fun description()
 
-  public override fun __minimize(): Unit {
+  override fun __minimize() {
   }
 }

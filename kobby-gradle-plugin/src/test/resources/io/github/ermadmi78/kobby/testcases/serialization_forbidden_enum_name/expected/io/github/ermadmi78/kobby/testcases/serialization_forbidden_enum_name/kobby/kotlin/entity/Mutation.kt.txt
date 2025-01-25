@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.ko
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameContext
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.ForbiddenEnumNameDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Mutation {
   public fun __context(): ForbiddenEnumNameContext
 
-  public fun MutationProjection.__withCurrentProjection(): Unit
+  public fun MutationProjection.__withCurrentProjection()
 }
 
 @ForbiddenEnumNameDSL
 public interface MutationProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

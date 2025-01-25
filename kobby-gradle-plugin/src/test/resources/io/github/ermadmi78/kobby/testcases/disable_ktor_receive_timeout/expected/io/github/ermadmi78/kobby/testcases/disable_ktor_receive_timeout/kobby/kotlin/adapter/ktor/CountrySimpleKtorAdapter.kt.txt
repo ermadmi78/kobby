@@ -46,7 +46,7 @@ public open class CountrySimpleKtorAdapter(
   protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val listener: (CountryRequest) -> Unit = {},
 ) : CountryAdapter {
-  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
+  override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
     val request = CountryRequest(query, variables)
     listener(request)
 
@@ -72,8 +72,7 @@ public open class CountrySimpleKtorAdapter(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
-      MutationDto {
+  override suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto {
     val request = CountryRequest(query, variables)
     listener(request)
 

@@ -120,7 +120,7 @@ public interface PrefCtxContextPostCtx {
 }
 
 public fun interface PrefCtxSubscriberPostCtx<T> {
-  public suspend fun subscribe(block: suspend PrefCtxReceiverPostCtx<T>.() -> Unit): Unit
+  public suspend fun subscribe(block: suspend PrefCtxReceiverPostCtx<T>.() -> Unit)
 }
 
 @PrefCtxDSLPostCtx
@@ -150,8 +150,7 @@ private class PreImPrefCtxContextPostCtxPostIm(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit):
-      PrefEnMyQueryPostEn {
+  override suspend fun myQuery(projection: PrePrMyQueryPostPr.() -> Unit): PrefEnMyQueryPostEn {
     val projectionRef = PreImPrePrMyQueryPostPrPostIm().apply(projection)
 
     val header = StringBuilder()
@@ -175,7 +174,7 @@ private class PreImPrefCtxContextPostCtxPostIm(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
+  override suspend fun myMutation(projection: PrePrMyMutationPostPr.() -> Unit):
       PrefEnMyMutationPostEn {
     val projectionRef = PreImPrePrMyMutationPostPrPostIm().apply(projection)
 
@@ -196,7 +195,7 @@ private class PreImPrefCtxContextPostCtxPostIm(
     return DPrefMutationDPost.buildEntity(this, projectionRef)
   }
 
-  public override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
+  override fun mySubscription(projection: PrePrMySubscriptionPostPr.() -> Unit):
       PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> {
     val projectionRef = PreImPrePrMySubscriptionPostPrPostIm().apply(projection)
 
@@ -216,7 +215,7 @@ private class PreImPrefCtxContextPostCtxPostIm(
     return PrefCtxSubscriberPostCtx<PrefEnMySubscriptionPostEn> {
       adapter.executeSubscription(subscription, arguments) {
         it.invoke(object : PrefCtxReceiverPostCtx<PrefEnMySubscriptionPostEn> {
-          public override suspend fun receive(): PrefEnMySubscriptionPostEn {
+          override suspend fun receive(): PrefEnMySubscriptionPostEn {
             val DPrefSubscriptionDPost: DPrefMySubscriptionDPost = this@executeSubscription.receive()
             return DPrefSubscriptionDPost.buildEntity(this@PreImPrefCtxContextPostCtxPostIm,
                 projectionRef)

@@ -32,7 +32,7 @@ public interface Native {
  */
 @CinemaDSL
 public interface NativeProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 
@@ -45,13 +45,13 @@ public interface NativeQualification {
    * Film entity.
    * The film belongs to one country and can be played by several actors.
    */
-  public fun __onFilm(__projection: FilmProjection.() -> Unit = {}): Unit
+  public fun __onFilm(__projection: FilmProjection.() -> Unit = {})
 
   /**
    * Actor entity.
    * The actor belongs to one country and can play in several films.
    */
-  public fun __onActor(__projection: ActorProjection.() -> Unit = {}): Unit
+  public fun __onActor(__projection: ActorProjection.() -> Unit = {})
 }
 
 /**

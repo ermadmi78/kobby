@@ -19,7 +19,6 @@ import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeContext
 import io.github.ermadmi78.kobby.testcases.escape.kobby.kotlin.EscapeDSL
 import kotlin.Int
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Point {
   public val x: Int
@@ -28,15 +27,15 @@ public interface Point {
 
   public fun __context(): EscapeContext
 
-  public fun PointProjection.__withCurrentProjection(): Unit
+  public fun PointProjection.__withCurrentProjection()
 }
 
 @EscapeDSL
 public interface PointProjection {
-  public fun x(): Unit
+  public fun x()
 
-  public fun y(): Unit
+  public fun y()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

@@ -27,9 +27,9 @@ import my.root.dto1.EPrefGenderEPost
 import my.root.dto1.EPrefGenreEPost
 
 public interface PrefEnCountryPostEn : PrefEnEntityPostEn {
-  public override val id: Long
+  override val id: Long
 
-  public override val fields: String
+  override val fields: String
 
   public val name: String
 
@@ -43,28 +43,28 @@ public interface PrefEnCountryPostEn : PrefEnEntityPostEn {
 
   public val native: List<PrefEnNativePostEn>
 
-  public override fun context(): PrefCtxContextPostCtx
+  override fun context(): PrefCtxContextPostCtx
 
-  public fun PrePrCountryPostPr.withCurrentProjection(): Unit
+  public fun PrePrCountryPostPr.withCurrentProjection()
 }
 
 @PrefCtxDSLPostCtx
 public interface PrePrCountryPostPr : PrePrEntityPostPr {
-  public override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit): Unit
+  override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit)
 
-  public fun withoutPrNameWithoutPo(): Unit
+  public fun withoutPrNameWithoutPo()
 
-  public fun withPrFilmWithPo(id: Long, projection: PrePrFilmPostPr.() -> Unit = {}): Unit
+  public fun withPrFilmWithPo(id: Long, projection: PrePrFilmPostPr.() -> Unit = {})
 
-  public fun withPrFilmsWithPo(query: PreQrCountryFilmsPostQr.() -> Unit = {}): Unit
+  public fun withPrFilmsWithPo(query: PreQrCountryFilmsPostQr.() -> Unit = {})
 
-  public fun withPrActorWithPo(id: Long, projection: PrePrActorPostPr.() -> Unit = {}): Unit
+  public fun withPrActorWithPo(id: Long, projection: PrePrActorPostPr.() -> Unit = {})
 
-  public fun withPrActorsWithPo(query: PreQrCountryActorsPostQr.() -> Unit = {}): Unit
+  public fun withPrActorsWithPo(query: PreQrCountryActorsPostQr.() -> Unit = {})
 
-  public fun withPrNativeWithPo(projection: PreQPNativePostQP.() -> Unit = {}): Unit
+  public fun withPrNativeWithPo(projection: PreQPNativePostQP.() -> Unit = {})
 
-  public override fun minimize(): Unit {
+  override fun minimize() {
     withoutPrNameWithoutPo()
   }
 }

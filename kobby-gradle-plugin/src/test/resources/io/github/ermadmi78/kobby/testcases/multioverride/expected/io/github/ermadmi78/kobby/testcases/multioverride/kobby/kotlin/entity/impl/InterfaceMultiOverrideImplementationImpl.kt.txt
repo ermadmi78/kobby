@@ -24,7 +24,6 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -38,7 +37,7 @@ internal class InterfaceMultiOverrideImplementationImpl(
   internal val __innerProjection: InterfaceMultiOverrideImplementationProjectionImpl,
   internal val __innerDto: InterfaceMultiOverrideImplementationDto,
 ) : InterfaceMultiOverrideImplementation {
-  public override val noOverride1: String
+  override val noOverride1: String
     get() {
       if (!__innerProjection.__innerNoOverride10) {
         error("Property [noOverride1] is not available - add [noOverride1] projection to switch on it")
@@ -46,7 +45,7 @@ internal class InterfaceMultiOverrideImplementationImpl(
       return __innerDto.noOverride1!!
     }
 
-  public override val noOverride2: String
+  override val noOverride2: String
     get() {
       if (!__innerProjection.__innerNoOverride21) {
         error("Property [noOverride2] is not available - add [noOverride2] projection to switch on it")
@@ -54,7 +53,7 @@ internal class InterfaceMultiOverrideImplementationImpl(
       return __innerDto.noOverride2!!
     }
 
-  public override val interfaceMultiOverride: String
+  override val interfaceMultiOverride: String
     get() {
       if (!__innerProjection.__innerInterfaceMultiOverride2) {
         error("Property [interfaceMultiOverride] is not available - add [interfaceMultiOverride] projection to switch on it")
@@ -62,7 +61,7 @@ internal class InterfaceMultiOverrideImplementationImpl(
       return __innerDto.interfaceMultiOverride!!
     }
 
-  public override val finalField: String
+  override val finalField: String
     get() {
       if (!__innerProjection.__innerFinalField3) {
         error("Property [finalField] is not available - add [finalField] projection to switch on it")
@@ -71,7 +70,7 @@ internal class InterfaceMultiOverrideImplementationImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("InterfaceMultiOverrideImplementation").append('(')
 
     var counter = 0
@@ -107,10 +106,9 @@ internal class InterfaceMultiOverrideImplementationImpl(
     append(')')
   }
 
-  public override fun __context(): MultiOverrideContext = __innerContext
+  override fun __context(): MultiOverrideContext = __innerContext
 
-  public override fun InterfaceMultiOverrideImplementationProjection.__withCurrentProjection():
-      Unit {
+  override fun InterfaceMultiOverrideImplementationProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -133,29 +131,29 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
 
   internal var __innerFinalField3Size: Int? = null
 
-  public override fun noOverride1(size: Int?): Unit {
+  override fun noOverride1(size: Int?) {
     __innerNoOverride10 = true
     __innerNoOverride10Size = size
   }
 
-  public override fun noOverride2(size: Int?): Unit {
+  override fun noOverride2(size: Int?) {
     __innerNoOverride21 = true
     __innerNoOverride21Size = size
   }
 
-  public override fun interfaceMultiOverride(size: Int?): Unit {
+  override fun interfaceMultiOverride(size: Int?) {
     __innerInterfaceMultiOverride2 = true
     __innerInterfaceMultiOverride2Size = size
   }
 
-  public override fun finalField(size: Int?): Unit {
+  override fun finalField(size: Int?) {
     __innerFinalField3 = true
     __innerFinalField3Size = size
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: InterfaceMultiOverrideImplementationProjection): Unit {
+      __projection: InterfaceMultiOverrideImplementationProjection) {
     if ("noOverride1" !in ignore && __innerNoOverride10) {
       __projection.noOverride1(__innerNoOverride10Size)
     }
@@ -179,7 +177,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride1" !in ignore && __innerNoOverride10) {
       body.append(' ').append("noOverride1")
       var counter = 0
@@ -218,7 +216,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride2" !in ignore && __innerNoOverride21) {
       body.append(' ').append("noOverride2")
       var counter = 0
@@ -257,7 +255,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("interfaceMultiOverride" !in ignore && __innerInterfaceMultiOverride2) {
       body.append(' ').append("interfaceMultiOverride")
       var counter = 0
@@ -296,7 +294,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("finalField" !in ignore && __innerFinalField3) {
       body.append(' ').append("finalField")
       var counter = 0
@@ -335,7 +333,7 @@ internal open class InterfaceMultiOverrideImplementationProjectionImpl :
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: noOverride1

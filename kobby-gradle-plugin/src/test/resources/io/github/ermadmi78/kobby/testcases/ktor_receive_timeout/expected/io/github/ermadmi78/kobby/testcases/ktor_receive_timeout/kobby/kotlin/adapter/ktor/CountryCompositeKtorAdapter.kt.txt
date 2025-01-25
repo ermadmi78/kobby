@@ -77,13 +77,13 @@ public open class CountryCompositeKtorAdapter(
   protected val mapper: CountryMapper,
   protected val requestHeaders: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val subscriptionPayload: suspend () -> Map<String, Any?>? = { null },
-  protected val subscriptionReceiveTimeoutMillis: Long? = 23000,
+  protected val subscriptionReceiveTimeoutMillis: Long? = 23_000,
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
   protected val listener: (CountryRequest) -> Unit = {},
 ) : CountryAdapter {
-  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
+  override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
     val request = CountryRequest(query, variables)
     listener(request)
 
@@ -109,8 +109,7 @@ public open class CountryCompositeKtorAdapter(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
-      MutationDto {
+  override suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto {
     val request = CountryRequest(query, variables)
     listener(request)
 
@@ -136,11 +135,11 @@ public open class CountryCompositeKtorAdapter(
         )
   }
 
-  public override suspend fun executeSubscription(
+  override suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
     block: suspend CountryReceiver<SubscriptionDto>.() -> Unit,
-  ): Unit {
+  ) {
     val httpHeaders: Map<String, String> = requestHeaders()
     val payload: Map<String, Any?>? = subscriptionPayload()
     client.webSocket(
@@ -175,7 +174,7 @@ public open class CountryCompositeKtorAdapter(
     initPayload: Map<String, Any?>?,
     request: CountryRequest,
     block: suspend CountryReceiver<SubscriptionDto>.() -> Unit,
-  ): Unit {
+  ) {
     val socket = this
     sendMessage(socket, CountryClientMessageConnectionInit(initPayload))
 
@@ -200,7 +199,7 @@ public open class CountryCompositeKtorAdapter(
 
     try {
       block.invoke(object : CountryReceiver<SubscriptionDto> {
-        public override suspend fun receive(): SubscriptionDto {
+        override suspend fun receive(): SubscriptionDto {
           while (true) {
             var reply = receiveMessage(socket)
             if (reply == null) {
@@ -252,8 +251,7 @@ public open class CountryCompositeKtorAdapter(
     }
   }
 
-  protected open suspend fun sendMessage(socket: WebSocketSession, message: CountryClientMessage):
-      Unit {
+  protected open suspend fun sendMessage(socket: WebSocketSession, message: CountryClientMessage) {
     val content = mapper.serialize(message)
     socket.send(content)
   }

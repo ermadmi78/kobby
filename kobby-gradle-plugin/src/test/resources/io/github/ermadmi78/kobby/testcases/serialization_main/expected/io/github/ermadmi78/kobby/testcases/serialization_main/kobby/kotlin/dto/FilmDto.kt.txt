@@ -37,16 +37,16 @@ public data class FilmDto(
   /**
    * Unique identifier of entity
    */
-  public override val id: Long? = null,
+  override val id: Long? = null,
   /**
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
    */
-  public override val fields: JsonObject? = null,
+  override val fields: JsonObject? = null,
   /**
    * Tags of entity
    */
-  public override val tags: List<TagDto>? = null,
+  override val tags: List<TagDto>? = null,
   /**
    * Title of film
    */
@@ -68,7 +68,9 @@ public data class FilmDto(
    * Returns empty list if not found.
    */
   public val actors: List<ActorDto>? = null,
-) : EntityDto, TaggableDto, NativeDto
+) : EntityDto,
+    TaggableDto,
+    NativeDto
 
 public fun FilmDto.toBuilder(): FilmDtoBuilder = FilmDtoBuilder().also {
   it.id = this.id

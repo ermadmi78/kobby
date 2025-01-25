@@ -81,13 +81,13 @@ public open class CinemaCompositeKtorAdapter(
   protected val mapper: Json = cinemaJson,
   protected val requestHeaders: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val subscriptionPayload: suspend () -> JsonObject? = { null },
-  protected val subscriptionReceiveTimeoutMillis: Long? = 10000,
+  protected val subscriptionReceiveTimeoutMillis: Long? = 10_000,
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
   protected val listener: (CinemaRequest) -> Unit = {},
 ) : CinemaAdapter {
-  public override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+  override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
     val request = CinemaRequest(query, variables)
     listener(request)
 
@@ -113,7 +113,7 @@ public open class CinemaCompositeKtorAdapter(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+  override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
     val request = CinemaRequest(query, variables)
     listener(request)
 
@@ -139,11 +139,11 @@ public open class CinemaCompositeKtorAdapter(
         )
   }
 
-  public override suspend fun executeSubscription(
+  override suspend fun executeSubscription(
     query: String,
     variables: JsonObject,
     block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit,
-  ): Unit {
+  ) {
     val httpHeaders: Map<String, String> = requestHeaders()
     val payload: JsonObject? = subscriptionPayload()
     client.webSocket(
@@ -176,7 +176,7 @@ public open class CinemaCompositeKtorAdapter(
     initPayload: JsonObject?,
     request: CinemaRequest,
     block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit,
-  ): Unit {
+  ) {
     val socket = this
     sendMessage(socket, CinemaClientMessageConnectionInit(initPayload))
 
@@ -201,7 +201,7 @@ public open class CinemaCompositeKtorAdapter(
 
     try {
       block.invoke(object : CinemaReceiver<SubscriptionDto> {
-        public override suspend fun receive(): SubscriptionDto {
+        override suspend fun receive(): SubscriptionDto {
           while (true) {
             var reply = receiveMessage(socket)
             if (reply == null) {
@@ -253,8 +253,7 @@ public open class CinemaCompositeKtorAdapter(
     }
   }
 
-  protected open suspend fun sendMessage(socket: WebSocketSession, message: CinemaClientMessage):
-      Unit {
+  protected open suspend fun sendMessage(socket: WebSocketSession, message: CinemaClientMessage) {
     val content = mapper.encodeToString(message)
     socket.send(content)
   }

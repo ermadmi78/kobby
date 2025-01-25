@@ -65,10 +65,10 @@ internal class CountryImpl(
   internal val __innerProjection: CountryProjectionImpl,
   internal val __innerDto: CountryDto,
 ) : Country {
-  public override val id: Long
+  override val id: Long
     get() = __innerDto.id!!
 
-  public override val fields: JsonObject
+  override val fields: JsonObject
     get() {
       if (__innerProjection.__innerFields1 == null) {
         error("Property [fields] is not available - add [fields] projection to switch on it")
@@ -76,7 +76,7 @@ internal class CountryImpl(
       return __innerDto.fields!!
     }
 
-  public override val name: String
+  override val name: String
     get() {
       if (!__innerProjection.__innerName2) {
         error("Property [name] is not available - remove [__withoutName] projection to switch on it")
@@ -84,55 +84,49 @@ internal class CountryImpl(
       return __innerDto.name!!
     }
 
-  public override val film: Film? by lazy {
+  override val film: Film? by lazy {
     if (__innerProjection.__innerFilm3 == null) {
       error("Property [film] is not available - add [film] projection to switch on it")
     }
     __innerDto.resolveFilm(__innerContext, __innerProjection.__innerFilm3!!)
   }
 
-
-  public override val films: List<Film> by lazy {
+  override val films: List<Film> by lazy {
     if (__innerProjection.__innerFilms4 == null) {
       error("Property [films] is not available - add [films] projection to switch on it")
     }
     __innerDto.resolveFilms(__innerContext, __innerProjection.__innerFilms4!!)
   }
 
-
-  public override val actor: Actor? by lazy {
+  override val actor: Actor? by lazy {
     if (__innerProjection.__innerActor5 == null) {
       error("Property [actor] is not available - add [actor] projection to switch on it")
     }
     __innerDto.resolveActor(__innerContext, __innerProjection.__innerActor5!!)
   }
 
-
-  public override val actors: List<Actor> by lazy {
+  override val actors: List<Actor> by lazy {
     if (__innerProjection.__innerActors6 == null) {
       error("Property [actors] is not available - add [actors] projection to switch on it")
     }
     __innerDto.resolveActors(__innerContext, __innerProjection.__innerActors6!!)
   }
 
-
-  public override val taggable: List<Taggable> by lazy {
+  override val taggable: List<Taggable> by lazy {
     if (__innerProjection.__innerTaggable7 == null) {
       error("Property [taggable] is not available - add [taggable] projection to switch on it")
     }
     __innerDto.resolveTaggable(__innerContext, __innerProjection.__innerTaggable7!!)
   }
 
-
-  public override val native: List<Native> by lazy {
+  override val native: List<Native> by lazy {
     if (__innerProjection.__innerNative8 == null) {
       error("Property [native] is not available - add [native] projection to switch on it")
     }
     __innerDto.resolveNative(__innerContext, __innerProjection.__innerNative8!!)
   }
 
-
-  public override fun equals(other: Any?): Boolean {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -144,10 +138,10 @@ internal class CountryImpl(
     return __innerDto.id == other.__innerDto.id
   }
 
-  public override fun hashCode(): Int = __innerDto.id?.hashCode() ?: 0
+  override fun hashCode(): Int = __innerDto.id?.hashCode() ?: 0
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Country").append('(')
 
     var counter = 0
@@ -218,9 +212,9 @@ internal class CountryImpl(
     append(')')
   }
 
-  public override fun __context(): CinemaContext = __innerContext
+  override fun __context(): CinemaContext = __innerContext
 
-  public override fun CountryProjection.__withCurrentProjection(): Unit {
+  override fun CountryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -248,45 +242,43 @@ internal open class CountryProjectionImpl : CountryProjection {
 
   internal var __innerNative8: NativeQualifiedProjectionImpl? = null
 
-  public override fun fields(__selection: EntityFieldsSelection.() -> Unit): Unit {
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit) {
     __innerFields1 = EntityFieldsSelectionImpl().apply(__selection)
   }
 
-  public override fun __withoutName(): Unit {
+  override fun __withoutName() {
     __innerName2 = false
   }
 
-  public override fun film(id: Long, __projection: FilmProjection.() -> Unit): Unit {
+  override fun film(id: Long, __projection: FilmProjection.() -> Unit) {
     __innerFilm3 = FilmProjectionImpl().apply(__projection)
     __innerFilm3Id = id
   }
 
-  public override fun films(__query: CountryFilmsQuery.() -> Unit): Unit {
+  override fun films(__query: CountryFilmsQuery.() -> Unit) {
     __innerFilms4 = CountryFilmsQueryImpl().apply(__query)
   }
 
-  public override fun actor(id: Long, __projection: ActorProjection.() -> Unit): Unit {
+  override fun actor(id: Long, __projection: ActorProjection.() -> Unit) {
     __innerActor5 = ActorProjectionImpl().apply(__projection)
     __innerActor5Id = id
   }
 
-  public override fun actors(__query: CountryActorsQuery.() -> Unit): Unit {
+  override fun actors(__query: CountryActorsQuery.() -> Unit) {
     __innerActors6 = CountryActorsQueryImpl().apply(__query)
   }
 
-  public override fun taggable(tag: String, __projection: TaggableQualifiedProjection.() -> Unit):
-      Unit {
+  override fun taggable(tag: String, __projection: TaggableQualifiedProjection.() -> Unit) {
     __innerTaggable7 = TaggableQualifiedProjectionImpl().apply(__projection)
     __innerTaggable7Tag = tag
   }
 
-  public override fun native(__projection: NativeQualifiedProjection.() -> Unit): Unit {
+  override fun native(__projection: NativeQualifiedProjection.() -> Unit) {
     __innerNative8 = NativeQualifiedProjectionImpl().apply(__projection)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection) {
     if ("fields" !in ignore && __innerFields1 != null) {
       __projection.fields {
         this@CountryProjectionImpl.__innerFields1!!.___innerRepeatSelection(this)
@@ -338,7 +330,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("fields" !in ignore && __innerFields1 != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -377,7 +369,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("film" !in ignore && __innerFilm3 != null) {
       body.append(' ').append("film")
       var counter = 0
@@ -419,7 +411,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("films" !in ignore && __innerFilms4 != null) {
       body.append(' ').append("films")
       var counter = 0
@@ -507,7 +499,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("actor" !in ignore && __innerActor5 != null) {
       body.append(' ').append("actor")
       var counter = 0
@@ -549,7 +541,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("actors" !in ignore && __innerActors6 != null) {
       body.append(' ').append("actors")
       var counter = 0
@@ -684,7 +676,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("taggable" !in ignore && __innerTaggable7 != null) {
       body.append(' ').append("taggable")
       var counter = 0
@@ -726,7 +718,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id
@@ -770,16 +762,16 @@ internal open class CountryProjectionImpl : CountryProjection {
 }
 
 internal class CountryFilmsQueryImpl : FilmProjectionImpl(), CountryFilmsQuery {
-  public override var title: String? = null
+  override var title: String? = null
 
-  public override var genre: Genre? = null
+  override var genre: Genre? = null
 
-  public override var limit: Int? = null
+  override var limit: Int? = null
 
-  public override var offset: Int? = null
+  override var offset: Int? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatSelection(__selection: CountryFilmsSelection): Unit {
+  internal fun ___innerRepeatSelection(__selection: CountryFilmsSelection) {
     __selection.title = title
     __selection.genre = genre
     __selection.limit = limit
@@ -788,23 +780,22 @@ internal class CountryFilmsQueryImpl : FilmProjectionImpl(), CountryFilmsQuery {
 }
 
 internal class CountryActorsQueryImpl : ActorProjectionImpl(), CountryActorsQuery {
-  public override var firstName: String? = null
+  override var firstName: String? = null
 
-  public override var lastName: String? = null
+  override var lastName: String? = null
 
-  public override var birthdayFrom: @Serializable(with = LocalDateSerializer::class) LocalDate? =
-      null
+  override var birthdayFrom: @Serializable(with = LocalDateSerializer::class) LocalDate? = null
 
-  public override var birthdayTo: @Serializable(with = LocalDateSerializer::class) LocalDate? = null
+  override var birthdayTo: @Serializable(with = LocalDateSerializer::class) LocalDate? = null
 
-  public override var gender: Gender? = null
+  override var gender: Gender? = null
 
-  public override var limit: Int? = null
+  override var limit: Int? = null
 
-  public override var offset: Int? = null
+  override var offset: Int? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatSelection(__selection: CountryActorsSelection): Unit {
+  internal fun ___innerRepeatSelection(__selection: CountryActorsSelection) {
     __selection.firstName = firstName
     __selection.lastName = lastName
     __selection.birthdayFrom = birthdayFrom

@@ -44,32 +44,29 @@ public class PreImMySubscriptionPostIm(
   public val innerProjectionPin: PreImPrePrMySubscriptionPostPrPostIm,
   public val innerDtoPin: DPrefMySubscriptionDPost,
 ) : PrefEnMySubscriptionPostEn {
-  public override val countryCreated: PrefEnCountryPostEn by lazy {
+  override val countryCreated: PrefEnCountryPostEn by lazy {
     if (innerProjectionPin.innerCountryCreated0Pin == null) {
       error("Property [countryCreated] is not available - add [withPrCountryCreatedWithPo] projection to switch on it")
     }
     innerDtoPin.resolveCountryCreated(innerContextPin, innerProjectionPin.innerCountryCreated0Pin!!)
   }
 
-
-  public override val filmCreated: PrefEnFilmPostEn by lazy {
+  override val filmCreated: PrefEnFilmPostEn by lazy {
     if (innerProjectionPin.innerFilmCreated1Pin == null) {
       error("Property [filmCreated] is not available - add [withPrFilmCreatedWithPo] projection to switch on it")
     }
     innerDtoPin.resolveFilmCreated(innerContextPin, innerProjectionPin.innerFilmCreated1Pin!!)
   }
 
-
-  public override val actorCreated: PrefEnActorPostEn by lazy {
+  override val actorCreated: PrefEnActorPostEn by lazy {
     if (innerProjectionPin.innerActorCreated2Pin == null) {
       error("Property [actorCreated] is not available - add [withPrActorCreatedWithPo] projection to switch on it")
     }
     innerDtoPin.resolveActorCreated(innerContextPin, innerProjectionPin.innerActorCreated2Pin!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("MySubscription").append('(')
 
     var counter = 0
@@ -98,9 +95,9 @@ public class PreImMySubscriptionPostIm(
     append(')')
   }
 
-  public override fun context(): PrefCtxContextPostCtx = innerContextPin
+  override fun context(): PrefCtxContextPostCtx = innerContextPin
 
-  public override fun PrePrMySubscriptionPostPr.withCurrentProjection(): Unit {
+  override fun PrePrMySubscriptionPostPr.withCurrentProjection() {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)
   }
 }
@@ -116,25 +113,22 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
 
   public var innerActorCreated2CountryIdPin: Long? = null
 
-  public override fun withPrCountryCreatedWithPo(projection: PrePrCountryPostPr.() -> Unit): Unit {
+  override fun withPrCountryCreatedWithPo(projection: PrePrCountryPostPr.() -> Unit) {
     innerCountryCreated0Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
   }
 
-  public override fun withPrFilmCreatedWithPo(countryId: Long?,
-      projection: PrePrFilmPostPr.() -> Unit): Unit {
+  override fun withPrFilmCreatedWithPo(countryId: Long?, projection: PrePrFilmPostPr.() -> Unit) {
     innerFilmCreated1Pin = PreImPrePrFilmPostPrPostIm().apply(projection)
     innerFilmCreated1CountryIdPin = countryId
   }
 
-  public override fun withPrActorCreatedWithPo(countryId: Long?,
-      projection: PrePrActorPostPr.() -> Unit): Unit {
+  override fun withPrActorCreatedWithPo(countryId: Long?, projection: PrePrActorPostPr.() -> Unit) {
     innerActorCreated2Pin = PreImPrePrActorPostPrPostIm().apply(projection)
     innerActorCreated2CountryIdPin = countryId
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMySubscriptionPostPr):
-      Unit {
+  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMySubscriptionPostPr) {
     if ("countryCreated" !in ignore && innerCountryCreated0Pin != null) {
       projection.withPrCountryCreatedWithPo {
         this@PreImPrePrMySubscriptionPostPrPostIm.innerCountryCreated0Pin!!._innerRepeatProjectionPin(setOf(), this)
@@ -161,7 +155,7 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("filmCreated" !in ignore && innerFilmCreated1Pin != null) {
       body.append(' ').append("filmCreated")
       var counter = 0
@@ -203,7 +197,7 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("actorCreated" !in ignore && innerActorCreated2Pin != null) {
       body.append(' ').append("actorCreated")
       var counter = 0
@@ -245,7 +239,7 @@ public open class PreImPrePrMySubscriptionPostPrPostIm : PrePrMySubscriptionPost
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: countryCreated

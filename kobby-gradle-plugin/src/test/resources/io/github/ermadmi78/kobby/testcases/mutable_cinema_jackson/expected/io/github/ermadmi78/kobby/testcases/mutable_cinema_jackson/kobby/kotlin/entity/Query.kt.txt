@@ -71,7 +71,7 @@ public interface Query {
 
   public fun __context(): CinemaContext
 
-  public fun QueryProjection.__withCurrentProjection(): Unit
+  public fun QueryProjection.__withCurrentProjection()
 }
 
 @CinemaDSL
@@ -80,7 +80,7 @@ public interface QueryProjection {
    * Find country by id.
    * Returns null if not found.
    */
-  public fun country(id: Long, __projection: CountryProjection.() -> Unit = {}): Unit
+  public fun country(id: Long, __projection: CountryProjection.() -> Unit = {})
 
   /**
    * Find countries by name.
@@ -96,38 +96,38 @@ public interface QueryProjection {
     limit: Int? = null,
     offset: Int? = null,
     __projection: CountryProjection.() -> Unit = {},
-  ): Unit
+  )
 
   /**
    * Find film by id.
    * Returns null if not found.
    */
-  public fun film(id: Long, __projection: FilmProjection.() -> Unit = {}): Unit
+  public fun film(id: Long, __projection: FilmProjection.() -> Unit = {})
 
   /**
    * Find films by title and genre.
    * Returns empty list if not found.
    */
-  public fun films(__query: QueryFilmsQuery.() -> Unit = {}): Unit
+  public fun films(__query: QueryFilmsQuery.() -> Unit = {})
 
   /**
    * Find actor by id.
    * Returns null if not found.
    */
-  public fun actor(id: Long, __projection: ActorProjection.() -> Unit = {}): Unit
+  public fun actor(id: Long, __projection: ActorProjection.() -> Unit = {})
 
   /**
    * Find actors by firstName, lastName, birthday and gender.
    * Returns empty list if not found.
    */
-  public fun actors(__query: QueryActorsQuery.() -> Unit = {}): Unit
+  public fun actors(__query: QueryActorsQuery.() -> Unit = {})
 
   /**
    * Find entities by tag
    */
-  public fun taggable(tag: String, __projection: TaggableQualifiedProjection.() -> Unit = {}): Unit
+  public fun taggable(tag: String, __projection: TaggableQualifiedProjection.() -> Unit = {})
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 

@@ -20,41 +20,40 @@ import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverr
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface ComplexMultiOverride : ComplexBase1, ComplexIntermediateBase1, ComplexBase2 {
-  public override val noOverride0: String
+  override val noOverride0: String
 
-  public override val noOverride1: String
+  override val noOverride1: String
 
-  public override val noOverride2: String
+  override val noOverride2: String
 
-  public override val complexMultiOverride: String
+  override val complexMultiOverride: String
 
-  public override val intermediateMultiOverride: String
+  override val intermediateMultiOverride: String
 
   public val finalField: String
 
-  public override fun __context(): MultiOverrideContext
+  override fun __context(): MultiOverrideContext
 
-  public fun ComplexMultiOverrideProjection.__withCurrentProjection(): Unit
+  public fun ComplexMultiOverrideProjection.__withCurrentProjection()
 }
 
 @MultiOverrideDSL
 public interface ComplexMultiOverrideProjection : ComplexBase1Projection,
     ComplexIntermediateBase1Projection, ComplexBase2Projection {
-  public override fun noOverride0(size: Int?): Unit
+  override fun noOverride0(size: Int?)
 
-  public override fun noOverride1(size: Int?): Unit
+  override fun noOverride1(size: Int?)
 
-  public override fun noOverride2(size: Int?): Unit
+  override fun noOverride2(size: Int?)
 
-  public override fun complexMultiOverride(size: Int?): Unit
+  override fun complexMultiOverride(size: Int?)
 
-  public override fun intermediateMultiOverride(size: Int?): Unit
+  override fun intermediateMultiOverride(size: Int?)
 
-  public fun finalField(size: Int? = null): Unit
+  public fun finalField(size: Int? = null)
 
-  public override fun __minimize(): Unit {
+  override fun __minimize() {
   }
 }

@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.e
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleContext
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Subscription {
   public fun __context(): SimpleContext
 
-  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+  public fun SubscriptionProjection.__withCurrentProjection()
 }
 
 @SimpleDSL
 public interface SubscriptionProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

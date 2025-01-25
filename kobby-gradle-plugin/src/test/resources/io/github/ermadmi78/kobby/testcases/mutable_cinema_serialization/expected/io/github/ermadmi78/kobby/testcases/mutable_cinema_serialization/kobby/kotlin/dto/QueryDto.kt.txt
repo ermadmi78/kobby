@@ -71,7 +71,7 @@ public class QueryDto {
    */
   public var taggable: List<TaggableDto>? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("QueryDto").append('(')
     append("country").append('=').append(country)
     append(", ").append("countries").append('=').append(countries)

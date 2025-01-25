@@ -39,13 +39,13 @@ public class CountryDto : EntityDto {
   /**
    * Unique identifier of entity
    */
-  public override var id: Long? = null
+  override var id: Long? = null
 
   /**
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
    */
-  public override var fields: JsonObject? = null
+  override var fields: JsonObject? = null
 
   /**
    * The name of the country
@@ -86,7 +86,7 @@ public class CountryDto : EntityDto {
    */
   public var native: List<NativeDto>? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("CountryDto").append('(')
     append("id").append('=').append(id)
     append(", ").append("fields").append('=').append(fields)

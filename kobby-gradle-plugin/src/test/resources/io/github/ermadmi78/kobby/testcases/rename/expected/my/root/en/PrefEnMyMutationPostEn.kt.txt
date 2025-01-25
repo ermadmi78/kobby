@@ -40,32 +40,31 @@ public interface PrefEnMyMutationPostEn {
 
   public fun context(): PrefCtxContextPostCtx
 
-  public fun PrePrMyMutationPostPr.withCurrentProjection(): Unit
+  public fun PrePrMyMutationPostPr.withCurrentProjection()
 }
 
 @PrefCtxDSLPostCtx
 public interface PrePrMyMutationPostPr {
-  public fun withPrCreateCountryWithPo(name: String, projection: PrePrCountryPostPr.() -> Unit =
-      {}): Unit
+  public fun withPrCreateCountryWithPo(name: String, projection: PrePrCountryPostPr.() -> Unit = {})
 
   public fun withPrCreateFilmWithPo(
     countryId: Long,
     film: IPrefFilmInputIPost,
     projection: PrePrFilmPostPr.() -> Unit = {},
-  ): Unit
+  )
 
   public fun withPrCreateActorWithPo(
     countryId: Long,
     actor: IPrefActorInputIPost,
     projection: PrePrActorPostPr.() -> Unit = {},
-  ): Unit
+  )
 
-  public fun withPrAssociateWithPo(filmId: Long, actorId: Long): Unit
+  public fun withPrAssociateWithPo(filmId: Long, actorId: Long)
 
-  public fun withPrTagFilmWithPo(filmId: Long, tagValue: String): Unit
+  public fun withPrTagFilmWithPo(filmId: Long, tagValue: String)
 
-  public fun withPrTagActorWithPo(actorId: Long, tagValue: String): Unit
+  public fun withPrTagActorWithPo(actorId: Long, tagValue: String)
 
-  public fun minimize(): Unit {
+  public fun minimize() {
   }
 }

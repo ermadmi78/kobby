@@ -20,20 +20,19 @@ import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.Forb
 import io.github.ermadmi78.kobby.testcases.forbidden_enum_name.kobby.kotlin.dto.user_update_column
 import kotlin.Long
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Query {
   public val user: user_update_column?
 
   public fun __context(): ForbiddenEnumNameContext
 
-  public fun QueryProjection.__withCurrentProjection(): Unit
+  public fun QueryProjection.__withCurrentProjection()
 }
 
 @ForbiddenEnumNameDSL
 public interface QueryProjection {
-  public fun user(id: Long): Unit
+  public fun user(id: Long)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

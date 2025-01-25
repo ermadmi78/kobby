@@ -24,7 +24,6 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -37,7 +36,7 @@ internal class CountryImpl(
   internal val __innerProjection: CountryProjectionImpl,
   internal val __innerDto: CountryDto,
 ) : Country {
-  public override val id: Long
+  override val id: Long
     get() {
       if (!__innerProjection.__innerId0) {
         error("Property [id] is not available - add [id] projection to switch on it")
@@ -45,7 +44,7 @@ internal class CountryImpl(
       return __innerDto.id!!
     }
 
-  public override val name: String
+  override val name: String
     get() {
       if (!__innerProjection.__innerName1) {
         error("Property [name] is not available - add [name] projection to switch on it")
@@ -53,7 +52,7 @@ internal class CountryImpl(
       return __innerDto.name!!
     }
 
-  public override val description: String?
+  override val description: String?
     get() {
       if (!__innerProjection.__innerDescription2) {
         error("Property [description] is not available - add [description] projection to switch on it")
@@ -62,7 +61,7 @@ internal class CountryImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Country").append('(')
 
     var counter = 0
@@ -91,9 +90,9 @@ internal class CountryImpl(
     append(')')
   }
 
-  public override fun __context(): InvalidFieldIsRequredContext = __innerContext
+  override fun __context(): InvalidFieldIsRequredContext = __innerContext
 
-  public override fun CountryProjection.__withCurrentProjection(): Unit {
+  override fun CountryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -105,21 +104,20 @@ internal open class CountryProjectionImpl : CountryProjection {
 
   internal var __innerDescription2: Boolean = false
 
-  public override fun id(): Unit {
+  override fun id() {
     __innerId0 = true
   }
 
-  public override fun name(): Unit {
+  override fun name() {
     __innerName1 = true
   }
 
-  public override fun description(): Unit {
+  override fun description() {
     __innerDescription2 = true
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection) {
     if ("id" !in ignore && __innerId0) {
       __projection.id()
     }
@@ -140,7 +138,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id

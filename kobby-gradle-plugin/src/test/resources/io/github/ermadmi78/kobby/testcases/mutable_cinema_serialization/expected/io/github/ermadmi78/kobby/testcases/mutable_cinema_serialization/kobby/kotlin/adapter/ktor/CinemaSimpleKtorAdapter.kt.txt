@@ -46,7 +46,7 @@ public open class CinemaSimpleKtorAdapter(
   protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val listener: (CinemaRequest) -> Unit = {},
 ) : CinemaAdapter {
-  public override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+  override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
     val request = CinemaRequest(query, variables)
     listener(request)
 
@@ -72,7 +72,7 @@ public open class CinemaSimpleKtorAdapter(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+  override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
     val request = CinemaRequest(query, variables)
     listener(request)
 

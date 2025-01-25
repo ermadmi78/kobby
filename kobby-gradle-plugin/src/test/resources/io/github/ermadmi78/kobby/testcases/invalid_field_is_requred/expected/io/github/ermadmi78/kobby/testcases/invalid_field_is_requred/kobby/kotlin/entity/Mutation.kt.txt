@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotli
 import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.InvalidFieldIsRequredContext
 import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.InvalidFieldIsRequredDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Mutation {
   public fun __context(): InvalidFieldIsRequredContext
 
-  public fun MutationProjection.__withCurrentProjection(): Unit
+  public fun MutationProjection.__withCurrentProjection()
 }
 
 @InvalidFieldIsRequredDSL
 public interface MutationProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

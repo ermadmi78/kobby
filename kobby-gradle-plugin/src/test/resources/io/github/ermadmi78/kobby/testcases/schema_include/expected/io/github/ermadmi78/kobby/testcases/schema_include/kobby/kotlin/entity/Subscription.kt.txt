@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.entity
 import io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.QueryContext
 import io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.QueryDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Subscription {
   public fun __context(): QueryContext
 
-  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+  public fun SubscriptionProjection.__withCurrentProjection()
 }
 
 @QueryDSL
 public interface SubscriptionProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

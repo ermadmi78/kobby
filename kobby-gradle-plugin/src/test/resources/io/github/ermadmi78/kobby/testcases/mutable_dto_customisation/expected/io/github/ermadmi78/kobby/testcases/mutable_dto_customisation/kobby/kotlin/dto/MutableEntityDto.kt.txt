@@ -30,31 +30,31 @@ import kotlin.text.buildString
 public class MutableEntityDto : EntityDto, AllDto {
   public var id: Long? = null
 
-  public override var title: String? = null
+  override var title: String? = null
 
-  public override var immutableV: ImmutableEntityDto? = null
+  override var immutableV: ImmutableEntityDto? = null
 
-  public override var immutableN: ImmutableEntityDto? = null
+  override var immutableN: ImmutableEntityDto? = null
 
-  public override var immutableListVV: List<ImmutableEntityDto>? = null
+  override var immutableListVV: List<ImmutableEntityDto>? = null
 
-  public override var immutableListNV: List<ImmutableEntityDto?>? = null
+  override var immutableListNV: List<ImmutableEntityDto?>? = null
 
-  public override var immutableListVN: List<ImmutableEntityDto>? = null
+  override var immutableListVN: List<ImmutableEntityDto>? = null
 
-  public override var immutableListNN: List<ImmutableEntityDto?>? = null
+  override var immutableListNN: List<ImmutableEntityDto?>? = null
 
-  public override var mutableV: MutableEntityDto? = null
+  override var mutableV: MutableEntityDto? = null
 
-  public override var mutableN: MutableEntityDto? = null
+  override var mutableN: MutableEntityDto? = null
 
-  public override var mutableListVV: List<MutableEntityDto>? = null
+  override var mutableListVV: List<MutableEntityDto>? = null
 
-  public override var mutableListNV: List<MutableEntityDto?>? = null
+  override var mutableListNV: List<MutableEntityDto?>? = null
 
-  public override var mutableListVN: List<MutableEntityDto>? = null
+  override var mutableListVN: List<MutableEntityDto>? = null
 
-  public override var mutableListNN: List<MutableEntityDto?>? = null
+  override var mutableListNN: List<MutableEntityDto?>? = null
 
   public var additional1: Boolean? = null
 
@@ -62,7 +62,7 @@ public class MutableEntityDto : EntityDto, AllDto {
 
   public var additional3: Boolean? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("MutableEntityDto").append('(')
     append("id").append('=').append(id)
     append(", ").append("title").append('=').append(title)

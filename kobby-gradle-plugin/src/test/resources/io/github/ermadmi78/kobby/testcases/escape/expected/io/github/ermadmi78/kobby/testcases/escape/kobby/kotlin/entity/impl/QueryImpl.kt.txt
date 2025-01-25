@@ -47,32 +47,29 @@ internal class QueryImpl(
   internal val __innerProjection: QueryProjectionImpl,
   internal val __innerDto: QueryDto,
 ) : Query {
-  public override val escapes: List<Escape> by lazy {
+  override val escapes: List<Escape> by lazy {
     if (__innerProjection.__innerEscapes0 == null) {
       error("Property [escapes] is not available - add [escapes] projection to switch on it")
     }
     __innerDto.resolveEscapes(__innerContext, __innerProjection.__innerEscapes0!!)
   }
 
-
-  public override val escapesSelection: List<Escape> by lazy {
+  override val escapesSelection: List<Escape> by lazy {
     if (__innerProjection.__innerEscapesSelection1 == null) {
       error("Property [escapesSelection] is not available - add [escapesSelection] projection to switch on it")
     }
     __innerDto.resolveEscapesSelection(__innerContext, __innerProjection.__innerEscapesSelection1!!)
   }
 
-
-  public override val severalPrimaryKeys: SeveralPrimaryKeys? by lazy {
+  override val severalPrimaryKeys: SeveralPrimaryKeys? by lazy {
     if (__innerProjection.__innerSeveralPrimaryKeys2 == null) {
       error("Property [severalPrimaryKeys] is not available - add [severalPrimaryKeys] projection to switch on it")
     }
     __innerDto.resolveSeveralPrimaryKeys(__innerContext, __innerProjection.__innerSeveralPrimaryKeys2!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Query").append('(')
 
     var counter = 0
@@ -101,9 +98,9 @@ internal class QueryImpl(
     append(')')
   }
 
-  public override fun __context(): EscapeContext = __innerContext
+  override fun __context(): EscapeContext = __innerContext
 
-  public override fun QueryProjection.__withCurrentProjection(): Unit {
+  override fun QueryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -119,27 +116,26 @@ internal open class QueryProjectionImpl : QueryProjection {
 
   internal var __innerSeveralPrimaryKeys2: SeveralPrimaryKeysProjectionImpl? = null
 
-  public override fun escapes(
+  override fun escapes(
     `do`: Int?,
     `by`: Int?,
     __projection: EscapeProjection.() -> Unit,
-  ): Unit {
+  ) {
     __innerEscapes0 = EscapeProjectionImpl().apply(__projection)
     __innerEscapes0Do = `do`
     __innerEscapes0By = `by`
   }
 
-  public override fun escapesSelection(__query: QueryEscapesSelectionQuery.() -> Unit): Unit {
+  override fun escapesSelection(__query: QueryEscapesSelectionQuery.() -> Unit) {
     __innerEscapesSelection1 = QueryEscapesSelectionQueryImpl().apply(__query)
   }
 
-  public override fun severalPrimaryKeys(__projection: SeveralPrimaryKeysProjection.() -> Unit):
-      Unit {
+  override fun severalPrimaryKeys(__projection: SeveralPrimaryKeysProjection.() -> Unit) {
     __innerSeveralPrimaryKeys2 = SeveralPrimaryKeysProjectionImpl().apply(__projection)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection) {
     if ("escapes" !in ignore && __innerEscapes0 != null) {
       __projection.escapes(__innerEscapes0Do, __innerEscapes0By) {
         this@QueryProjectionImpl.__innerEscapes0!!.___innerRepeatProjection(setOf(), this)
@@ -167,7 +163,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("escapes" !in ignore && __innerEscapes0 != null) {
       body.append(' ').append("escapes")
       var counter = 0
@@ -224,7 +220,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("escapesSelection" !in ignore && __innerEscapesSelection1 != null) {
       body.append(' ').append("escapesSelection")
       var counter = 0
@@ -282,7 +278,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: escapes
@@ -304,12 +300,12 @@ internal open class QueryProjectionImpl : QueryProjection {
 }
 
 internal class QueryEscapesSelectionQueryImpl : EscapeProjectionImpl(), QueryEscapesSelectionQuery {
-  public override var `do`: Int? = null
+  override var `do`: Int? = null
 
-  public override var `by`: Int? = null
+  override var `by`: Int? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatSelection(__selection: QueryEscapesSelectionSelection): Unit {
+  internal fun ___innerRepeatSelection(__selection: QueryEscapesSelectionSelection) {
     __selection.`do` = `do`
     __selection.`by` = `by`
   }

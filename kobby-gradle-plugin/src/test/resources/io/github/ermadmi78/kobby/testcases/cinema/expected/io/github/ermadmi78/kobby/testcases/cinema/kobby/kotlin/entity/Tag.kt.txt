@@ -19,7 +19,6 @@ import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 /**
  * Type Tag is introduced for testing types with single value.
@@ -33,7 +32,7 @@ public interface Tag {
 
   public fun __context(): CinemaContext
 
-  public fun TagProjection.__withCurrentProjection(): Unit
+  public fun TagProjection.__withCurrentProjection()
 }
 
 /**
@@ -45,8 +44,8 @@ public interface TagProjection {
   /**
    * The tag value
    */
-  public fun `value`(): Unit
+  public fun `value`()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

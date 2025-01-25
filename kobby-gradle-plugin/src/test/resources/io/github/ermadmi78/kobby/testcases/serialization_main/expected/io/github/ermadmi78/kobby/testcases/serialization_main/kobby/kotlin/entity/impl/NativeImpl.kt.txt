@@ -39,17 +39,17 @@ internal open class NativeQualifiedProjectionImpl : NativeQualifiedProjection {
 
   internal val ___inner__onActor: ActorProjectionImpl = ActorProjectionImpl()
 
-  public override fun __onFilm(__projection: FilmProjection.() -> Unit): Unit {
+  override fun __onFilm(__projection: FilmProjection.() -> Unit) {
     FilmProjectionImpl().apply(__projection).___innerRepeatProjection(setOf(), ___inner__onFilm)
   }
 
-  public override fun __onActor(__projection: ActorProjection.() -> Unit): Unit {
+  override fun __onActor(__projection: ActorProjection.() -> Unit) {
     ActorProjectionImpl().apply(__projection).___innerRepeatProjection(setOf(), ___inner__onActor)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: NativeQualifiedProjection): Unit {
+      __projection: NativeQualifiedProjection) {
     __projection.__onFilm {
       this@NativeQualifiedProjectionImpl.___inner__onFilm.___innerRepeatProjection(setOf(), this)
     }
@@ -67,7 +67,7 @@ internal open class NativeQualifiedProjectionImpl : NativeQualifiedProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     body.append(' ').append("__typename")

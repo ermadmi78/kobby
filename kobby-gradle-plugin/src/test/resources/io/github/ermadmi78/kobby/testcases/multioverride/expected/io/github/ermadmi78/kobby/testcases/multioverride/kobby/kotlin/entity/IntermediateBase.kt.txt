@@ -32,19 +32,18 @@ public interface IntermediateBase {
 
 @MultiOverrideDSL
 public interface IntermediateBaseProjection {
-  public fun intermediateNoOverride(size: Int? = null): Unit
+  public fun intermediateNoOverride(size: Int? = null)
 
-  public fun intermediateMultiOverride(size: Int?): Unit
+  public fun intermediateMultiOverride(size: Int?)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 
 @MultiOverrideDSL
 public interface IntermediateBaseQualification {
   public
-      fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit):
-      Unit
+      fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit)
 }
 
 @MultiOverrideDSL

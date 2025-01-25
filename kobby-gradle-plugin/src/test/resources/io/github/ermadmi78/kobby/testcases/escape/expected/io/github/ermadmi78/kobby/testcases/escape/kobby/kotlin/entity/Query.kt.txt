@@ -31,7 +31,7 @@ public interface Query {
 
   public fun __context(): EscapeContext
 
-  public fun QueryProjection.__withCurrentProjection(): Unit
+  public fun QueryProjection.__withCurrentProjection()
 }
 
 @EscapeDSL
@@ -44,13 +44,13 @@ public interface QueryProjection {
     `do`: Int? = null,
     `by`: Int? = null,
     __projection: EscapeProjection.() -> Unit = {},
-  ): Unit
+  )
 
-  public fun escapesSelection(__query: QueryEscapesSelectionQuery.() -> Unit = {}): Unit
+  public fun escapesSelection(__query: QueryEscapesSelectionQuery.() -> Unit = {})
 
-  public fun severalPrimaryKeys(__projection: SeveralPrimaryKeysProjection.() -> Unit = {}): Unit
+  public fun severalPrimaryKeys(__projection: SeveralPrimaryKeysProjection.() -> Unit = {})
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 

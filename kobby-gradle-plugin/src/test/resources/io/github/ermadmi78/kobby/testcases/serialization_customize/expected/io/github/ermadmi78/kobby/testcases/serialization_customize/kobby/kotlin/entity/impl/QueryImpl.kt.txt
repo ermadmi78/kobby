@@ -44,16 +44,15 @@ internal class QueryImpl(
   internal val __innerProjection: QueryProjectionImpl,
   internal val __innerDto: QueryDto,
 ) : Query {
-  public override val simple: List<Simple> by lazy {
+  override val simple: List<Simple> by lazy {
     if (__innerProjection.__innerSimple0 == null) {
       error("Property [simple] is not available - add [simple] projection to switch on it")
     }
     __innerDto.resolveSimple(__innerContext, __innerProjection.__innerSimple0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Query").append('(')
 
     var counter = 0
@@ -68,9 +67,9 @@ internal class QueryImpl(
     append(')')
   }
 
-  public override fun __context(): SimpleContext = __innerContext
+  override fun __context(): SimpleContext = __innerContext
 
-  public override fun QueryProjection.__withCurrentProjection(): Unit {
+  override fun QueryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -80,13 +79,13 @@ internal open class QueryProjectionImpl : QueryProjection {
 
   internal var __innerSimple0Name: String? = null
 
-  public override fun simple(name: String?, __projection: SimpleProjection.() -> Unit): Unit {
+  override fun simple(name: String?, __projection: SimpleProjection.() -> Unit) {
     __innerSimple0 = SimpleProjectionImpl().apply(__projection)
     __innerSimple0Name = name
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection) {
     if ("simple" !in ignore && __innerSimple0 != null) {
       __projection.simple(__innerSimple0Name) {
         this@QueryProjectionImpl.__innerSimple0!!.___innerRepeatProjection(setOf(), this)
@@ -103,7 +102,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("simple" !in ignore && __innerSimple0 != null) {
       body.append(' ').append("simple")
       var counter = 0
@@ -145,7 +144,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: simple

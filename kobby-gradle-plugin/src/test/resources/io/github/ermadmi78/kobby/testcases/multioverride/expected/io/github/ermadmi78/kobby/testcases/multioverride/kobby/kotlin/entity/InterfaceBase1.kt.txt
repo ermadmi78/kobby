@@ -32,19 +32,18 @@ public interface InterfaceBase1 {
 
 @MultiOverrideDSL
 public interface InterfaceBase1Projection {
-  public fun noOverride1(size: Int? = null): Unit
+  public fun noOverride1(size: Int? = null)
 
-  public fun interfaceMultiOverride(size: Int?): Unit
+  public fun interfaceMultiOverride(size: Int?)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 
 @MultiOverrideDSL
 public interface InterfaceBase1Qualification {
   public
-      fun __onInterfaceMultiOverrideImplementation(__projection: InterfaceMultiOverrideImplementationProjection.() -> Unit):
-      Unit
+      fun __onInterfaceMultiOverrideImplementation(__projection: InterfaceMultiOverrideImplementationProjection.() -> Unit)
 }
 
 @MultiOverrideDSL

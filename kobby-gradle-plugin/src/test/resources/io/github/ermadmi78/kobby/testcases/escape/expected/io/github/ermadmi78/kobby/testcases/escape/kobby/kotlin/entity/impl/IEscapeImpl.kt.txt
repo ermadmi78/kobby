@@ -51,7 +51,7 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
 
   internal val ___inner__onEscape: EscapeProjectionImpl = EscapeProjectionImpl()
 
-  public override fun `is`(): Unit {
+  override fun `is`() {
     __innerIs0 = true
 
     ___inner__onEscape.__innerIs1 = __innerIs0
@@ -59,11 +59,11 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
     ___innerIgnore += "is"
   }
 
-  public override fun points(
+  override fun points(
     `do`: Int?,
     `by`: Int?,
     __projection: PointProjection.() -> Unit,
-  ): Unit {
+  ) {
     __innerPoints2 = PointProjectionImpl().apply(__projection)
     __innerPoints2Do = `do`
     __innerPoints2By = `by`
@@ -75,13 +75,13 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
     ___innerIgnore += "points"
   }
 
-  public override fun __onEscape(__projection: EscapeProjection.() -> Unit): Unit {
+  override fun __onEscape(__projection: EscapeProjection.() -> Unit) {
     EscapeProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onEscape)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: IEscapeQualifiedProjection): Unit {
+      __projection: IEscapeQualifiedProjection) {
     if ("is" !in ignore && __innerIs0) {
       __projection.`is`()
     }
@@ -104,7 +104,7 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("points" !in ignore && __innerPoints2 != null) {
       body.append(' ').append("points")
       var counter = 0
@@ -161,7 +161,7 @@ internal open class IEscapeQualifiedProjectionImpl : IEscapeQualifiedProjection 
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: is

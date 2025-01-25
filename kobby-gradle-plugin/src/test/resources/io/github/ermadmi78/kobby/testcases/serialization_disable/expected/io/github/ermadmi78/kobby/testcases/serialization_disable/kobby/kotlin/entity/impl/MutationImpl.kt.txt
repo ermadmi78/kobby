@@ -40,16 +40,15 @@ internal class MutationImpl(
   internal val __innerProjection: MutationProjectionImpl,
   internal val __innerDto: MutationDto,
 ) : Mutation {
-  public override val create: Simple by lazy {
+  override val create: Simple by lazy {
     if (__innerProjection.__innerCreate0 == null) {
       error("Property [create] is not available - add [create] projection to switch on it")
     }
     __innerDto.resolveCreate(__innerContext, __innerProjection.__innerCreate0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Mutation").append('(')
 
     var counter = 0
@@ -64,9 +63,9 @@ internal class MutationImpl(
     append(')')
   }
 
-  public override fun __context(): SimpleContext = __innerContext
+  override fun __context(): SimpleContext = __innerContext
 
-  public override fun MutationProjection.__withCurrentProjection(): Unit {
+  override fun MutationProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -76,14 +75,13 @@ internal open class MutationProjectionImpl : MutationProjection {
 
   internal var __innerCreate0Input: SimpleInput? = null
 
-  public override fun create(input: SimpleInput?, __projection: SimpleProjection.() -> Unit): Unit {
+  override fun create(input: SimpleInput?, __projection: SimpleProjection.() -> Unit) {
     __innerCreate0 = SimpleProjectionImpl().apply(__projection)
     __innerCreate0Input = input
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection) {
     if ("create" !in ignore && __innerCreate0 != null) {
       __projection.create(__innerCreate0Input) {
         this@MutationProjectionImpl.__innerCreate0!!.___innerRepeatProjection(setOf(), this)
@@ -100,7 +98,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("create" !in ignore && __innerCreate0 != null) {
       body.append(' ').append("create")
       var counter = 0
@@ -142,7 +140,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: create

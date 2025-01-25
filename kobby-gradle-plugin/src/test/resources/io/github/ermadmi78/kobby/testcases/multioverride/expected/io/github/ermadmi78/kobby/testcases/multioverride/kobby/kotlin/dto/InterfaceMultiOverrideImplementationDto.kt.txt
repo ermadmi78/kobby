@@ -23,11 +23,13 @@ import kotlin.also
 import kotlin.apply
 
 public data class InterfaceMultiOverrideImplementationDto(
-  public override val noOverride1: String? = null,
-  public override val noOverride2: String? = null,
-  public override val interfaceMultiOverride: String? = null,
+  override val noOverride1: String? = null,
+  override val noOverride2: String? = null,
+  override val interfaceMultiOverride: String? = null,
   public val finalField: String? = null,
-) : InterfaceMultiOverrideDto, InterfaceBase1Dto, InterfaceBase2Dto
+) : InterfaceMultiOverrideDto,
+    InterfaceBase1Dto,
+    InterfaceBase2Dto
 
 public fun InterfaceMultiOverrideImplementationDto.toBuilder():
     InterfaceMultiOverrideImplementationDtoBuilder =

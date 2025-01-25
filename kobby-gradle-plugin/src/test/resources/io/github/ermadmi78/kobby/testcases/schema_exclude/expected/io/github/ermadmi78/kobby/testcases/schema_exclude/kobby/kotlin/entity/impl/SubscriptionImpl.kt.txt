@@ -38,16 +38,15 @@ internal class SubscriptionImpl(
   internal val __innerProjection: SubscriptionProjectionImpl,
   internal val __innerDto: SubscriptionDto,
 ) : Subscription {
-  public override val countryCreated: Country by lazy {
+  override val countryCreated: Country by lazy {
     if (__innerProjection.__innerCountryCreated0 == null) {
       error("Property [countryCreated] is not available - add [countryCreated] projection to switch on it")
     }
     __innerDto.resolveCountryCreated(__innerContext, __innerProjection.__innerCountryCreated0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Subscription").append('(')
 
     var counter = 0
@@ -62,9 +61,9 @@ internal class SubscriptionImpl(
     append(')')
   }
 
-  public override fun __context(): GraphqlContext = __innerContext
+  override fun __context(): GraphqlContext = __innerContext
 
-  public override fun SubscriptionProjection.__withCurrentProjection(): Unit {
+  override fun SubscriptionProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -72,13 +71,12 @@ internal class SubscriptionImpl(
 internal open class SubscriptionProjectionImpl : SubscriptionProjection {
   internal var __innerCountryCreated0: CountryProjectionImpl? = null
 
-  public override fun countryCreated(__projection: CountryProjection.() -> Unit): Unit {
+  override fun countryCreated(__projection: CountryProjection.() -> Unit) {
     __innerCountryCreated0 = CountryProjectionImpl().apply(__projection)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection) {
     if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
       __projection.countryCreated {
         this@SubscriptionProjectionImpl.__innerCountryCreated0!!.___innerRepeatProjection(setOf(), this)
@@ -95,7 +93,7 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: countryCreated

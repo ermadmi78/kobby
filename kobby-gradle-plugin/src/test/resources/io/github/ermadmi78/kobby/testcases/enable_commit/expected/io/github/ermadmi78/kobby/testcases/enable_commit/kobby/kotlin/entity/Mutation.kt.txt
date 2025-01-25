@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.entity
 import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.enable_commit.kobby.kotlin.CinemaDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Mutation {
   public fun __context(): CinemaContext
 
-  public fun MutationProjection.__withCurrentProjection(): Unit
+  public fun MutationProjection.__withCurrentProjection()
 }
 
 @CinemaDSL
 public interface MutationProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

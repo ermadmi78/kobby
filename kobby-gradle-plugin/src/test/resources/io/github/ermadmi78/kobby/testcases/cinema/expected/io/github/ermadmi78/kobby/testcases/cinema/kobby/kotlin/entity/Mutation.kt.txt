@@ -61,7 +61,7 @@ public interface Mutation {
 
   public fun __context(): CinemaContext
 
-  public fun MutationProjection.__withCurrentProjection(): Unit
+  public fun MutationProjection.__withCurrentProjection()
 }
 
 @CinemaDSL
@@ -71,7 +71,7 @@ public interface MutationProjection {
    *
    * @param name Name of the country
    */
-  public fun createCountry(name: String, __projection: CountryProjection.() -> Unit = {}): Unit
+  public fun createCountry(name: String, __projection: CountryProjection.() -> Unit = {})
 
   /**
    * Create film
@@ -83,7 +83,7 @@ public interface MutationProjection {
     countryId: Long,
     film: FilmInput,
     __query: MutationCreateFilmQuery.() -> Unit = {},
-  ): Unit
+  )
 
   /**
    * Create actor
@@ -95,7 +95,7 @@ public interface MutationProjection {
     countryId: Long,
     actor: ActorInput,
     __query: MutationCreateActorQuery.() -> Unit = {},
-  ): Unit
+  )
 
   /**
    * Associate film with actor
@@ -103,7 +103,7 @@ public interface MutationProjection {
    * @param filmId ID of film %
    * @param actorId ID of actor
    */
-  public fun associate(filmId: Long, actorId: Long): Unit
+  public fun associate(filmId: Long, actorId: Long)
 
   /**
    * Add tag to film.
@@ -112,7 +112,7 @@ public interface MutationProjection {
    * @param filmId ID of film
    * @param tagValue Tag value
    */
-  public fun tagFilm(filmId: Long, tagValue: String): Unit
+  public fun tagFilm(filmId: Long, tagValue: String)
 
   /**
    * Add tag to actor.
@@ -121,9 +121,9 @@ public interface MutationProjection {
    * @param actorId ID of actor
    * @param tagValue Tag value
    */
-  public fun tagActor(actorId: Long, tagValue: String): Unit
+  public fun tagActor(actorId: Long, tagValue: String)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 

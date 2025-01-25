@@ -46,7 +46,7 @@ public data class SeveralPrimaryKeysDto(
   public val result: Int? = null,
   public val block: String? = null,
 ) {
-  public override fun equals(other: Any?): Boolean {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -81,7 +81,7 @@ public data class SeveralPrimaryKeysDto(
     return true
   }
 
-  public override fun hashCode(): Int {
+  override fun hashCode(): Int {
     var result = this.`if`?.hashCode() ?: 0
     result = 31 * result + (this.`do`?.hashCode() ?: 0)
     result = 31 * result + (this.`while`?.hashCode() ?: 0)

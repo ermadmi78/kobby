@@ -27,7 +27,7 @@ public interface Query {
 
   public fun __context(): CinemaContext
 
-  public fun QueryProjection.__withCurrentProjection(): Unit
+  public fun QueryProjection.__withCurrentProjection()
 }
 
 @CinemaDSL
@@ -40,8 +40,8 @@ public interface QueryProjection {
     offset: Int? = null,
     limit: Int? = null,
     __projection: CountryProjection.() -> Unit,
-  ): Unit
+  )
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

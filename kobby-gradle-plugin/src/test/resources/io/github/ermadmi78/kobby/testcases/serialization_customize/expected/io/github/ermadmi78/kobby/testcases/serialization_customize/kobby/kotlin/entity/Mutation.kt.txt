@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin
 import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.SimpleContext
 import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.SimpleDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Mutation {
   public fun __context(): SimpleContext
 
-  public fun MutationProjection.__withCurrentProjection(): Unit
+  public fun MutationProjection.__withCurrentProjection()
 }
 
 @SimpleDSL
 public interface MutationProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

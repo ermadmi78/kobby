@@ -20,7 +20,6 @@ import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountryD
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Country {
   public val id: Long
@@ -29,15 +28,15 @@ public interface Country {
 
   public fun __context(): CountryContext
 
-  public fun CountryProjection.__withCurrentProjection(): Unit
+  public fun CountryProjection.__withCurrentProjection()
 }
 
 @CountryDSL
 public interface CountryProjection {
-  public fun id(): Unit
+  public fun id()
 
-  public fun name(): Unit
+  public fun name()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

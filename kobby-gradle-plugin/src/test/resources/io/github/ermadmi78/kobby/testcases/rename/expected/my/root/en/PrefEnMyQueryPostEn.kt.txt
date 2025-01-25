@@ -41,12 +41,12 @@ public interface PrefEnMyQueryPostEn {
 
   public fun context(): PrefCtxContextPostCtx
 
-  public fun PrePrMyQueryPostPr.withCurrentProjection(): Unit
+  public fun PrePrMyQueryPostPr.withCurrentProjection()
 }
 
 @PrefCtxDSLPostCtx
 public interface PrePrMyQueryPostPr {
-  public fun withPrCountryWithPo(id: Long, projection: PrePrCountryPostPr.() -> Unit = {}): Unit
+  public fun withPrCountryWithPo(id: Long, projection: PrePrCountryPostPr.() -> Unit = {})
 
   /**
    * @param limit Default: 10
@@ -55,17 +55,17 @@ public interface PrePrMyQueryPostPr {
     name: String? = null,
     limit: Int? = null,
     projection: PrePrCountryPostPr.() -> Unit = {},
-  ): Unit
+  )
 
-  public fun withPrFilmWithPo(id: Long, projection: PrePrFilmPostPr.() -> Unit = {}): Unit
+  public fun withPrFilmWithPo(id: Long, projection: PrePrFilmPostPr.() -> Unit = {})
 
-  public fun withPrFilmsWithPo(query: PreQrMyQueryFilmsPostQr.() -> Unit = {}): Unit
+  public fun withPrFilmsWithPo(query: PreQrMyQueryFilmsPostQr.() -> Unit = {})
 
-  public fun withPrActorWithPo(id: Long, projection: PrePrActorPostPr.() -> Unit = {}): Unit
+  public fun withPrActorWithPo(id: Long, projection: PrePrActorPostPr.() -> Unit = {})
 
-  public fun withPrActorsWithPo(query: PreQrMyQueryActorsPostQr.() -> Unit = {}): Unit
+  public fun withPrActorsWithPo(query: PreQrMyQueryActorsPostQr.() -> Unit = {})
 
-  public fun minimize(): Unit {
+  public fun minimize() {
   }
 }
 

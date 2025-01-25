@@ -26,13 +26,13 @@ public interface Query {
 
   public fun __context(): QueryContext
 
-  public fun QueryProjection.__withCurrentProjection(): Unit
+  public fun QueryProjection.__withCurrentProjection()
 }
 
 @QueryDSL
 public interface QueryProjection {
-  public fun countries(__projection: CountryProjection.() -> Unit): Unit
+  public fun countries(__projection: CountryProjection.() -> Unit)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

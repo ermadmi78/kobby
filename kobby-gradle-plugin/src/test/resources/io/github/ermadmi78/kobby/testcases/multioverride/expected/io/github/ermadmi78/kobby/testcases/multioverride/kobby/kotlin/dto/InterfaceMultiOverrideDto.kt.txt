@@ -19,9 +19,9 @@ import kotlin.String
 import kotlin.Suppress
 
 public interface InterfaceMultiOverrideDto : InterfaceBase1Dto, InterfaceBase2Dto {
-  public override val noOverride1: String?
+  override val noOverride1: String?
 
-  public override val noOverride2: String?
+  override val noOverride2: String?
 
-  public override val interfaceMultiOverride: String?
+  override val interfaceMultiOverride: String?
 }

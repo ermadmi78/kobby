@@ -33,20 +33,20 @@ public interface Taggable : Entity {
   /**
    * Unique identifier of entity %
    */
-  public override val id: Long
+  override val id: Long
 
   /**
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
    */
-  public override val fields: Map<String, Any?>
+  override val fields: Map<String, Any?>
 
   /**
    * Tags of entity
    */
   public val tags: List<Tag>
 
-  public override fun __context(): CinemaContext
+  override fun __context(): CinemaContext
 }
 
 /**
@@ -59,14 +59,14 @@ public interface TaggableProjection : EntityProjection {
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
    */
-  public override fun fields(__selection: EntityFieldsSelection.() -> Unit): Unit
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit)
 
   /**
    * Tags of entity
    */
-  public fun tags(__projection: TagProjection.() -> Unit): Unit
+  public fun tags(__projection: TagProjection.() -> Unit)
 
-  public override fun __minimize(): Unit {
+  override fun __minimize() {
   }
 }
 
@@ -80,13 +80,13 @@ public interface TaggableQualification {
    * Film entity.
    * The film belongs to one country and can be played by several actors.
    */
-  public fun __onFilm(__projection: FilmProjection.() -> Unit = {}): Unit
+  public fun __onFilm(__projection: FilmProjection.() -> Unit = {})
 
   /**
    * Actor entity.
    * The actor belongs to one country and can play in several films.
    */
-  public fun __onActor(__projection: ActorProjection.() -> Unit = {}): Unit
+  public fun __onActor(__projection: ActorProjection.() -> Unit = {})
 }
 
 /**

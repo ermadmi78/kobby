@@ -46,7 +46,7 @@ internal open class BaseQualifiedProjectionImpl : BaseQualifiedProjection {
 
   internal val ___inner__onCountry: CountryProjectionImpl = CountryProjectionImpl()
 
-  public override fun id(): Unit {
+  override fun id() {
     __innerId0 = true
 
     ___inner__onCountry.__innerId0 = __innerId0
@@ -54,7 +54,7 @@ internal open class BaseQualifiedProjectionImpl : BaseQualifiedProjection {
     ___innerIgnore += "id"
   }
 
-  public override fun name(): Unit {
+  override fun name() {
     __innerName1 = true
 
     ___inner__onCountry.__innerName1 = __innerName1
@@ -62,7 +62,7 @@ internal open class BaseQualifiedProjectionImpl : BaseQualifiedProjection {
     ___innerIgnore += "name"
   }
 
-  public override fun description(): Unit {
+  override fun description() {
     __innerDescription2 = true
 
     ___inner__onCountry.__innerDescription2 = __innerDescription2
@@ -70,13 +70,13 @@ internal open class BaseQualifiedProjectionImpl : BaseQualifiedProjection {
     ___innerIgnore += "description"
   }
 
-  public override fun __onCountry(__projection: CountryProjection.() -> Unit): Unit {
+  override fun __onCountry(__projection: CountryProjection.() -> Unit) {
     CountryProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onCountry)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: BaseQualifiedProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>,
+      __projection: BaseQualifiedProjection) {
     if ("id" !in ignore && __innerId0) {
       __projection.id()
     }
@@ -100,7 +100,7 @@ internal open class BaseQualifiedProjectionImpl : BaseQualifiedProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id

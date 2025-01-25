@@ -39,18 +39,18 @@ public class FilmDto : EntityDto, TaggableDto, NativeDto {
   /**
    * Unique identifier of entity
    */
-  public override var id: Long? = null
+  override var id: Long? = null
 
   /**
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
    */
-  public override var fields: JsonObject? = null
+  override var fields: JsonObject? = null
 
   /**
    * Tags of entity
    */
-  public override var tags: List<TagDto>? = null
+  override var tags: List<TagDto>? = null
 
   /**
    * Title of film
@@ -78,7 +78,7 @@ public class FilmDto : EntityDto, TaggableDto, NativeDto {
    */
   public var actors: List<ActorDto>? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("FilmDto").append('(')
     append("id").append('=').append(id)
     append(", ").append("fields").append('=').append(fields)

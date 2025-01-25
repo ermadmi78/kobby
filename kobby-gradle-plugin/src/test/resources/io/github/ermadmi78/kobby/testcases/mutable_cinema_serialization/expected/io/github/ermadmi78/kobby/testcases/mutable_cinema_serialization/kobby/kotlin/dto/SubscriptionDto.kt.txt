@@ -44,7 +44,7 @@ public class SubscriptionDto {
    */
   public var actorCreated: ActorDto? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("SubscriptionDto").append('(')
     append("countryCreated").append('=').append(countryCreated)
     append(", ").append("filmCreated").append('=').append(filmCreated)

@@ -23,13 +23,15 @@ import kotlin.also
 import kotlin.apply
 
 public data class ComplexMultiOverrideDto(
-  public override val noOverride0: String? = null,
-  public override val noOverride1: String? = null,
-  public override val noOverride2: String? = null,
-  public override val complexMultiOverride: String? = null,
-  public override val intermediateMultiOverride: String? = null,
+  override val noOverride0: String? = null,
+  override val noOverride1: String? = null,
+  override val noOverride2: String? = null,
+  override val complexMultiOverride: String? = null,
+  override val intermediateMultiOverride: String? = null,
   public val finalField: String? = null,
-) : ComplexBase1Dto, ComplexIntermediateBase1Dto, ComplexBase2Dto
+) : ComplexBase1Dto,
+    ComplexIntermediateBase1Dto,
+    ComplexBase2Dto
 
 public fun ComplexMultiOverrideDto.toBuilder(): ComplexMultiOverrideDtoBuilder =
     ComplexMultiOverrideDtoBuilder().also {

@@ -55,10 +55,10 @@ internal class FilmImpl(
   internal val __innerProjection: FilmProjectionImpl,
   internal val __innerDto: FilmDto,
 ) : Film {
-  public override val id: Long
+  override val id: Long
     get() = __innerDto.id!!
 
-  public override val fields: Map<String, Any?>
+  override val fields: Map<String, Any?>
     get() {
       if (__innerProjection.__innerFields1 == null) {
         error("Property [fields] is not available - add [fields] projection to switch on it")
@@ -66,15 +66,14 @@ internal class FilmImpl(
       return __innerDto.fields!!
     }
 
-  public override val tags: List<Tag> by lazy {
+  override val tags: List<Tag> by lazy {
     if (__innerProjection.__innerTags2 == null) {
       error("Property [tags] is not available - add [tags] projection to switch on it")
     }
     __innerDto.resolveTags(__innerContext, __innerProjection.__innerTags2!!)
   }
 
-
-  public override val title: String
+  override val title: String
     get() {
       if (!__innerProjection.__innerTitle3) {
         error("Property [title] is not available - remove [__withoutTitle] projection to switch on it")
@@ -82,7 +81,7 @@ internal class FilmImpl(
       return __innerDto.title!!
     }
 
-  public override val genre: Genre
+  override val genre: Genre
     get() {
       if (!__innerProjection.__innerGenre4) {
         error("Property [genre] is not available - add [genre] projection to switch on it")
@@ -90,26 +89,24 @@ internal class FilmImpl(
       return __innerDto.genre!!
     }
 
-  public override val countryId: Long
+  override val countryId: Long
     get() = __innerDto.countryId!!
 
-  public override val country: Country by lazy {
+  override val country: Country by lazy {
     if (__innerProjection.__innerCountry6 == null) {
       error("Property [country] is not available - add [country] projection to switch on it")
     }
     __innerDto.resolveCountry(__innerContext, __innerProjection.__innerCountry6!!)
   }
 
-
-  public override val actors: List<Actor> by lazy {
+  override val actors: List<Actor> by lazy {
     if (__innerProjection.__innerActors7 == null) {
       error("Property [actors] is not available - add [actors] projection to switch on it")
     }
     __innerDto.resolveActors(__innerContext, __innerProjection.__innerActors7!!)
   }
 
-
-  public override fun equals(other: Any?): Boolean {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -121,10 +118,10 @@ internal class FilmImpl(
     return __innerDto.id == other.__innerDto.id
   }
 
-  public override fun hashCode(): Int = __innerDto.id?.hashCode() ?: 0
+  override fun hashCode(): Int = __innerDto.id?.hashCode() ?: 0
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Film").append('(')
 
     var counter = 0
@@ -188,9 +185,9 @@ internal class FilmImpl(
     append(')')
   }
 
-  public override fun __context(): CinemaContext = __innerContext
+  override fun __context(): CinemaContext = __innerContext
 
-  public override fun FilmProjection.__withCurrentProjection(): Unit {
+  override fun FilmProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -208,32 +205,32 @@ internal open class FilmProjectionImpl : FilmProjection {
 
   internal var __innerActors7: FilmActorsQueryImpl? = null
 
-  public override fun fields(__selection: EntityFieldsSelection.() -> Unit): Unit {
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit) {
     __innerFields1 = EntityFieldsSelectionImpl().apply(__selection)
   }
 
-  public override fun tags(__projection: TagProjection.() -> Unit): Unit {
+  override fun tags(__projection: TagProjection.() -> Unit) {
     __innerTags2 = TagProjectionImpl().apply(__projection)
   }
 
-  public override fun __withoutTitle(): Unit {
+  override fun __withoutTitle() {
     __innerTitle3 = false
   }
 
-  public override fun genre(): Unit {
+  override fun genre() {
     __innerGenre4 = true
   }
 
-  public override fun country(__projection: CountryProjection.() -> Unit): Unit {
+  override fun country(__projection: CountryProjection.() -> Unit) {
     __innerCountry6 = CountryProjectionImpl().apply(__projection)
   }
 
-  public override fun actors(__query: FilmActorsQuery.() -> Unit): Unit {
+  override fun actors(__query: FilmActorsQuery.() -> Unit) {
     __innerActors7 = FilmActorsQueryImpl().apply(__query)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: FilmProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: FilmProjection) {
     if ("fields" !in ignore && __innerFields1 != null) {
       __projection.fields {
         this@FilmProjectionImpl.__innerFields1!!.___innerRepeatSelection(this)
@@ -272,7 +269,7 @@ internal open class FilmProjectionImpl : FilmProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("fields" !in ignore && __innerFields1 != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -311,7 +308,7 @@ internal open class FilmProjectionImpl : FilmProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("actors" !in ignore && __innerActors7 != null) {
       body.append(' ').append("actors")
       var counter = 0
@@ -446,7 +443,7 @@ internal open class FilmProjectionImpl : FilmProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id
@@ -496,22 +493,22 @@ internal open class FilmProjectionImpl : FilmProjection {
 }
 
 internal class FilmActorsQueryImpl : ActorProjectionImpl(), FilmActorsQuery {
-  public override var firstName: String? = null
+  override var firstName: String? = null
 
-  public override var lastName: String? = null
+  override var lastName: String? = null
 
-  public override var birthdayFrom: LocalDate? = null
+  override var birthdayFrom: LocalDate? = null
 
-  public override var birthdayTo: LocalDate? = null
+  override var birthdayTo: LocalDate? = null
 
-  public override var gender: Gender? = null
+  override var gender: Gender? = null
 
-  public override var limit: Int? = null
+  override var limit: Int? = null
 
-  public override var offset: Int? = null
+  override var offset: Int? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatSelection(__selection: FilmActorsSelection): Unit {
+  internal fun ___innerRepeatSelection(__selection: FilmActorsSelection) {
     __selection.firstName = firstName
     __selection.lastName = lastName
     __selection.birthdayFrom = birthdayFrom

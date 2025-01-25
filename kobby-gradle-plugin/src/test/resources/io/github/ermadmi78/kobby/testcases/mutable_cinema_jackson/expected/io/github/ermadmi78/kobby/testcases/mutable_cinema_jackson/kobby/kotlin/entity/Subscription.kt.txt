@@ -39,7 +39,7 @@ public interface Subscription {
 
   public fun __context(): CinemaContext
 
-  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+  public fun SubscriptionProjection.__withCurrentProjection()
 }
 
 @CinemaDSL
@@ -47,20 +47,18 @@ public interface SubscriptionProjection {
   /**
    * Listen new countries
    */
-  public fun countryCreated(__projection: CountryProjection.() -> Unit = {}): Unit
+  public fun countryCreated(__projection: CountryProjection.() -> Unit = {})
 
   /**
    * Listen new films
    */
-  public fun filmCreated(countryId: Long? = null, __projection: FilmProjection.() -> Unit = {}):
-      Unit
+  public fun filmCreated(countryId: Long? = null, __projection: FilmProjection.() -> Unit = {})
 
   /**
    * Listen new actors
    */
-  public fun actorCreated(countryId: Long? = null, __projection: ActorProjection.() -> Unit = {}):
-      Unit
+  public fun actorCreated(countryId: Long? = null, __projection: ActorProjection.() -> Unit = {})
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

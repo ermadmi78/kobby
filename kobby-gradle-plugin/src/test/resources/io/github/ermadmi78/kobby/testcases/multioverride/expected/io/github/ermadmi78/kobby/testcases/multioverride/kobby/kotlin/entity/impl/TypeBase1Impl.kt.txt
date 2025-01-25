@@ -51,7 +51,7 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
   internal val ___inner__onTypeMultiOverride: TypeMultiOverrideProjectionImpl =
       TypeMultiOverrideProjectionImpl()
 
-  public override fun noOverride1(size: Int?): Unit {
+  override fun noOverride1(size: Int?) {
     __innerNoOverride10 = true
     __innerNoOverride10Size = size
 
@@ -61,7 +61,7 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
     ___innerIgnore += "noOverride1"
   }
 
-  public override fun typeMultiOverride(size: Int?): Unit {
+  override fun typeMultiOverride(size: Int?) {
     __innerTypeMultiOverride1 = true
     __innerTypeMultiOverride1Size = size
 
@@ -71,14 +71,13 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
     ___innerIgnore += "typeMultiOverride"
   }
 
-  public override fun __onTypeMultiOverride(__projection: TypeMultiOverrideProjection.() -> Unit):
-      Unit {
+  override fun __onTypeMultiOverride(__projection: TypeMultiOverrideProjection.() -> Unit) {
     TypeMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onTypeMultiOverride)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: TypeBase1QualifiedProjection): Unit {
+      __projection: TypeBase1QualifiedProjection) {
     if ("noOverride1" !in ignore && __innerNoOverride10) {
       __projection.noOverride1(__innerNoOverride10Size)
     }
@@ -99,7 +98,7 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride1" !in ignore && __innerNoOverride10) {
       body.append(' ').append("noOverride1")
       var counter = 0
@@ -138,7 +137,7 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("typeMultiOverride" !in ignore && __innerTypeMultiOverride1) {
       body.append(' ').append("typeMultiOverride")
       var counter = 0
@@ -177,7 +176,7 @@ internal open class TypeBase1QualifiedProjectionImpl : TypeBase1QualifiedProject
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: noOverride1
