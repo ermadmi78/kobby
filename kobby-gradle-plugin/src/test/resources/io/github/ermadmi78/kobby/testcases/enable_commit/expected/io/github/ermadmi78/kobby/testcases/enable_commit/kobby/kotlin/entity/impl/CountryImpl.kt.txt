@@ -45,7 +45,7 @@ internal class CountryImpl(
   internal val __innerProjection: CountryProjectionImpl,
   internal val __innerDto: CountryDto,
 ) : Country {
-  public override val id: Long
+  override val id: Long
     get() {
       if (!__innerProjection.__innerId0) {
         error("Property [id] is not available - add [id] projection to switch on it")
@@ -53,7 +53,7 @@ internal class CountryImpl(
       return __innerDto.id!!
     }
 
-  public override val name: String
+  override val name: String
     get() {
       if (!__innerProjection.__innerName1) {
         error("Property [name] is not available - add [name] projection to switch on it")
@@ -61,16 +61,15 @@ internal class CountryImpl(
       return __innerDto.name!!
     }
 
-  public override val films: List<Film> by lazy {
+  override val films: List<Film> by lazy {
     if (__innerProjection.__innerFilms2 == null) {
       error("Property [films] is not available - add [films] projection to switch on it")
     }
     __innerDto.resolveFilms(__innerContext, __innerProjection.__innerFilms2!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Country").append('(')
 
     var counter = 0
@@ -99,9 +98,9 @@ internal class CountryImpl(
     append(')')
   }
 
-  public override fun __context(): CinemaContext = __innerContext
+  override fun __context(): CinemaContext = __innerContext
 
-  public override fun CountryProjection.__withCurrentProjection(): Unit {
+  override fun CountryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -117,27 +116,26 @@ internal open class CountryProjectionImpl : CountryProjection {
 
   internal var __innerFilms2Limit: Int? = null
 
-  public override fun id(): Unit {
+  override fun id() {
     __innerId0 = true
   }
 
-  public override fun name(): Unit {
+  override fun name() {
     __innerName1 = true
   }
 
-  public override fun films(
+  override fun films(
     offset: Int?,
     limit: Int?,
     __projection: FilmProjection.() -> Unit,
-  ): Unit {
+  ) {
     __innerFilms2 = FilmProjectionImpl().apply(__projection)
     __innerFilms2Offset = offset
     __innerFilms2Limit = limit
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection) {
     if ("id" !in ignore && __innerId0) {
       __projection.id()
     }
@@ -160,7 +158,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("films" !in ignore && __innerFilms2 != null) {
       body.append(' ').append("films")
       var counter = 0
@@ -217,7 +215,7 @@ internal open class CountryProjectionImpl : CountryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id

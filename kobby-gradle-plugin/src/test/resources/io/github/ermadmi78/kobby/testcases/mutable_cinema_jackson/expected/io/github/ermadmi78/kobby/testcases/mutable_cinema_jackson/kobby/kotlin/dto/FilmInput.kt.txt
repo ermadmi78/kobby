@@ -41,7 +41,7 @@ public class FilmInput {
    */
   public var genre: Genre? = Genre.DRAMA
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("FilmInput").append('(')
     append("title").append('=').append(title)
     append(", ").append("genre").append('=').append(genre)

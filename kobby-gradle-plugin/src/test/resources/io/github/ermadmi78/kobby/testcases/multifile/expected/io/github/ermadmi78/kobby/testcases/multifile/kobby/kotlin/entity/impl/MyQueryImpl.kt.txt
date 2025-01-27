@@ -42,16 +42,15 @@ internal class MyQueryImpl(
   internal val __innerProjection: MyQueryProjectionImpl,
   internal val __innerDto: MyQueryDto,
 ) : MyQuery {
-  public override val find: List<MyResult> by lazy {
+  override val find: List<MyResult> by lazy {
     if (__innerProjection.__innerFind0 == null) {
       error("Property [find] is not available - add [find] projection to switch on it")
     }
     __innerDto.resolveFind(__innerContext, __innerProjection.__innerFind0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("MyQuery").append('(')
 
     var counter = 0
@@ -66,9 +65,9 @@ internal class MyQueryImpl(
     append(')')
   }
 
-  public override fun __context(): GraphqlContext = __innerContext
+  override fun __context(): GraphqlContext = __innerContext
 
-  public override fun MyQueryProjection.__withCurrentProjection(): Unit {
+  override fun MyQueryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -78,14 +77,13 @@ internal open class MyQueryProjectionImpl : MyQueryProjection {
 
   internal var __innerFind0Pattern: String? = null
 
-  public override fun find(pattern: String, __projection: MyResultProjection.() -> Unit): Unit {
+  override fun find(pattern: String, __projection: MyResultProjection.() -> Unit) {
     __innerFind0 = MyResultProjectionImpl().apply(__projection)
     __innerFind0Pattern = pattern
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MyQueryProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MyQueryProjection) {
     if ("find" !in ignore && __innerFind0 != null) {
       __projection.find(__innerFind0Pattern!!) {
         this@MyQueryProjectionImpl.__innerFind0!!.___innerRepeatProjection(setOf(), this)
@@ -102,7 +100,7 @@ internal open class MyQueryProjectionImpl : MyQueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("find" !in ignore && __innerFind0 != null) {
       body.append(' ').append("find")
       var counter = 0
@@ -144,7 +142,7 @@ internal open class MyQueryProjectionImpl : MyQueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: find

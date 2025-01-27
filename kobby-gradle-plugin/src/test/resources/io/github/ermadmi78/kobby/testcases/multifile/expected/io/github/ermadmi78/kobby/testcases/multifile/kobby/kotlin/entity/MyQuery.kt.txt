@@ -27,13 +27,13 @@ public interface MyQuery {
 
   public fun __context(): GraphqlContext
 
-  public fun MyQueryProjection.__withCurrentProjection(): Unit
+  public fun MyQueryProjection.__withCurrentProjection()
 }
 
 @GraphqlDSL
 public interface MyQueryProjection {
-  public fun find(pattern: String, __projection: MyResultProjection.() -> Unit): Unit
+  public fun find(pattern: String, __projection: MyResultProjection.() -> Unit)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

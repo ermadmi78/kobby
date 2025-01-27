@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.entity
 import io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.GraphqlContext
 import io.github.ermadmi78.kobby.testcases.schema_exclude.kobby.kotlin.GraphqlDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Mutation {
   public fun __context(): GraphqlContext
 
-  public fun MutationProjection.__withCurrentProjection(): Unit
+  public fun MutationProjection.__withCurrentProjection()
 }
 
 @GraphqlDSL
 public interface MutationProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

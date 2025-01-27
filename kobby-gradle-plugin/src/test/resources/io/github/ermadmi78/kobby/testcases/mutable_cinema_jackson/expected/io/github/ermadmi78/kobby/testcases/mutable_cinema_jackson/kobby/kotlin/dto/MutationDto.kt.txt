@@ -69,7 +69,7 @@ public class MutationDto {
    */
   public var tagActor: Boolean? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("MutationDto").append('(')
     append("createCountry").append('=').append(createCountry)
     append(", ").append("createFilm").append('=').append(createFilm)

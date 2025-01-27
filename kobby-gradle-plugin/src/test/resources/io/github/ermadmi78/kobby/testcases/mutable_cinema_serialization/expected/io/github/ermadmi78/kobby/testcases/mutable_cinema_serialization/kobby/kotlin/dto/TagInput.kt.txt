@@ -36,7 +36,7 @@ public class TagInput {
    */
   public var `value`: String? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("TagInput").append('(')
     append("value").append('=').append(`value`)
     append(')')

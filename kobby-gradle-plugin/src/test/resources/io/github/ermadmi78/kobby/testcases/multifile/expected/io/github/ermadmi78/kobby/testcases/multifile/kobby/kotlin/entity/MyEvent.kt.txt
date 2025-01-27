@@ -20,7 +20,6 @@ import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlDSL
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface MyEvent {
   public val id: Long
@@ -29,15 +28,15 @@ public interface MyEvent {
 
   public fun __context(): GraphqlContext
 
-  public fun MyEventProjection.__withCurrentProjection(): Unit
+  public fun MyEventProjection.__withCurrentProjection()
 }
 
 @GraphqlDSL
 public interface MyEventProjection {
-  public fun id(): Unit
+  public fun id()
 
-  public fun name(): Unit
+  public fun name()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

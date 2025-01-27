@@ -54,56 +54,50 @@ public class PreImMyQueryPostIm(
   public val innerProjectionPin: PreImPrePrMyQueryPostPrPostIm,
   public val innerDtoPin: DPrefMyQueryDPost,
 ) : PrefEnMyQueryPostEn {
-  public override val country: PrefEnCountryPostEn? by lazy {
+  override val country: PrefEnCountryPostEn? by lazy {
     if (innerProjectionPin.innerCountry0Pin == null) {
       error("Property [country] is not available - add [withPrCountryWithPo] projection to switch on it")
     }
     innerDtoPin.resolveCountry(innerContextPin, innerProjectionPin.innerCountry0Pin!!)
   }
 
-
-  public override val countries: List<PrefEnCountryPostEn> by lazy {
+  override val countries: List<PrefEnCountryPostEn> by lazy {
     if (innerProjectionPin.innerCountries1Pin == null) {
       error("Property [countries] is not available - add [withPrCountriesWithPo] projection to switch on it")
     }
     innerDtoPin.resolveCountries(innerContextPin, innerProjectionPin.innerCountries1Pin!!)
   }
 
-
-  public override val film: PrefEnFilmPostEn? by lazy {
+  override val film: PrefEnFilmPostEn? by lazy {
     if (innerProjectionPin.innerFilm2Pin == null) {
       error("Property [film] is not available - add [withPrFilmWithPo] projection to switch on it")
     }
     innerDtoPin.resolveFilm(innerContextPin, innerProjectionPin.innerFilm2Pin!!)
   }
 
-
-  public override val films: List<PrefEnFilmPostEn> by lazy {
+  override val films: List<PrefEnFilmPostEn> by lazy {
     if (innerProjectionPin.innerFilms3Pin == null) {
       error("Property [films] is not available - add [withPrFilmsWithPo] projection to switch on it")
     }
     innerDtoPin.resolveFilms(innerContextPin, innerProjectionPin.innerFilms3Pin!!)
   }
 
-
-  public override val actor: PrefEnActorPostEn? by lazy {
+  override val actor: PrefEnActorPostEn? by lazy {
     if (innerProjectionPin.innerActor4Pin == null) {
       error("Property [actor] is not available - add [withPrActorWithPo] projection to switch on it")
     }
     innerDtoPin.resolveActor(innerContextPin, innerProjectionPin.innerActor4Pin!!)
   }
 
-
-  public override val actors: List<PrefEnActorPostEn> by lazy {
+  override val actors: List<PrefEnActorPostEn> by lazy {
     if (innerProjectionPin.innerActors5Pin == null) {
       error("Property [actors] is not available - add [withPrActorsWithPo] projection to switch on it")
     }
     innerDtoPin.resolveActors(innerContextPin, innerProjectionPin.innerActors5Pin!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("MyQuery").append('(')
 
     var counter = 0
@@ -153,9 +147,9 @@ public class PreImMyQueryPostIm(
     append(')')
   }
 
-  public override fun context(): PrefCtxContextPostCtx = innerContextPin
+  override fun context(): PrefCtxContextPostCtx = innerContextPin
 
-  public override fun PrePrMyQueryPostPr.withCurrentProjection(): Unit {
+  override fun PrePrMyQueryPostPr.withCurrentProjection() {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)
   }
 }
@@ -183,42 +177,41 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
 
   public var innerActors5Pin: PreImPreQrMyQueryActorsPostQrPostIm? = null
 
-  public override fun withPrCountryWithPo(id: Long, projection: PrePrCountryPostPr.() -> Unit):
-      Unit {
+  override fun withPrCountryWithPo(id: Long, projection: PrePrCountryPostPr.() -> Unit) {
     innerCountry0Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
     innerCountry0IdPin = id
   }
 
-  public override fun withPrCountriesWithPo(
+  override fun withPrCountriesWithPo(
     name: String?,
     limit: Int?,
     projection: PrePrCountryPostPr.() -> Unit,
-  ): Unit {
+  ) {
     innerCountries1Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
     innerCountries1NamePin = name
     innerCountries1LimitPin = limit
   }
 
-  public override fun withPrFilmWithPo(id: Long, projection: PrePrFilmPostPr.() -> Unit): Unit {
+  override fun withPrFilmWithPo(id: Long, projection: PrePrFilmPostPr.() -> Unit) {
     innerFilm2Pin = PreImPrePrFilmPostPrPostIm().apply(projection)
     innerFilm2IdPin = id
   }
 
-  public override fun withPrFilmsWithPo(query: PreQrMyQueryFilmsPostQr.() -> Unit): Unit {
+  override fun withPrFilmsWithPo(query: PreQrMyQueryFilmsPostQr.() -> Unit) {
     innerFilms3Pin = PreImPreQrMyQueryFilmsPostQrPostIm().apply(query)
   }
 
-  public override fun withPrActorWithPo(id: Long, projection: PrePrActorPostPr.() -> Unit): Unit {
+  override fun withPrActorWithPo(id: Long, projection: PrePrActorPostPr.() -> Unit) {
     innerActor4Pin = PreImPrePrActorPostPrPostIm().apply(projection)
     innerActor4IdPin = id
   }
 
-  public override fun withPrActorsWithPo(query: PreQrMyQueryActorsPostQr.() -> Unit): Unit {
+  override fun withPrActorsWithPo(query: PreQrMyQueryActorsPostQr.() -> Unit) {
     innerActors5Pin = PreImPreQrMyQueryActorsPostQrPostIm().apply(query)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMyQueryPostPr): Unit {
+  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrMyQueryPostPr) {
     if ("country" !in ignore && innerCountry0Pin != null) {
       projection.withPrCountryWithPo(innerCountry0IdPin!!) {
         this@PreImPrePrMyQueryPostPrPostIm.innerCountry0Pin!!._innerRepeatProjectionPin(setOf(), this)
@@ -262,7 +255,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("country" !in ignore && innerCountry0Pin != null) {
       body.append(' ').append("country")
       var counter = 0
@@ -304,7 +297,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("countries" !in ignore && innerCountries1Pin != null) {
       body.append(' ').append("countries")
       var counter = 0
@@ -361,7 +354,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("film" !in ignore && innerFilm2Pin != null) {
       body.append(' ').append("film")
       var counter = 0
@@ -403,7 +396,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("films" !in ignore && innerFilms3Pin != null) {
       body.append(' ').append("films")
       var counter = 0
@@ -491,7 +484,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("actor" !in ignore && innerActor4Pin != null) {
       body.append(' ').append("actor")
       var counter = 0
@@ -533,7 +526,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("actors" !in ignore && innerActors5Pin != null) {
       body.append(' ').append("actors")
       var counter = 0
@@ -621,7 +614,7 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: country
@@ -648,16 +641,16 @@ public open class PreImPrePrMyQueryPostPrPostIm : PrePrMyQueryPostPr {
 
 public class PreImPreQrMyQueryFilmsPostQrPostIm : PreImPrePrFilmPostPrPostIm(),
     PreQrMyQueryFilmsPostQr {
-  public override var title: String? = null
+  override var title: String? = null
 
-  public override var genre: EPrefGenreEPost? = null
+  override var genre: EPrefGenreEPost? = null
 
-  public override var limit: Int? = null
+  override var limit: Int? = null
 
-  public override var offset: Int? = null
+  override var offset: Int? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatSelectionPin(selection: PreSelMyQueryFilmsPostSel): Unit {
+  public fun _innerRepeatSelectionPin(selection: PreSelMyQueryFilmsPostSel) {
     selection.title = title
     selection.genre = genre
     selection.limit = limit
@@ -667,16 +660,16 @@ public class PreImPreQrMyQueryFilmsPostQrPostIm : PreImPrePrFilmPostPrPostIm(),
 
 public class PreImPreQrMyQueryActorsPostQrPostIm : PreImPrePrActorPostPrPostIm(),
     PreQrMyQueryActorsPostQr {
-  public override var firstName: String? = null
+  override var firstName: String? = null
 
-  public override var lastName: String? = null
+  override var lastName: String? = null
 
-  public override var gender: EPrefGenderEPost? = null
+  override var gender: EPrefGenderEPost? = null
 
-  public override var limit: Int? = null
+  override var limit: Int? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatSelectionPin(selection: PreSelMyQueryActorsPostSel): Unit {
+  public fun _innerRepeatSelectionPin(selection: PreSelMyQueryActorsPostSel) {
     selection.firstName = firstName
     selection.lastName = lastName
     selection.gender = gender

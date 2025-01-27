@@ -26,13 +26,13 @@ public interface Subscription {
 
   public fun __context(): EscapeContext
 
-  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+  public fun SubscriptionProjection.__withCurrentProjection()
 }
 
 @EscapeDSL
 public interface SubscriptionProjection {
-  public fun `by`(`in`: Int? = null, __projection: EscapeProjection.() -> Unit = {}): Unit
+  public fun `by`(`in`: Int? = null, __projection: EscapeProjection.() -> Unit = {})
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

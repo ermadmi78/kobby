@@ -33,14 +33,14 @@ public interface Country {
 
   public fun __context(): CinemaContext
 
-  public fun CountryProjection.__withCurrentProjection(): Unit
+  public fun CountryProjection.__withCurrentProjection()
 }
 
 @CinemaDSL
 public interface CountryProjection {
-  public fun id(): Unit
+  public fun id()
 
-  public fun name(): Unit
+  public fun name()
 
   /**
    * @param offset Default: 0
@@ -50,8 +50,8 @@ public interface CountryProjection {
     offset: Int? = null,
     limit: Int? = null,
     __projection: FilmProjection.() -> Unit,
-  ): Unit
+  )
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

@@ -118,7 +118,7 @@ public interface GraphqlContext {
 }
 
 public fun interface GraphqlSubscriber<T> {
-  public suspend fun subscribe(block: suspend GraphqlReceiver<T>.() -> Unit): Unit
+  public suspend fun subscribe(block: suspend GraphqlReceiver<T>.() -> Unit)
 }
 
 @GraphqlDSL
@@ -147,7 +147,7 @@ private class GraphqlContextImpl(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+  override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
     val projectionRef = QueryProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -171,7 +171,7 @@ private class GraphqlContextImpl(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+  override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
     val projectionRef = MutationProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -191,7 +191,7 @@ private class GraphqlContextImpl(
     return mutationDto.buildEntity(this, projectionRef)
   }
 
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+  override fun subscription(__projection: SubscriptionProjection.() -> Unit):
       GraphqlSubscriber<Subscription> {
     val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
@@ -211,7 +211,7 @@ private class GraphqlContextImpl(
     return GraphqlSubscriber<Subscription> {
       adapter.executeSubscription(subscription, arguments) {
         it.invoke(object : GraphqlReceiver<Subscription> {
-          public override suspend fun receive(): Subscription {
+          override suspend fun receive(): Subscription {
             val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
             return subscriptionDto.buildEntity(this@GraphqlContextImpl, projectionRef)
           }

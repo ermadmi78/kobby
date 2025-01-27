@@ -23,33 +23,32 @@ import kotlin.Suppress
 import kotlin.Unit
 
 public interface InterfaceMultiOverride : InterfaceBase1, InterfaceBase2 {
-  public override val noOverride1: String
+  override val noOverride1: String
 
-  public override val noOverride2: String
+  override val noOverride2: String
 
-  public override val interfaceMultiOverride: String
+  override val interfaceMultiOverride: String
 
-  public override fun __context(): MultiOverrideContext
+  override fun __context(): MultiOverrideContext
 }
 
 @MultiOverrideDSL
 public interface InterfaceMultiOverrideProjection : InterfaceBase1Projection,
     InterfaceBase2Projection {
-  public override fun noOverride1(size: Int?): Unit
+  override fun noOverride1(size: Int?)
 
-  public override fun noOverride2(size: Int?): Unit
+  override fun noOverride2(size: Int?)
 
-  public override fun interfaceMultiOverride(size: Int?): Unit
+  override fun interfaceMultiOverride(size: Int?)
 
-  public override fun __minimize(): Unit {
+  override fun __minimize() {
   }
 }
 
 @MultiOverrideDSL
 public interface InterfaceMultiOverrideQualification {
   public
-      fun __onInterfaceMultiOverrideImplementation(__projection: InterfaceMultiOverrideImplementationProjection.() -> Unit):
-      Unit
+      fun __onInterfaceMultiOverrideImplementation(__projection: InterfaceMultiOverrideImplementationProjection.() -> Unit)
 }
 
 @MultiOverrideDSL

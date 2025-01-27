@@ -21,7 +21,6 @@ import java.time.LocalDate
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Simple {
   public val id: Long
@@ -32,17 +31,17 @@ public interface Simple {
 
   public fun __context(): SimpleContext
 
-  public fun SimpleProjection.__withCurrentProjection(): Unit
+  public fun SimpleProjection.__withCurrentProjection()
 }
 
 @SimpleDSL
 public interface SimpleProjection {
-  public fun id(): Unit
+  public fun id()
 
-  public fun name(): Unit
+  public fun name()
 
-  public fun date(): Unit
+  public fun date()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

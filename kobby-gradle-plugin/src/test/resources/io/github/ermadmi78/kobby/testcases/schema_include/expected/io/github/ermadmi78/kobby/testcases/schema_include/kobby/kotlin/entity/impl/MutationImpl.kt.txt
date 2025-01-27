@@ -22,7 +22,6 @@ import io.github.ermadmi78.kobby.testcases.schema_include.kobby.kotlin.entity.Mu
 import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -35,22 +34,21 @@ internal class MutationImpl(
   internal val __innerDto: MutationDto,
 ) : Mutation {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Mutation").append('(')
     append(')')
   }
 
-  public override fun __context(): QueryContext = __innerContext
+  override fun __context(): QueryContext = __innerContext
 
-  public override fun MutationProjection.__withCurrentProjection(): Unit {
+  override fun MutationProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
 
 internal open class MutationProjectionImpl : MutationProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection) {
   }
 
   /**
@@ -62,7 +60,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     body.append(' ').append('}')

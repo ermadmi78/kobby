@@ -25,13 +25,13 @@ public interface Subscription {
 
   public fun __context(): CountryContext
 
-  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+  public fun SubscriptionProjection.__withCurrentProjection()
 }
 
 @CountryDSL
 public interface SubscriptionProjection {
-  public fun countryCreated(__projection: CountryProjection.() -> Unit): Unit
+  public fun countryCreated(__projection: CountryProjection.() -> Unit)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

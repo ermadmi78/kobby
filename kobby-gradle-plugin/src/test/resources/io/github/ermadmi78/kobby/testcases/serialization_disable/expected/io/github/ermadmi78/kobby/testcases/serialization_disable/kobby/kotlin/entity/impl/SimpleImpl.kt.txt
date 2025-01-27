@@ -25,7 +25,6 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -38,7 +37,7 @@ internal class SimpleImpl(
   internal val __innerProjection: SimpleProjectionImpl,
   internal val __innerDto: SimpleDto,
 ) : Simple {
-  public override val id: Long
+  override val id: Long
     get() {
       if (!__innerProjection.__innerId0) {
         error("Property [id] is not available - add [id] projection to switch on it")
@@ -46,7 +45,7 @@ internal class SimpleImpl(
       return __innerDto.id!!
     }
 
-  public override val name: String
+  override val name: String
     get() {
       if (!__innerProjection.__innerName1) {
         error("Property [name] is not available - add [name] projection to switch on it")
@@ -54,7 +53,7 @@ internal class SimpleImpl(
       return __innerDto.name!!
     }
 
-  public override val date: LocalDate?
+  override val date: LocalDate?
     get() {
       if (!__innerProjection.__innerDate2) {
         error("Property [date] is not available - add [date] projection to switch on it")
@@ -63,7 +62,7 @@ internal class SimpleImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Simple").append('(')
 
     var counter = 0
@@ -92,9 +91,9 @@ internal class SimpleImpl(
     append(')')
   }
 
-  public override fun __context(): SimpleContext = __innerContext
+  override fun __context(): SimpleContext = __innerContext
 
-  public override fun SimpleProjection.__withCurrentProjection(): Unit {
+  override fun SimpleProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -106,20 +105,20 @@ internal open class SimpleProjectionImpl : SimpleProjection {
 
   internal var __innerDate2: Boolean = false
 
-  public override fun id(): Unit {
+  override fun id() {
     __innerId0 = true
   }
 
-  public override fun name(): Unit {
+  override fun name() {
     __innerName1 = true
   }
 
-  public override fun date(): Unit {
+  override fun date() {
     __innerDate2 = true
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SimpleProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SimpleProjection) {
     if ("id" !in ignore && __innerId0) {
       __projection.id()
     }
@@ -140,7 +139,7 @@ internal open class SimpleProjectionImpl : SimpleProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id

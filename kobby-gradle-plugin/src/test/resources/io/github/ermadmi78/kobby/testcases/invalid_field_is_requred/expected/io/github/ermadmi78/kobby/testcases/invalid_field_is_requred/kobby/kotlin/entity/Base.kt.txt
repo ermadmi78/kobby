@@ -34,19 +34,19 @@ public interface Base {
 
 @InvalidFieldIsRequredDSL
 public interface BaseProjection {
-  public fun id(): Unit
+  public fun id()
 
-  public fun name(): Unit
+  public fun name()
 
-  public fun description(): Unit
+  public fun description()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 
 @InvalidFieldIsRequredDSL
 public interface BaseQualification {
-  public fun __onCountry(__projection: CountryProjection.() -> Unit): Unit
+  public fun __onCountry(__projection: CountryProjection.() -> Unit)
 }
 
 @InvalidFieldIsRequredDSL

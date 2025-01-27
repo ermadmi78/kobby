@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.entity
 import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideContext
 import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverrideDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Mutation {
   public fun __context(): MultiOverrideContext
 
-  public fun MutationProjection.__withCurrentProjection(): Unit
+  public fun MutationProjection.__withCurrentProjection()
 }
 
 @MultiOverrideDSL
 public interface MutationProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

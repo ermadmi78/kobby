@@ -24,7 +24,6 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -38,7 +37,7 @@ internal class TypeMultiOverrideImpl(
   internal val __innerProjection: TypeMultiOverrideProjectionImpl,
   internal val __innerDto: TypeMultiOverrideDto,
 ) : TypeMultiOverride {
-  public override val noOverride1: String
+  override val noOverride1: String
     get() {
       if (!__innerProjection.__innerNoOverride10) {
         error("Property [noOverride1] is not available - add [noOverride1] projection to switch on it")
@@ -46,7 +45,7 @@ internal class TypeMultiOverrideImpl(
       return __innerDto.noOverride1!!
     }
 
-  public override val noOverride2: String
+  override val noOverride2: String
     get() {
       if (!__innerProjection.__innerNoOverride21) {
         error("Property [noOverride2] is not available - add [noOverride2] projection to switch on it")
@@ -54,7 +53,7 @@ internal class TypeMultiOverrideImpl(
       return __innerDto.noOverride2!!
     }
 
-  public override val typeMultiOverride: String
+  override val typeMultiOverride: String
     get() {
       if (!__innerProjection.__innerTypeMultiOverride2) {
         error("Property [typeMultiOverride] is not available - add [typeMultiOverride] projection to switch on it")
@@ -62,7 +61,7 @@ internal class TypeMultiOverrideImpl(
       return __innerDto.typeMultiOverride!!
     }
 
-  public override val finalField: String
+  override val finalField: String
     get() {
       if (!__innerProjection.__innerFinalField3) {
         error("Property [finalField] is not available - add [finalField] projection to switch on it")
@@ -71,7 +70,7 @@ internal class TypeMultiOverrideImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("TypeMultiOverride").append('(')
 
     var counter = 0
@@ -107,9 +106,9 @@ internal class TypeMultiOverrideImpl(
     append(')')
   }
 
-  public override fun __context(): MultiOverrideContext = __innerContext
+  override fun __context(): MultiOverrideContext = __innerContext
 
-  public override fun TypeMultiOverrideProjection.__withCurrentProjection(): Unit {
+  override fun TypeMultiOverrideProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -131,29 +130,29 @@ internal open class TypeMultiOverrideProjectionImpl : TypeMultiOverrideProjectio
 
   internal var __innerFinalField3Size: Int? = null
 
-  public override fun noOverride1(size: Int?): Unit {
+  override fun noOverride1(size: Int?) {
     __innerNoOverride10 = true
     __innerNoOverride10Size = size
   }
 
-  public override fun noOverride2(size: Int?): Unit {
+  override fun noOverride2(size: Int?) {
     __innerNoOverride21 = true
     __innerNoOverride21Size = size
   }
 
-  public override fun typeMultiOverride(size: Int?): Unit {
+  override fun typeMultiOverride(size: Int?) {
     __innerTypeMultiOverride2 = true
     __innerTypeMultiOverride2Size = size
   }
 
-  public override fun finalField(size: Int?): Unit {
+  override fun finalField(size: Int?) {
     __innerFinalField3 = true
     __innerFinalField3Size = size
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: TypeMultiOverrideProjection): Unit {
+      __projection: TypeMultiOverrideProjection) {
     if ("noOverride1" !in ignore && __innerNoOverride10) {
       __projection.noOverride1(__innerNoOverride10Size)
     }
@@ -177,7 +176,7 @@ internal open class TypeMultiOverrideProjectionImpl : TypeMultiOverrideProjectio
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride1" !in ignore && __innerNoOverride10) {
       body.append(' ').append("noOverride1")
       var counter = 0
@@ -216,7 +215,7 @@ internal open class TypeMultiOverrideProjectionImpl : TypeMultiOverrideProjectio
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride2" !in ignore && __innerNoOverride21) {
       body.append(' ').append("noOverride2")
       var counter = 0
@@ -255,7 +254,7 @@ internal open class TypeMultiOverrideProjectionImpl : TypeMultiOverrideProjectio
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("typeMultiOverride" !in ignore && __innerTypeMultiOverride2) {
       body.append(' ').append("typeMultiOverride")
       var counter = 0
@@ -294,7 +293,7 @@ internal open class TypeMultiOverrideProjectionImpl : TypeMultiOverrideProjectio
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("finalField" !in ignore && __innerFinalField3) {
       body.append(' ').append("finalField")
       var counter = 0
@@ -333,7 +332,7 @@ internal open class TypeMultiOverrideProjectionImpl : TypeMultiOverrideProjectio
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: noOverride1

@@ -24,7 +24,6 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -38,7 +37,7 @@ internal class IntermediateMultiOverrideImpl(
   internal val __innerProjection: IntermediateMultiOverrideProjectionImpl,
   internal val __innerDto: IntermediateMultiOverrideDto,
 ) : IntermediateMultiOverride {
-  public override val noOverride0: String
+  override val noOverride0: String
     get() {
       if (!__innerProjection.__innerNoOverride00) {
         error("Property [noOverride0] is not available - add [noOverride0] projection to switch on it")
@@ -46,7 +45,7 @@ internal class IntermediateMultiOverrideImpl(
       return __innerDto.noOverride0!!
     }
 
-  public override val noOverride1: String
+  override val noOverride1: String
     get() {
       if (!__innerProjection.__innerNoOverride11) {
         error("Property [noOverride1] is not available - add [noOverride1] projection to switch on it")
@@ -54,7 +53,7 @@ internal class IntermediateMultiOverrideImpl(
       return __innerDto.noOverride1!!
     }
 
-  public override val complexMultiOverride: String
+  override val complexMultiOverride: String
     get() {
       if (!__innerProjection.__innerComplexMultiOverride2) {
         error("Property [complexMultiOverride] is not available - add [complexMultiOverride] projection to switch on it")
@@ -62,7 +61,7 @@ internal class IntermediateMultiOverrideImpl(
       return __innerDto.complexMultiOverride!!
     }
 
-  public override val intermediateNoOverride: String
+  override val intermediateNoOverride: String
     get() {
       if (!__innerProjection.__innerIntermediateNoOverride3) {
         error("Property [intermediateNoOverride] is not available - add [intermediateNoOverride] projection to switch on it")
@@ -70,7 +69,7 @@ internal class IntermediateMultiOverrideImpl(
       return __innerDto.intermediateNoOverride!!
     }
 
-  public override val intermediateMultiOverride: String
+  override val intermediateMultiOverride: String
     get() {
       if (!__innerProjection.__innerIntermediateMultiOverride4) {
         error("Property [intermediateMultiOverride] is not available - add [intermediateMultiOverride] projection to switch on it")
@@ -78,7 +77,7 @@ internal class IntermediateMultiOverrideImpl(
       return __innerDto.intermediateMultiOverride!!
     }
 
-  public override val finalField: String
+  override val finalField: String
     get() {
       if (!__innerProjection.__innerFinalField5) {
         error("Property [finalField] is not available - add [finalField] projection to switch on it")
@@ -87,7 +86,7 @@ internal class IntermediateMultiOverrideImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("IntermediateMultiOverride").append('(')
 
     var counter = 0
@@ -137,9 +136,9 @@ internal class IntermediateMultiOverrideImpl(
     append(')')
   }
 
-  public override fun __context(): MultiOverrideContext = __innerContext
+  override fun __context(): MultiOverrideContext = __innerContext
 
-  public override fun IntermediateMultiOverrideProjection.__withCurrentProjection(): Unit {
+  override fun IntermediateMultiOverrideProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -169,39 +168,39 @@ internal open class IntermediateMultiOverrideProjectionImpl : IntermediateMultiO
 
   internal var __innerFinalField5Size: Int? = null
 
-  public override fun noOverride0(size: Int?): Unit {
+  override fun noOverride0(size: Int?) {
     __innerNoOverride00 = true
     __innerNoOverride00Size = size
   }
 
-  public override fun noOverride1(size: Int?): Unit {
+  override fun noOverride1(size: Int?) {
     __innerNoOverride11 = true
     __innerNoOverride11Size = size
   }
 
-  public override fun complexMultiOverride(size: Int?): Unit {
+  override fun complexMultiOverride(size: Int?) {
     __innerComplexMultiOverride2 = true
     __innerComplexMultiOverride2Size = size
   }
 
-  public override fun intermediateNoOverride(size: Int?): Unit {
+  override fun intermediateNoOverride(size: Int?) {
     __innerIntermediateNoOverride3 = true
     __innerIntermediateNoOverride3Size = size
   }
 
-  public override fun intermediateMultiOverride(size: Int?): Unit {
+  override fun intermediateMultiOverride(size: Int?) {
     __innerIntermediateMultiOverride4 = true
     __innerIntermediateMultiOverride4Size = size
   }
 
-  public override fun finalField(size: Int?): Unit {
+  override fun finalField(size: Int?) {
     __innerFinalField5 = true
     __innerFinalField5Size = size
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: IntermediateMultiOverrideProjection): Unit {
+      __projection: IntermediateMultiOverrideProjection) {
     if ("noOverride0" !in ignore && __innerNoOverride00) {
       __projection.noOverride0(__innerNoOverride00Size)
     }
@@ -231,7 +230,7 @@ internal open class IntermediateMultiOverrideProjectionImpl : IntermediateMultiO
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride0" !in ignore && __innerNoOverride00) {
       body.append(' ').append("noOverride0")
       var counter = 0
@@ -270,7 +269,7 @@ internal open class IntermediateMultiOverrideProjectionImpl : IntermediateMultiO
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride1" !in ignore && __innerNoOverride11) {
       body.append(' ').append("noOverride1")
       var counter = 0
@@ -309,7 +308,7 @@ internal open class IntermediateMultiOverrideProjectionImpl : IntermediateMultiO
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("complexMultiOverride" !in ignore && __innerComplexMultiOverride2) {
       body.append(' ').append("complexMultiOverride")
       var counter = 0
@@ -348,7 +347,7 @@ internal open class IntermediateMultiOverrideProjectionImpl : IntermediateMultiO
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("intermediateNoOverride" !in ignore && __innerIntermediateNoOverride3) {
       body.append(' ').append("intermediateNoOverride")
       var counter = 0
@@ -387,7 +386,7 @@ internal open class IntermediateMultiOverrideProjectionImpl : IntermediateMultiO
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("intermediateMultiOverride" !in ignore && __innerIntermediateMultiOverride4) {
       body.append(' ').append("intermediateMultiOverride")
       var counter = 0
@@ -426,7 +425,7 @@ internal open class IntermediateMultiOverrideProjectionImpl : IntermediateMultiO
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("finalField" !in ignore && __innerFinalField5) {
       body.append(' ').append("finalField")
       var counter = 0
@@ -465,7 +464,7 @@ internal open class IntermediateMultiOverrideProjectionImpl : IntermediateMultiO
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: noOverride0

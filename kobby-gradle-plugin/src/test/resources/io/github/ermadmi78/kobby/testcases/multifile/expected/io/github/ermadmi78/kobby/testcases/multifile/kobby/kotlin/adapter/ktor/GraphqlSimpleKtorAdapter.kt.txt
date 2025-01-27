@@ -46,8 +46,7 @@ public open class GraphqlSimpleKtorAdapter(
   protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val listener: (GraphqlRequest) -> Unit = {},
 ) : GraphqlAdapter {
-  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
-      MyQueryDto {
+  override suspend fun executeQuery(query: String, variables: Map<String, Any?>): MyQueryDto {
     val request = GraphqlRequest(query, variables)
     listener(request)
 
@@ -73,8 +72,7 @@ public open class GraphqlSimpleKtorAdapter(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
-      MyMutationDto {
+  override suspend fun executeMutation(query: String, variables: Map<String, Any?>): MyMutationDto {
     val request = GraphqlRequest(query, variables)
     listener(request)
 

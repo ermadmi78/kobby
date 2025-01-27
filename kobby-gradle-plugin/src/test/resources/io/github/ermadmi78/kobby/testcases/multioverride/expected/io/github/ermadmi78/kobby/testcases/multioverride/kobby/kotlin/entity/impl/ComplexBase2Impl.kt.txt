@@ -51,7 +51,7 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
   internal val ___inner__onComplexMultiOverride: ComplexMultiOverrideProjectionImpl =
       ComplexMultiOverrideProjectionImpl()
 
-  public override fun noOverride2(size: Int?): Unit {
+  override fun noOverride2(size: Int?) {
     __innerNoOverride20 = true
     __innerNoOverride20Size = size
 
@@ -61,7 +61,7 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
     ___innerIgnore += "noOverride2"
   }
 
-  public override fun complexMultiOverride(size: Int?): Unit {
+  override fun complexMultiOverride(size: Int?) {
     __innerComplexMultiOverride1 = true
     __innerComplexMultiOverride1Size = size
 
@@ -71,14 +71,13 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
     ___innerIgnore += "complexMultiOverride"
   }
 
-  public override
-      fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit): Unit {
+  override fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit) {
     ComplexMultiOverrideProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onComplexMultiOverride)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: ComplexBase2QualifiedProjection): Unit {
+      __projection: ComplexBase2QualifiedProjection) {
     if ("noOverride2" !in ignore && __innerNoOverride20) {
       __projection.noOverride2(__innerNoOverride20Size)
     }
@@ -99,7 +98,7 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride2" !in ignore && __innerNoOverride20) {
       body.append(' ').append("noOverride2")
       var counter = 0
@@ -138,7 +137,7 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("complexMultiOverride" !in ignore && __innerComplexMultiOverride1) {
       body.append(' ').append("complexMultiOverride")
       var counter = 0
@@ -177,7 +176,7 @@ internal open class ComplexBase2QualifiedProjectionImpl : ComplexBase2QualifiedP
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: noOverride2

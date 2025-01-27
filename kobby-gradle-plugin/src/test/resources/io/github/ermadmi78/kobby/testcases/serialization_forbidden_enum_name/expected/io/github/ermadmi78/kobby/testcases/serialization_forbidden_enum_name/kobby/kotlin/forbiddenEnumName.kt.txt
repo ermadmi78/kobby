@@ -59,7 +59,6 @@ public val forbiddenEnumNameJson: Json = Json {
   }
 }
 
-
 public fun forbiddenEnumNameContextOf(adapter: ForbiddenEnumNameAdapter): ForbiddenEnumNameContext =
     ForbiddenEnumNameContextImpl(adapter)
 
@@ -133,7 +132,7 @@ public interface ForbiddenEnumNameContext {
 }
 
 public fun interface ForbiddenEnumNameSubscriber<T> {
-  public suspend fun subscribe(block: suspend ForbiddenEnumNameReceiver<T>.() -> Unit): Unit
+  public suspend fun subscribe(block: suspend ForbiddenEnumNameReceiver<T>.() -> Unit)
 }
 
 @ForbiddenEnumNameDSL
@@ -162,7 +161,7 @@ private class ForbiddenEnumNameContextImpl(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+  override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
     val projectionRef = QueryProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -186,7 +185,7 @@ private class ForbiddenEnumNameContextImpl(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+  override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
     val projectionRef = MutationProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -206,7 +205,7 @@ private class ForbiddenEnumNameContextImpl(
     return mutationDto.buildEntity(this, projectionRef)
   }
 
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+  override fun subscription(__projection: SubscriptionProjection.() -> Unit):
       ForbiddenEnumNameSubscriber<Subscription> {
     val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
@@ -226,7 +225,7 @@ private class ForbiddenEnumNameContextImpl(
     return ForbiddenEnumNameSubscriber<Subscription> {
       adapter.executeSubscription(subscription, JsonObject(arguments)) {
         it.invoke(object : ForbiddenEnumNameReceiver<Subscription> {
-          public override suspend fun receive(): Subscription {
+          override suspend fun receive(): Subscription {
             val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
             return subscriptionDto.buildEntity(this@ForbiddenEnumNameContextImpl, projectionRef)
           }

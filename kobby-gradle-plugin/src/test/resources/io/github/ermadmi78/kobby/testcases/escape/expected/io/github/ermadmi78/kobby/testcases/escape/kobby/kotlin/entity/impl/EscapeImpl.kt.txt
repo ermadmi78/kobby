@@ -45,10 +45,10 @@ internal class EscapeImpl(
   internal val __innerProjection: EscapeProjectionImpl,
   internal val __innerDto: EscapeDto,
 ) : Escape {
-  public override val `if`: Long
+  override val `if`: Long
     get() = __innerDto.`if`!!
 
-  public override val `is`: String
+  override val `is`: String
     get() {
       if (!__innerProjection.__innerIs1) {
         error("Property [is] is not available - add [is] projection to switch on it")
@@ -56,18 +56,17 @@ internal class EscapeImpl(
       return __innerDto.`is`!!
     }
 
-  public override val `for`: Int?
+  override val `for`: Int?
     get() = __innerDto.`for`
 
-  public override val points: List<Point> by lazy {
+  override val points: List<Point> by lazy {
     if (__innerProjection.__innerPoints3 == null) {
       error("Property [points] is not available - add [points] projection to switch on it")
     }
     __innerDto.resolvePoints(__innerContext, __innerProjection.__innerPoints3!!)
   }
 
-
-  public override val it: String
+  override val it: String
     get() {
       if (!__innerProjection.__innerIt4) {
         error("Property [it] is not available - add [it] projection to switch on it")
@@ -75,7 +74,7 @@ internal class EscapeImpl(
       return __innerDto.it!!
     }
 
-  public override val `in`: String?
+  override val `in`: String?
     get() {
       if (!__innerProjection.__innerIn5) {
         error("Property [in] is not available - remove [__withoutIn] projection to switch on it")
@@ -83,31 +82,28 @@ internal class EscapeImpl(
       return __innerDto.`in`
     }
 
-  public override val `val`: Point? by lazy {
+  override val `val`: Point? by lazy {
     if (__innerProjection.__innerVal6 == null) {
       error("Property [val] is not available - add [val] projection to switch on it")
     }
     __innerDto.resolveVal(__innerContext, __innerProjection.__innerVal6!!)
   }
 
-
-  public override val `var`: List<Point?>? by lazy {
+  override val `var`: List<Point?>? by lazy {
     if (__innerProjection.__innerVar7 == null) {
       error("Property [var] is not available - add [var] projection to switch on it")
     }
     __innerDto.resolveVar(__innerContext, __innerProjection.__innerVar7!!)
   }
 
-
-  public override val `while`: List<Point> by lazy {
+  override val `while`: List<Point> by lazy {
     if (__innerProjection.__innerWhile8 == null) {
       error("Property [while] is not available - add [while] projection to switch on it")
     }
     __innerDto.resolveWhile(__innerContext, __innerProjection.__innerWhile8!!)
   }
 
-
-  public override fun equals(other: Any?): Boolean {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -119,10 +115,10 @@ internal class EscapeImpl(
     return __innerDto.`if` == other.__innerDto.`if`
   }
 
-  public override fun hashCode(): Int = __innerDto.`if`?.hashCode() ?: 0
+  override fun hashCode(): Int = __innerDto.`if`?.hashCode() ?: 0
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Escape").append('(')
 
     var counter = 0
@@ -193,9 +189,9 @@ internal class EscapeImpl(
     append(')')
   }
 
-  public override fun __context(): EscapeContext = __innerContext
+  override fun __context(): EscapeContext = __innerContext
 
-  public override fun EscapeProjection.__withCurrentProjection(): Unit {
+  override fun EscapeProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -219,42 +215,42 @@ internal open class EscapeProjectionImpl : EscapeProjection {
 
   internal var __innerWhile8: PointProjectionImpl? = null
 
-  public override fun `is`(): Unit {
+  override fun `is`() {
     __innerIs1 = true
   }
 
-  public override fun points(
+  override fun points(
     `do`: Int?,
     `by`: Int?,
     __projection: PointProjection.() -> Unit,
-  ): Unit {
+  ) {
     __innerPoints3 = PointProjectionImpl().apply(__projection)
     __innerPoints3Do = `do`
     __innerPoints3By = `by`
   }
 
-  public override fun it(): Unit {
+  override fun it() {
     __innerIt4 = true
   }
 
-  public override fun __withoutIn(): Unit {
+  override fun __withoutIn() {
     __innerIn5 = false
   }
 
-  public override fun `val`(__projection: PointProjection.() -> Unit): Unit {
+  override fun `val`(__projection: PointProjection.() -> Unit) {
     __innerVal6 = PointProjectionImpl().apply(__projection)
   }
 
-  public override fun `var`(__projection: PointProjection.() -> Unit): Unit {
+  override fun `var`(__projection: PointProjection.() -> Unit) {
     __innerVar7 = PointProjectionImpl().apply(__projection)
   }
 
-  public override fun `while`(__projection: PointProjection.() -> Unit): Unit {
+  override fun `while`(__projection: PointProjection.() -> Unit) {
     __innerWhile8 = PointProjectionImpl().apply(__projection)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: EscapeProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: EscapeProjection) {
     if ("is" !in ignore && __innerIs1) {
       __projection.`is`()
     }
@@ -295,7 +291,7 @@ internal open class EscapeProjectionImpl : EscapeProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("points" !in ignore && __innerPoints3 != null) {
       body.append(' ').append("points")
       var counter = 0
@@ -352,7 +348,7 @@ internal open class EscapeProjectionImpl : EscapeProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: if

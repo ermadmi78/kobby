@@ -21,7 +21,6 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface SeveralPrimaryKeys {
   public val `if`: Long
@@ -40,11 +39,11 @@ public interface SeveralPrimaryKeys {
 
   public fun __context(): EscapeContext
 
-  public fun SeveralPrimaryKeysProjection.__withCurrentProjection(): Unit
+  public fun SeveralPrimaryKeysProjection.__withCurrentProjection()
 }
 
 @EscapeDSL
 public interface SeveralPrimaryKeysProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

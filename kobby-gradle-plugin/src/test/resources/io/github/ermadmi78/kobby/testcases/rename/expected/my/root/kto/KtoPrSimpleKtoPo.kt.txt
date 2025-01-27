@@ -46,7 +46,7 @@ public open class KtoPrSimpleKtoPo(
   protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val listener: (GPrefRequestGPost) -> Unit = {},
 ) : PrefCtxAdapterPostCtx {
-  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
+  override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
       DPrefMyQueryDPost {
     val request = GPrefRequestGPost(query, variables)
     listener(request)
@@ -73,7 +73,7 @@ public open class KtoPrSimpleKtoPo(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+  override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
       DPrefMyMutationDPost {
     val request = GPrefRequestGPost(query, variables)
     listener(request)

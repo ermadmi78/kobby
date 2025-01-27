@@ -33,7 +33,7 @@ public interface Query {
 
   public fun __context(): SimpleContext
 
-  public fun QueryProjection.__withCurrentProjection(): Unit
+  public fun QueryProjection.__withCurrentProjection()
 }
 
 /**
@@ -46,8 +46,8 @@ public interface QueryProjection {
    *
    * @param limit  limit result list
    */
-  public fun all(limit: Int? = null, __projection: SimpleProjection.() -> Unit): Unit
+  public fun all(limit: Int? = null, __projection: SimpleProjection.() -> Unit)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

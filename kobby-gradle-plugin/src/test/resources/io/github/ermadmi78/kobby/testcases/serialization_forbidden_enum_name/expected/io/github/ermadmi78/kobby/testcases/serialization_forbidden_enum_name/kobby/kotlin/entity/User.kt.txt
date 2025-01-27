@@ -21,7 +21,6 @@ import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kob
 import io.github.ermadmi78.kobby.testcases.serialization_forbidden_enum_name.kobby.kotlin.dto.user_update_column
 import kotlin.Long
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface User {
   public val id: Long
@@ -32,17 +31,17 @@ public interface User {
 
   public fun __context(): ForbiddenEnumNameContext
 
-  public fun UserProjection.__withCurrentProjection(): Unit
+  public fun UserProjection.__withCurrentProjection()
 }
 
 @ForbiddenEnumNameDSL
 public interface UserProjection {
-  public fun id(): Unit
+  public fun id()
 
-  public fun update_column(): Unit
+  public fun update_column()
 
-  public fun mischievous(): Unit
+  public fun mischievous()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

@@ -25,7 +25,6 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -39,7 +38,7 @@ internal class QueryImpl(
   internal val __innerProjection: QueryProjectionImpl,
   internal val __innerDto: QueryDto,
 ) : Query {
-  public override val user: user_update_column?
+  override val user: user_update_column?
     get() {
       if (!__innerProjection.__innerUser0) {
         error("Property [user] is not available - add [user] projection to switch on it")
@@ -48,7 +47,7 @@ internal class QueryImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Query").append('(')
 
     var counter = 0
@@ -63,9 +62,9 @@ internal class QueryImpl(
     append(')')
   }
 
-  public override fun __context(): ForbiddenEnumNameContext = __innerContext
+  override fun __context(): ForbiddenEnumNameContext = __innerContext
 
-  public override fun QueryProjection.__withCurrentProjection(): Unit {
+  override fun QueryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -75,13 +74,13 @@ internal open class QueryProjectionImpl : QueryProjection {
 
   internal var __innerUser0Id: Long? = null
 
-  public override fun user(id: Long): Unit {
+  override fun user(id: Long) {
     __innerUser0 = true
     __innerUser0Id = id
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection) {
     if ("user" !in ignore && __innerUser0) {
       __projection.user(__innerUser0Id!!)
     }
@@ -96,7 +95,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("user" !in ignore && __innerUser0) {
       body.append(' ').append("user")
       var counter = 0
@@ -135,7 +134,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: user

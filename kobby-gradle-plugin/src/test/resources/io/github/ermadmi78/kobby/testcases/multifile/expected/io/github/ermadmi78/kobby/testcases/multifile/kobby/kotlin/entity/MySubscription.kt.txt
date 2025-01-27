@@ -26,13 +26,13 @@ public interface MySubscription {
 
   public fun __context(): GraphqlContext
 
-  public fun MySubscriptionProjection.__withCurrentProjection(): Unit
+  public fun MySubscriptionProjection.__withCurrentProjection()
 }
 
 @GraphqlDSL
 public interface MySubscriptionProjection {
-  public fun onInsert(pattern: String? = null, __projection: MyEventProjection.() -> Unit): Unit
+  public fun onInsert(pattern: String? = null, __projection: MyEventProjection.() -> Unit)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

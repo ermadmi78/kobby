@@ -53,7 +53,7 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
 
   public val _innerOnPrActorOnPoPin: PreImPrePrActorPostPrPostIm = PreImPrePrActorPostPrPostIm()
 
-  public override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit): Unit {
+  override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit) {
     innerFields1Pin = PreImPreSelEntityFieldsPostSelPostIm().apply(selection)
 
     _innerOnPrCountryOnPoPin.innerFields1Pin = innerFields1Pin
@@ -65,20 +65,20 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
     _innerIgnorePin += "fields"
   }
 
-  public override fun onPrCountryOnPo(projection: PrePrCountryPostPr.() -> Unit): Unit {
+  override fun onPrCountryOnPo(projection: PrePrCountryPostPr.() -> Unit) {
     PreImPrePrCountryPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin, _innerOnPrCountryOnPoPin)
   }
 
-  public override fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit): Unit {
+  override fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit) {
     PreImPrePrFilmPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin, _innerOnPrFilmOnPoPin)
   }
 
-  public override fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit): Unit {
+  override fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit) {
     PreImPrePrActorPostPrPostIm().apply(projection)._innerRepeatProjectionPin(_innerIgnorePin, _innerOnPrActorOnPoPin)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PreQPEntityPostQP): Unit {
+  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PreQPEntityPostQP) {
     if ("fields" !in ignore && innerFields1Pin != null) {
       projection.withPrFieldsWithPo {
         this@PreImPreQPEntityPostQPPostIm.innerFields1Pin!!._innerRepeatSelectionPin(this)
@@ -104,7 +104,7 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("fields" !in ignore && innerFields1Pin != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -143,7 +143,7 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id
@@ -184,10 +184,10 @@ public open class PreImPreQPEntityPostQPPostIm : PreQPEntityPostQP {
 }
 
 public class PreImPreSelEntityFieldsPostSelPostIm : PreSelEntityFieldsPostSel {
-  public override var keys: List<String>? = null
+  override var keys: List<String>? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatSelectionPin(selection: PreSelEntityFieldsPostSel): Unit {
+  public fun _innerRepeatSelectionPin(selection: PreSelEntityFieldsPostSel) {
     selection.keys = keys
   }
 }

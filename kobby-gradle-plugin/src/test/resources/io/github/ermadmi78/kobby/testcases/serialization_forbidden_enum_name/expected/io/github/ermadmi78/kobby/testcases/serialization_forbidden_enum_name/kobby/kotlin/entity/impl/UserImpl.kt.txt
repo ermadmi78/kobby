@@ -25,7 +25,6 @@ import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -39,7 +38,7 @@ internal class UserImpl(
   internal val __innerProjection: UserProjectionImpl,
   internal val __innerDto: UserDto,
 ) : User {
-  public override val id: Long
+  override val id: Long
     get() {
       if (!__innerProjection.__innerId0) {
         error("Property [id] is not available - add [id] projection to switch on it")
@@ -47,7 +46,7 @@ internal class UserImpl(
       return __innerDto.id!!
     }
 
-  public override val update_column: user_update_column
+  override val update_column: user_update_column
     get() {
       if (!__innerProjection.__innerUpdate_column1) {
         error("Property [update_column] is not available - add [update_column] projection to switch on it")
@@ -55,7 +54,7 @@ internal class UserImpl(
       return __innerDto.update_column!!
     }
 
-  public override val mischievous: mischievous?
+  override val mischievous: mischievous?
     get() {
       if (!__innerProjection.__innerMischievous2) {
         error("Property [mischievous] is not available - add [mischievous] projection to switch on it")
@@ -64,7 +63,7 @@ internal class UserImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("User").append('(')
 
     var counter = 0
@@ -93,9 +92,9 @@ internal class UserImpl(
     append(')')
   }
 
-  public override fun __context(): ForbiddenEnumNameContext = __innerContext
+  override fun __context(): ForbiddenEnumNameContext = __innerContext
 
-  public override fun UserProjection.__withCurrentProjection(): Unit {
+  override fun UserProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -107,20 +106,20 @@ internal open class UserProjectionImpl : UserProjection {
 
   internal var __innerMischievous2: Boolean = false
 
-  public override fun id(): Unit {
+  override fun id() {
     __innerId0 = true
   }
 
-  public override fun update_column(): Unit {
+  override fun update_column() {
     __innerUpdate_column1 = true
   }
 
-  public override fun mischievous(): Unit {
+  override fun mischievous() {
     __innerMischievous2 = true
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: UserProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: UserProjection) {
     if ("id" !in ignore && __innerId0) {
       __projection.id()
     }
@@ -141,7 +140,7 @@ internal open class UserProjectionImpl : UserProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id

@@ -39,16 +39,17 @@ import my.root.ctx.PrefCtxDSLPostCtx
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class DPrefActorDPost(
-  public override val id: Long? = null,
-  public override val fields: String? = null,
+  override val id: Long? = null,
+  override val fields: String? = null,
   public val firstName: String? = null,
   public val lastName: String? = null,
   public val gender: EPrefGenderEPost? = null,
   public val countryId: Long? = null,
   public val country: DPrefCountryDPost? = null,
   public val films: List<DPrefFilmDPost>? = null,
-) : DPrefEntityDPost, DPrefNativeDPost {
-  public override fun equals(other: Any?): Boolean {
+) : DPrefEntityDPost,
+    DPrefNativeDPost {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -68,7 +69,7 @@ public data class DPrefActorDPost(
     return true
   }
 
-  public override fun hashCode(): Int {
+  override fun hashCode(): Int {
     var result = this.id?.hashCode() ?: 0
     result = 31 * result + (this.countryId?.hashCode() ?: 0)
     return result

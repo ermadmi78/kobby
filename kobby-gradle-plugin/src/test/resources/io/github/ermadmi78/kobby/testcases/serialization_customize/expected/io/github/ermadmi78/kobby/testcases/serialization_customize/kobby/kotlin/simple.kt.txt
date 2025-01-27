@@ -59,7 +59,6 @@ public val simpleJson: Json = Json {
   }
 }
 
-
 public fun simpleContextOf(adapter: SimpleAdapter): SimpleContext = SimpleContextImpl(adapter)
 
 public fun buildSimpleQuery(__projection: QueryProjection.() -> Unit): Pair<String, JsonObject> {
@@ -131,7 +130,7 @@ public interface SimpleContext {
 }
 
 public fun interface SimpleSubscriber<T> {
-  public suspend fun subscribe(block: suspend SimpleReceiver<T>.() -> Unit): Unit
+  public suspend fun subscribe(block: suspend SimpleReceiver<T>.() -> Unit)
 }
 
 @SimpleDSL
@@ -160,7 +159,7 @@ private class SimpleContextImpl(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+  override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
     val projectionRef = QueryProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -184,7 +183,7 @@ private class SimpleContextImpl(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+  override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
     val projectionRef = MutationProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -204,7 +203,7 @@ private class SimpleContextImpl(
     return mutationDto.buildEntity(this, projectionRef)
   }
 
-  public override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+  override fun subscription(__projection: SubscriptionProjection.() -> Unit):
       SimpleSubscriber<Subscription> {
     val projectionRef = SubscriptionProjectionImpl().apply(__projection)
 
@@ -224,7 +223,7 @@ private class SimpleContextImpl(
     return SimpleSubscriber<Subscription> {
       adapter.executeSubscription(subscription, JsonObject(arguments)) {
         it.invoke(object : SimpleReceiver<Subscription> {
-          public override suspend fun receive(): Subscription {
+          override suspend fun receive(): Subscription {
             val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
             return subscriptionDto.buildEntity(this@SimpleContextImpl, projectionRef)
           }

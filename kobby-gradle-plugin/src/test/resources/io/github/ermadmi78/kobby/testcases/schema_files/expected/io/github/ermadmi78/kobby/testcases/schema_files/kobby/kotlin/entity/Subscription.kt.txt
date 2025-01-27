@@ -18,16 +18,15 @@ package io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.entity
 import io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.GraphqlContext
 import io.github.ermadmi78.kobby.testcases.schema_files.kobby.kotlin.GraphqlDSL
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Subscription {
   public fun __context(): GraphqlContext
 
-  public fun SubscriptionProjection.__withCurrentProjection(): Unit
+  public fun SubscriptionProjection.__withCurrentProjection()
 }
 
 @GraphqlDSL
 public interface SubscriptionProjection {
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

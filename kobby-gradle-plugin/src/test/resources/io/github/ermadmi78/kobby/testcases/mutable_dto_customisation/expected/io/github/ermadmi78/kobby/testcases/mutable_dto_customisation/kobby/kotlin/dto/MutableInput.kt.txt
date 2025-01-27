@@ -58,7 +58,7 @@ public class MutableInput {
 
   public var mutableListNN: List<MutableTargetInput?>? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("MutableInput").append('(')
     append("id").append('=').append(id)
     append(", ").append("title").append('=').append(title)

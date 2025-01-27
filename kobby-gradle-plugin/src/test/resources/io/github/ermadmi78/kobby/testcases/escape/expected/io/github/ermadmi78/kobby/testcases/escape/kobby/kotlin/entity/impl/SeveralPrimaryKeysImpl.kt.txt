@@ -25,7 +25,6 @@ import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -37,28 +36,28 @@ internal class SeveralPrimaryKeysImpl(
   internal val __innerProjection: SeveralPrimaryKeysProjectionImpl,
   internal val __innerDto: SeveralPrimaryKeysDto,
 ) : SeveralPrimaryKeys {
-  public override val `if`: Long
+  override val `if`: Long
     get() = __innerDto.`if`!!
 
-  public override val `do`: String?
+  override val `do`: String?
     get() = __innerDto.`do`
 
-  public override val `while`: Int
+  override val `while`: Int
     get() = __innerDto.`while`!!
 
-  public override val it: String?
+  override val it: String?
     get() = __innerDto.it
 
-  public override val other: String?
+  override val other: String?
     get() = __innerDto.other
 
-  public override val result: Int
+  override val result: Int
     get() = __innerDto.result!!
 
-  public override val block: String?
+  override val block: String?
     get() = __innerDto.block
 
-  public override fun equals(other: Any?): Boolean {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -93,7 +92,7 @@ internal class SeveralPrimaryKeysImpl(
     return true
   }
 
-  public override fun hashCode(): Int {
+  override fun hashCode(): Int {
     var result = __innerDto.`if`?.hashCode() ?: 0
     result = 31 * result + (__innerDto.`do`?.hashCode() ?: 0)
     result = 31 * result + (__innerDto.`while`?.hashCode() ?: 0)
@@ -105,7 +104,7 @@ internal class SeveralPrimaryKeysImpl(
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("SeveralPrimaryKeys").append('(')
 
     var counter = 0
@@ -162,9 +161,9 @@ internal class SeveralPrimaryKeysImpl(
     append(')')
   }
 
-  public override fun __context(): EscapeContext = __innerContext
+  override fun __context(): EscapeContext = __innerContext
 
-  public override fun SeveralPrimaryKeysProjection.__withCurrentProjection(): Unit {
+  override fun SeveralPrimaryKeysProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -172,7 +171,7 @@ internal class SeveralPrimaryKeysImpl(
 internal open class SeveralPrimaryKeysProjectionImpl : SeveralPrimaryKeysProjection {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: SeveralPrimaryKeysProjection): Unit {
+      __projection: SeveralPrimaryKeysProjection) {
   }
 
   /**
@@ -184,7 +183,7 @@ internal open class SeveralPrimaryKeysProjectionImpl : SeveralPrimaryKeysProject
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: if

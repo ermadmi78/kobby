@@ -24,7 +24,6 @@ import kotlin.Any
 import kotlin.Boolean
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -38,7 +37,7 @@ internal class MyMutationImpl(
   internal val __innerProjection: MyMutationProjectionImpl,
   internal val __innerDto: MyMutationDto,
 ) : MyMutation {
-  public override val insert: Boolean
+  override val insert: Boolean
     get() {
       if (!__innerProjection.__innerInsert0) {
         error("Property [insert] is not available - add [insert] projection to switch on it")
@@ -47,7 +46,7 @@ internal class MyMutationImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("MyMutation").append('(')
 
     var counter = 0
@@ -62,9 +61,9 @@ internal class MyMutationImpl(
     append(')')
   }
 
-  public override fun __context(): GraphqlContext = __innerContext
+  override fun __context(): GraphqlContext = __innerContext
 
-  public override fun MyMutationProjection.__withCurrentProjection(): Unit {
+  override fun MyMutationProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -74,14 +73,13 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
 
   internal var __innerInsert0Data: MyInput? = null
 
-  public override fun insert(`data`: MyInput): Unit {
+  override fun insert(`data`: MyInput) {
     __innerInsert0 = true
     __innerInsert0Data = `data`
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MyMutationProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MyMutationProjection) {
     if ("insert" !in ignore && __innerInsert0) {
       __projection.insert(__innerInsert0Data!!)
     }
@@ -96,7 +94,7 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("insert" !in ignore && __innerInsert0) {
       body.append(' ').append("insert")
       var counter = 0
@@ -135,7 +133,7 @@ internal open class MyMutationProjectionImpl : MyMutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: insert

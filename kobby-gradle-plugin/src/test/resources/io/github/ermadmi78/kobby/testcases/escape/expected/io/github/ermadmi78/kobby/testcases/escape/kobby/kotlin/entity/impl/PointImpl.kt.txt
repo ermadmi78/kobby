@@ -24,7 +24,6 @@ import kotlin.Boolean
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -37,7 +36,7 @@ internal class PointImpl(
   internal val __innerProjection: PointProjectionImpl,
   internal val __innerDto: PointDto,
 ) : Point {
-  public override val x: Int
+  override val x: Int
     get() {
       if (!__innerProjection.__innerX0) {
         error("Property [x] is not available - add [x] projection to switch on it")
@@ -45,7 +44,7 @@ internal class PointImpl(
       return __innerDto.x!!
     }
 
-  public override val y: Int
+  override val y: Int
     get() {
       if (!__innerProjection.__innerY1) {
         error("Property [y] is not available - add [y] projection to switch on it")
@@ -54,7 +53,7 @@ internal class PointImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Point").append('(')
 
     var counter = 0
@@ -76,9 +75,9 @@ internal class PointImpl(
     append(')')
   }
 
-  public override fun __context(): EscapeContext = __innerContext
+  override fun __context(): EscapeContext = __innerContext
 
-  public override fun PointProjection.__withCurrentProjection(): Unit {
+  override fun PointProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -88,16 +87,16 @@ internal open class PointProjectionImpl : PointProjection {
 
   internal var __innerY1: Boolean = false
 
-  public override fun x(): Unit {
+  override fun x() {
     __innerX0 = true
   }
 
-  public override fun y(): Unit {
+  override fun y() {
     __innerY1 = true
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: PointProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: PointProjection) {
     if ("x" !in ignore && __innerX0) {
       __projection.x()
     }
@@ -115,7 +114,7 @@ internal open class PointProjectionImpl : PointProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: x

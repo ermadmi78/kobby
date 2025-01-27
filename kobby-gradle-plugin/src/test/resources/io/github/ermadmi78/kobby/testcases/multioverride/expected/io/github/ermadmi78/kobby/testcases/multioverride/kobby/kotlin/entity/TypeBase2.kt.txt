@@ -32,17 +32,17 @@ public interface TypeBase2 {
 
 @MultiOverrideDSL
 public interface TypeBase2Projection {
-  public fun noOverride2(size: Int? = null): Unit
+  public fun noOverride2(size: Int? = null)
 
-  public fun typeMultiOverride(size: Int?): Unit
+  public fun typeMultiOverride(size: Int?)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 
 @MultiOverrideDSL
 public interface TypeBase2Qualification {
-  public fun __onTypeMultiOverride(__projection: TypeMultiOverrideProjection.() -> Unit): Unit
+  public fun __onTypeMultiOverride(__projection: TypeMultiOverrideProjection.() -> Unit)
 }
 
 @MultiOverrideDSL

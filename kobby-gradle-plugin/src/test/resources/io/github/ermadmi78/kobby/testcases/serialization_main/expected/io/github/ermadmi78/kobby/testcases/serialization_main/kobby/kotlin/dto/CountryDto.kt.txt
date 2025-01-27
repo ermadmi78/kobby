@@ -37,12 +37,12 @@ public data class CountryDto(
   /**
    * Unique identifier of entity
    */
-  public override val id: Long? = null,
+  override val id: Long? = null,
   /**
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
    */
-  public override val fields: JsonObject? = null,
+  override val fields: JsonObject? = null,
   /**
    * The name of the country
    */

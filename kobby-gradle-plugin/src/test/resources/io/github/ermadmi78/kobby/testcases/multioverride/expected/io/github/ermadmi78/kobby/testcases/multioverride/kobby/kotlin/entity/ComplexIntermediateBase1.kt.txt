@@ -25,36 +25,35 @@ import kotlin.Unit
 public interface ComplexIntermediateBase1 : ComplexBase1 {
   public val noOverride0: String
 
-  public override val noOverride1: String
+  override val noOverride1: String
 
-  public override val complexMultiOverride: String
+  override val complexMultiOverride: String
 
   public val intermediateMultiOverride: String
 
-  public override fun __context(): MultiOverrideContext
+  override fun __context(): MultiOverrideContext
 }
 
 @MultiOverrideDSL
 public interface ComplexIntermediateBase1Projection : ComplexBase1Projection {
-  public fun noOverride0(size: Int? = null): Unit
+  public fun noOverride0(size: Int? = null)
 
-  public override fun noOverride1(size: Int?): Unit
+  override fun noOverride1(size: Int?)
 
-  public override fun complexMultiOverride(size: Int?): Unit
+  override fun complexMultiOverride(size: Int?)
 
-  public fun intermediateMultiOverride(size: Int?): Unit
+  public fun intermediateMultiOverride(size: Int?)
 
-  public override fun __minimize(): Unit {
+  override fun __minimize() {
   }
 }
 
 @MultiOverrideDSL
 public interface ComplexIntermediateBase1Qualification {
-  public fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit): Unit
+  public fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit)
 
   public
-      fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit):
-      Unit
+      fun __onIntermediateMultiOverride(__projection: IntermediateMultiOverrideProjection.() -> Unit)
 }
 
 @MultiOverrideDSL

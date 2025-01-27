@@ -26,14 +26,13 @@ public interface Mutation {
 
   public fun __context(): EscapeContext
 
-  public fun MutationProjection.__withCurrentProjection(): Unit
+  public fun MutationProjection.__withCurrentProjection()
 }
 
 @EscapeDSL
 public interface MutationProjection {
-  public fun `by`(`while`: EscapeInput? = null, __projection: EscapeProjection.() -> Unit = {}):
-      Unit
+  public fun `by`(`while`: EscapeInput? = null, __projection: EscapeProjection.() -> Unit = {})
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

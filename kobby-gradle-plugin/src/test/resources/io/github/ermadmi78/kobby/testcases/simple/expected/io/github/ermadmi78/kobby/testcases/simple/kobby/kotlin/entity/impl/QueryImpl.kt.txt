@@ -42,16 +42,15 @@ internal class QueryImpl(
   internal val __innerProjection: QueryProjectionImpl,
   internal val __innerDto: QueryDto,
 ) : Query {
-  public override val all: List<List<List<Simple>?>>? by lazy {
+  override val all: List<List<List<Simple>?>>? by lazy {
     if (__innerProjection.__innerAll0 == null) {
       error("Property [all] is not available - add [all] projection to switch on it")
     }
     __innerDto.resolveAll(__innerContext, __innerProjection.__innerAll0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Query").append('(')
 
     var counter = 0
@@ -66,9 +65,9 @@ internal class QueryImpl(
     append(')')
   }
 
-  public override fun __context(): SimpleContext = __innerContext
+  override fun __context(): SimpleContext = __innerContext
 
-  public override fun QueryProjection.__withCurrentProjection(): Unit {
+  override fun QueryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -78,13 +77,13 @@ internal open class QueryProjectionImpl : QueryProjection {
 
   internal var __innerAll0Limit: Int? = null
 
-  public override fun all(limit: Int?, __projection: SimpleProjection.() -> Unit): Unit {
+  override fun all(limit: Int?, __projection: SimpleProjection.() -> Unit) {
     __innerAll0 = SimpleProjectionImpl().apply(__projection)
     __innerAll0Limit = limit
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection) {
     if ("all" !in ignore && __innerAll0 != null) {
       __projection.all(__innerAll0Limit) {
         this@QueryProjectionImpl.__innerAll0!!.___innerRepeatProjection(setOf(), this)
@@ -101,7 +100,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("all" !in ignore && __innerAll0 != null) {
       body.append(' ').append("all")
       var counter = 0
@@ -143,7 +142,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: all

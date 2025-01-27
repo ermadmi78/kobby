@@ -41,16 +41,15 @@ internal class QueryImpl(
   internal val __innerProjection: QueryProjectionImpl,
   internal val __innerDto: QueryDto,
 ) : Query {
-  public override val countries: List<Country> by lazy {
+  override val countries: List<Country> by lazy {
     if (__innerProjection.__innerCountries0 == null) {
       error("Property [countries] is not available - add [countries] projection to switch on it")
     }
     __innerDto.resolveCountries(__innerContext, __innerProjection.__innerCountries0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Query").append('(')
 
     var counter = 0
@@ -65,9 +64,9 @@ internal class QueryImpl(
     append(')')
   }
 
-  public override fun __context(): GraphqlContext = __innerContext
+  override fun __context(): GraphqlContext = __innerContext
 
-  public override fun QueryProjection.__withCurrentProjection(): Unit {
+  override fun QueryProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -75,12 +74,12 @@ internal class QueryImpl(
 internal open class QueryProjectionImpl : QueryProjection {
   internal var __innerCountries0: CountryProjectionImpl? = null
 
-  public override fun countries(__projection: CountryProjection.() -> Unit): Unit {
+  override fun countries(__projection: CountryProjection.() -> Unit) {
     __innerCountries0 = CountryProjectionImpl().apply(__projection)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection) {
     if ("countries" !in ignore && __innerCountries0 != null) {
       __projection.countries {
         this@QueryProjectionImpl.__innerCountries0!!.___innerRepeatProjection(setOf(), this)
@@ -97,7 +96,7 @@ internal open class QueryProjectionImpl : QueryProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: countries

@@ -52,7 +52,7 @@ internal open class InterfaceBase2QualifiedProjectionImpl : InterfaceBase2Qualif
       InterfaceMultiOverrideImplementationProjectionImpl =
       InterfaceMultiOverrideImplementationProjectionImpl()
 
-  public override fun noOverride2(size: Int?): Unit {
+  override fun noOverride2(size: Int?) {
     __innerNoOverride20 = true
     __innerNoOverride20Size = size
 
@@ -62,7 +62,7 @@ internal open class InterfaceBase2QualifiedProjectionImpl : InterfaceBase2Qualif
     ___innerIgnore += "noOverride2"
   }
 
-  public override fun interfaceMultiOverride(size: Int?): Unit {
+  override fun interfaceMultiOverride(size: Int?) {
     __innerInterfaceMultiOverride1 = true
     __innerInterfaceMultiOverride1Size = size
 
@@ -72,15 +72,14 @@ internal open class InterfaceBase2QualifiedProjectionImpl : InterfaceBase2Qualif
     ___innerIgnore += "interfaceMultiOverride"
   }
 
-  public override
-      fun __onInterfaceMultiOverrideImplementation(__projection: InterfaceMultiOverrideImplementationProjection.() -> Unit):
-      Unit {
+  override
+      fun __onInterfaceMultiOverrideImplementation(__projection: InterfaceMultiOverrideImplementationProjection.() -> Unit) {
     InterfaceMultiOverrideImplementationProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onInterfaceMultiOverrideImplementation)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: InterfaceBase2QualifiedProjection): Unit {
+      __projection: InterfaceBase2QualifiedProjection) {
     if ("noOverride2" !in ignore && __innerNoOverride20) {
       __projection.noOverride2(__innerNoOverride20Size)
     }
@@ -101,7 +100,7 @@ internal open class InterfaceBase2QualifiedProjectionImpl : InterfaceBase2Qualif
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("noOverride2" !in ignore && __innerNoOverride20) {
       body.append(' ').append("noOverride2")
       var counter = 0
@@ -140,7 +139,7 @@ internal open class InterfaceBase2QualifiedProjectionImpl : InterfaceBase2Qualif
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("interfaceMultiOverride" !in ignore && __innerInterfaceMultiOverride1) {
       body.append(' ').append("interfaceMultiOverride")
       var counter = 0
@@ -179,7 +178,7 @@ internal open class InterfaceBase2QualifiedProjectionImpl : InterfaceBase2Qualif
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: noOverride2

@@ -52,7 +52,7 @@ internal open class TaggableQualifiedProjectionImpl : TaggableQualifiedProjectio
 
   internal val ___inner__onActor: ActorProjectionImpl = ActorProjectionImpl()
 
-  public override fun fields(__selection: EntityFieldsSelection.() -> Unit): Unit {
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit) {
     __innerFields1 = EntityFieldsSelectionImpl().apply(__selection)
 
     ___inner__onFilm.__innerFields1 = __innerFields1
@@ -62,7 +62,7 @@ internal open class TaggableQualifiedProjectionImpl : TaggableQualifiedProjectio
     ___innerIgnore += "fields"
   }
 
-  public override fun tags(__projection: TagProjection.() -> Unit): Unit {
+  override fun tags(__projection: TagProjection.() -> Unit) {
     __innerTags2 = TagProjectionImpl().apply(__projection)
 
     ___inner__onFilm.__innerTags2 = __innerTags2
@@ -72,17 +72,17 @@ internal open class TaggableQualifiedProjectionImpl : TaggableQualifiedProjectio
     ___innerIgnore += "tags"
   }
 
-  public override fun __onFilm(__projection: FilmProjection.() -> Unit): Unit {
+  override fun __onFilm(__projection: FilmProjection.() -> Unit) {
     FilmProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onFilm)
   }
 
-  public override fun __onActor(__projection: ActorProjection.() -> Unit): Unit {
+  override fun __onActor(__projection: ActorProjection.() -> Unit) {
     ActorProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onActor)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: TaggableQualifiedProjection): Unit {
+      __projection: TaggableQualifiedProjection) {
     if ("fields" !in ignore && __innerFields1 != null) {
       __projection.fields {
         this@TaggableQualifiedProjectionImpl.__innerFields1!!.___innerRepeatSelection(this)
@@ -110,7 +110,7 @@ internal open class TaggableQualifiedProjectionImpl : TaggableQualifiedProjectio
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("fields" !in ignore && __innerFields1 != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -149,7 +149,7 @@ internal open class TaggableQualifiedProjectionImpl : TaggableQualifiedProjectio
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id

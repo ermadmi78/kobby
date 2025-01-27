@@ -118,7 +118,7 @@ public interface GraphqlContext {
 }
 
 public fun interface GraphqlSubscriber<T> {
-  public suspend fun subscribe(block: suspend GraphqlReceiver<T>.() -> Unit): Unit
+  public suspend fun subscribe(block: suspend GraphqlReceiver<T>.() -> Unit)
 }
 
 @GraphqlDSL
@@ -147,7 +147,7 @@ private class GraphqlContextImpl(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery {
+  override suspend fun query(__projection: MyQueryProjection.() -> Unit): MyQuery {
     val projectionRef = MyQueryProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -171,7 +171,7 @@ private class GraphqlContextImpl(
    * https://youtrack.jetbrains.com/issue/KTIJ-844
    */
   @Suppress("BlockingMethodInNonBlockingContext")
-  public override suspend fun mutation(__projection: MyMutationProjection.() -> Unit): MyMutation {
+  override suspend fun mutation(__projection: MyMutationProjection.() -> Unit): MyMutation {
     val projectionRef = MyMutationProjectionImpl().apply(__projection)
 
     val header = StringBuilder()
@@ -191,7 +191,7 @@ private class GraphqlContextImpl(
     return mutationDto.buildEntity(this, projectionRef)
   }
 
-  public override fun subscription(__projection: MySubscriptionProjection.() -> Unit):
+  override fun subscription(__projection: MySubscriptionProjection.() -> Unit):
       GraphqlSubscriber<MySubscription> {
     val projectionRef = MySubscriptionProjectionImpl().apply(__projection)
 
@@ -211,7 +211,7 @@ private class GraphqlContextImpl(
     return GraphqlSubscriber<MySubscription> {
       adapter.executeSubscription(subscription, arguments) {
         it.invoke(object : GraphqlReceiver<MySubscription> {
-          public override suspend fun receive(): MySubscription {
+          override suspend fun receive(): MySubscription {
             val subscriptionDto: MySubscriptionDto = this@executeSubscription.receive()
             return subscriptionDto.buildEntity(this@GraphqlContextImpl, projectionRef)
           }

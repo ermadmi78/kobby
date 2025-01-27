@@ -30,16 +30,16 @@ public interface Query {
 
   public fun __context(): SimpleContext
 
-  public fun QueryProjection.__withCurrentProjection(): Unit
+  public fun QueryProjection.__withCurrentProjection()
 }
 
 @SimpleDSL
 public interface QueryProjection {
-  public fun simple(__query: QuerySimpleQuery.() -> Unit): Unit
+  public fun simple(__query: QuerySimpleQuery.() -> Unit)
 
-  public fun simpleByDate(date: LocalDate, __projection: SimpleProjection.() -> Unit): Unit
+  public fun simpleByDate(date: LocalDate, __projection: SimpleProjection.() -> Unit)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 

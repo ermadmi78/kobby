@@ -40,16 +40,16 @@ import kotlin.collections.List
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class EscapeDto(
   public val `if`: Long? = null,
-  public override val `is`: String? = null,
-  public override val `for`: Int? = null,
-  public override val points: List<PointDto>? = null,
+  override val `is`: String? = null,
+  override val `for`: Int? = null,
+  override val points: List<PointDto>? = null,
   public val it: String? = null,
   public val `in`: String? = null,
   public val `val`: PointDto? = null,
   public val `var`: List<PointDto?>? = null,
   public val `while`: List<PointDto>? = null,
 ) : IEscapeDto {
-  public override fun equals(other: Any?): Boolean {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -61,7 +61,7 @@ public data class EscapeDto(
     return this.`if` == other.`if`
   }
 
-  public override fun hashCode(): Int = this.`if`?.hashCode() ?: 0
+  override fun hashCode(): Int = this.`if`?.hashCode() ?: 0
 }
 
 public fun EscapeDto.toBuilder(): EscapeDtoBuilder = EscapeDtoBuilder().also {

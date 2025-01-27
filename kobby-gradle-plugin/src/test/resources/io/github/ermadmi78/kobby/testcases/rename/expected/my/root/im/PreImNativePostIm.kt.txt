@@ -39,16 +39,16 @@ public open class PreImPreQPNativePostQPPostIm : PreQPNativePostQP {
 
   public val _innerOnPrActorOnPoPin: PreImPrePrActorPostPrPostIm = PreImPrePrActorPostPrPostIm()
 
-  public override fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit): Unit {
+  override fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit) {
     PreImPrePrFilmPostPrPostIm().apply(projection)._innerRepeatProjectionPin(setOf(), _innerOnPrFilmOnPoPin)
   }
 
-  public override fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit): Unit {
+  override fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit) {
     PreImPrePrActorPostPrPostIm().apply(projection)._innerRepeatProjectionPin(setOf(), _innerOnPrActorOnPoPin)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PreQPNativePostQP): Unit {
+  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PreQPNativePostQP) {
     projection.onPrFilmOnPo {
       this@PreImPreQPNativePostQPPostIm._innerOnPrFilmOnPoPin._innerRepeatProjectionPin(setOf(), this)
     }
@@ -66,7 +66,7 @@ public open class PreImPreQPNativePostQPPostIm : PreQPNativePostQP {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     body.append(' ').append("__typename")

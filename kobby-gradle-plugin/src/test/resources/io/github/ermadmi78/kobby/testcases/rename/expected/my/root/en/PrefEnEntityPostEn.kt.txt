@@ -33,19 +33,19 @@ public interface PrefEnEntityPostEn {
 
 @PrefCtxDSLPostCtx
 public interface PrePrEntityPostPr {
-  public fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit = {}): Unit
+  public fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit = {})
 
-  public fun minimize(): Unit {
+  public fun minimize() {
   }
 }
 
 @PrefCtxDSLPostCtx
 public interface PreQalEntityPostQal {
-  public fun onPrCountryOnPo(projection: PrePrCountryPostPr.() -> Unit = {}): Unit
+  public fun onPrCountryOnPo(projection: PrePrCountryPostPr.() -> Unit = {})
 
-  public fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit = {}): Unit
+  public fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit = {})
 
-  public fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit = {}): Unit
+  public fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit = {})
 }
 
 @PrefCtxDSLPostCtx

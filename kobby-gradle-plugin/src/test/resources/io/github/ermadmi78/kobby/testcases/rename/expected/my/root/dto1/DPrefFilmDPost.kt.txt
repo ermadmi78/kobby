@@ -39,15 +39,16 @@ import my.root.ctx.PrefCtxDSLPostCtx
 )
 @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
 public data class DPrefFilmDPost(
-  public override val id: Long? = null,
-  public override val fields: String? = null,
+  override val id: Long? = null,
+  override val fields: String? = null,
   public val title: String? = null,
   public val genre: EPrefGenreEPost? = null,
   public val countryId: Long? = null,
   public val country: DPrefCountryDPost? = null,
   public val actors: List<DPrefActorDPost>? = null,
-) : DPrefEntityDPost, DPrefNativeDPost {
-  public override fun equals(other: Any?): Boolean {
+) : DPrefEntityDPost,
+    DPrefNativeDPost {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -59,7 +60,7 @@ public data class DPrefFilmDPost(
     return this.id == other.id
   }
 
-  public override fun hashCode(): Int = this.id?.hashCode() ?: 0
+  override fun hashCode(): Int = this.id?.hashCode() ?: 0
 }
 
 public fun DPrefFilmDPost.myBuilder1(): BPrefDPrefFilmDPostBPost = BPrefDPrefFilmDPostBPost().also {

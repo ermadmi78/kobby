@@ -23,7 +23,6 @@ import kotlin.Any
 import kotlin.Boolean
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
@@ -36,7 +35,7 @@ internal class TagImpl(
   internal val __innerProjection: TagProjectionImpl,
   internal val __innerDto: TagDto,
 ) : Tag {
-  public override val `value`: String
+  override val `value`: String
     get() {
       if (!__innerProjection.__innerValue0) {
         error("Property [value] is not available - add [value] projection to switch on it")
@@ -45,7 +44,7 @@ internal class TagImpl(
     }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Tag").append('(')
 
     var counter = 0
@@ -60,9 +59,9 @@ internal class TagImpl(
     append(')')
   }
 
-  public override fun __context(): CinemaContext = __innerContext
+  override fun __context(): CinemaContext = __innerContext
 
-  public override fun TagProjection.__withCurrentProjection(): Unit {
+  override fun TagProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -70,12 +69,12 @@ internal class TagImpl(
 internal open class TagProjectionImpl : TagProjection {
   internal var __innerValue0: Boolean = false
 
-  public override fun `value`(): Unit {
+  override fun `value`() {
     __innerValue0 = true
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: TagProjection): Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: TagProjection) {
     if ("value" !in ignore && __innerValue0) {
       __projection.`value`()
     }
@@ -90,7 +89,7 @@ internal open class TagProjectionImpl : TagProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: value

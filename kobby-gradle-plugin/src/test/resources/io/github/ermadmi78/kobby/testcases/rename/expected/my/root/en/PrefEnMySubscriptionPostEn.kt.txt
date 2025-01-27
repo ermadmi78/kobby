@@ -30,19 +30,19 @@ public interface PrefEnMySubscriptionPostEn {
 
   public fun context(): PrefCtxContextPostCtx
 
-  public fun PrePrMySubscriptionPostPr.withCurrentProjection(): Unit
+  public fun PrePrMySubscriptionPostPr.withCurrentProjection()
 }
 
 @PrefCtxDSLPostCtx
 public interface PrePrMySubscriptionPostPr {
-  public fun withPrCountryCreatedWithPo(projection: PrePrCountryPostPr.() -> Unit = {}): Unit
+  public fun withPrCountryCreatedWithPo(projection: PrePrCountryPostPr.() -> Unit = {})
 
   public fun withPrFilmCreatedWithPo(countryId: Long? = null, projection: PrePrFilmPostPr.() -> Unit
-      = {}): Unit
+      = {})
 
   public fun withPrActorCreatedWithPo(countryId: Long? = null,
-      projection: PrePrActorPostPr.() -> Unit = {}): Unit
+      projection: PrePrActorPostPr.() -> Unit = {})
 
-  public fun minimize(): Unit {
+  public fun minimize() {
   }
 }

@@ -32,17 +32,17 @@ public interface ComplexBase2 {
 
 @MultiOverrideDSL
 public interface ComplexBase2Projection {
-  public fun noOverride2(size: Int? = null): Unit
+  public fun noOverride2(size: Int? = null)
 
-  public fun complexMultiOverride(size: Int?): Unit
+  public fun complexMultiOverride(size: Int?)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 
 @MultiOverrideDSL
 public interface ComplexBase2Qualification {
-  public fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit): Unit
+  public fun __onComplexMultiOverride(__projection: ComplexMultiOverrideProjection.() -> Unit)
 }
 
 @MultiOverrideDSL

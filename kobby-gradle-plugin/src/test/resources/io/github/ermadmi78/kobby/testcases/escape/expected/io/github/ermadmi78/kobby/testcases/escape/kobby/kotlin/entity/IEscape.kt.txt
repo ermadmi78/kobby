@@ -35,7 +35,7 @@ public interface IEscape {
 
 @EscapeDSL
 public interface IEscapeProjection {
-  public fun `is`(): Unit
+  public fun `is`()
 
   /**
    * @param do Default: 0
@@ -45,15 +45,15 @@ public interface IEscapeProjection {
     `do`: Int? = null,
     `by`: Int? = null,
     __projection: PointProjection.() -> Unit,
-  ): Unit
+  )
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }
 
 @EscapeDSL
 public interface IEscapeQualification {
-  public fun __onEscape(__projection: EscapeProjection.() -> Unit = {}): Unit
+  public fun __onEscape(__projection: EscapeProjection.() -> Unit = {})
 }
 
 @EscapeDSL

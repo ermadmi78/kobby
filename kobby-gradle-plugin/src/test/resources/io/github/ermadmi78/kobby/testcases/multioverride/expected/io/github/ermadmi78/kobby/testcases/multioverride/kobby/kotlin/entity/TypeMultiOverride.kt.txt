@@ -20,32 +20,31 @@ import io.github.ermadmi78.kobby.testcases.multioverride.kobby.kotlin.MultiOverr
 import kotlin.Int
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface TypeMultiOverride : TypeBase1, TypeBase2 {
-  public override val noOverride1: String
+  override val noOverride1: String
 
-  public override val noOverride2: String
+  override val noOverride2: String
 
-  public override val typeMultiOverride: String
+  override val typeMultiOverride: String
 
   public val finalField: String
 
-  public override fun __context(): MultiOverrideContext
+  override fun __context(): MultiOverrideContext
 
-  public fun TypeMultiOverrideProjection.__withCurrentProjection(): Unit
+  public fun TypeMultiOverrideProjection.__withCurrentProjection()
 }
 
 @MultiOverrideDSL
 public interface TypeMultiOverrideProjection : TypeBase1Projection, TypeBase2Projection {
-  public override fun noOverride1(size: Int?): Unit
+  override fun noOverride1(size: Int?)
 
-  public override fun noOverride2(size: Int?): Unit
+  override fun noOverride2(size: Int?)
 
-  public override fun typeMultiOverride(size: Int?): Unit
+  override fun typeMultiOverride(size: Int?)
 
-  public fun finalField(size: Int? = null): Unit
+  public fun finalField(size: Int? = null)
 
-  public override fun __minimize(): Unit {
+  override fun __minimize() {
   }
 }

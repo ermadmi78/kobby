@@ -51,10 +51,10 @@ public class PreImActorPostIm(
   public val innerProjectionPin: PreImPrePrActorPostPrPostIm,
   public val innerDtoPin: DPrefActorDPost,
 ) : PrefEnActorPostEn {
-  public override val id: Long
+  override val id: Long
     get() = innerDtoPin.id!!
 
-  public override val fields: String
+  override val fields: String
     get() {
       if (innerProjectionPin.innerFields1Pin == null) {
         error("Property [fields] is not available - add [withPrFieldsWithPo] projection to switch on it")
@@ -62,7 +62,7 @@ public class PreImActorPostIm(
       return innerDtoPin.fields!!
     }
 
-  public override val firstName: String
+  override val firstName: String
     get() {
       if (!innerProjectionPin.innerFirstName2Pin) {
         error("Property [firstName] is not available - remove [withoutPrFirstNameWithoutPo] projection to switch on it")
@@ -70,7 +70,7 @@ public class PreImActorPostIm(
       return innerDtoPin.firstName!!
     }
 
-  public override val lastName: String?
+  override val lastName: String?
     get() {
       if (!innerProjectionPin.innerLastName3Pin) {
         error("Property [lastName] is not available - remove [withoutPrLastNameWithoutPo] projection to switch on it")
@@ -78,7 +78,7 @@ public class PreImActorPostIm(
       return innerDtoPin.lastName
     }
 
-  public override val gender: EPrefGenderEPost
+  override val gender: EPrefGenderEPost
     get() {
       if (!innerProjectionPin.innerGender4Pin) {
         error("Property [gender] is not available - add [withPrGenderWithPo] projection to switch on it")
@@ -86,26 +86,24 @@ public class PreImActorPostIm(
       return innerDtoPin.gender!!
     }
 
-  public override val countryId: Long
+  override val countryId: Long
     get() = innerDtoPin.countryId!!
 
-  public override val country: PrefEnCountryPostEn by lazy {
+  override val country: PrefEnCountryPostEn by lazy {
     if (innerProjectionPin.innerCountry6Pin == null) {
       error("Property [country] is not available - add [withPrCountryWithPo] projection to switch on it")
     }
     innerDtoPin.resolveCountry(innerContextPin, innerProjectionPin.innerCountry6Pin!!)
   }
 
-
-  public override val films: List<PrefEnFilmPostEn> by lazy {
+  override val films: List<PrefEnFilmPostEn> by lazy {
     if (innerProjectionPin.innerFilms7Pin == null) {
       error("Property [films] is not available - add [withPrFilmsWithPo] projection to switch on it")
     }
     innerDtoPin.resolveFilms(innerContextPin, innerProjectionPin.innerFilms7Pin!!)
   }
 
-
-  public override fun equals(other: Any?): Boolean {
+  override fun equals(other: Any?): Boolean {
     if (this === other) {
       return true
     }
@@ -125,14 +123,14 @@ public class PreImActorPostIm(
     return true
   }
 
-  public override fun hashCode(): Int {
+  override fun hashCode(): Int {
     var result = innerDtoPin.id?.hashCode() ?: 0
     result = 31 * result + (innerDtoPin.countryId?.hashCode() ?: 0)
     return result
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Actor").append('(')
 
     var counter = 0
@@ -196,9 +194,9 @@ public class PreImActorPostIm(
     append(')')
   }
 
-  public override fun context(): PrefCtxContextPostCtx = innerContextPin
+  override fun context(): PrefCtxContextPostCtx = innerContextPin
 
-  public override fun PrePrActorPostPr.withCurrentProjection(): Unit {
+  override fun PrePrActorPostPr.withCurrentProjection() {
     innerProjectionPin._innerRepeatProjectionPin(setOf(), this)
   }
 }
@@ -216,32 +214,32 @@ public open class PreImPrePrActorPostPrPostIm : PrePrActorPostPr {
 
   public var innerFilms7Pin: PreImPreQrActorFilmsPostQrPostIm? = null
 
-  public override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit): Unit {
+  override fun withPrFieldsWithPo(selection: PreSelEntityFieldsPostSel.() -> Unit) {
     innerFields1Pin = PreImPreSelEntityFieldsPostSelPostIm().apply(selection)
   }
 
-  public override fun withoutPrFirstNameWithoutPo(): Unit {
+  override fun withoutPrFirstNameWithoutPo() {
     innerFirstName2Pin = false
   }
 
-  public override fun withoutPrLastNameWithoutPo(): Unit {
+  override fun withoutPrLastNameWithoutPo() {
     innerLastName3Pin = false
   }
 
-  public override fun withPrGenderWithPo(): Unit {
+  override fun withPrGenderWithPo() {
     innerGender4Pin = true
   }
 
-  public override fun withPrCountryWithPo(projection: PrePrCountryPostPr.() -> Unit): Unit {
+  override fun withPrCountryWithPo(projection: PrePrCountryPostPr.() -> Unit) {
     innerCountry6Pin = PreImPrePrCountryPostPrPostIm().apply(projection)
   }
 
-  public override fun withPrFilmsWithPo(query: PreQrActorFilmsPostQr.() -> Unit): Unit {
+  override fun withPrFilmsWithPo(query: PreQrActorFilmsPostQr.() -> Unit) {
     innerFilms7Pin = PreImPreQrActorFilmsPostQrPostIm().apply(query)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrActorPostPr): Unit {
+  public fun _innerRepeatProjectionPin(ignore: Set<String>, projection: PrePrActorPostPr) {
     if ("fields" !in ignore && innerFields1Pin != null) {
       projection.withPrFieldsWithPo {
         this@PreImPrePrActorPostPrPostIm.innerFields1Pin!!._innerRepeatSelectionPin(this)
@@ -278,7 +276,7 @@ public open class PreImPrePrActorPostPrPostIm : PrePrActorPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("fields" !in ignore && innerFields1Pin != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -317,7 +315,7 @@ public open class PreImPrePrActorPostPrPostIm : PrePrActorPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("films" !in ignore && innerFilms7Pin != null) {
       body.append(' ').append("films")
       var counter = 0
@@ -405,7 +403,7 @@ public open class PreImPrePrActorPostPrPostIm : PrePrActorPostPr {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id
@@ -453,16 +451,16 @@ public open class PreImPrePrActorPostPrPostIm : PrePrActorPostPr {
 
 public class PreImPreQrActorFilmsPostQrPostIm : PreImPrePrFilmPostPrPostIm(), PreQrActorFilmsPostQr
     {
-  public override var title: String? = null
+  override var title: String? = null
 
-  public override var genre: EPrefGenreEPost? = null
+  override var genre: EPrefGenreEPost? = null
 
-  public override var limit: Int? = null
+  override var limit: Int? = null
 
-  public override var offset: Int? = null
+  override var offset: Int? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public fun _innerRepeatSelectionPin(selection: PreSelActorFilmsPostSel): Unit {
+  public fun _innerRepeatSelectionPin(selection: PreSelActorFilmsPostSel) {
     selection.title = title
     selection.genre = genre
     selection.limit = limit

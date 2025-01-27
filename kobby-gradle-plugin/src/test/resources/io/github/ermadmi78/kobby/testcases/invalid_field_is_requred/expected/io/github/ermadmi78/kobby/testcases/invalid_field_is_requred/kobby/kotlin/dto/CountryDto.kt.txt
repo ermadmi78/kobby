@@ -24,9 +24,9 @@ import kotlin.also
 import kotlin.apply
 
 public data class CountryDto(
-  public override val id: Long? = null,
-  public override val name: String? = null,
-  public override val description: String? = null,
+  override val id: Long? = null,
+  override val name: String? = null,
+  override val description: String? = null,
 ) : BaseDto
 
 public fun CountryDto.toBuilder(): CountryDtoBuilder = CountryDtoBuilder().also {

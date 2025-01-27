@@ -19,7 +19,6 @@ import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotl
 import io.github.ermadmi78.kobby.testcases.forbidden_projection_names.kobby.kotlin.ForbiddenProjectionNamesDSL
 import kotlin.Boolean
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface Query {
   public val getClass: Boolean
@@ -44,31 +43,31 @@ public interface Query {
 
   public fun __context(): ForbiddenProjectionNamesContext
 
-  public fun QueryProjection.__withCurrentProjection(): Unit
+  public fun QueryProjection.__withCurrentProjection()
 }
 
 @ForbiddenProjectionNamesDSL
 public interface QueryProjection {
-  public fun __getClass(): Unit
+  public fun __getClass()
 
-  public fun __hashCode(): Unit
+  public fun __hashCode()
 
-  public fun __equals(): Unit
+  public fun __equals()
 
-  public fun __clone(): Unit
+  public fun __clone()
 
-  public fun __toString(): Unit
+  public fun __toString()
 
-  public fun __notify(): Unit
+  public fun __notify()
 
-  public fun __notifyAll(): Unit
+  public fun __notifyAll()
 
-  public fun __wait(): Unit
+  public fun __wait()
 
-  public fun __finalize(): Unit
+  public fun __finalize()
 
-  public fun normal(): Unit
+  public fun normal()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

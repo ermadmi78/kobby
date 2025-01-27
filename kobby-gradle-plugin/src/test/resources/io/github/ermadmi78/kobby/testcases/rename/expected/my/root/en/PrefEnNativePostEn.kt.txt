@@ -26,15 +26,15 @@ public interface PrefEnNativePostEn {
 
 @PrefCtxDSLPostCtx
 public interface PrePrNativePostPr {
-  public fun minimize(): Unit {
+  public fun minimize() {
   }
 }
 
 @PrefCtxDSLPostCtx
 public interface PreQalNativePostQal {
-  public fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit = {}): Unit
+  public fun onPrFilmOnPo(projection: PrePrFilmPostPr.() -> Unit = {})
 
-  public fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit = {}): Unit
+  public fun onPrActorOnPo(projection: PrePrActorPostPr.() -> Unit = {})
 }
 
 @PrefCtxDSLPostCtx

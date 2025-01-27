@@ -20,7 +20,6 @@ import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.SimpleDSL
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
-import kotlin.Unit
 
 /**
  *  Simple type
@@ -38,7 +37,7 @@ public interface Simple {
 
   public fun __context(): SimpleContext
 
-  public fun SimpleProjection.__withCurrentProjection(): Unit
+  public fun SimpleProjection.__withCurrentProjection()
 }
 
 /**
@@ -49,13 +48,13 @@ public interface SimpleProjection {
   /**
    *  id of simple
    */
-  public fun id(): Unit
+  public fun id()
 
   /**
    *  name of simple
    */
-  public fun name(): Unit
+  public fun name()
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

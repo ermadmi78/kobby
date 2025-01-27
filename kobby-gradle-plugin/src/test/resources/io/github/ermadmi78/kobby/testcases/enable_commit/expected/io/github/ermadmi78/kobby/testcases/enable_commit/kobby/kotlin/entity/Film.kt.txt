@@ -31,17 +31,17 @@ public interface Film {
 
   public fun __context(): CinemaContext
 
-  public fun FilmProjection.__withCurrentProjection(): Unit
+  public fun FilmProjection.__withCurrentProjection()
 }
 
 @CinemaDSL
 public interface FilmProjection {
-  public fun id(): Unit
+  public fun id()
 
-  public fun title(): Unit
+  public fun title()
 
-  public fun country(__projection: CountryProjection.() -> Unit): Unit
+  public fun country(__projection: CountryProjection.() -> Unit)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

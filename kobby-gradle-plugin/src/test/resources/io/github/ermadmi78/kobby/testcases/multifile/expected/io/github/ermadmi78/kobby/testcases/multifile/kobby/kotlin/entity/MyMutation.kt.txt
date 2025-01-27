@@ -20,20 +20,19 @@ import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlDSL
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyInput
 import kotlin.Boolean
 import kotlin.Suppress
-import kotlin.Unit
 
 public interface MyMutation {
   public val insert: Boolean
 
   public fun __context(): GraphqlContext
 
-  public fun MyMutationProjection.__withCurrentProjection(): Unit
+  public fun MyMutationProjection.__withCurrentProjection()
 }
 
 @GraphqlDSL
 public interface MyMutationProjection {
-  public fun insert(`data`: MyInput): Unit
+  public fun insert(`data`: MyInput)
 
-  public fun __minimize(): Unit {
+  public fun __minimize() {
   }
 }

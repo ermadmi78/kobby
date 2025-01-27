@@ -23,11 +23,12 @@ import kotlin.also
 import kotlin.apply
 
 public data class TypeMultiOverrideDto(
-  public override val noOverride1: String? = null,
-  public override val noOverride2: String? = null,
-  public override val typeMultiOverride: String? = null,
+  override val noOverride1: String? = null,
+  override val noOverride2: String? = null,
+  override val typeMultiOverride: String? = null,
   public val finalField: String? = null,
-) : TypeBase1Dto, TypeBase2Dto
+) : TypeBase1Dto,
+    TypeBase2Dto
 
 public fun TypeMultiOverrideDto.toBuilder(): TypeMultiOverrideDtoBuilder =
     TypeMultiOverrideDtoBuilder().also {

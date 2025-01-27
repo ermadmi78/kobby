@@ -39,16 +39,15 @@ internal class MySubscriptionImpl(
   internal val __innerProjection: MySubscriptionProjectionImpl,
   internal val __innerDto: MySubscriptionDto,
 ) : MySubscription {
-  public override val onInsert: MyEvent by lazy {
+  override val onInsert: MyEvent by lazy {
     if (__innerProjection.__innerOnInsert0 == null) {
       error("Property [onInsert] is not available - add [onInsert] projection to switch on it")
     }
     __innerDto.resolveOnInsert(__innerContext, __innerProjection.__innerOnInsert0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("MySubscription").append('(')
 
     var counter = 0
@@ -63,9 +62,9 @@ internal class MySubscriptionImpl(
     append(')')
   }
 
-  public override fun __context(): GraphqlContext = __innerContext
+  override fun __context(): GraphqlContext = __innerContext
 
-  public override fun MySubscriptionProjection.__withCurrentProjection(): Unit {
+  override fun MySubscriptionProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -75,14 +74,14 @@ internal open class MySubscriptionProjectionImpl : MySubscriptionProjection {
 
   internal var __innerOnInsert0Pattern: String? = null
 
-  public override fun onInsert(pattern: String?, __projection: MyEventProjection.() -> Unit): Unit {
+  override fun onInsert(pattern: String?, __projection: MyEventProjection.() -> Unit) {
     __innerOnInsert0 = MyEventProjectionImpl().apply(__projection)
     __innerOnInsert0Pattern = pattern
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: MySubscriptionProjection): Unit {
+      __projection: MySubscriptionProjection) {
     if ("onInsert" !in ignore && __innerOnInsert0 != null) {
       __projection.onInsert(__innerOnInsert0Pattern) {
         this@MySubscriptionProjectionImpl.__innerOnInsert0!!.___innerRepeatProjection(setOf(), this)
@@ -99,7 +98,7 @@ internal open class MySubscriptionProjectionImpl : MySubscriptionProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("onInsert" !in ignore && __innerOnInsert0 != null) {
       body.append(' ').append("onInsert")
       var counter = 0
@@ -141,7 +140,7 @@ internal open class MySubscriptionProjectionImpl : MySubscriptionProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: onInsert

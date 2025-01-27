@@ -40,16 +40,15 @@ internal class MutationImpl(
   internal val __innerProjection: MutationProjectionImpl,
   internal val __innerDto: MutationDto,
 ) : Mutation {
-  public override val `by`: Escape? by lazy {
+  override val `by`: Escape? by lazy {
     if (__innerProjection.__innerBy0 == null) {
       error("Property [by] is not available - add [by] projection to switch on it")
     }
     __innerDto.resolveBy(__innerContext, __innerProjection.__innerBy0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Mutation").append('(')
 
     var counter = 0
@@ -64,9 +63,9 @@ internal class MutationImpl(
     append(')')
   }
 
-  public override fun __context(): EscapeContext = __innerContext
+  override fun __context(): EscapeContext = __innerContext
 
-  public override fun MutationProjection.__withCurrentProjection(): Unit {
+  override fun MutationProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -76,14 +75,13 @@ internal open class MutationProjectionImpl : MutationProjection {
 
   internal var __innerBy0While: EscapeInput? = null
 
-  public override fun `by`(`while`: EscapeInput?, __projection: EscapeProjection.() -> Unit): Unit {
+  override fun `by`(`while`: EscapeInput?, __projection: EscapeProjection.() -> Unit) {
     __innerBy0 = EscapeProjectionImpl().apply(__projection)
     __innerBy0While = `while`
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection) {
     if ("by" !in ignore && __innerBy0 != null) {
       __projection.`by`(__innerBy0While) {
         this@MutationProjectionImpl.__innerBy0!!.___innerRepeatProjection(setOf(), this)
@@ -100,7 +98,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("by" !in ignore && __innerBy0 != null) {
       body.append(' ').append("by")
       var counter = 0
@@ -142,7 +140,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: by

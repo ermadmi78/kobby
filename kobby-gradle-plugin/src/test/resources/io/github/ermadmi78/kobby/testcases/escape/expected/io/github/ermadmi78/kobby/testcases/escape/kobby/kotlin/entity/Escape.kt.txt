@@ -27,11 +27,11 @@ import kotlin.collections.List
 public interface Escape : IEscape {
   public val `if`: Long
 
-  public override val `is`: String
+  override val `is`: String
 
-  public override val `for`: Int?
+  override val `for`: Int?
 
-  public override val points: List<Point>
+  override val points: List<Point>
 
   public val it: String
 
@@ -43,36 +43,36 @@ public interface Escape : IEscape {
 
   public val `while`: List<Point>
 
-  public override fun __context(): EscapeContext
+  override fun __context(): EscapeContext
 
-  public fun EscapeProjection.__withCurrentProjection(): Unit
+  public fun EscapeProjection.__withCurrentProjection()
 }
 
 @EscapeDSL
 public interface EscapeProjection : IEscapeProjection {
-  public override fun `is`(): Unit
+  override fun `is`()
 
   /**
    * @param do Default: 0
    * @param by Default: 100
    */
-  public override fun points(
+  override fun points(
     `do`: Int?,
     `by`: Int?,
     __projection: PointProjection.() -> Unit,
-  ): Unit
+  )
 
-  public fun it(): Unit
+  public fun it()
 
-  public fun __withoutIn(): Unit
+  public fun __withoutIn()
 
-  public fun `val`(__projection: PointProjection.() -> Unit): Unit
+  public fun `val`(__projection: PointProjection.() -> Unit)
 
-  public fun `var`(__projection: PointProjection.() -> Unit): Unit
+  public fun `var`(__projection: PointProjection.() -> Unit)
 
-  public fun `while`(__projection: PointProjection.() -> Unit): Unit
+  public fun `while`(__projection: PointProjection.() -> Unit)
 
-  public override fun __minimize(): Unit {
+  override fun __minimize() {
     __withoutIn()
   }
 }

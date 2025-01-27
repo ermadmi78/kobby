@@ -39,16 +39,15 @@ internal class MutationImpl(
   internal val __innerProjection: MutationProjectionImpl,
   internal val __innerDto: MutationDto,
 ) : Mutation {
-  public override val createCountry: Country by lazy {
+  override val createCountry: Country by lazy {
     if (__innerProjection.__innerCreateCountry0 == null) {
       error("Property [createCountry] is not available - add [createCountry] projection to switch on it")
     }
     __innerDto.resolveCreateCountry(__innerContext, __innerProjection.__innerCreateCountry0!!)
   }
 
-
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("Mutation").append('(')
 
     var counter = 0
@@ -63,9 +62,9 @@ internal class MutationImpl(
     append(')')
   }
 
-  public override fun __context(): CountryContext = __innerContext
+  override fun __context(): CountryContext = __innerContext
 
-  public override fun MutationProjection.__withCurrentProjection(): Unit {
+  override fun MutationProjection.__withCurrentProjection() {
     __innerProjection.___innerRepeatProjection(setOf(), this)
   }
 }
@@ -75,15 +74,13 @@ internal open class MutationProjectionImpl : MutationProjection {
 
   internal var __innerCreateCountry0Name: String? = null
 
-  public override fun createCountry(name: String, __projection: CountryProjection.() -> Unit):
-      Unit {
+  override fun createCountry(name: String, __projection: CountryProjection.() -> Unit) {
     __innerCreateCountry0 = CountryProjectionImpl().apply(__projection)
     __innerCreateCountry0Name = name
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection):
-      Unit {
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection) {
     if ("createCountry" !in ignore && __innerCreateCountry0 != null) {
       __projection.createCountry(__innerCreateCountry0Name!!) {
         this@MutationProjectionImpl.__innerCreateCountry0!!.___innerRepeatProjection(setOf(), this)
@@ -100,7 +97,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     if ("createCountry" !in ignore && __innerCreateCountry0 != null) {
       body.append(' ').append("createCountry")
       var counter = 0
@@ -142,7 +139,7 @@ internal open class MutationProjectionImpl : MutationProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, Any>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: createCountry

@@ -54,7 +54,7 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
 
   internal val ___inner__onCountry: CountryProjectionImpl = CountryProjectionImpl()
 
-  public override fun fields(__selection: EntityFieldsSelection.() -> Unit): Unit {
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit) {
     __innerFields1 = EntityFieldsSelectionImpl().apply(__selection)
 
     ___inner__onFilm.__innerFields1 = __innerFields1
@@ -66,21 +66,21 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
     ___innerIgnore += "fields"
   }
 
-  public override fun __onFilm(__projection: FilmProjection.() -> Unit): Unit {
+  override fun __onFilm(__projection: FilmProjection.() -> Unit) {
     FilmProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onFilm)
   }
 
-  public override fun __onActor(__projection: ActorProjection.() -> Unit): Unit {
+  override fun __onActor(__projection: ActorProjection.() -> Unit) {
     ActorProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onActor)
   }
 
-  public override fun __onCountry(__projection: CountryProjection.() -> Unit): Unit {
+  override fun __onCountry(__projection: CountryProjection.() -> Unit) {
     CountryProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onCountry)
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>,
-      __projection: EntityQualifiedProjection): Unit {
+      __projection: EntityQualifiedProjection) {
     if ("fields" !in ignore && __innerFields1 != null) {
       __projection.fields {
         this@EntityQualifiedProjectionImpl.__innerFields1!!.___innerRepeatSelection(this)
@@ -106,7 +106,7 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     if ("fields" !in ignore && __innerFields1 != null) {
       body.append(' ').append("fields")
       var counter = 0
@@ -145,7 +145,7 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
-  ): Unit {
+  ) {
     body.append(' ').append('{')
 
     // Field: id
@@ -186,10 +186,10 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
 }
 
 internal class EntityFieldsSelectionImpl : EntityFieldsSelection {
-  public override var keys: List<String>? = null
+  override var keys: List<String>? = null
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatSelection(__selection: EntityFieldsSelection): Unit {
+  internal fun ___innerRepeatSelection(__selection: EntityFieldsSelection) {
     __selection.keys = keys
   }
 }

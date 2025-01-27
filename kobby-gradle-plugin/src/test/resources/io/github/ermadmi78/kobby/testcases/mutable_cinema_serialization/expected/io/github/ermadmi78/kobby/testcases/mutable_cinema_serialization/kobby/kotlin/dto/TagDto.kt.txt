@@ -38,7 +38,7 @@ public class TagDto {
    */
   public var `value`: String? = null
 
-  public override fun toString(): String = buildString {
+  override fun toString(): String = buildString {
     append("TagDto").append('(')
     append("value").append('=').append(`value`)
     append(')')

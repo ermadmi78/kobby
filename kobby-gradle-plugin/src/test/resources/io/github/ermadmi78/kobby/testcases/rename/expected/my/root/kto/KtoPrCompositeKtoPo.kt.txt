@@ -77,13 +77,13 @@ public open class KtoPrCompositeKtoPo(
   protected val mapper: PrefCtxMapperPostCtx,
   protected val requestHeaders: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val subscriptionPayload: suspend () -> Map<String, Any?>? = { null },
-  protected val subscriptionReceiveTimeoutMillis: Long? = 10000,
+  protected val subscriptionReceiveTimeoutMillis: Long? = 10_000,
   protected val httpAuthorizationTokenHeader: String = "Authorization",
   protected val webSocketAuthorizationTokenHeader: String = "authToken",
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
   protected val listener: (GPrefRequestGPost) -> Unit = {},
 ) : PrefCtxAdapterPostCtx {
-  public override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
+  override suspend fun executeQuery(query: String, variables: Map<String, Any?>):
       DPrefMyQueryDPost {
     val request = GPrefRequestGPost(query, variables)
     listener(request)
@@ -110,7 +110,7 @@ public open class KtoPrCompositeKtoPo(
         )
   }
 
-  public override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
+  override suspend fun executeMutation(query: String, variables: Map<String, Any?>):
       DPrefMyMutationDPost {
     val request = GPrefRequestGPost(query, variables)
     listener(request)
@@ -137,11 +137,11 @@ public open class KtoPrCompositeKtoPo(
         )
   }
 
-  public override suspend fun executeSubscription(
+  override suspend fun executeSubscription(
     query: String,
     variables: Map<String, Any?>,
     block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit,
-  ): Unit {
+  ) {
     val httpHeaders: Map<String, String> = requestHeaders()
     val payload: Map<String, Any?>? = subscriptionPayload()
     client.webSocket(
@@ -176,7 +176,7 @@ public open class KtoPrCompositeKtoPo(
     initPayload: Map<String, Any?>?,
     request: GPrefRequestGPost,
     block: suspend PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost>.() -> Unit,
-  ): Unit {
+  ) {
     val socket = this
     sendMessage(socket, GPrefClientMessageConnectionInitGPost(initPayload))
 
@@ -201,7 +201,7 @@ public open class KtoPrCompositeKtoPo(
 
     try {
       block.invoke(object : PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost> {
-        public override suspend fun receive(): DPrefMySubscriptionDPost {
+        override suspend fun receive(): DPrefMySubscriptionDPost {
           while (true) {
             var reply = receiveMessage(socket)
             if (reply == null) {
@@ -255,7 +255,7 @@ public open class KtoPrCompositeKtoPo(
   }
 
   protected open suspend fun sendMessage(socket: WebSocketSession,
-      message: GPrefClientMessageGPost): Unit {
+      message: GPrefClientMessageGPost) {
     val content = mapper.serialize(message)
     socket.send(content)
   }
