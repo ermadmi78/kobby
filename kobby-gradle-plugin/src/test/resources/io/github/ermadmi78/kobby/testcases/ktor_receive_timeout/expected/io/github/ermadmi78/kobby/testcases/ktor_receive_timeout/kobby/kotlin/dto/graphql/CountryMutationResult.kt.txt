@@ -17,12 +17,17 @@ package io.github.ermadmi78.kobby.testcases.ktor_receive_timeout.kobby.kotlin.dt
 
 import com.fasterxml.jackson.`annotation`.JsonInclude
 import io.github.ermadmi78.kobby.testcases.ktor_receive_timeout.kobby.kotlin.dto.MutationDto
+import kotlin.Any
+import kotlin.String
 import kotlin.Suppress
 import kotlin.collections.List
+import kotlin.collections.Map
 
 public data class CountryMutationResult(
   @JsonInclude(value = JsonInclude.Include.NON_ABSENT)
   public val `data`: MutationDto? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
   public val errors: List<CountryError>? = null,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val extensions: Map<String, Any?>? = null,
 )

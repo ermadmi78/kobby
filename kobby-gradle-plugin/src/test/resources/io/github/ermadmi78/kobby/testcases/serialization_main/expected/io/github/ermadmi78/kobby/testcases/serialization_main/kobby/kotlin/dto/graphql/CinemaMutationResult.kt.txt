@@ -19,9 +19,11 @@ import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.M
 import kotlin.Suppress
 import kotlin.collections.List
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 public data class CinemaMutationResult(
   public val `data`: MutationDto? = null,
   public val errors: List<CinemaError>? = null,
+  public val extensions: JsonObject? = null,
 )

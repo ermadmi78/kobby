@@ -16,8 +16,11 @@
 package my.root.dto1.gr_ql
 
 import com.fasterxml.jackson.`annotation`.JsonInclude
+import kotlin.Any
+import kotlin.String
 import kotlin.Suppress
 import kotlin.collections.List
+import kotlin.collections.Map
 import my.root.dto1.DPrefMyMutationDPost
 
 public data class GPrefMutationResultGPost(
@@ -25,4 +28,6 @@ public data class GPrefMutationResultGPost(
   public val `data`: DPrefMyMutationDPost? = null,
   @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
   public val errors: List<GPrefErrorGPost>? = null,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val extensions: Map<String, Any?>? = null,
 )
