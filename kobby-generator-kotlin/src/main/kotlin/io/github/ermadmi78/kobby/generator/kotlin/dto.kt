@@ -437,6 +437,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             }
         }
 
+        val argErrors = "errors" to LIST.parameterizedBy(dto.graphql.errorClass).nullable()
+        val extensions = "extensions" to MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+
         // GraphQL Error
         files += buildFile(dto.graphql.packageName, dto.graphql.errorName) {
             buildClass(dto.graphql.errorName) {
@@ -460,15 +463,13 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         buildProperty("path", LIST.parameterizedBy(ANY).nullable()) {
                             jacksonIncludeNonEmpty()
                         }
-                        buildProperty("extensions", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
+                        buildProperty(extensions) {
                             jacksonIncludeNonEmpty()
                         }
                     }
                 }
             }
         }
-
-        val argErrors = "errors" to LIST.parameterizedBy(dto.graphql.errorClass).nullable()
 
         // GraphQL Exception
         files += buildFile(dto.graphql.packageName, dto.graphql.exceptionName) {
@@ -486,19 +487,30 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             }
         }
 
+        fun TypeSpecBuilder.primaryConstructorProperties(className: ClassName) {
+            buildPrimaryConstructorProperties {
+                buildProperty("data", className.nullable()) {
+                    jacksonIncludeNonAbsent()
+                }
+                buildProperty(argErrors) {
+                    jacksonIncludeNonEmpty()
+                }
+                if (dto.serialization.enabled) {
+                    buildProperty("extensions", SerializationJson.JSON_OBJECT.nullable())
+                } else {
+                    buildProperty(extensions) {
+                        jacksonIncludeNonEmpty()
+                    }
+                }
+            }
+        }
+
         // GraphQL QueryResult
         files += buildFile(dto.graphql.packageName, dto.graphql.queryResultName) {
             buildClass(dto.graphql.queryResultName) {
                 annotateSerializable()
                 addModifiers(KModifier.DATA)
-                buildPrimaryConstructorProperties {
-                    buildProperty("data", schema.query.dtoClass.nullable()) {
-                        jacksonIncludeNonAbsent()
-                    }
-                    buildProperty(argErrors) {
-                        jacksonIncludeNonEmpty()
-                    }
-                }
+                primaryConstructorProperties(schema.query.dtoClass)
             }
         }
 
@@ -507,14 +519,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             buildClass(dto.graphql.mutationResultName) {
                 annotateSerializable()
                 addModifiers(KModifier.DATA)
-                buildPrimaryConstructorProperties {
-                    buildProperty("data", schema.mutation.dtoClass.nullable()) {
-                        jacksonIncludeNonAbsent()
-                    }
-                    buildProperty(argErrors) {
-                        jacksonIncludeNonEmpty()
-                    }
-                }
+                primaryConstructorProperties(schema.mutation.dtoClass)
             }
         }
 
@@ -523,14 +528,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             buildClass(dto.graphql.subscriptionResultName) {
                 annotateSerializable()
                 addModifiers(KModifier.DATA)
-                buildPrimaryConstructorProperties {
-                    buildProperty("data", schema.subscription.dtoClass.nullable()) {
-                        jacksonIncludeNonAbsent()
-                    }
-                    buildProperty(argErrors) {
-                        jacksonIncludeNonEmpty()
-                    }
-                }
+                primaryConstructorProperties(schema.subscription.dtoClass)
             }
         }
 
