@@ -7,6 +7,7 @@ pluginManagement {
     val pluginShadowVersion: String by settings
     val nexusPublishVersion: String by settings
     val mavenPluginDevelopmentVersion: String by settings
+    val testLogger: String by settings
 
     plugins {
         kotlin("jvm") version kotlinVersion
@@ -15,6 +16,7 @@ pluginManagement {
         id("com.github.johnrengelman.shadow") version pluginShadowVersion
         id("io.github.gradle-nexus.publish-plugin") version nexusPublishVersion
         id("de.benediktritter.maven-plugin-development") version mavenPluginDevelopmentVersion
+        id("com.adarshr.test-logger") version testLogger
     }
 }
 

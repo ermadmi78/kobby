@@ -485,7 +485,7 @@ data class KotlinLayout(
         }
 
         buildAnnotation(JSON_SUB_TYPES) {
-            for (subObjectNode in node.subObjects.values) {
+            for (subObjectNode in node.subObjects) {
                 buildAnnotation(JSON_SUB_TYPES_TYPE) {
                     addMember("value = %T::class", subObjectNode.dtoClass)
                     addMember("name = %S", subObjectNode.name)

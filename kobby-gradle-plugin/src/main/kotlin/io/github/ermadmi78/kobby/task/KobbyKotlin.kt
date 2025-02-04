@@ -94,6 +94,37 @@ open class KobbyKotlin : DefaultTask() {
 
     @Input
     @Optional
+    @Option(
+        option = "schemaTruncateReportEnabled",
+        description = "Print detailed schema truncation report to console (default false)"
+    )
+    val schemaTruncateReportEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "schemaTruncateRegexEnabled",
+        description = "true - use Regex in truncation query, false - use Kobby Pattern " +
+                "(? - matches one character, * - matches zero or more characters, | - OR operator). " +
+                "Default false."
+    )
+    val schemaTruncateRegexEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "schemaTruncateCaseSensitive",
+        description = "Are patterns used in a GraphQL schema truncation query case sensitive (default true)"
+    )
+    val schemaTruncateCaseSensitive: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    val schemaTruncateQuery: MapProperty<String, KobbyTypeOperationQuery> =
+        project.objects.mapProperty(String::class.java, KobbyTypeOperationQuery::class.java)
+
+    @Input
+    @Optional
     val scalars: MapProperty<String, KotlinType> =
         project.objects.mapProperty(String::class.java, KotlinType::class.java)
 
@@ -771,6 +802,10 @@ open class KobbyKotlin : DefaultTask() {
         schemaDirectiveDefault.convention(KobbyDirective.DEFAULT)
         schemaDirectiveSelection.convention(KobbyDirective.SELECTION)
 
+        schemaTruncateReportEnabled.convention(false)
+        schemaTruncateRegexEnabled.convention(false)
+        schemaTruncateCaseSensitive.convention(true)
+
         scalars.convention(PREDEFINED_SCALARS)
 
         relativePackage.convention(true)
@@ -1020,10 +1055,27 @@ open class KobbyKotlin : DefaultTask() {
             "Failed to create directory for generated sources: $targetDirectory".throwIt()
         }
 
-        val schema = try {
+        var schema = try {
             parseSchema(directiveLayout, *graphQLSchemaFiles.map { FileReader(it) }.toTypedArray())
         } catch (e: Exception) {
             "Schema parsing failed.".throwIt(e)
+        }
+
+        // Truncate schema
+        val truncateQuery = schemaTruncateQuery.orNull
+        if (!truncateQuery.isNullOrEmpty()) {
+            schema = try {
+                schema.truncate(
+                    reportEnabled = schemaTruncateReportEnabled.get(),
+                    regexEnabled = schemaTruncateRegexEnabled.get(),
+                    caseSensitive = schemaTruncateCaseSensitive.get(),
+                    query = truncateQuery
+                ) { message ->
+                    logger.warn(message)
+                }
+            } catch (e: Exception) {
+                "Schema truncation failed.".throwIt(e)
+            }
         }
 
         try {
@@ -1042,16 +1094,6 @@ open class KobbyKotlin : DefaultTask() {
 
         output.forEach {
             it.writeTo(targetDirectory)
-        }
-    }
-
-    private fun String.throwIt(cause: Throwable? = null): Nothing {
-        val message = "[kobby] $this${if (cause == null) "" else " " + cause.message}"
-        System.err.println(message)
-        if (cause == null) {
-            throw TaskInstantiationException(message)
-        } else {
-            throw TaskInstantiationException(message, cause)
         }
     }
 

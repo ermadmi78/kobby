@@ -12,7 +12,7 @@ class KobbyEnumValue internal constructor(
     val name: String,
     val comments: List<String>
 ) {
-    fun comments(action: (String) -> Unit) = comments.forEach(action)
+    inline fun comments(action: (String) -> Unit) = comments.forEach(action)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

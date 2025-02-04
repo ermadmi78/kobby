@@ -5,7 +5,10 @@
 package io.github.ermadmi78.kobby
 
 import io.github.ermadmi78.kobby.generator.kotlin.KotlinTypes.PREDEFINED_SCALARS
+import io.github.ermadmi78.kobby.model.query.KobbyTypeAlias
 import io.github.ermadmi78.kobby.task.KobbyKotlin
+import io.github.ermadmi78.kobby.task.KobbySchemaAnalyze
+import io.github.ermadmi78.kobby.task.KobbyTypeOperationQuery
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
@@ -28,47 +31,123 @@ class KobbyPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val extension = project.extensions.create(KOBBY, KobbyExtension::class.java)
         project.tasks.register(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java)
+        project.tasks.register(KobbySchemaAnalyze.TASK_NAME, KobbySchemaAnalyze::class.java)
 
         project.afterEvaluate { p ->
             val kotlinTask = p.tasks.named(KobbyKotlin.TASK_NAME, KobbyKotlin::class.java).get()
-            if (extension.kotlinExtension.valueOrNull?.enabled == false) {
-                kotlinTask.enabled = false
-                p.logger.warn("$KOBBY: [${KobbyKotlin.TASK_NAME}] task disabled")
-                return@afterEvaluate
-            }
+            val schemaAnalyzeTask = p.tasks.named(KobbySchemaAnalyze.TASK_NAME, KobbySchemaAnalyze::class.java).get()
 
             extension.schemaExtension.valueOrNull?.apply {
                 files?.also {
                     kotlinTask.schemaFiles.convention(p.provider<Iterable<RegularFile>> {
                         it.map { p.layout.file(p.provider { it }).get() }
                     })
+                    schemaAnalyzeTask.schemaFiles.convention(p.provider<Iterable<RegularFile>> {
+                        it.map { p.layout.file(p.provider { it }).get() }
+                    })
                 }
                 scanExtension.valueOrNull?.apply {
                     dir?.also {
                         kotlinTask.schemaScanDir.convention(it)
+                        schemaAnalyzeTask.schemaScanDir.convention(it)
                     }
                     includes?.also {
                         kotlinTask.schemaScanIncludes.convention(it)
+                        schemaAnalyzeTask.schemaScanIncludes.convention(it)
                     }
                     excludes?.also {
                         kotlinTask.schemaScanExcludes.convention(it)
+                        schemaAnalyzeTask.schemaScanExcludes.convention(it)
                     }
                 }
                 directiveExtension.valueOrNull?.apply {
                     primaryKey?.also {
                         kotlinTask.schemaDirectivePrimaryKey.convention(it)
+                        schemaAnalyzeTask.schemaDirectivePrimaryKey.convention(it)
                     }
                     required?.also {
                         kotlinTask.schemaDirectiveRequired.convention(it)
+                        schemaAnalyzeTask.schemaDirectiveRequired.convention(it)
                     }
                     default?.also {
                         kotlinTask.schemaDirectiveDefault.convention(it)
+                        schemaAnalyzeTask.schemaDirectiveDefault.convention(it)
                     }
                     selection?.also {
                         kotlinTask.schemaDirectiveSelection.convention(it)
+                        schemaAnalyzeTask.schemaDirectiveSelection.convention(it)
+                    }
+                }
+                truncateExtension.valueOrNull?.apply {
+                    reportEnabled?.also {
+                        kotlinTask.schemaTruncateReportEnabled.convention(it)
+                        schemaAnalyzeTask.schemaTruncateReportEnabled.convention(it)
+                    }
+                    regexEnabled?.also {
+                        kotlinTask.schemaTruncateRegexEnabled.convention(it)
+                        schemaAnalyzeTask.schemaTruncateRegexEnabled.convention(it)
+                    }
+                    caseSensitive?.also {
+                        kotlinTask.schemaTruncateCaseSensitive.convention(it)
+                        schemaAnalyzeTask.schemaTruncateCaseSensitive.convention(it)
+                    }
+
+                    val queryExtensionValue = queryExtension.valueOrNull
+                    if (queryExtensionValue == null) {
+                        val fakeQuery = mapOf(KobbyTypeAlias.ANY to KobbyTypeOperationQuery())
+                        kotlinTask.schemaTruncateQuery.convention(fakeQuery)
+                        schemaAnalyzeTask.schemaTruncateQuery.convention(fakeQuery)
+                    } else {
+                        val query = queryExtensionValue.build()
+                            .takeIf { it.isNotEmpty() }
+                            ?: mapOf(KobbyTypeAlias.ANY to KobbyTypeOperationQuery())
+                        kotlinTask.schemaTruncateQuery.convention(query)
+                        schemaAnalyzeTask.schemaTruncateQuery.convention(query)
+                    }
+                }
+                analyzeExtension.valueOrNull?.apply {
+                    truncatedSchema?.also {
+                        schemaAnalyzeTask.truncatedSchema.convention(it)
+                    }
+                    depth?.also {
+                        schemaAnalyzeTask.depth.convention(it)
+                    }
+                    reportLengthLimit?.also {
+                        schemaAnalyzeTask.reportLengthLimit.convention(it)
+                    }
+                    printMinWeight?.also {
+                        schemaAnalyzeTask.printMinWeight.convention(it)
+                    }
+                    printOverride?.also {
+                        schemaAnalyzeTask.printOverride.convention(it)
+                    }
+                    printArgumentTypes?.also {
+                        schemaAnalyzeTask.printArgumentTypes.convention(it)
+                    }
+                    printSuperTypes?.also {
+                        schemaAnalyzeTask.printSuperTypes.convention(it)
+                    }
+                    printSubTypes?.also {
+                        schemaAnalyzeTask.printSubTypes.convention(it)
+                    }
+                    regexEnabled?.also {
+                        schemaAnalyzeTask.regexEnabled.convention(it)
+                    }
+                    caseSensitive?.also {
+                        schemaAnalyzeTask.caseSensitive.convention(it)
+                    }
+                    queryExtension.valueOrNull?.also {
+                        schemaAnalyzeTask.query.convention(it.build())
                     }
                 }
             }
+
+            if (extension.kotlinExtension.valueOrNull?.enabled == false) {
+                kotlinTask.enabled = false
+                p.logger.warn("$KOBBY: [${KobbyKotlin.TASK_NAME}] task disabled")
+                return@afterEvaluate
+            }
+
             extension.kotlinExtension.valueOrNull?.also { kotlinExtension ->
                 kotlinExtension.scalars?.also {
                     kotlinTask.scalars.convention(PREDEFINED_SCALARS + it)

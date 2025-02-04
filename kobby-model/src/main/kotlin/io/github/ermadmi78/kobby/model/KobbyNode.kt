@@ -18,63 +18,75 @@ class KobbyNode internal constructor(
     val enumValues: Map<String, KobbyEnumValue>,
     val fields: Map<String, KobbyField>
 ) {
-    val implements: Map<String, KobbyNode> by lazy {
+    val implements: Set<KobbyNode> by lazy {
         _implements.asSequence()
             .map { schema.interfaces[it] ?: schema.unions[it] ?: invalidSchema("Unknown type \"$it\"") }
-            .map { it.name to it }
-            .toMap()
+            .toSet()
     }
 
-    val subObjects: Map<String, KobbyNode> by lazy {
+    /**
+     * Direct descendants of this node
+     */
+    inline fun children(action: (KobbyNode) -> Unit) {
+        for (subName in (schema.subObjectsIndex[name] ?: emptySet())) {
+            schema.all[subName]?.also { subNode ->
+                action(subNode)
+            }
+        }
+    }
+
+    /**
+     * returns object tree hierarchy without this node (all sub nodes with kind == OBJECT)
+     */
+    val subObjects: Set<KobbyNode> by lazy {
         when (kind) {
             INTERFACE, UNION -> {
-                val res = mutableMapOf<String, KobbyNode>()
-                for (subName in (schema.subObjectsIndex[name] ?: emptySet())) {
-                    schema.all[subName]?.also { subNode ->
-                        if (subNode.kind == OBJECT) {
-                            res[subNode.name] = subNode
-                        } else {
-                            res += subNode.subObjects
-                        }
+                val res = mutableSetOf<KobbyNode>()
+                children { subNode ->
+                    if (subNode.kind == OBJECT) {
+                        res += subNode
+                    } else {
+                        res += subNode.subObjects
                     }
                 }
 
                 res
             }
 
-            else -> emptyMap()
+            else -> emptySet()
         }
     }
 
     /**
      * returns node tree hierarchy without this node
      */
-    val subTree: List<KobbyNode> by lazy {
-        val subNodeNames: Set<String> = schema.subObjectsIndex[name]?.takeIf { it.isNotEmpty() }
-            ?: return@lazy emptyList<KobbyNode>()
+    val subTree: Set<KobbyNode> by lazy {
+        when (kind) {
+            INTERFACE, UNION -> {
+                val res = mutableSetOf<KobbyNode>()
+                children { subNode ->
+                    res += subNode
+                    res += subNode.subTree
+                }
 
-        val res = mutableListOf<KobbyNode>()
-        for (subName in subNodeNames) {
-            schema.all[subName]?.also { subNode ->
-                res += subNode
-                res += subNode.subTree
+                res
             }
-        }
 
-        return@lazy res
+            else -> emptySet()
+        }
     }
 
-    fun implements(action: (KobbyNode) -> Unit) = implements.values.forEach(action)
-    fun subObjects(action: (KobbyNode) -> Unit) = subObjects.values.forEach(action)
-    fun comments(action: (String) -> Unit) = comments.forEach(action)
-    fun enumValues(action: (KobbyEnumValue) -> Unit) = enumValues.values.forEach(action)
-    fun fields(action: (KobbyField) -> Unit) = fields.values.forEach(action)
+    inline fun implements(action: (KobbyNode) -> Unit) = implements.forEach(action)
+    inline fun subObjects(action: (KobbyNode) -> Unit) = subObjects.forEach(action)
+    inline fun comments(action: (String) -> Unit) = comments.forEach(action)
+    inline fun enumValues(action: (KobbyEnumValue) -> Unit) = enumValues.values.forEach(action)
+    inline fun fields(action: (KobbyField) -> Unit) = fields.values.forEach(action)
 
     val primaryKeysCount: Int by lazy {
         fields.values.count { it.isPrimaryKey }
     }
 
-    fun primaryKeys(action: (KobbyField) -> Unit) = fields.values.asSequence()
+    inline fun primaryKeys(action: (KobbyField) -> Unit) = fields.values.asSequence()
         .filter { it.isPrimaryKey }
         .forEach(action)
 
@@ -87,6 +99,60 @@ class KobbyNode internal constructor(
     val isQuery: Boolean = schema.operations[Operation.QUERY] == name
     val isMutation: Boolean = schema.operations[Operation.MUTATION] == name
     val isSubscription: Boolean = schema.operations[Operation.SUBSCRIPTION] == name
+
+    /**
+     * The number of GraphQL types (except scalars) reachable for a query on a field that returns the given type.
+     */
+    val weight: Int by lazy {
+        if (kind == SCALAR) {
+            return@lazy 0
+        }
+
+        if (kind == ENUM) {
+            return@lazy 1
+        }
+
+        var counter = 0
+        transitiveDependencies.forEach {
+            if (it.kind != SCALAR) {
+                counter++
+            }
+        }
+        counter
+    }
+
+    val transitiveDependencies: Set<KobbyNode> by lazy {
+        if (kind == SCALAR || kind == ENUM) {
+            return@lazy setOf(this)
+        }
+
+        val dependencies = mutableSetOf<KobbyNode>()
+        val supertypes = mutableSetOf<KobbyNode>()
+
+        populateTransitiveDependencies(dependencies, supertypes)
+        dependencies += supertypes
+        dependencies
+    }
+
+    private fun populateTransitiveDependencies(
+        dependencies: MutableSet<KobbyNode>,
+        supertypes: MutableSet<KobbyNode>
+    ) {
+        if (!dependencies.add(this)) {
+            return // Cutting off the dependency cycle
+        }
+
+        implements { parentNode ->
+            supertypes += parentNode
+        }
+        children { subNode ->
+            subNode.populateTransitiveDependencies(dependencies, supertypes)
+        }
+        fields { field ->
+            field.type.node.populateTransitiveDependencies(dependencies, supertypes)
+            dependencies += field.argumentDependencies
+        }
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

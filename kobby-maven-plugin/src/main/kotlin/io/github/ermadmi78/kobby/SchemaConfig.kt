@@ -1,5 +1,6 @@
 package io.github.ermadmi78.kobby
 
+import io.github.ermadmi78.kobby.model.query.KobbyTypeAlias
 import org.apache.maven.plugins.annotations.Parameter
 import java.io.File
 
@@ -13,11 +14,19 @@ class SchemaConfig {
     @Parameter
     var directive: DirectiveConfig = DirectiveConfig()
 
+    @Parameter
+    var truncate: TruncateConfig? = null
+
+    @Parameter
+    var analyze: AnalyzeConfig = AnalyzeConfig()
+
     override fun toString(): String {
         return "SchemaConfig(" +
                 "\n    files=${files.print(4)}, " +
                 "\n    scan=$scan, " +
                 "\n    directive=$directive" +
+                "\n    truncate=$truncate" +
+                "\n    analyze=$analyze" +
                 "\n  )"
     }
 }
@@ -64,14 +73,78 @@ class DirectiveConfig {
     }
 }
 
-private fun <T : Any> List<T>.print(shift: Int): String = buildString {
-    if (this@print.isEmpty()) {
-        append("[]")
-    } else {
-        append('[')
-        this@print.forEach { file ->
-            append('\n').shift(shift + 2).append(file)
-        }
-        append('\n').shift(shift).append(']')
+class TruncateConfig {
+    @Parameter
+    var reportEnabled: Boolean = false
+
+    @Parameter
+    var regexEnabled: Boolean = false
+
+    @Parameter
+    var caseSensitive: Boolean = true
+
+    @Parameter
+    var queries: List<QueryConfig> = listOf()
+
+    override fun toString(): String {
+        return "TruncateConfig(" +
+                "\n      reportEnabled=$reportEnabled, " +
+                "\n      regexEnabled=$regexEnabled, " +
+                "\n      caseSensitive=$caseSensitive, " +
+                "\n      queries=${queries.print(6)}" +
+                "\n    )"
+    }
+}
+
+class AnalyzeConfig {
+    @Parameter
+    var truncatedSchema: Boolean = true
+
+    @Parameter
+    var depth: Int = 1
+
+    @Parameter
+    var reportLengthLimit: Int = 10000
+
+    @Parameter
+    var printMinWeight: Int = 2
+
+    @Parameter
+    var printOverride: Boolean = false
+
+    @Parameter
+    var printArgumentTypes: Boolean = false
+
+    @Parameter
+    var printSuperTypes: Boolean = false
+
+    @Parameter
+    var printSubTypes: Boolean = false
+
+    @Parameter
+    var regexEnabled: Boolean = false
+
+    @Parameter
+    var caseSensitive: Boolean = true
+
+    @Parameter
+    var queries: List<QueryConfig> = listOf(
+        QueryConfig().also { it.type = KobbyTypeAlias.ROOT }
+    )
+
+    override fun toString(): String {
+        return "TruncateConfig(" +
+                "\n      truncatedSchema=$truncatedSchema, " +
+                "\n      depth=$depth, " +
+                "\n      reportLengthLimit=$reportLengthLimit, " +
+                "\n      printMinWeight=$printMinWeight, " +
+                "\n      printOverride=$printOverride, " +
+                "\n      printArgumentTypes=$printArgumentTypes, " +
+                "\n      printSuperTypes=$printSuperTypes, " +
+                "\n      printSubTypes=$printSubTypes, " +
+                "\n      regexEnabled=$regexEnabled, " +
+                "\n      caseSensitive=$caseSensitive, " +
+                "\n      queries=${queries.print(6)}" +
+                "\n    )"
     }
 }

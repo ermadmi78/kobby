@@ -25,23 +25,23 @@ class KobbySchema internal constructor(
     val mutation: KobbyNode by lazy(NONE) { objects[operations[Operation.MUTATION]!!]!! }
     val subscription: KobbyNode by lazy(NONE) { objects[operations[Operation.SUBSCRIPTION]!!]!! }
 
-    fun operations(action: (KobbyNode) -> Unit) = Operation.values().asSequence().map {
+    inline fun operations(action: (KobbyNode) -> Unit) = Operation.values().asSequence().map {
         objects[operations[it]!!]!!
     }.forEach(action)
 
-    fun all(action: (KobbyNode) -> Unit) = all.values.forEach(action)
-    fun scalars(action: (KobbyNode) -> Unit) = scalars.values.forEach(action)
-    fun objects(action: (KobbyNode) -> Unit) = objects.values.forEach(action)
-    fun interfaces(action: (KobbyNode) -> Unit) = interfaces.values.forEach(action)
-    fun unions(action: (KobbyNode) -> Unit) = unions.values.forEach(action)
+    inline fun all(action: (KobbyNode) -> Unit) = all.values.forEach(action)
+    inline fun scalars(action: (KobbyNode) -> Unit) = scalars.values.forEach(action)
+    inline fun objects(action: (KobbyNode) -> Unit) = objects.values.forEach(action)
+    inline fun interfaces(action: (KobbyNode) -> Unit) = interfaces.values.forEach(action)
+    inline fun unions(action: (KobbyNode) -> Unit) = unions.values.forEach(action)
 
-    fun interfacesAndUnions(action: (KobbyNode) -> Unit) {
+    inline fun interfacesAndUnions(action: (KobbyNode) -> Unit) {
         interfaces(action)
         unions(action)
     }
 
-    fun enums(action: (KobbyNode) -> Unit) = enums.values.forEach(action)
-    fun inputs(action: (KobbyNode) -> Unit) = inputs.values.forEach(action)
+    inline fun enums(action: (KobbyNode) -> Unit) = enums.values.forEach(action)
+    inline fun inputs(action: (KobbyNode) -> Unit) = inputs.values.forEach(action)
 
     fun validate(): List<String> {
         val warnings = mutableListOf<String>()

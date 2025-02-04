@@ -13,6 +13,7 @@ plugins {
     `maven-publish`
     signing
     id("io.github.gradle-nexus.publish-plugin")
+    id("com.adarshr.test-logger")
 }
 
 allprojects {
@@ -40,6 +41,7 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
+    apply(plugin = "com.adarshr.test-logger")
 
     kotlin {
         jvmToolchain(kotlinJdkVersion.toInt())

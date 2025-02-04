@@ -15,11 +15,11 @@ class KobbyField internal constructor(
     val type: KobbyType,
     val defaultValue: KobbyLiteral?,
     val number: Int,
-    private val primaryKey: Boolean,
-    private val required: Boolean,
-    private val default: Boolean,
-    private val selection: Boolean,
-    private val _comments: List<String>,
+    internal val primaryKey: Boolean,
+    internal val required: Boolean,
+    internal val default: Boolean,
+    internal val selection: Boolean,
+    internal val _comments: List<String>,
     val arguments: Map<String, KobbyArgument>
 ) {
     val hasDefaultValue: Boolean get() = defaultValue != null
@@ -32,12 +32,12 @@ class KobbyField internal constructor(
         }
     }
 
-    fun comments(action: (String) -> Unit) = comments.forEach(action)
-    fun arguments(action: (KobbyArgument) -> Unit) = arguments.values.forEach(action)
+    inline fun comments(action: (String) -> Unit) = comments.forEach(action)
+    inline fun arguments(action: (KobbyArgument) -> Unit) = arguments.values.forEach(action)
 
     val overriddenField: KobbyField? by lazy {
         if (node.kind == OBJECT || node.kind == INTERFACE) {
-            node.implements.values.asSequence().map { it.fields[name] }.filterNotNull().firstOrNull()
+            node.implements.asSequence().map { it.fields[name] }.filterNotNull().firstOrNull()
         } else {
             null
         }
@@ -46,7 +46,7 @@ class KobbyField internal constructor(
     val isOverride: Boolean get() = overriddenField != null
 
     private val isMultiOverride: Boolean by lazy {
-        node.implements.values.asSequence()
+        node.implements.asSequence()
             .map { it.fields[name] }
             .filterNotNull()
             .filter { !it.isOverride }
@@ -77,6 +77,40 @@ class KobbyField internal constructor(
 
     val isSelection: Boolean by lazy {
         overriddenField?.isSelection ?: (selection && arguments.values.any { it.isInitialized })
+    }
+
+    /**
+     * The number of GraphQL types (except scalars) reachable for a query on a field that returns the given type.
+     */
+    val weight: Int by lazy {
+        var counter = type.node.weight
+
+        if (arguments.isNotEmpty()) {
+            val transitiveDependencies = type.node.transitiveDependencies
+            argumentDependencies.forEach {
+                if (it.kind != SCALAR && it !in transitiveDependencies) {
+                    counter++
+                }
+            }
+        }
+
+        counter
+    }
+
+    val argumentDependencies: Set<KobbyNode> by lazy {
+        if (arguments.isEmpty()) {
+            emptySet()
+        } else {
+            mutableSetOf<KobbyNode>().also { result ->
+                arguments { arg ->
+                    if (arg.type.node.kind == INPUT) {
+                        result += arg.type.node.transitiveDependencies
+                    } else {
+                        result += arg.type.node
+                    }
+                }
+            }
+        }
     }
 
     internal fun validate(warnings: MutableList<String>) {

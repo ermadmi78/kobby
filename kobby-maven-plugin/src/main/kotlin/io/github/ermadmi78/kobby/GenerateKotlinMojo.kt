@@ -18,12 +18,16 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.plugins.annotations.ResolutionScope
 import org.apache.maven.project.MavenProject
-import org.codehaus.plexus.util.DirectoryScanner
 import java.io.File
 import java.io.FileReader
 
 /**
  * Generate Kotlin DSL
+ *
+ * To print the plugin configuration, enable debug level logging:
+ * ```
+ * mvn -X clean compile
+ * ```
  *
  * Created on 17.07.2021
  *
@@ -49,6 +53,10 @@ class GenerateKotlinMojo : AbstractMojo() {
     private var kotlin: KotlinConfig = KotlinConfig()
 
     override fun execute() {
+        if (log.isDebugEnabled) {
+            log.debug("[Kobby] Plugin Configuration:\n$this")
+        }
+
         if (!kotlin.enabled) {
             log.warn("Kobby: Kotlin DSL generation is disabled")
             return
@@ -126,10 +134,6 @@ class GenerateKotlinMojo : AbstractMojo() {
         }
 
         log.info("[Kobby] Kotlin DSL generating...")
-
-        if (log.isDebugEnabled) {
-            log.debug("[Kobby] Plugin Configuration:\n$this")
-        }
 
         val directiveLayout = mapOf(
             KobbyDirective.PRIMARY_KEY to schema.directive.primaryKey,
@@ -288,14 +292,30 @@ class GenerateKotlinMojo : AbstractMojo() {
             log.warn("[kobby] Kotlinx serialization and Jackson serialization are not supported simultaneously.")
         }
 
-        val schema = try {
+        var kobbySchema = try {
             parseSchema(directiveLayout, *schema.files.map { FileReader(it) }.toTypedArray())
         } catch (e: Exception) {
             "Schema parsing failed.".throwIt(e)
         }
 
+        val truncateConfig: TruncateConfig? = schema.truncate
+        if (truncateConfig != null) {
+            kobbySchema = try {
+                kobbySchema.truncate(
+                    reportEnabled = truncateConfig.reportEnabled,
+                    regexEnabled = truncateConfig.regexEnabled,
+                    caseSensitive = truncateConfig.caseSensitive,
+                    queries = truncateConfig.queries
+                ) { message ->
+                    log.info(message)
+                }
+            } catch (e: Exception) {
+                "Schema truncation failed.".throwIt(e)
+            }
+        }
+
         try {
-            schema.validate().forEach { warning ->
+            kobbySchema.validate().forEach { warning ->
                 log.warn(warning)
             }
         } catch (e: Exception) {
@@ -303,7 +323,7 @@ class GenerateKotlinMojo : AbstractMojo() {
         }
 
         val output = try {
-            generateKotlin(schema, layout)
+            generateKotlin(kobbySchema, layout)
         } catch (e: Exception) {
             "Kotlin DSL generation failed.".throwIt(e)
         }
@@ -314,15 +334,6 @@ class GenerateKotlinMojo : AbstractMojo() {
 
         log.info("[Kobby] Kotlin DSL generated $targetDirectory")
     }
-
-    private fun File.scanGraphqls(scan: ScanConfig): Sequence<File> = DirectoryScanner().run {
-        basedir = this@scanGraphqls
-        setIncludes(scan.includes.toTypedArray())
-        setExcludes(scan.excludes.toTypedArray())
-        setFollowSymlinks(false)
-        scan()
-        includedFiles
-    }.asSequence().map { File(this, it).absoluteFile }.filter { it.isFile }
 
     override fun toString(): String {
         return "GenerateKotlinMojo(" +

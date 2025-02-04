@@ -13,7 +13,7 @@ class KobbyArgument internal constructor(
     val name: String,
     val type: KobbyType,
     val defaultValue: KobbyLiteral?,
-    private val _comments: List<String>
+    internal val _comments: List<String>
 ) {
     val hasDefaultValue: Boolean get() = defaultValue != null
 
@@ -25,7 +25,7 @@ class KobbyArgument internal constructor(
         }
     }
 
-    fun comments(action: (String) -> Unit) = comments.forEach(action)
+    inline fun comments(action: (String) -> Unit) = comments.forEach(action)
 
     val isInitialized: Boolean get() = type.nullable || hasDefaultValue
 

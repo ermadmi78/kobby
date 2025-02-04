@@ -92,13 +92,6 @@ private fun KotlinTypeConfig.print(shift: Int): String = buildString {
     append('\n').shift(shift).append(')')
 }
 
-internal fun StringBuilder.shift(shift: Int): StringBuilder {
-    for (i in 1..shift) {
-        append(' ')
-    }
-    return this
-}
-
 class KotlinTypeConfig {
     @Parameter(required = true)
     lateinit var packageName: String
