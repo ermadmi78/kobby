@@ -17,10 +17,6 @@ package io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entit
 
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.CinemaDSL
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.ActorInput
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.FilmInput
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.TagInput
-import java.time.LocalDate
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
@@ -32,21 +28,6 @@ public interface Mutation {
    * Create country
    */
   public val createCountry: Country
-
-  /**
-   * Create film
-   */
-  public val createFilm: Film
-
-  /**
-   * Create actor
-   */
-  public val createActor: Actor
-
-  /**
-   * Update birthday of actor
-   */
-  public val updateBirthday: Actor?
 
   /**
    * Associate film with actor
@@ -80,42 +61,6 @@ public interface MutationProjection {
   public fun createCountry(name: String, __projection: CountryProjection.() -> Unit = {})
 
   /**
-   * Create film
-   *
-   * @param countryId ID of the country to which the film belongs
-   * @param film Film input data
-   */
-  public fun createFilm(
-    countryId: Long,
-    film: FilmInput,
-    __query: MutationCreateFilmQuery.() -> Unit = {},
-  )
-
-  /**
-   * Create actor
-   *
-   * @param countryId ID of the country to which the actor belongs
-   * @param actor Actor input data
-   */
-  public fun createActor(
-    countryId: Long,
-    actor: ActorInput,
-    __query: MutationCreateActorQuery.() -> Unit = {},
-  )
-
-  /**
-   * Update birthday of actor
-   *
-   * @param actorId ID of the actor to update
-   * @param birthday New birthday
-   */
-  public fun updateBirthday(
-    actorId: Long,
-    birthday: LocalDate,
-    __projection: ActorProjection.() -> Unit = {},
-  )
-
-  /**
    * Associate film with actor
    *
    * @param filmId ID of film
@@ -144,37 +89,3 @@ public interface MutationProjection {
   public fun __minimize() {
   }
 }
-
-/**
- * Create film
- */
-@CinemaDSL
-public interface MutationCreateFilmSelection {
-  /**
-   * Add tag to film if tag is not null
-   */
-  public var tags: TagInput?
-}
-
-/**
- * Create film
- */
-@CinemaDSL
-public interface MutationCreateFilmQuery : MutationCreateFilmSelection, FilmProjection
-
-/**
- * Create actor
- */
-@CinemaDSL
-public interface MutationCreateActorSelection {
-  /**
-   * Add tag to actor if tag is not null
-   */
-  public var tags: TagInput?
-}
-
-/**
- * Create actor
- */
-@CinemaDSL
-public interface MutationCreateActorQuery : MutationCreateActorSelection, ActorProjection

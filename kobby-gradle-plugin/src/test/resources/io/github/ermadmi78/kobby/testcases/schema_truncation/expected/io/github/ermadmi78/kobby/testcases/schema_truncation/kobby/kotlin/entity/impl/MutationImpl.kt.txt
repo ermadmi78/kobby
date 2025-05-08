@@ -17,23 +17,11 @@ package io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entit
 
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.cinemaJson
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.ActorInput
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.FilmInput
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.MutationDto
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.TagInput
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.serializer.LocalDateSerializer
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.Actor
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.ActorProjection
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.Country
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.CountryProjection
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.Film
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.Mutation
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.MutationCreateActorQuery
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.MutationCreateActorSelection
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.MutationCreateFilmQuery
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.MutationCreateFilmSelection
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.MutationProjection
-import java.time.LocalDate
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.String
@@ -47,7 +35,6 @@ import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.encodeToJsonElement
 
@@ -63,30 +50,9 @@ internal class MutationImpl(
     __innerDto.resolveCreateCountry(__innerContext, __innerProjection.__innerCreateCountry0!!)
   }
 
-  override val createFilm: Film by lazy {
-    if (__innerProjection.__innerCreateFilm1 == null) {
-      error("Property [createFilm] is not available - add [createFilm] projection to switch on it")
-    }
-    __innerDto.resolveCreateFilm(__innerContext, __innerProjection.__innerCreateFilm1!!)
-  }
-
-  override val createActor: Actor by lazy {
-    if (__innerProjection.__innerCreateActor2 == null) {
-      error("Property [createActor] is not available - add [createActor] projection to switch on it")
-    }
-    __innerDto.resolveCreateActor(__innerContext, __innerProjection.__innerCreateActor2!!)
-  }
-
-  override val updateBirthday: Actor? by lazy {
-    if (__innerProjection.__innerUpdateBirthday3 == null) {
-      error("Property [updateBirthday] is not available - add [updateBirthday] projection to switch on it")
-    }
-    __innerDto.resolveUpdateBirthday(__innerContext, __innerProjection.__innerUpdateBirthday3!!)
-  }
-
   override val associate: Boolean
     get() {
-      if (!__innerProjection.__innerAssociate4) {
+      if (!__innerProjection.__innerAssociate1) {
         error("Property [associate] is not available - add [associate] projection to switch on it")
       }
       return __innerDto.associate!!
@@ -94,7 +60,7 @@ internal class MutationImpl(
 
   override val tagFilm: Boolean
     get() {
-      if (!__innerProjection.__innerTagFilm5) {
+      if (!__innerProjection.__innerTagFilm2) {
         error("Property [tagFilm] is not available - add [tagFilm] projection to switch on it")
       }
       return __innerDto.tagFilm!!
@@ -102,7 +68,7 @@ internal class MutationImpl(
 
   override val tagActor: Boolean
     get() {
-      if (!__innerProjection.__innerTagActor6) {
+      if (!__innerProjection.__innerTagActor3) {
         error("Property [tagActor] is not available - add [tagActor] projection to switch on it")
       }
       return __innerDto.tagActor!!
@@ -121,42 +87,21 @@ internal class MutationImpl(
       append("createCountry").append('=').append(createCountry)
     }
 
-    if (__innerProjection.__innerCreateFilm1 != null) {
-      if (counter++ > 0) {
-        append(", ")
-      }
-      append("createFilm").append('=').append(createFilm)
-    }
-
-    if (__innerProjection.__innerCreateActor2 != null) {
-      if (counter++ > 0) {
-        append(", ")
-      }
-      append("createActor").append('=').append(createActor)
-    }
-
-    if (__innerProjection.__innerUpdateBirthday3 != null) {
-      if (counter++ > 0) {
-        append(", ")
-      }
-      append("updateBirthday").append('=').append(updateBirthday)
-    }
-
-    if (__innerProjection.__innerAssociate4) {
+    if (__innerProjection.__innerAssociate1) {
       if (counter++ > 0) {
         append(", ")
       }
       append("associate").append('=').append(associate)
     }
 
-    if (__innerProjection.__innerTagFilm5) {
+    if (__innerProjection.__innerTagFilm2) {
       if (counter++ > 0) {
         append(", ")
       }
       append("tagFilm").append('=').append(tagFilm)
     }
 
-    if (__innerProjection.__innerTagActor6) {
+    if (__innerProjection.__innerTagActor3) {
       if (counter++ > 0) {
         append(", ")
       }
@@ -178,94 +123,45 @@ internal open class MutationProjectionImpl : MutationProjection {
 
   internal var __innerCreateCountry0Name: String? = null
 
-  internal var __innerCreateFilm1: MutationCreateFilmQueryImpl? = null
+  internal var __innerAssociate1: Boolean = false
 
-  internal var __innerCreateFilm1CountryId: Long? = null
+  internal var __innerAssociate1FilmId: Long? = null
 
-  internal var __innerCreateFilm1Film: FilmInput? = null
+  internal var __innerAssociate1ActorId: Long? = null
 
-  internal var __innerCreateActor2: MutationCreateActorQueryImpl? = null
+  internal var __innerTagFilm2: Boolean = false
 
-  internal var __innerCreateActor2CountryId: Long? = null
+  internal var __innerTagFilm2FilmId: Long? = null
 
-  internal var __innerCreateActor2Actor: ActorInput? = null
+  internal var __innerTagFilm2TagValue: String? = null
 
-  internal var __innerUpdateBirthday3: ActorProjectionImpl? = null
+  internal var __innerTagActor3: Boolean = false
 
-  internal var __innerUpdateBirthday3ActorId: Long? = null
+  internal var __innerTagActor3ActorId: Long? = null
 
-  internal var __innerUpdateBirthday3Birthday: @Serializable(with = LocalDateSerializer::class)
-      LocalDate? = null
-
-  internal var __innerAssociate4: Boolean = false
-
-  internal var __innerAssociate4FilmId: Long? = null
-
-  internal var __innerAssociate4ActorId: Long? = null
-
-  internal var __innerTagFilm5: Boolean = false
-
-  internal var __innerTagFilm5FilmId: Long? = null
-
-  internal var __innerTagFilm5TagValue: String? = null
-
-  internal var __innerTagActor6: Boolean = false
-
-  internal var __innerTagActor6ActorId: Long? = null
-
-  internal var __innerTagActor6TagValue: String? = null
+  internal var __innerTagActor3TagValue: String? = null
 
   override fun createCountry(name: String, __projection: CountryProjection.() -> Unit) {
     __innerCreateCountry0 = CountryProjectionImpl().apply(__projection)
     __innerCreateCountry0Name = name
   }
 
-  override fun createFilm(
-    countryId: Long,
-    film: FilmInput,
-    __query: MutationCreateFilmQuery.() -> Unit,
-  ) {
-    __innerCreateFilm1 = MutationCreateFilmQueryImpl().apply(__query)
-    __innerCreateFilm1CountryId = countryId
-    __innerCreateFilm1Film = film
-  }
-
-  override fun createActor(
-    countryId: Long,
-    actor: ActorInput,
-    __query: MutationCreateActorQuery.() -> Unit,
-  ) {
-    __innerCreateActor2 = MutationCreateActorQueryImpl().apply(__query)
-    __innerCreateActor2CountryId = countryId
-    __innerCreateActor2Actor = actor
-  }
-
-  override fun updateBirthday(
-    actorId: Long,
-    birthday: LocalDate,
-    __projection: ActorProjection.() -> Unit,
-  ) {
-    __innerUpdateBirthday3 = ActorProjectionImpl().apply(__projection)
-    __innerUpdateBirthday3ActorId = actorId
-    __innerUpdateBirthday3Birthday = birthday
-  }
-
   override fun associate(filmId: Long, actorId: Long) {
-    __innerAssociate4 = true
-    __innerAssociate4FilmId = filmId
-    __innerAssociate4ActorId = actorId
+    __innerAssociate1 = true
+    __innerAssociate1FilmId = filmId
+    __innerAssociate1ActorId = actorId
   }
 
   override fun tagFilm(filmId: Long, tagValue: String) {
-    __innerTagFilm5 = true
-    __innerTagFilm5FilmId = filmId
-    __innerTagFilm5TagValue = tagValue
+    __innerTagFilm2 = true
+    __innerTagFilm2FilmId = filmId
+    __innerTagFilm2TagValue = tagValue
   }
 
   override fun tagActor(actorId: Long, tagValue: String) {
-    __innerTagActor6 = true
-    __innerTagActor6ActorId = actorId
-    __innerTagActor6TagValue = tagValue
+    __innerTagActor3 = true
+    __innerTagActor3ActorId = actorId
+    __innerTagActor3TagValue = tagValue
   }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
@@ -275,32 +171,14 @@ internal open class MutationProjectionImpl : MutationProjection {
         this@MutationProjectionImpl.__innerCreateCountry0!!.___innerRepeatProjection(setOf(), this)
       }
     }
-    if ("createFilm" !in ignore && __innerCreateFilm1 != null) {
-      __projection.createFilm(__innerCreateFilm1CountryId!!, __innerCreateFilm1Film!!) {
-        this@MutationProjectionImpl.__innerCreateFilm1!!.___innerRepeatProjection(setOf(), this)
-        this@MutationProjectionImpl.__innerCreateFilm1!!.___innerRepeatSelection(this)
-      }
+    if ("associate" !in ignore && __innerAssociate1) {
+      __projection.associate(__innerAssociate1FilmId!!, __innerAssociate1ActorId!!)
     }
-    if ("createActor" !in ignore && __innerCreateActor2 != null) {
-      __projection.createActor(__innerCreateActor2CountryId!!, __innerCreateActor2Actor!!) {
-        this@MutationProjectionImpl.__innerCreateActor2!!.___innerRepeatProjection(setOf(), this)
-        this@MutationProjectionImpl.__innerCreateActor2!!.___innerRepeatSelection(this)
-      }
+    if ("tagFilm" !in ignore && __innerTagFilm2) {
+      __projection.tagFilm(__innerTagFilm2FilmId!!, __innerTagFilm2TagValue!!)
     }
-    if ("updateBirthday" !in ignore && __innerUpdateBirthday3 != null) {
-      __projection.updateBirthday(__innerUpdateBirthday3ActorId!!,
-          __innerUpdateBirthday3Birthday!!) {
-        this@MutationProjectionImpl.__innerUpdateBirthday3!!.___innerRepeatProjection(setOf(), this)
-      }
-    }
-    if ("associate" !in ignore && __innerAssociate4) {
-      __projection.associate(__innerAssociate4FilmId!!, __innerAssociate4ActorId!!)
-    }
-    if ("tagFilm" !in ignore && __innerTagFilm5) {
-      __projection.tagFilm(__innerTagFilm5FilmId!!, __innerTagFilm5TagValue!!)
-    }
-    if ("tagActor" !in ignore && __innerTagActor6) {
-      __projection.tagActor(__innerTagActor6ActorId!!, __innerTagActor6TagValue!!)
+    if ("tagActor" !in ignore && __innerTagActor3) {
+      __projection.tagActor(__innerTagActor3ActorId!!, __innerTagActor3TagValue!!)
     }
   }
 
@@ -347,217 +225,16 @@ internal open class MutationProjectionImpl : MutationProjection {
   }
 
   /**
-   * Projection for field: createFilm
-   */
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  private fun ____innerBuildCreateFilm1(
-    ignore: Set<String>,
-    `header`: StringBuilder,
-    body: StringBuilder,
-    arguments: MutableMap<String, JsonElement>,
-  ) {
-    if ("createFilm" !in ignore && __innerCreateFilm1 != null) {
-      body.append(' ').append("createFilm")
-      var counter = 0
-      val addBrackets = true
-      if (addBrackets) {
-        body.append('(')
-      }
-
-      // Argument: createFilm.countryId
-      if (true) {
-        if (counter++ > 0) {
-          body.append(", ")
-        }
-        val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerCreateFilm1CountryId!!)
-        body.append("countryId").append(": ").append('$').append(arg)
-
-        if (header.isNotEmpty()) {
-          header.append(", ")
-        }
-        header.append('$').append(arg).append(": ").append("ID!")
-      }
-
-      // Argument: createFilm.film
-      if (true) {
-        if (counter++ > 0) {
-          body.append(", ")
-        }
-        val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerCreateFilm1Film!!)
-        body.append("film").append(": ").append('$').append(arg)
-
-        if (header.isNotEmpty()) {
-          header.append(", ")
-        }
-        header.append('$').append(arg).append(": ").append("FilmInput!")
-      }
-
-      // Argument: createFilm.tags
-      if (__innerCreateFilm1!!.tags != null) {
-        if (counter++ > 0) {
-          body.append(", ")
-        }
-        val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerCreateFilm1!!.tags!!)
-        body.append("tags").append(": ").append('$').append(arg)
-
-        if (header.isNotEmpty()) {
-          header.append(", ")
-        }
-        header.append('$').append(arg).append(": ").append("TagInput")
-      }
-
-      if (addBrackets) {
-        body.append(')')
-      }
-
-      // Build nested projection of Film
-      __innerCreateFilm1!!.___innerBuild(setOf(), header, body, arguments)
-    }
-  }
-
-  /**
-   * Projection for field: createActor
-   */
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  private fun ____innerBuildCreateActor2(
-    ignore: Set<String>,
-    `header`: StringBuilder,
-    body: StringBuilder,
-    arguments: MutableMap<String, JsonElement>,
-  ) {
-    if ("createActor" !in ignore && __innerCreateActor2 != null) {
-      body.append(' ').append("createActor")
-      var counter = 0
-      val addBrackets = true
-      if (addBrackets) {
-        body.append('(')
-      }
-
-      // Argument: createActor.countryId
-      if (true) {
-        if (counter++ > 0) {
-          body.append(", ")
-        }
-        val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerCreateActor2CountryId!!)
-        body.append("countryId").append(": ").append('$').append(arg)
-
-        if (header.isNotEmpty()) {
-          header.append(", ")
-        }
-        header.append('$').append(arg).append(": ").append("ID!")
-      }
-
-      // Argument: createActor.actor
-      if (true) {
-        if (counter++ > 0) {
-          body.append(", ")
-        }
-        val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerCreateActor2Actor!!)
-        body.append("actor").append(": ").append('$').append(arg)
-
-        if (header.isNotEmpty()) {
-          header.append(", ")
-        }
-        header.append('$').append(arg).append(": ").append("ActorInput!")
-      }
-
-      // Argument: createActor.tags
-      if (__innerCreateActor2!!.tags != null) {
-        if (counter++ > 0) {
-          body.append(", ")
-        }
-        val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerCreateActor2!!.tags!!)
-        body.append("tags").append(": ").append('$').append(arg)
-
-        if (header.isNotEmpty()) {
-          header.append(", ")
-        }
-        header.append('$').append(arg).append(": ").append("TagInput")
-      }
-
-      if (addBrackets) {
-        body.append(')')
-      }
-
-      // Build nested projection of Actor
-      __innerCreateActor2!!.___innerBuild(setOf(), header, body, arguments)
-    }
-  }
-
-  /**
-   * Projection for field: updateBirthday
-   */
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  private fun ____innerBuildUpdateBirthday3(
-    ignore: Set<String>,
-    `header`: StringBuilder,
-    body: StringBuilder,
-    arguments: MutableMap<String, JsonElement>,
-  ) {
-    if ("updateBirthday" !in ignore && __innerUpdateBirthday3 != null) {
-      body.append(' ').append("updateBirthday")
-      var counter = 0
-      val addBrackets = true
-      if (addBrackets) {
-        body.append('(')
-      }
-
-      // Argument: updateBirthday.actorId
-      if (true) {
-        if (counter++ > 0) {
-          body.append(", ")
-        }
-        val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerUpdateBirthday3ActorId!!)
-        body.append("actorId").append(": ").append('$').append(arg)
-
-        if (header.isNotEmpty()) {
-          header.append(", ")
-        }
-        header.append('$').append(arg).append(": ").append("ID!")
-      }
-
-      // Argument: updateBirthday.birthday
-      if (true) {
-        if (counter++ > 0) {
-          body.append(", ")
-        }
-        val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerUpdateBirthday3Birthday!!)
-        body.append("birthday").append(": ").append('$').append(arg)
-
-        if (header.isNotEmpty()) {
-          header.append(", ")
-        }
-        header.append('$').append(arg).append(": ").append("Date!")
-      }
-
-      if (addBrackets) {
-        body.append(')')
-      }
-
-      // Build nested projection of Actor
-      __innerUpdateBirthday3!!.___innerBuild(setOf(), header, body, arguments)
-    }
-  }
-
-  /**
    * Projection for field: associate
    */
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  private fun ____innerBuildAssociate4(
+  private fun ____innerBuildAssociate1(
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
   ) {
-    if ("associate" !in ignore && __innerAssociate4) {
+    if ("associate" !in ignore && __innerAssociate1) {
       body.append(' ').append("associate")
       var counter = 0
       val addBrackets = true
@@ -571,7 +248,7 @@ internal open class MutationProjectionImpl : MutationProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerAssociate4FilmId!!)
+        arguments[arg] = cinemaJson.encodeToJsonElement(__innerAssociate1FilmId!!)
         body.append("filmId").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -586,7 +263,7 @@ internal open class MutationProjectionImpl : MutationProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerAssociate4ActorId!!)
+        arguments[arg] = cinemaJson.encodeToJsonElement(__innerAssociate1ActorId!!)
         body.append("actorId").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -605,13 +282,13 @@ internal open class MutationProjectionImpl : MutationProjection {
    * Projection for field: tagFilm
    */
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  private fun ____innerBuildTagFilm5(
+  private fun ____innerBuildTagFilm2(
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
   ) {
-    if ("tagFilm" !in ignore && __innerTagFilm5) {
+    if ("tagFilm" !in ignore && __innerTagFilm2) {
       body.append(' ').append("tagFilm")
       var counter = 0
       val addBrackets = true
@@ -625,7 +302,7 @@ internal open class MutationProjectionImpl : MutationProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerTagFilm5FilmId!!)
+        arguments[arg] = cinemaJson.encodeToJsonElement(__innerTagFilm2FilmId!!)
         body.append("filmId").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -640,7 +317,7 @@ internal open class MutationProjectionImpl : MutationProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerTagFilm5TagValue!!)
+        arguments[arg] = cinemaJson.encodeToJsonElement(__innerTagFilm2TagValue!!)
         body.append("tagValue").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -659,13 +336,13 @@ internal open class MutationProjectionImpl : MutationProjection {
    * Projection for field: tagActor
    */
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  private fun ____innerBuildTagActor6(
+  private fun ____innerBuildTagActor3(
     ignore: Set<String>,
     `header`: StringBuilder,
     body: StringBuilder,
     arguments: MutableMap<String, JsonElement>,
   ) {
-    if ("tagActor" !in ignore && __innerTagActor6) {
+    if ("tagActor" !in ignore && __innerTagActor3) {
       body.append(' ').append("tagActor")
       var counter = 0
       val addBrackets = true
@@ -679,7 +356,7 @@ internal open class MutationProjectionImpl : MutationProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerTagActor6ActorId!!)
+        arguments[arg] = cinemaJson.encodeToJsonElement(__innerTagActor3ActorId!!)
         body.append("actorId").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -694,7 +371,7 @@ internal open class MutationProjectionImpl : MutationProjection {
           body.append(", ")
         }
         val arg = "arg" + arguments.size
-        arguments[arg] = cinemaJson.encodeToJsonElement(__innerTagActor6TagValue!!)
+        arguments[arg] = cinemaJson.encodeToJsonElement(__innerTagActor3TagValue!!)
         body.append("tagValue").append(": ").append('$').append(arg)
 
         if (header.isNotEmpty()) {
@@ -724,43 +401,16 @@ internal open class MutationProjectionImpl : MutationProjection {
     // Field: createCountry
     ____innerBuildCreateCountry0(ignore, header, body, arguments)
 
-    // Field: createFilm
-    ____innerBuildCreateFilm1(ignore, header, body, arguments)
-
-    // Field: createActor
-    ____innerBuildCreateActor2(ignore, header, body, arguments)
-
-    // Field: updateBirthday
-    ____innerBuildUpdateBirthday3(ignore, header, body, arguments)
-
     // Field: associate
-    ____innerBuildAssociate4(ignore, header, body, arguments)
+    ____innerBuildAssociate1(ignore, header, body, arguments)
 
     // Field: tagFilm
-    ____innerBuildTagFilm5(ignore, header, body, arguments)
+    ____innerBuildTagFilm2(ignore, header, body, arguments)
 
     // Field: tagActor
-    ____innerBuildTagActor6(ignore, header, body, arguments)
+    ____innerBuildTagActor3(ignore, header, body, arguments)
 
     body.append(' ').append('}')
-  }
-}
-
-internal class MutationCreateFilmQueryImpl : FilmProjectionImpl(), MutationCreateFilmQuery {
-  override var tags: TagInput? = null
-
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatSelection(__selection: MutationCreateFilmSelection) {
-    __selection.tags = tags
-  }
-}
-
-internal class MutationCreateActorQueryImpl : ActorProjectionImpl(), MutationCreateActorQuery {
-  override var tags: TagInput? = null
-
-  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
-  internal fun ___innerRepeatSelection(__selection: MutationCreateActorSelection) {
-    __selection.tags = tags
   }
 }
 
@@ -771,15 +421,3 @@ internal fun MutationDto.buildEntity(__innerContext: CinemaContext,
 internal fun MutationDto.resolveCreateCountry(__innerContext: CinemaContext,
     __innerProjection: CountryProjectionImpl): Country =
     createCountry?.buildEntity(__innerContext, __innerProjection)!!
-
-internal fun MutationDto.resolveCreateFilm(__innerContext: CinemaContext,
-    __innerProjection: FilmProjectionImpl): Film =
-    createFilm?.buildEntity(__innerContext, __innerProjection)!!
-
-internal fun MutationDto.resolveCreateActor(__innerContext: CinemaContext,
-    __innerProjection: ActorProjectionImpl): Actor =
-    createActor?.buildEntity(__innerContext, __innerProjection)!!
-
-internal fun MutationDto.resolveUpdateBirthday(__innerContext: CinemaContext,
-    __innerProjection: ActorProjectionImpl): Actor? =
-    updateBirthday?.buildEntity(__innerContext, __innerProjection)

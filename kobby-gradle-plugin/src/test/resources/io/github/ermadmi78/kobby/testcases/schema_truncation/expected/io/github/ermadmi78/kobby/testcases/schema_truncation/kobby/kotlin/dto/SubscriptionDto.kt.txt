@@ -30,26 +30,14 @@ public data class SubscriptionDto(
    * Listen new countries
    */
   public val countryCreated: CountryDto? = null,
-  /**
-   * Listen new films
-   */
-  public val filmCreated: FilmDto? = null,
-  /**
-   * Listen new actors
-   */
-  public val actorCreated: ActorDto? = null,
 )
 
 public fun SubscriptionDto.toBuilder(): SubscriptionDtoBuilder = SubscriptionDtoBuilder().also {
   it.countryCreated = this.countryCreated
-  it.filmCreated = this.filmCreated
-  it.actorCreated = this.actorCreated
 }
 
 public fun SubscriptionDtoBuilder.toDto(): SubscriptionDto = SubscriptionDto(
-  countryCreated,
-  filmCreated,
-  actorCreated
+  countryCreated
 )
 
 public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto =
@@ -64,14 +52,4 @@ public class SubscriptionDtoBuilder {
    * Listen new countries
    */
   public var countryCreated: CountryDto? = null
-
-  /**
-   * Listen new films
-   */
-  public var filmCreated: FilmDto? = null
-
-  /**
-   * Listen new actors
-   */
-  public var actorCreated: ActorDto? = null
 }

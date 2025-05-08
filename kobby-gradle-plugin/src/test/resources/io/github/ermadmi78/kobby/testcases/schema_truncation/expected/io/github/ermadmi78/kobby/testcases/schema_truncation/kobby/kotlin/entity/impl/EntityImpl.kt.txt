@@ -17,16 +17,12 @@ package io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entit
 
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.cinemaJson
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.ActorDto
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.CountryDto
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.EntityDto
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.FilmDto
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.ActorProjection
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.CountryProjection
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.Entity
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.EntityFieldsSelection
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.EntityQualifiedProjection
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.FilmProjection
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
@@ -48,30 +44,14 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
 
   internal var __innerFields1: EntityFieldsSelectionImpl? = null
 
-  internal val ___inner__onFilm: FilmProjectionImpl = FilmProjectionImpl()
-
-  internal val ___inner__onActor: ActorProjectionImpl = ActorProjectionImpl()
-
   internal val ___inner__onCountry: CountryProjectionImpl = CountryProjectionImpl()
 
   override fun fields(__selection: EntityFieldsSelection.() -> Unit) {
     __innerFields1 = EntityFieldsSelectionImpl().apply(__selection)
 
-    ___inner__onFilm.__innerFields1 = __innerFields1
-
-    ___inner__onActor.__innerFields1 = __innerFields1
-
     ___inner__onCountry.__innerFields1 = __innerFields1
 
     ___innerIgnore += "fields"
-  }
-
-  override fun __onFilm(__projection: FilmProjection.() -> Unit) {
-    FilmProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onFilm)
-  }
-
-  override fun __onActor(__projection: ActorProjection.() -> Unit) {
-    ActorProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onActor)
   }
 
   override fun __onCountry(__projection: CountryProjection.() -> Unit) {
@@ -85,12 +65,6 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
       __projection.fields {
         this@EntityQualifiedProjectionImpl.__innerFields1!!.___innerRepeatSelection(this)
       }
-    }
-    __projection.__onFilm {
-      this@EntityQualifiedProjectionImpl.___inner__onFilm.___innerRepeatProjection(setOf(), this)
-    }
-    __projection.__onActor {
-      this@EntityQualifiedProjectionImpl.___inner__onActor.___innerRepeatProjection(setOf(), this)
     }
     __projection.__onCountry {
       this@EntityQualifiedProjectionImpl.___inner__onCountry.___innerRepeatProjection(setOf(), this)
@@ -160,20 +134,6 @@ internal open class EntityQualifiedProjectionImpl : EntityQualifiedProjection {
 
     val subBody = StringBuilder()
 
-    // Qualification of: Film
-    subBody.clear()
-    ___inner__onFilm.___innerBuild(___innerIgnore, header, subBody, arguments)
-    if (subBody.length > 4) {
-      body.append(" ... on ").append("Film").append(subBody)
-    }
-
-    // Qualification of: Actor
-    subBody.clear()
-    ___inner__onActor.___innerBuild(___innerIgnore, header, subBody, arguments)
-    if (subBody.length > 4) {
-      body.append(" ... on ").append("Actor").append(subBody)
-    }
-
     // Qualification of: Country
     subBody.clear()
     ___inner__onCountry.___innerBuild(___innerIgnore, header, subBody, arguments)
@@ -196,8 +156,6 @@ internal class EntityFieldsSelectionImpl : EntityFieldsSelection {
 
 internal fun EntityDto.buildEntity(__innerContext: CinemaContext,
     __innerProjection: EntityQualifiedProjectionImpl): Entity = when(this) {
-  is FilmDto -> FilmImpl(__innerContext, __innerProjection.___inner__onFilm, this)
-  is ActorDto -> ActorImpl(__innerContext, __innerProjection.___inner__onActor, this)
   is CountryDto -> CountryImpl(__innerContext, __innerProjection.___inner__onCountry, this)
   else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
 }

@@ -17,15 +17,10 @@ package io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entit
 
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.CinemaDSL
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.Gender
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.Genre
-import java.time.LocalDate
-import kotlin.Int
 import kotlin.Long
 import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
-import kotlin.collections.List
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -49,40 +44,6 @@ public interface Country : Entity {
    */
   public val name: String
 
-  /**
-   * Find film by id.
-   * Returns null if not found.
-   */
-  public val film: Film?
-
-  /**
-   * Find films of country by title and genre.
-   * Returns empty list if not found.
-   */
-  public val films: List<Film>
-
-  /**
-   * Find actor by id.
-   * Returns null if not found.
-   */
-  public val actor: Actor?
-
-  /**
-   * Find actors of country by firstName, lastName, birthday and gender.
-   * Returns empty list if not found.
-   */
-  public val actors: List<Actor>
-
-  /**
-   * Find entities of this country by tag
-   */
-  public val taggable: List<Taggable>
-
-  /**
-   * Find native entities of this country
-   */
-  public val native: List<Native>
-
   override fun __context(): CinemaContext
 
   public fun CountryProjection.__withCurrentProjection()
@@ -105,130 +66,7 @@ public interface CountryProjection : EntityProjection {
    */
   public fun __withoutName()
 
-  /**
-   * Find film by id.
-   * Returns null if not found.
-   */
-  public fun film(id: Long, __projection: FilmProjection.() -> Unit = {})
-
-  /**
-   * Find films of country by title and genre.
-   * Returns empty list if not found.
-   */
-  public fun films(__query: CountryFilmsQuery.() -> Unit = {})
-
-  /**
-   * Find actor by id.
-   * Returns null if not found.
-   */
-  public fun actor(id: Long, __projection: ActorProjection.() -> Unit = {})
-
-  /**
-   * Find actors of country by firstName, lastName, birthday and gender.
-   * Returns empty list if not found.
-   */
-  public fun actors(__query: CountryActorsQuery.() -> Unit = {})
-
-  /**
-   * Find entities of this country by tag
-   */
-  public fun taggable(tag: String, __projection: TaggableQualifiedProjection.() -> Unit = {})
-
-  /**
-   * Find native entities of this country
-   */
-  public fun native(__projection: NativeQualifiedProjection.() -> Unit = {})
-
   override fun __minimize() {
     __withoutName()
   }
 }
-
-/**
- * Find films of country by title and genre.
- * Returns empty list if not found.
- */
-@CinemaDSL
-public interface CountryFilmsSelection {
-  /**
-   * Part of title of film to search
-   */
-  public var title: String?
-
-  /**
-   * Genre of film to search
-   */
-  public var genre: Genre?
-
-  /**
-   * Limit of result list.
-   * Put -1 to be unlimited.  
-   * > Default: 10
-   */
-  public var limit: Int?
-
-  /**
-   * Offset of result list.  
-   * > Default: 0
-   */
-  public var offset: Int?
-}
-
-/**
- * Find films of country by title and genre.
- * Returns empty list if not found.
- */
-@CinemaDSL
-public interface CountryFilmsQuery : CountryFilmsSelection, FilmProjection
-
-/**
- * Find actors of country by firstName, lastName, birthday and gender.
- * Returns empty list if not found.
- */
-@CinemaDSL
-public interface CountryActorsSelection {
-  /**
-   * Part of first name of actor to search
-   */
-  public var firstName: String?
-
-  /**
-   * Part of last name of actor to search
-   */
-  public var lastName: String?
-
-  /**
-   * Find actors whose birthday is greater than or equal to birthdayFrom
-   */
-  public var birthdayFrom: LocalDate?
-
-  /**
-   * Find actors whose birthday is less than or equal to birthdayTo
-   */
-  public var birthdayTo: LocalDate?
-
-  /**
-   * Gender of actor to search
-   */
-  public var gender: Gender?
-
-  /**
-   * Limit of result list.
-   * Put -1 to be unlimited.  
-   * > Default: 10
-   */
-  public var limit: Int?
-
-  /**
-   * Offset of result list.  
-   * > Default: 0
-   */
-  public var offset: Int?
-}
-
-/**
- * Find actors of country by firstName, lastName, birthday and gender.
- * Returns empty list if not found.
- */
-@CinemaDSL
-public interface CountryActorsQuery : CountryActorsSelection, ActorProjection

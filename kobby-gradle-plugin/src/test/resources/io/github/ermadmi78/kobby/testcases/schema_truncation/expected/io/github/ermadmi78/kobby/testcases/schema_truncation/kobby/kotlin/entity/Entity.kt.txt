@@ -63,18 +63,6 @@ public interface EntityProjection {
 @CinemaDSL
 public interface EntityQualification {
   /**
-   * Film entity.
-   * The film belongs to one country and can be played by several actors.
-   */
-  public fun __onFilm(__projection: FilmProjection.() -> Unit = {})
-
-  /**
-   * Actor entity.
-   * The actor belongs to one country and can play in several films.
-   */
-  public fun __onActor(__projection: ActorProjection.() -> Unit = {})
-
-  /**
    * Country entity.
    * The country can be home to several films and several actors.
    */

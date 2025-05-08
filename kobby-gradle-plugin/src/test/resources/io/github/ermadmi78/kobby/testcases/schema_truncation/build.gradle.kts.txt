@@ -19,13 +19,20 @@ plugins {
 }
 
 kobby {
+    schema {
+        truncate {
+            byQuery {
+                forAny {
+                    exclude {
+                        dependency("Film|Actor")
+                        subTypeDependency("Film|Actor")
+                    }
+                }
+            }
+        }
+    }
     kotlin {
         scalars = mapOf(
-            "Date" to typeOf("java.time", "LocalDate")
-                .serializer(
-                    "io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.serializer",
-                    "LocalDateSerializer"
-                ),
             "JSON" to typeOf("kotlinx.serialization.json", "JsonObject")
         )
     }

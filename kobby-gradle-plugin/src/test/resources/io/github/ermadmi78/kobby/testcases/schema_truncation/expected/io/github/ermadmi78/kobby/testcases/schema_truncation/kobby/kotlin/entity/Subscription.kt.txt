@@ -17,7 +17,6 @@ package io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entit
 
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.CinemaDSL
-import kotlin.Long
 import kotlin.Suppress
 import kotlin.Unit
 
@@ -26,16 +25,6 @@ public interface Subscription {
    * Listen new countries
    */
   public val countryCreated: Country
-
-  /**
-   * Listen new films
-   */
-  public val filmCreated: Film
-
-  /**
-   * Listen new actors
-   */
-  public val actorCreated: Actor
 
   public fun __context(): CinemaContext
 
@@ -48,16 +37,6 @@ public interface SubscriptionProjection {
    * Listen new countries
    */
   public fun countryCreated(__projection: CountryProjection.() -> Unit = {})
-
-  /**
-   * Listen new films
-   */
-  public fun filmCreated(countryId: Long? = null, __projection: FilmProjection.() -> Unit = {})
-
-  /**
-   * Listen new actors
-   */
-  public fun actorCreated(countryId: Long? = null, __projection: ActorProjection.() -> Unit = {})
 
   public fun __minimize() {
   }

@@ -15,15 +15,11 @@
 
 package io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin
 
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.ActorDto
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.CountryDto
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.EntityDto
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.FilmDto
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.MutationDto
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.NativeDto
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.QueryDto
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.SubscriptionDto
-import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.TaggableDto
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.Mutation
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.MutationProjection
 import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.entity.Query
@@ -65,17 +61,7 @@ public val cinemaJson: Json = Json {
   prettyPrint = false
   serializersModule = SerializersModule {
     polymorphic(EntityDto::class) {
-      subclass(FilmDto::class)
-      subclass(ActorDto::class)
       subclass(CountryDto::class)
-    }
-    polymorphic(TaggableDto::class) {
-      subclass(FilmDto::class)
-      subclass(ActorDto::class)
-    }
-    polymorphic(NativeDto::class) {
-      subclass(FilmDto::class)
-      subclass(ActorDto::class)
     }
   }
 }
