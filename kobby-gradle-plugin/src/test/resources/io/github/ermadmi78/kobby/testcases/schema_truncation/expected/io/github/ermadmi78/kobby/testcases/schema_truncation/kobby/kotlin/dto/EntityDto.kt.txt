@@ -1,0 +1,36 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto
+
+import kotlin.Long
+import kotlin.Suppress
+import kotlinx.serialization.json.JsonObject
+
+/**
+ * Base interface for all entities.
+ */
+public interface EntityDto {
+  /**
+   * Unique identifier of entity
+   */
+  public val id: Long?
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public val fields: JsonObject?
+}
