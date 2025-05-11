@@ -37,6 +37,13 @@ class KobbyTypeOperationQueryScope(
     )
 
     @Suppress("FunctionName")
+    fun _affectBoth(): KobbyTypeOperationQueryScope {
+        includeScope._affectBoth()
+        excludeScope._affectBoth()
+        return this
+    }
+
+    @Suppress("FunctionName")
     fun _buildPredicate(): KobbyTypePredicate {
         val (includeFieldPredicate, includeEnumValuePredicate) = includeScope._buildPredicate()
         val (excludeFieldPredicate, excludeEnumValuePredicate) = excludeScope._buildPredicate()

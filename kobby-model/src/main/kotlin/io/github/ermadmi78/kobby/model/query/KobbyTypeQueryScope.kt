@@ -73,6 +73,16 @@ class KobbyTypeQueryScope(
     }
 
     @Suppress("FunctionName")
+    fun _affectBoth(): KobbyTypeQueryScope {
+        if (fieldAffected || enumValueAffected) {
+            fieldAffected = true
+            enumValueAffected = true
+        }
+
+        return this
+    }
+
+    @Suppress("FunctionName")
     fun _buildPredicate(): KobbyTypePredicate =
         ::fieldMatches to ::enumValueMatches
 

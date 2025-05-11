@@ -21,6 +21,14 @@ class KobbySchemaQueryScope(
     private val typeScopes = mutableMapOf<KobbyNode, KobbyTypeOperationQueryScope>()
 
     @Suppress("FunctionName")
+    fun _affectBoth(): KobbySchemaQueryScope {
+        typeScopes.values.forEach { scope ->
+            scope._affectBoth()
+        }
+        return this
+    }
+
+    @Suppress("FunctionName")
     fun _buildMap(): Map<KobbyNode, KobbyTypePredicate> =
         typeScopes.mapValues { entry -> entry.value._buildPredicate() }
 

@@ -207,6 +207,7 @@ fun KobbySchema.analyze(
 
     val root: Map<KobbyNode, KobbyTypePredicate> = KobbySchemaQueryScope(this, regexEnabled, caseSensitive)
         .apply(query)
+        ._affectBoth()
         ._buildMap()
 
     return sequence {

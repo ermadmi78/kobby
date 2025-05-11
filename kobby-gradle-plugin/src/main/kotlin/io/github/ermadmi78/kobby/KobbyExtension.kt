@@ -306,6 +306,17 @@ open class KobbySchemaAnalyzeExtension {
      * * `?` - matches one character.
      * * `*` - matches zero or more characters.
      * * `|` - OR operator.
+     * * `__query` - alias for `Query` type.
+     * * `__mutation` - alias for `Mutation` type.
+     * * `__subscription` - alias for `Subscription` type.
+     * * `__root` - alias for `Query`, `Mutation` and `Subscription` types.
+     * * `__any` - alias for any type in the GraphQL schema.
+     * * `__anyScalar` - alias for any scalar in the GraphQL schema.
+     * * `__anyObject` - alias for any object in the GraphQL schema.
+     * * `__anyInterface` - alias for any interface in the GraphQL schema.
+     * * `__anyUnion` - alias for any union in the GraphQL schema.
+     * * `__anyEnum` - alias for any enum in the GraphQL schema.
+     * * `__anyInput` - alias for any input object in the GraphQL schema.
      *
      * Default: false
      */
