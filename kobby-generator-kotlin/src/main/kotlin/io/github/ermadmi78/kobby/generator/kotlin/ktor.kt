@@ -61,7 +61,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteQuery,
                     "query",
-                    dto.graphql.queryResultClass
+                    dto.graphql.queryResultClass,
+                    dto.graphql.queryExceptionClass
                 )
 
                 buildSimpleQueryOrMutationFun(
@@ -69,7 +70,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteMutation,
                     "mutation",
-                    dto.graphql.mutationResultClass
+                    dto.graphql.mutationResultClass,
+                    dto.graphql.mutationExceptionClass
                 )
             }
         }
@@ -299,7 +301,8 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
     layout: KotlinLayout,
     name: String,
     operation: String,
-    graphQlResultClass: TypeName
+    graphQlResultClass: TypeName,
+    graphQlExceptionClass: TypeName
 ) = with(layout) {
     buildFunction(name) {
         addModifiers(OVERRIDE)
@@ -352,14 +355,26 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
             Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
         ) {
             addStatement(
-                "throw·%T(%S, ${ktor.simpleValRequest}, it)",
-                dto.graphql.exceptionClass,
+                "throw·%T(" +
+                        "\n⇥%S," +
+                        "\n${ktor.simpleValRequest}," +
+                        "\nit," +
+                        "\n${ktor.simpleValResult}.extensions," +
+                        "\n${ktor.simpleValResult}.data" +
+                        "⇤\n)",
+                graphQlExceptionClass,
                 "GraphQL $operation failed"
             )
         }
         addStatement(
-            "return·${ktor.simpleValResult}.data ?: throw·%T(\n⇥%S,\n${ktor.simpleValRequest}⇤\n)",
-            dto.graphql.exceptionClass,
+            "return·${ktor.simpleValResult}.data ?: throw·%T(" +
+                    "\n⇥%S," +
+                    "\n${ktor.simpleValRequest}," +
+                    "\n${ktor.simpleValResult}.errors," +
+                    "\n${ktor.simpleValResult}.extensions," +
+                    "\nnull" +
+                    "⇤\n)",
+            graphQlExceptionClass,
             "GraphQL $operation completes successfully but returns no data"
         )
     }

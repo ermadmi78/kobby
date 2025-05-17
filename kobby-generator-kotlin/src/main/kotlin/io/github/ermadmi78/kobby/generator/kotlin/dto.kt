@@ -1,8 +1,7 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
 import com.squareup.kotlinpoet.*
-import com.squareup.kotlinpoet.KModifier.OVERRIDE
-import com.squareup.kotlinpoet.KModifier.SEALED
+import com.squareup.kotlinpoet.KModifier.*
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_IGNORE_PROPERTIES
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_INCLUDE
@@ -469,20 +468,81 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
         }
 
         val argErrors = "errors" to LIST.parameterizedBy(dto.graphql.errorClass).nullable()
+        val argExtensions = if (dto.serialization.enabled) {
+            "extensions" to SerializationJson.JSON_OBJECT.nullable()
+        } else {
+            "extensions" to MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
+        }
 
         // GraphQL Exception
         files += buildFile(dto.graphql.packageName, dto.graphql.exceptionName) {
             buildClass(dto.graphql.exceptionName) {
+                addModifiers(OPEN)
                 buildPrimaryConstructorProperties {
                     buildParameter("message", STRING)
                     buildProperty("request", dto.graphql.requestClass)
                     buildProperty(argErrors)
+                    buildProperty(argExtensions)
                 }
                 superclass(ClassName("kotlin", "RuntimeException"))
                 addSuperclassConstructorParameter(
                     "message + (errors?.%M(\",\\n  \", \"\\n  \", \"\\n\")·{ it.toString() } ?: \"\")",
                     MemberName("kotlin.collections", "joinToString")
                 )
+            }
+        }
+
+        // GraphQL Query Exception
+        files += buildFile(dto.graphql.packageName, dto.graphql.queryExceptionName) {
+            buildClass(dto.graphql.queryExceptionName) {
+                buildPrimaryConstructorProperties {
+                    buildParameter("message", STRING)
+                    buildParameter("request", dto.graphql.requestClass)
+                    buildParameter(argErrors)
+                    buildParameter(argExtensions)
+                    buildProperty("data", schema.query.dtoClass.nullable())
+                }
+                superclass(dto.graphql.exceptionClass)
+                addSuperclassConstructorParameter("message")
+                addSuperclassConstructorParameter("request")
+                addSuperclassConstructorParameter(argErrors.first)
+                addSuperclassConstructorParameter(argExtensions.first)
+            }
+        }
+
+        // GraphQL Mutation Exception
+        files += buildFile(dto.graphql.packageName, dto.graphql.mutationExceptionName) {
+            buildClass(dto.graphql.mutationExceptionName) {
+                buildPrimaryConstructorProperties {
+                    buildParameter("message", STRING)
+                    buildParameter("request", dto.graphql.requestClass)
+                    buildParameter(argErrors)
+                    buildParameter(argExtensions)
+                    buildProperty("data", schema.mutation.dtoClass.nullable())
+                }
+                superclass(dto.graphql.exceptionClass)
+                addSuperclassConstructorParameter("message")
+                addSuperclassConstructorParameter("request")
+                addSuperclassConstructorParameter(argErrors.first)
+                addSuperclassConstructorParameter(argExtensions.first)
+            }
+        }
+
+        // GraphQL Subscription Exception
+        files += buildFile(dto.graphql.packageName, dto.graphql.subscriptionExceptionName) {
+            buildClass(dto.graphql.subscriptionExceptionName) {
+                buildPrimaryConstructorProperties {
+                    buildParameter("message", STRING)
+                    buildParameter("request", dto.graphql.requestClass)
+                    buildParameter(argErrors)
+                    buildParameter(argExtensions)
+                    buildProperty("data", schema.subscription.dtoClass.nullable())
+                }
+                superclass(dto.graphql.exceptionClass)
+                addSuperclassConstructorParameter("message")
+                addSuperclassConstructorParameter("request")
+                addSuperclassConstructorParameter(argErrors.first)
+                addSuperclassConstructorParameter(argExtensions.first)
             }
         }
 
@@ -496,6 +556,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         jacksonIncludeNonAbsent()
                     }
                     buildProperty(argErrors) {
+                        jacksonIncludeNonEmpty()
+                    }
+                    buildProperty(argExtensions) {
                         jacksonIncludeNonEmpty()
                     }
                 }
@@ -514,6 +577,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     buildProperty(argErrors) {
                         jacksonIncludeNonEmpty()
                     }
+                    buildProperty(argExtensions) {
+                        jacksonIncludeNonEmpty()
+                    }
                 }
             }
         }
@@ -528,6 +594,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         jacksonIncludeNonAbsent()
                     }
                     buildProperty(argErrors) {
+                        jacksonIncludeNonEmpty()
+                    }
+                    buildProperty(argExtensions) {
                         jacksonIncludeNonEmpty()
                     }
                 }

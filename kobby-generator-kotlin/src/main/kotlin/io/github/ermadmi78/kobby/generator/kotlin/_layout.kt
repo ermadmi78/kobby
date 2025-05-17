@@ -140,6 +140,24 @@ internal val KotlinDtoGraphQLLayout.exceptionName: String
 internal val KotlinDtoGraphQLLayout.exceptionClass: ClassName
     get() = ClassName(packageName, exceptionName)
 
+internal val KotlinDtoGraphQLLayout.queryExceptionName: String
+    get() = "QueryException".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.queryExceptionClass: ClassName
+    get() = ClassName(packageName, queryExceptionName)
+
+internal val KotlinDtoGraphQLLayout.mutationExceptionName: String
+    get() = "MutationException".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.mutationExceptionClass: ClassName
+    get() = ClassName(packageName, mutationExceptionName)
+
+internal val KotlinDtoGraphQLLayout.subscriptionExceptionName: String
+    get() = "SubscriptionException".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.subscriptionExceptionClass: ClassName
+    get() = ClassName(packageName, subscriptionExceptionName)
+
 internal val KotlinDtoGraphQLLayout.queryResultName: String
     get() = "QueryResult".decorate(decoration)
 
