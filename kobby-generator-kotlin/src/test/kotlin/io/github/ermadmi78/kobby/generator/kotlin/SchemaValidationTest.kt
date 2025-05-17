@@ -72,6 +72,8 @@ class SchemaValidationTest {
             true,
             "kobby.entity",
             Decoration(null, null),
+            "__errors",
+            "__extensions",
             true,
             "__context",
             "__withCurrentProjection",
@@ -99,6 +101,8 @@ class SchemaValidationTest {
             Decoration("__inner", null)
         ),
         KotlinAdapterLayout(
+            false,
+            true,
             KotlinAdapterKtorLayout(
                 true,
                 true,

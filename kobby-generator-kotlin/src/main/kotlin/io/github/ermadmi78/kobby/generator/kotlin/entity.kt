@@ -64,6 +64,34 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             addKdoc("%L", it)
         }
 
+        if (adapter.extendedApi && node.isOperation) {
+            addSuperinterface(context.responseClass)
+
+            buildFunction(entity.errorsFunName) {
+                addModifiers(ABSTRACT)
+                addModifiers(OVERRIDE)
+                returns(dto.errorsType)
+
+                var kDoc = "GraphQL response errors access function generated for adapters with extended API."
+                if (adapter.throwException) {
+                    kDoc += " To enable GraphQL error propagation to the entity layer, " +
+                            "set Kobby configuration property `adapter.throwException` to `false`."
+                }
+                addKdoc("%L", kDoc)
+            }
+
+            buildFunction(entity.extensionsFunName) {
+                addModifiers(ABSTRACT)
+                addModifiers(OVERRIDE)
+                returns(dto.extensionsType)
+
+                addKdoc(
+                    "%L",
+                    "GraphQL response extensions access function generated for adapters with extended API."
+                )
+            }
+        }
+
         if (entity.contextFunEnabled) {
             // context access function
             buildFunction(entity.contextFunName) {

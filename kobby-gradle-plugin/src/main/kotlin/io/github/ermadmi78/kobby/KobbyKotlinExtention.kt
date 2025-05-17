@@ -563,6 +563,32 @@ open class KobbyKotlinEntityExtension {
     var postfix: String? = null
 
     /**
+     * GraphQL response errors access function generated for adapters with extended API.
+     * See `adapter.extendedApi` and `adapter.throwException` properties.
+     *
+     * To enable GraphQL error propagation to the entity layer,
+     * set `adapter.throwException` property to `false`.
+     * [More details](https://github.com/ermadmi78/kobby/issues/48)
+     * [More details](https://github.com/ermadmi78/kobby/issues/51)
+     *
+     * Default: "__errors"
+     */
+    var errorsFunName: String? = null
+
+    /**
+     * GraphQL response extensions access function generated for adapters with extended API.
+     * See `adapter.extendedApi` property.
+     *
+     * To enable GraphQL extensions propagation to the entity layer,
+     * set `adapter.extendedApi` property to `true`.
+     * [More details](https://github.com/ermadmi78/kobby/issues/48)
+     * [More details](https://github.com/ermadmi78/kobby/issues/51)
+     *
+     * Default: "__extensions"
+     */
+    var extensionsFunName: String? = null
+
+    /**
      * Generate context access function in entity interface.
      * [More details](https://github.com/ermadmi78/kobby/issues/20)
      * [More details](https://github.com/ermadmi78/kobby/issues/29)
@@ -762,6 +788,24 @@ open class KobbyKotlinImplExtension {
  */
 @Kobby
 open class KobbyKotlinAdapterExtension {
+    /**
+     * Is extended adapter API (with GraphQL errors and extensions) enabled
+     * [More details](https://github.com/ermadmi78/kobby/issues/48)
+     * [More details](https://github.com/ermadmi78/kobby/issues/51)
+     *
+     * Default: false
+     */
+    var extendedApi: Boolean? = null
+
+    /**
+     * Throw exception when receiving non-empty GraphQL errors
+     * [More details](https://github.com/ermadmi78/kobby/issues/48)
+     * [More details](https://github.com/ermadmi78/kobby/issues/51)
+     *
+     * Default: true
+     */
+    var throwException: Boolean? = null
+
     internal val ktorExtension = lazy { KobbyKotlinAdapterKtorExtension() }
 
     /** Configuration of Ktor adapter classes generation */

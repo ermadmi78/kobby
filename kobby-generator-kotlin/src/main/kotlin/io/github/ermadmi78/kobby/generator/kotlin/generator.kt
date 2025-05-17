@@ -143,6 +143,35 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                 }
             }
 
+            val extendedApi = adapter.extendedApi
+
+            if (extendedApi) {
+                // Build response interface
+                buildInterface(context.responseName) {
+                    buildFunction(entity.errorsFunName) {
+                        addModifiers(ABSTRACT)
+                        returns(dto.errorsType)
+
+                        var kDoc = "GraphQL response errors access function generated for adapters with extended API."
+                        if (adapter.throwException) {
+                            kDoc += " To enable GraphQL error propagation to the entity layer, " +
+                                    "set Kobby configuration property `adapter.throwException` to `false`."
+                        }
+                        addKdoc("%L", kDoc)
+                    }
+
+                    buildFunction(entity.extensionsFunName) {
+                        addModifiers(ABSTRACT)
+                        returns(dto.extensionsType)
+
+                        addKdoc(
+                            "%L",
+                            "GraphQL response extensions access function generated for adapters with extended API."
+                        )
+                    }
+                }
+            }
+
             // Build adapter interface
             buildInterface(context.adapterName) {
                 val notImplementedClass = ClassName("kotlin", "NotImplementedError")
@@ -151,7 +180,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                     addModifiers(SUSPEND)
                     buildParameter(context.adapterArgQuery)
                     buildParameter(adapterArgVariables)
-                    returns(schema.query.dtoClass)
+                    returns(if (extendedApi) dto.graphql.queryResultClass else schema.query.dtoClass)
 
                     addStatement(
                         "return·throw·%T(%S)",
@@ -164,7 +193,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                     addModifiers(SUSPEND)
                     buildParameter(context.adapterArgQuery)
                     buildParameter(adapterArgVariables)
-                    returns(schema.mutation.dtoClass)
+                    returns(if (extendedApi) dto.graphql.mutationResultClass else schema.mutation.dtoClass)
 
                     addStatement(
                         "return·throw·%T(%S)",
@@ -190,7 +219,19 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
 
             buildContextImplementation(schema, layout)
 
-            if (!dto.serialization.enabled) {
+            if (dto.serialization.enabled) {
+                if (extendedApi) {
+                    buildProperty(context.emptyJsonObjectName, SerializationJson.JSON_OBJECT) {
+                        buildInitializer {
+                            addStatement(
+                                "%T(%M())",
+                                SerializationJson.JSON_OBJECT,
+                                MemberName("kotlin.collections", "emptyMap")
+                            )
+                        }
+                    }
+                }
+            } else {
                 // Build mapper interface
                 buildInterface(context.mapperName) {
                     addKdoc("%L", "Helper interface for default adapter implementations")
@@ -340,9 +381,12 @@ private fun TypeSpecBuilder.buildContextFunction(
         }
         addStatement("")
 
+        val extendedApi = adapter.extendedApi
         val dtoVal = operation.run {
             if (dto.decoration.isNotEmpty()) decorate(dto.decoration) else decorate(null, "Dto")
         }
+        val resultVal = operation.decorate(null, "Result")
+
         if (subscription) {
             controlFlow("return·%T", context.subscriberClass.parameterizedBy(node.entityClass)) {
                 val callAdapterFlow = if (dto.serialization.enabled) {
@@ -363,11 +407,20 @@ private fun TypeSpecBuilder.buildContextFunction(
                             addModifiers(SUSPEND, OVERRIDE)
                             returns(node.entityClass)
 
-                            statement(node.dtoClass) {
-                                "val·$dtoVal:·%T·=·this@$adapterFun.${context.receiverFunReceive}()"
-                            }
-                            statement(ClassName(impl.packageName, node.entityBuilderName), contextImplClass) {
-                                "return·$dtoVal.%T(this@%T, $projectionRef)"
+                            if (extendedApi) {
+                                statement(dto.graphql.subscriptionResultClass) {
+                                    "val·$resultVal:·%T·=·this@$adapterFun.${context.receiverFunReceive}()"
+                                }
+                                statement(ClassName(impl.packageName, node.entityBuilderName), contextImplClass) {
+                                    "return·$resultVal.%T(this@%T, $projectionRef)"
+                                }
+                            } else {
+                                statement(node.dtoClass) {
+                                    "val·$dtoVal:·%T·=·this@$adapterFun.${context.receiverFunReceive}()"
+                                }
+                                statement(ClassName(impl.packageName, node.entityBuilderName), contextImplClass) {
+                                    "return·$dtoVal.%T(this@%T, $projectionRef)"
+                                }
                             }
                         }
 
@@ -385,17 +438,37 @@ private fun TypeSpecBuilder.buildContextFunction(
                 }
             }
         } else {
-            if (dto.serialization.enabled) {
-                statement(node.dtoClass, SerializationJson.JSON_OBJECT) {
-                    "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, %T(${arguments.first}))"
+            if (extendedApi) {
+                val resultClass: ClassName = when {
+                    node.isQuery -> dto.graphql.queryResultClass
+                    node.isMutation -> dto.graphql.mutationResultClass
+                    else -> error("Invalid algorithm")
+                }
+                if (dto.serialization.enabled) {
+                    statement(resultClass, SerializationJson.JSON_OBJECT) {
+                        "val·$resultVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, %T(${arguments.first}))"
+                    }
+                } else {
+                    statement(resultClass) {
+                        "val·$resultVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
+                    }
+                }
+                statement(ClassName(impl.packageName, node.entityBuilderName)) {
+                    "return·$resultVal.%T(this,·$projectionRef)"
                 }
             } else {
-                statement(node.dtoClass) {
-                    "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
+                if (dto.serialization.enabled) {
+                    statement(node.dtoClass, SerializationJson.JSON_OBJECT) {
+                        "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, %T(${arguments.first}))"
+                    }
+                } else {
+                    statement(node.dtoClass) {
+                        "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
+                    }
                 }
-            }
-            statement(ClassName(impl.packageName, node.entityBuilderName)) {
-                "return·$dtoVal.%T(this,·$projectionRef)"
+                statement(ClassName(impl.packageName, node.entityBuilderName)) {
+                    "return·$dtoVal.%T(this,·$projectionRef)"
+                }
             }
         }
     }

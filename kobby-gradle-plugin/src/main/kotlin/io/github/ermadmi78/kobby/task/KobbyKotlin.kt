@@ -498,6 +498,24 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "entityErrorsFunName",
+        description = "GraphQL response errors access function generated for adapters with extended API. " +
+                "See \"adapter.extendedApi\" and \"adapter.throwException\" properties. (default \"__errors\")"
+    )
+    val entityErrorsFunName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "entityExtensionsFunName",
+        description = "GraphQL response extensions access function generated for adapters with extended API. " +
+                "See \"adapter.extendedApi\" property. (default \"__extensions\")"
+    )
+    val entityExtensionsFunName: Property<String> = project.objects.property(String::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "entityContextFunEnabled",
         description = "Generate context access function in entity interface (default true)"
     )
@@ -733,6 +751,22 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "adapterExtendedApi",
+        description = "Is extended adapter API (with GraphQL errors and extensions) enabled (default false)"
+    )
+    val adapterExtendedApi: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "adapterThrowException",
+        description = "Throw exception when receiving non-empty GraphQL errors (default true)"
+    )
+    val adapterThrowException: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "adapterKtorSimpleEnabled",
         description = "Is simple Ktor adapter generation enabled (default false)"
     )
@@ -852,6 +886,8 @@ open class KobbyKotlin : DefaultTask() {
 
         entityEnabled.convention(true)
         entityPackageName.convention("entity")
+        entityErrorsFunName.convention("__errors")
+        entityExtensionsFunName.convention("__extensions")
         entityContextFunEnabled.convention(true)
         entityContextFunName.convention("__context")
         entityWithCurrentProjectionFun.convention("__withCurrentProjection")
@@ -871,6 +907,9 @@ open class KobbyKotlin : DefaultTask() {
         implPostfix.convention("Impl")
         implInternal.convention(true)
         implInnerPrefix.convention("__inner")
+
+        adapterExtendedApi.convention(false)
+        adapterThrowException.convention(true)
 
         adapterKtorSimpleEnabled.convention(project.provider {
             project.hasDependency("io.ktor", "ktor-client-cio")
@@ -1009,6 +1048,8 @@ open class KobbyKotlin : DefaultTask() {
                 entityEnabled.get(),
                 entityPackage.toPackageName(),
                 Decoration(entityPrefix.orNull, entityPostfix.orNull),
+                entityErrorsFunName.get(),
+                entityExtensionsFunName.get(),
                 entityContextFunEnabled.get(),
                 entityContextFunName.get(),
                 entityWithCurrentProjectionFun.get(),
@@ -1036,6 +1077,8 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(implInnerPrefix.orNull, implInnerPostfix.orNull)
             ),
             KotlinAdapterLayout(
+                adapterExtendedApi.get() || !adapterThrowException.get(),
+                adapterThrowException.get(),
                 KotlinAdapterKtorLayout(
                     adapterKtorSimpleEnabled.get(),
                     adapterKtorCompositeEnabled.get(),

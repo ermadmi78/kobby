@@ -109,6 +109,7 @@ class GenerateKotlinMojo : AbstractMojo() {
         val dto = kotlin.dto
         val entity = kotlin.entity
         val impl = kotlin.impl
+        val adapter = kotlin.adapter
         val ktor = kotlin.adapter.ktor
 
         dto.serialization.apply {
@@ -245,6 +246,8 @@ class GenerateKotlinMojo : AbstractMojo() {
                 entity.enabled,
                 entityPackage.toPackageName(),
                 Decoration(entity.prefix, entity.postfix),
+                entity.errorsFunName,
+                entity.extensionsFunName,
                 entity.contextFunEnabled,
                 entity.contextFunName,
                 entity.withCurrentProjectionFun,
@@ -275,6 +278,8 @@ class GenerateKotlinMojo : AbstractMojo() {
                 Decoration(impl.innerPrefix, impl.innerPostfix)
             ),
             KotlinAdapterLayout(
+                adapter.extendedApi || !adapter.throwException,
+                adapter.throwException,
                 KotlinAdapterKtorLayout(
                     ktor.simpleEnabled!!,
                     ktor.compositeEnabled!!,

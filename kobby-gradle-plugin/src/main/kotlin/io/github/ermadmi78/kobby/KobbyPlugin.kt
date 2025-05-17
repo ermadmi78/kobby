@@ -303,6 +303,15 @@ class KobbyPlugin : Plugin<Project> {
                     postfix?.also {
                         kotlinTask.entityPostfix.convention(it)
                     }
+
+                    errorsFunName?.also {
+                        kotlinTask.entityErrorsFunName.convention(it)
+                    }
+
+                    extensionsFunName?.also {
+                        kotlinTask.entityExtensionsFunName.convention(it)
+                    }
+
                     contextFunEnabled?.also {
                         kotlinTask.entityContextFunEnabled.convention(it)
                     }
@@ -398,6 +407,12 @@ class KobbyPlugin : Plugin<Project> {
                     }
                 }
                 kotlinExtension.adapterExtension.valueOrNull?.apply {
+                    extendedApi?.also {
+                        kotlinTask.adapterExtendedApi.convention(it)
+                    }
+                    throwException?.also {
+                        kotlinTask.adapterThrowException.convention(it)
+                    }
                     ktorExtension.valueOrNull?.apply {
                         simpleEnabled?.also {
                             kotlinTask.adapterKtorSimpleEnabled.convention(it)

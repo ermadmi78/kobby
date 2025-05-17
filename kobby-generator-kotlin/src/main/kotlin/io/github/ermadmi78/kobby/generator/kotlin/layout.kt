@@ -401,7 +401,9 @@ data class KotlinLayout(
     // *****************************************************************************************************************
     internal val KobbySchema.receiverSubscriptionDtoLambda: LambdaTypeName
         get() = LambdaTypeName.get(
-            context.receiverClass.parameterizedBy(subscription.dtoClass),
+            context.receiverClass.parameterizedBy(
+                if (adapter.extendedApi) dto.graphql.subscriptionResultClass else subscription.dtoClass
+            ),
             emptyList(),
             UNIT
         ).copy(suspending = true)
@@ -585,6 +587,8 @@ class KotlinEntityLayout(
     val enabled: Boolean,
     packageName: String,
     val decoration: Decoration,
+    val errorsFunName: String,
+    val extensionsFunName: String,
     val contextFunEnabled: Boolean,
     val contextFunName: String,
     val withCurrentProjectionFun: String,
@@ -622,6 +626,8 @@ class KotlinImplLayout(
 }
 
 class KotlinAdapterLayout(
+    val extendedApi: Boolean,
+    val throwException: Boolean,
     val ktor: KotlinAdapterKtorLayout
 )
 

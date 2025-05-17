@@ -61,7 +61,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteQuery,
                     "query",
-                    dto.graphql.queryResultClass
+                    dto.graphql.queryResultClass,
+                    dto.graphql.queryExceptionClass
                 )
 
                 buildSimpleQueryOrMutationFun(
@@ -69,7 +70,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteMutation,
                     "mutation",
-                    dto.graphql.mutationResultClass
+                    dto.graphql.mutationResultClass,
+                    dto.graphql.mutationExceptionClass
                 )
             }
         }
@@ -201,7 +203,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteQuery,
                     "query",
-                    dto.graphql.queryResultClass
+                    dto.graphql.queryResultClass,
+                    dto.graphql.queryExceptionClass
                 )
 
                 buildCompositeQueryOrMutationFun(
@@ -209,7 +212,8 @@ internal fun generateKtorAdapter(schema: KobbySchema, layout: KotlinLayout): Lis
                     layout,
                     context.adapterFunExecuteMutation,
                     "mutation",
-                    dto.graphql.mutationResultClass
+                    dto.graphql.mutationResultClass,
+                    dto.graphql.mutationExceptionClass
                 )
 
                 buildExecuteSubscriptionFun(schema, layout)
@@ -299,14 +303,15 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
     layout: KotlinLayout,
     name: String,
     operation: String,
-    graphQlResultClass: TypeName
+    graphQlResultClass: TypeName,
+    graphQlExceptionClass: TypeName
 ) = with(layout) {
     buildFunction(name) {
         addModifiers(OVERRIDE)
         addModifiers(SUSPEND)
         buildParameter(context.adapterArgQuery)
         buildParameter(adapterArgVariables)
-        returns(node.dtoClass)
+        returns(if (adapter.extendedApi) graphQlResultClass else node.dtoClass)
 
         val ktor = adapter.ktor
         statement(dto.graphql.requestClass) {
@@ -347,21 +352,55 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
         )
         addStatement("")
 
-        controlFlow(
-            "${ktor.simpleValResult}.errors?.%M·{ it.%M() }?.%M",
-            Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
-        ) {
+        if (adapter.throwException) {
+            controlFlow(
+                "${ktor.simpleValResult}.errors?.%M·{ it.%M() }?.%M",
+                Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
+            ) {
+                addStatement(
+                    "throw·%T(" +
+                            "\n⇥%S," +
+                            "\n${ktor.simpleValRequest}," +
+                            "\nit," +
+                            "\n${ktor.simpleValResult}.extensions," +
+                            "\n${ktor.simpleValResult}.data" +
+                            "⇤\n)",
+                    graphQlExceptionClass,
+                    "GraphQL $operation failed"
+                )
+            }
+        }
+
+        if (adapter.extendedApi) {
+            if (adapter.throwException) {
+                controlFlow("if·(${ktor.simpleValResult}.data·==·null)") {
+                    addStatement(
+                        "throw·%T(" +
+                                "\n⇥%S," +
+                                "\n${ktor.simpleValRequest}," +
+                                "\n${ktor.simpleValResult}.errors," +
+                                "\n${ktor.simpleValResult}.extensions," +
+                                "\nnull" +
+                                "⇤\n)",
+                        graphQlExceptionClass,
+                        "GraphQL $operation completes successfully but returns no data"
+                    )
+                }
+            }
+            addStatement("return·${ktor.simpleValResult}")
+        } else {
             addStatement(
-                "throw·%T(%S, ${ktor.simpleValRequest}, it)",
-                dto.graphql.exceptionClass,
-                "GraphQL $operation failed"
+                "return·${ktor.simpleValResult}.data ?: throw·%T(" +
+                        "\n⇥%S," +
+                        "\n${ktor.simpleValRequest}," +
+                        "\n${ktor.simpleValResult}.errors," +
+                        "\n${ktor.simpleValResult}.extensions," +
+                        "\nnull" +
+                        "⇤\n)",
+                graphQlExceptionClass,
+                "GraphQL $operation completes successfully but returns no data"
             )
         }
-        addStatement(
-            "return·${ktor.simpleValResult}.data ?: throw·%T(\n⇥%S,\n${ktor.simpleValRequest}⇤\n)",
-            dto.graphql.exceptionClass,
-            "GraphQL $operation completes successfully but returns no data"
-        )
     }
 }
 
@@ -370,14 +409,15 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
     layout: KotlinLayout,
     name: String,
     operation: String,
-    graphQlResultClass: TypeName
+    graphQlResultClass: TypeName,
+    graphQlExceptionClass: TypeName
 ) = with(layout) {
     buildFunction(name) {
         addModifiers(OVERRIDE)
         addModifiers(SUSPEND)
         buildParameter(context.adapterArgQuery)
         buildParameter(adapterArgVariables)
-        returns(node.dtoClass)
+        returns(if (adapter.extendedApi) graphQlResultClass else node.dtoClass)
 
         val ktor = adapter.ktor
         statement(dto.graphql.requestClass) {
@@ -438,21 +478,55 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
         }
         addStatement("")
 
-        controlFlow(
-            "${ktor.compositeValResult}.errors?.%M·{ it.%M() }?.%M",
-            Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
-        ) {
+        if (adapter.throwException) {
+            controlFlow(
+                "${ktor.compositeValResult}.errors?.%M·{ it.%M() }?.%M",
+                Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
+            ) {
+                addStatement(
+                    "throw·%T(" +
+                            "\n⇥%S," +
+                            "\n${ktor.compositeValRequest}," +
+                            "\nit," +
+                            "\n${ktor.compositeValResult}.extensions," +
+                            "\n${ktor.compositeValResult}.data" +
+                            "⇤\n)",
+                    graphQlExceptionClass,
+                    "GraphQL $operation failed"
+                )
+            }
+        }
+
+        if (adapter.extendedApi) {
+            if (adapter.throwException) {
+                controlFlow("if·(${ktor.compositeValResult}.data·==·null)") {
+                    addStatement(
+                        "throw·%T(" +
+                                "\n⇥%S," +
+                                "\n${ktor.compositeValRequest}," +
+                                "\n${ktor.compositeValResult}.errors," +
+                                "\n${ktor.compositeValResult}.extensions," +
+                                "\nnull" +
+                                "⇤\n)",
+                        graphQlExceptionClass,
+                        "GraphQL $operation completes successfully but returns no data"
+                    )
+                }
+            }
+            addStatement("return·${ktor.compositeValResult}")
+        } else {
             addStatement(
-                "throw·%T(%S, ${ktor.compositeValRequest}, it)",
-                dto.graphql.exceptionClass,
-                "GraphQL $operation failed"
+                "return·${ktor.compositeValResult}.data ?: throw·%T(" +
+                        "\n⇥%S," +
+                        "\n${ktor.compositeValRequest}," +
+                        "\n${ktor.compositeValResult}.errors," +
+                        "\n${ktor.compositeValResult}.extensions," +
+                        "\nnull" +
+                        "⇤\n)",
+                graphQlExceptionClass,
+                "GraphQL $operation completes successfully but returns no data"
             )
         }
-        addStatement(
-            "return·${ktor.compositeValResult}.data ?: throw·%T(\n⇥%S,\n${ktor.compositeValRequest}⇤\n)",
-            dto.graphql.exceptionClass,
-            "GraphQL $operation completes successfully but returns no data"
-        )
     }
 }
 
@@ -582,7 +656,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
         controlFlow("while·(true)") {
             controlFlow(
                 "when·(val·$reply·=·$receiveMessage(${ktor.compositePropertySocket})·?:·throw·%T(%P, $request))",
-                graphql.exceptionClass,
+                graphql.subscriptionExceptionClass,
                 "Receive timeout expired (\$${ktor.compositePropertySubscriptionReceiveTimeoutMillis} millis)"
             ) {
                 controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_CONNECTION_ACK)) {
@@ -595,7 +669,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                 controlFlow("else·->") {
                     addStatement(
                         "throw·%T(%P, $request)",
-                        graphql.exceptionClass,
+                        graphql.subscriptionExceptionClass,
                         "Invalid protocol - unexpected reply: \$$reply"
                     )
                 }
@@ -609,12 +683,18 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
         }
         addStatement("")
 
+        val returnClass: ClassName = if (adapter.extendedApi) {
+            dto.graphql.subscriptionResultClass
+        } else {
+            schema.subscription.dtoClass
+        }
+
         buildAnonymousClass {
-            addSuperinterface(context.receiverClass.parameterizedBy(schema.subscription.dtoClass))
+            addSuperinterface(context.receiverClass.parameterizedBy(returnClass))
 
             buildFunction(context.receiverFunReceive) {
                 addModifiers(SUSPEND, OVERRIDE)
-                returns(schema.subscription.dtoClass)
+                returns(returnClass)
 
                 controlFlow("while·(true)") {
                     addStatement("var·$reply·=·$receiveMessage(${ktor.compositePropertySocket})")
@@ -622,7 +702,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                         buildSendMessage(layout, WS_CLIENT_MESSAGE_PING)
                         addStatement(
                             "$reply·=·$receiveMessage(${ktor.compositePropertySocket})·?:·throw·%T(%P, $request)",
-                            graphql.exceptionClass,
+                            graphql.subscriptionExceptionClass,
                             "Receive timeout expired (\$${ktor.compositePropertySubscriptionReceiveTimeoutMillis} millis)"
                         )
                     }
@@ -633,28 +713,63 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                             addStatement("")
 
                             addStatement("val·$result·=·$reply.payload")
-                            controlFlow(
-                                "$result.errors?.%M·{ it.%M() }?.%M",
-                                Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
-                            ) {
+
+                            if (adapter.throwException) {
+                                controlFlow(
+                                    "$result.errors?.%M·{ it.%M() }?.%M",
+                                    Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
+                                ) {
+                                    addStatement(
+                                        "throw·%T(" +
+                                                "\n⇥%S," +
+                                                "\n$request," +
+                                                "\nit," +
+                                                "\n$result.extensions," +
+                                                "\n$result.data" +
+                                                "⇤\n)",
+                                        graphql.subscriptionExceptionClass,
+                                        "GraphQL subscription failed"
+                                    )
+                                }
+                            }
+
+                            if (adapter.extendedApi) {
+                                if (adapter.throwException) {
+                                    controlFlow("if·($result.data·==·null)") {
+                                        addStatement(
+                                            "throw·%T(" +
+                                                    "\n⇥%S," +
+                                                    "\n$request," +
+                                                    "\n$result.errors," +
+                                                    "\n$result.extensions," +
+                                                    "\nnull" +
+                                                    "⇤\n)",
+                                            graphql.subscriptionExceptionClass,
+                                            "GraphQL subscription completes successfully but returns no data"
+                                        )
+                                    }
+                                }
+                                addStatement("return·$result")
+                            } else {
                                 addStatement(
-                                    "throw·%T(%S, $request, it)",
-                                    graphql.exceptionClass,
-                                    "GraphQL subscription failed"
+                                    "return·$result.data ?: throw·%T(" +
+                                            "\n⇥%S," +
+                                            "\n$request," +
+                                            "\n$result.errors," +
+                                            "\n$result.extensions," +
+                                            "\nnull" +
+                                            "⇤\n)",
+                                    graphql.subscriptionExceptionClass,
+                                    "GraphQL subscription completes successfully but returns no data"
                                 )
                             }
-                            addStatement(
-                                "return·$result.data ?: throw·%T(\n⇥%S,\n$request⇤\n)",
-                                graphql.exceptionClass,
-                                "GraphQL subscription completes successfully but returns no data"
-                            )
                         }
 
                         controlFlow("is·%T·->", message(WS_SERVER_MESSAGE_ERROR)) {
                             addStatement("%M($reply.id·==·$subscriptionId)", Kotlin.require)
                             addStatement(
                                 "throw·%T(%S, $request, $reply.payload)",
-                                graphql.exceptionClass,
+                                graphql.subscriptionExceptionClass,
                                 "Subscription failed"
                             )
                         }
@@ -683,7 +798,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                         controlFlow("else·->") {
                             addStatement(
                                 "throw·%T(%P, $request)",
-                                graphql.exceptionClass,
+                                graphql.subscriptionExceptionClass,
                                 "Invalid protocol - unexpected reply: \$$reply"
                             )
                         }

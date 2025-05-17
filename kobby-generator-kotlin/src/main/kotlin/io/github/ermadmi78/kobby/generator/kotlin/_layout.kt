@@ -113,6 +113,20 @@ private fun String.isKotlinIdentifier(): Boolean {
 }
 
 //******************************************************************************************************************
+//                                   KotlinDtoLayout
+//******************************************************************************************************************
+
+internal val KotlinDtoLayout.errorsType: TypeName
+    get() = LIST.parameterizedBy(graphql.errorClass)
+
+internal val KotlinDtoLayout.extensionsType: TypeName
+    get() = if (serialization.enabled) {
+        SerializationJson.JSON_OBJECT
+    } else {
+        MAP.parameterizedBy(STRING, ANY.nullable())
+    }
+
+//******************************************************************************************************************
 //                                   KotlinDtoGraphQLLayout
 //******************************************************************************************************************
 
@@ -139,6 +153,24 @@ internal val KotlinDtoGraphQLLayout.exceptionName: String
 
 internal val KotlinDtoGraphQLLayout.exceptionClass: ClassName
     get() = ClassName(packageName, exceptionName)
+
+internal val KotlinDtoGraphQLLayout.queryExceptionName: String
+    get() = "QueryException".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.queryExceptionClass: ClassName
+    get() = ClassName(packageName, queryExceptionName)
+
+internal val KotlinDtoGraphQLLayout.mutationExceptionName: String
+    get() = "MutationException".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.mutationExceptionClass: ClassName
+    get() = ClassName(packageName, mutationExceptionName)
+
+internal val KotlinDtoGraphQLLayout.subscriptionExceptionName: String
+    get() = "SubscriptionException".decorate(decoration)
+
+internal val KotlinDtoGraphQLLayout.subscriptionExceptionClass: ClassName
+    get() = ClassName(packageName, subscriptionExceptionName)
 
 internal val KotlinDtoGraphQLLayout.queryResultName: String
     get() = "QueryResult".decorate(decoration)
@@ -237,6 +269,12 @@ internal val KotlinContextLayout.dslName: String
 internal val KotlinContextLayout.dslClass: ClassName
     get() = ClassName(packageName, dslName)
 
+internal val KotlinContextLayout.responseName: String
+    get() = "Response".decorate(decoration)
+
+internal val KotlinContextLayout.responseClass: ClassName
+    get() = ClassName(packageName, responseName)
+
 internal val KotlinContextLayout.adapterName: String
     get() = "Adapter".decorate(decoration)
 
@@ -293,6 +331,12 @@ internal fun KotlinContextLayout.receiverLambda(receiverType: TypeName): LambdaT
         UNIT
     ).copy(suspending = true)
 
+internal val KotlinContextLayout.emptyJsonObjectName: String
+    get() = "EmptyJsonObject".decorate(decoration)._decapitalize()
+
+internal val KotlinContextLayout.emptyJsonObjectMember: MemberName
+    get() = MemberName(packageName, emptyJsonObjectName)
+
 internal val KotlinContextLayout.mapperName: String
     get() = "Mapper".decorate(decoration)
 
@@ -317,6 +361,12 @@ internal val KotlinImplLayout.projectionPropertyName: String
 
 internal val KotlinImplLayout.dtoPropertyName: String
     get() = "dto".decorate(innerDecoration)
+
+internal val KotlinImplLayout.errorsPropertyName: String
+    get() = "errors".decorate(innerDecoration)
+
+internal val KotlinImplLayout.extensionsPropertyName: String
+    get() = "extensions".decorate(innerDecoration)
 
 internal val KotlinImplLayout.repeatProjectionFunName: String
     get() = "_" + "repeatProjection".decorate(innerDecoration)

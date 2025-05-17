@@ -53,18 +53,57 @@ internal fun generateImpl(schema: KobbySchema, layout: KotlinLayout): List<FileS
 }
 
 private fun FileSpecBuilder.buildObjectEntityBuilder(node: KobbyNode, layout: KotlinLayout) = with(layout) {
-    buildFunction(node.entityBuilderName) {
-        receiver(node.dtoClass)
-        if (impl.internal) {
-            addModifiers(INTERNAL)
+    if (adapter.extendedApi && node.isOperation) {
+        val graphqlResultClass: ClassName = when {
+            node.isQuery -> dto.graphql.queryResultClass
+            node.isMutation -> dto.graphql.mutationResultClass
+            node.isSubscription -> dto.graphql.subscriptionResultClass
+            else -> error("Invalid algorithm")
         }
 
-        buildParameter(impl.contextPropertyName, context.contextClass)
-        buildParameter(node.implProjectionProperty)
-        returns(node.entityClass)
+        buildFunction(node.entityBuilderName) {
+            receiver(graphqlResultClass)
+            if (impl.internal) {
+                addModifiers(INTERNAL)
+            }
 
-        statement(node.implClass) {
-            "return·%T(${impl.contextPropertyName},·${impl.projectionPropertyName},·this)"
+            buildParameter(impl.contextPropertyName, context.contextClass)
+            buildParameter(node.implProjectionProperty)
+            returns(node.entityClass)
+
+            statement(
+                node.implClass,
+                node.dtoClass,
+                MemberName("kotlin.collections", "emptyList"),
+                if (dto.serialization.enabled) {
+                    context.emptyJsonObjectMember
+                } else {
+                    MemberName("kotlin.collections", "emptyMap")
+                }
+            ) {
+                "return·%T(" +
+                        "\n⇥${impl.contextPropertyName}," +
+                        "\n${impl.projectionPropertyName}," +
+                        "\nthis.data·?:·%T()," +
+                        "\nthis.errors·?:·%M()," +
+                        "\nthis.extensions·?:·%M${if (dto.serialization.enabled) "" else "()"}" +
+                        "⇤\n)"
+            }
+        }
+    } else {
+        buildFunction(node.entityBuilderName) {
+            receiver(node.dtoClass)
+            if (impl.internal) {
+                addModifiers(INTERNAL)
+            }
+
+            buildParameter(impl.contextPropertyName, context.contextClass)
+            buildParameter(node.implProjectionProperty)
+            returns(node.entityClass)
+
+            statement(node.implClass) {
+                "return·%T(${impl.contextPropertyName},·${impl.projectionPropertyName},·this)"
+            }
         }
     }
 }
@@ -176,6 +215,22 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                     addModifiers(INTERNAL)
                 }
             }
+
+            if (adapter.extendedApi && node.isOperation) {
+                // errors
+                buildProperty(impl.errorsPropertyName, dto.errorsType) {
+                    if (impl.internal) {
+                        addModifiers(INTERNAL)
+                    }
+                }
+
+                // extensions
+                buildProperty(impl.extensionsPropertyName, dto.extensionsType) {
+                    if (impl.internal) {
+                        addModifiers(INTERNAL)
+                    }
+                }
+            }
         }
 
         // Entity equals and hashCode generation by @primaryKey directive
@@ -273,6 +328,22 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 }
 
                 buildAppendChain { appendLiteral(')') }
+            }
+        }
+
+        if (adapter.extendedApi && node.isOperation) {
+            buildFunction(entity.errorsFunName) {
+                addModifiers(OVERRIDE)
+                returns(dto.errorsType)
+
+                addStatement("return·${impl.errorsPropertyName}")
+            }
+
+            buildFunction(entity.extensionsFunName) {
+                addModifiers(OVERRIDE)
+                returns(dto.extensionsType)
+
+                addStatement("return·${impl.extensionsPropertyName}")
             }
         }
 

@@ -380,6 +380,12 @@ class KotlinEntityConfig {
     var postfix: String? = null
 
     @Parameter
+    var errorsFunName: String = "__errors"
+
+    @Parameter
+    var extensionsFunName: String = "__extensions"
+
+    @Parameter
     var contextFunEnabled: Boolean = true
 
     @Parameter
@@ -400,6 +406,8 @@ class KotlinEntityConfig {
                 "\n      packageName=$packageName, " +
                 "\n      prefix=$prefix, " +
                 "\n      postfix=$postfix, " +
+                "\n      errorsFunName=$errorsFunName, " +
+                "\n      extensionsFunName=$extensionsFunName, " +
                 "\n      contextFunEnabled=$contextFunEnabled, " +
                 "\n      contextFunName=$contextFunName, " +
                 "\n      withCurrentProjectionFun=$withCurrentProjectionFun, " +
@@ -544,10 +552,18 @@ class KotlinImplConfig {
 
 class KotlinAdapterConfig {
     @Parameter
+    var extendedApi: Boolean = false
+
+    @Parameter
+    var throwException: Boolean = true
+
+    @Parameter
     var ktor: KotlinAdapterKtorConfig = KotlinAdapterKtorConfig()
 
     override fun toString(): String {
         return "KotlinAdapterConfig(" +
+                "\n      extendedApi=$extendedApi, " +
+                "\n      throwException=$throwException, " +
                 "\n      ktor=$ktor" +
                 "\n    )"
     }
