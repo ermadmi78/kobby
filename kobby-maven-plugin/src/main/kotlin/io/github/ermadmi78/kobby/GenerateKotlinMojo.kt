@@ -283,7 +283,9 @@ class GenerateKotlinMojo : AbstractMojo() {
                         ktor.prefix?.trim() ?: capitalizedContextName,
                         ktor.postfix
                     ),
-                    (ktor.receiveTimeoutMillis ?: 10_000L).takeIf { it > 0L }
+                    (ktor.receiveTimeoutMillis ?: 10_000L).takeIf { it > 0L },
+                    ktor.extendedApi || !ktor.throwException,
+                    ktor.throwException
                 )
             )
         )

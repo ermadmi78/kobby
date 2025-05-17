@@ -779,6 +779,22 @@ open class KobbyKotlin : DefaultTask() {
     )
     val adapterKtorReceiveTimeoutMillis: Property<Long> = project.objects.property(Long::class.java)
 
+    @Input
+    @Optional
+    @Option(
+        option = "adapterKtorExtendedApi",
+        description = "Is extended adapter API (with GraphQL errors and extensions) enabled (default false)"
+    )
+    val adapterKtorExtendedApi: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "adapterKtorThrowException",
+        description = "Throw exception when receiving non-empty GraphQL errors (default true)"
+    )
+    val adapterKtorThrowException: Property<Boolean> = project.objects.property(Boolean::class.java)
+
     @OutputDirectory
     val outputDirectory: DirectoryProperty = project.objects.directoryProperty()
 
@@ -881,6 +897,8 @@ open class KobbyKotlin : DefaultTask() {
         adapterKtorPackageName.convention("adapter.ktor")
         adapterKtorPostfix.convention("KtorAdapter")
         adapterKtorReceiveTimeoutMillis.convention(10_000L)
+        adapterKtorExtendedApi.convention(false)
+        adapterKtorThrowException.convention(true)
 
         outputDirectory.convention(project.layout.buildDirectory.dir("generated/sources/kobby/main/kotlin"))
     }
@@ -1044,7 +1062,9 @@ open class KobbyKotlin : DefaultTask() {
                         adapterKtorPrefix.orNull?.trim() ?: capitalizedContextName,
                         adapterKtorPostfix.orNull
                     ),
-                    adapterKtorReceiveTimeoutMillis.orNull?.takeIf { it > 0L }
+                    adapterKtorReceiveTimeoutMillis.orNull?.takeIf { it > 0L },
+                    adapterKtorExtendedApi.get() || !adapterKtorThrowException.get(),
+                    adapterKtorThrowException.get()
                 )
             )
         )

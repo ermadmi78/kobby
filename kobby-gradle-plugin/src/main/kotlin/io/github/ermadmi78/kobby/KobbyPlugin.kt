@@ -417,6 +417,12 @@ class KobbyPlugin : Plugin<Project> {
                         receiveTimeoutMillis?.also {
                             kotlinTask.adapterKtorReceiveTimeoutMillis.convention(it)
                         }
+                        extendedApi?.also {
+                            kotlinTask.adapterKtorExtendedApi.convention(it)
+                        }
+                        throwException?.also {
+                            kotlinTask.adapterKtorThrowException.convention(it)
+                        }
                     }
                 }
             }

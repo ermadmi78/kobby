@@ -572,6 +572,12 @@ class KotlinAdapterKtorConfig {
     @Parameter
     var receiveTimeoutMillis: Long? = null
 
+    @Parameter
+    var extendedApi: Boolean = false
+
+    @Parameter
+    var throwException: Boolean = true
+
     override fun toString(): String {
         return "KotlinAdapterKtorConfig(" +
                 "\n        simpleEnabled=$simpleEnabled, " +
@@ -579,7 +585,9 @@ class KotlinAdapterKtorConfig {
                 "\n        packageName=$packageName, " +
                 "\n        prefix=$prefix, " +
                 "\n        postfix=$postfix, " +
-                "\n        receiveTimeoutMillis=$receiveTimeoutMillis" +
+                "\n        receiveTimeoutMillis=$receiveTimeoutMillis, " +
+                "\n        extendedApi=$extendedApi, " +
+                "\n        throwException=$throwException" +
                 "\n      )"
     }
 }
