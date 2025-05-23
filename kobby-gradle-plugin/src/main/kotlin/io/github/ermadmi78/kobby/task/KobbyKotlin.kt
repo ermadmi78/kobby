@@ -46,6 +46,8 @@ open class KobbyKotlin : DefaultTask() {
     )
     val schemaScanDir: Property<String> = project.objects.property(String::class.java)
 
+    private val schemaScanDirFile: File
+
     /**
      * ANT style include patterns to scan schema files (default `**`/`*`.graphqls)
      */
@@ -794,6 +796,7 @@ open class KobbyKotlin : DefaultTask() {
         })
 
         schemaScanDir.convention("src/main/resources")
+        schemaScanDirFile = project.file(schemaScanDir.get()).absoluteFile
         schemaScanIncludes.convention(listOf("**/*.graphqls"))
         schemaScanExcludes.convention(listOf())
 
@@ -914,7 +917,7 @@ open class KobbyKotlin : DefaultTask() {
                 graphQLSchemaFiles
                     .map { it.parent.pathIterator() }
                     .extractCommonPrefix()
-                    .removePrefixOrEmpty(project.file(schemaScanDir.get()).absoluteFile.path.pathIterator())
+                    .removePrefixOrEmpty(schemaScanDirFile.path.pathIterator())
                     .forEach {
                         list += it
                     }
