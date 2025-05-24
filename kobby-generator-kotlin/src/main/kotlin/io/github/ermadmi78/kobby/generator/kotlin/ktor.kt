@@ -311,7 +311,7 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
         addModifiers(SUSPEND)
         buildParameter(context.adapterArgQuery)
         buildParameter(adapterArgVariables)
-        returns(if (adapter.ktor.extendedApi) graphQlResultClass else node.dtoClass)
+        returns(if (adapter.extendedApi) graphQlResultClass else node.dtoClass)
 
         val ktor = adapter.ktor
         statement(dto.graphql.requestClass) {
@@ -352,7 +352,7 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
         )
         addStatement("")
 
-        if (ktor.throwException) {
+        if (adapter.throwException) {
             controlFlow(
                 "${ktor.simpleValResult}.errors?.%M·{ it.%M() }?.%M",
                 Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
@@ -371,19 +371,21 @@ private fun TypeSpecBuilder.buildSimpleQueryOrMutationFun(
             }
         }
 
-        if (adapter.ktor.extendedApi) {
-            controlFlow("if·(${ktor.simpleValResult}.data·==·null)") {
-                addStatement(
-                    "throw·%T(" +
-                            "\n⇥%S," +
-                            "\n${ktor.simpleValRequest}," +
-                            "\n${ktor.simpleValResult}.errors," +
-                            "\n${ktor.simpleValResult}.extensions," +
-                            "\nnull" +
-                            "⇤\n)",
-                    graphQlExceptionClass,
-                    "GraphQL $operation completes successfully but returns no data"
-                )
+        if (adapter.extendedApi) {
+            if (adapter.throwException) {
+                controlFlow("if·(${ktor.simpleValResult}.data·==·null)") {
+                    addStatement(
+                        "throw·%T(" +
+                                "\n⇥%S," +
+                                "\n${ktor.simpleValRequest}," +
+                                "\n${ktor.simpleValResult}.errors," +
+                                "\n${ktor.simpleValResult}.extensions," +
+                                "\nnull" +
+                                "⇤\n)",
+                        graphQlExceptionClass,
+                        "GraphQL $operation completes successfully but returns no data"
+                    )
+                }
             }
             addStatement("return·${ktor.simpleValResult}")
         } else {
@@ -415,7 +417,7 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
         addModifiers(SUSPEND)
         buildParameter(context.adapterArgQuery)
         buildParameter(adapterArgVariables)
-        returns(if (adapter.ktor.extendedApi) graphQlResultClass else node.dtoClass)
+        returns(if (adapter.extendedApi) graphQlResultClass else node.dtoClass)
 
         val ktor = adapter.ktor
         statement(dto.graphql.requestClass) {
@@ -476,7 +478,7 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
         }
         addStatement("")
 
-        if (ktor.throwException) {
+        if (adapter.throwException) {
             controlFlow(
                 "${ktor.compositeValResult}.errors?.%M·{ it.%M() }?.%M",
                 Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
@@ -495,19 +497,21 @@ private fun TypeSpecBuilder.buildCompositeQueryOrMutationFun(
             }
         }
 
-        if (adapter.ktor.extendedApi) {
-            controlFlow("if·(${ktor.compositeValResult}.data·==·null)") {
-                addStatement(
-                    "throw·%T(" +
-                            "\n⇥%S," +
-                            "\n${ktor.compositeValRequest}," +
-                            "\n${ktor.compositeValResult}.errors," +
-                            "\n${ktor.compositeValResult}.extensions," +
-                            "\nnull" +
-                            "⇤\n)",
-                    graphQlExceptionClass,
-                    "GraphQL $operation completes successfully but returns no data"
-                )
+        if (adapter.extendedApi) {
+            if (adapter.throwException) {
+                controlFlow("if·(${ktor.compositeValResult}.data·==·null)") {
+                    addStatement(
+                        "throw·%T(" +
+                                "\n⇥%S," +
+                                "\n${ktor.compositeValRequest}," +
+                                "\n${ktor.compositeValResult}.errors," +
+                                "\n${ktor.compositeValResult}.extensions," +
+                                "\nnull" +
+                                "⇤\n)",
+                        graphQlExceptionClass,
+                        "GraphQL $operation completes successfully but returns no data"
+                    )
+                }
             }
             addStatement("return·${ktor.compositeValResult}")
         } else {
@@ -679,7 +683,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
         }
         addStatement("")
 
-        val returnClass: ClassName = if (adapter.ktor.extendedApi) {
+        val returnClass: ClassName = if (adapter.extendedApi) {
             dto.graphql.subscriptionResultClass
         } else {
             schema.subscription.dtoClass
@@ -710,7 +714,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
 
                             addStatement("val·$result·=·$reply.payload")
 
-                            if (ktor.throwException) {
+                            if (adapter.throwException) {
                                 controlFlow(
                                     "$result.errors?.%M·{ it.%M() }?.%M",
                                     Kotlin.takeIf, Kotlin.isNotEmpty, Kotlin.let
@@ -729,19 +733,21 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
                                 }
                             }
 
-                            if (adapter.ktor.extendedApi) {
-                                controlFlow("if·($result.data·==·null)") {
-                                    addStatement(
-                                        "throw·%T(" +
-                                                "\n⇥%S," +
-                                                "\n$request," +
-                                                "\n$result.errors," +
-                                                "\n$result.extensions," +
-                                                "\nnull" +
-                                                "⇤\n)",
-                                        graphql.subscriptionExceptionClass,
-                                        "GraphQL subscription completes successfully but returns no data"
-                                    )
+                            if (adapter.extendedApi) {
+                                if (adapter.throwException) {
+                                    controlFlow("if·($result.data·==·null)") {
+                                        addStatement(
+                                            "throw·%T(" +
+                                                    "\n⇥%S," +
+                                                    "\n$request," +
+                                                    "\n$result.errors," +
+                                                    "\n$result.extensions," +
+                                                    "\nnull" +
+                                                    "⇤\n)",
+                                            graphql.subscriptionExceptionClass,
+                                            "GraphQL subscription completes successfully but returns no data"
+                                        )
+                                    }
                                 }
                                 addStatement("return·$result")
                             } else {

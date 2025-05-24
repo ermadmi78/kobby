@@ -64,6 +64,22 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             addKdoc("%L", it)
         }
 
+        if (adapter.extendedApi && node.isOperation) {
+            addSuperinterface(context.responseClass)
+
+            buildFunction(entity.errorsFunName) {
+                addModifiers(ABSTRACT)
+                addModifiers(OVERRIDE)
+                returns(dto.errorsType)
+            }
+
+            buildFunction(entity.extensionsFunName) {
+                addModifiers(ABSTRACT)
+                addModifiers(OVERRIDE)
+                returns(dto.extensionsType)
+            }
+        }
+
         if (entity.contextFunEnabled) {
             // context access function
             buildFunction(entity.contextFunName) {

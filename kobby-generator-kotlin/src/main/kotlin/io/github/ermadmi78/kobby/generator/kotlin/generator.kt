@@ -143,7 +143,22 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
                 }
             }
 
-            val extendedApi = adapter.ktor.extendedApi
+            val extendedApi = adapter.extendedApi
+
+            if (extendedApi) {
+                // Build response interface
+                buildInterface(context.responseName) {
+                    buildFunction(entity.errorsFunName) {
+                        addModifiers(ABSTRACT)
+                        returns(dto.errorsType)
+                    }
+
+                    buildFunction(entity.extensionsFunName) {
+                        addModifiers(ABSTRACT)
+                        returns(dto.extensionsType)
+                    }
+                }
+            }
 
             // Build adapter interface
             buildInterface(context.adapterName) {
@@ -192,7 +207,19 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
 
             buildContextImplementation(schema, layout)
 
-            if (!dto.serialization.enabled) {
+            if (dto.serialization.enabled) {
+                if (extendedApi) {
+                    buildProperty(context.emptyJsonObjectName, SerializationJson.JSON_OBJECT) {
+                        buildInitializer {
+                            addStatement(
+                                "%T(%M())",
+                                SerializationJson.JSON_OBJECT,
+                                MemberName("kotlin.collections", "emptyMap")
+                            )
+                        }
+                    }
+                }
+            } else {
                 // Build mapper interface
                 buildInterface(context.mapperName) {
                     addKdoc("%L", "Helper interface for default adapter implementations")
@@ -342,7 +369,7 @@ private fun TypeSpecBuilder.buildContextFunction(
         }
         addStatement("")
 
-        val extendedApi = adapter.ktor.extendedApi
+        val extendedApi = adapter.extendedApi
         val dtoVal = operation.run {
             if (dto.decoration.isNotEmpty()) decorate(dto.decoration) else decorate(null, "Dto")
         }
@@ -373,7 +400,7 @@ private fun TypeSpecBuilder.buildContextFunction(
                                     "val·$resultVal:·%T·=·this@$adapterFun.${context.receiverFunReceive}()"
                                 }
                                 statement(ClassName(impl.packageName, node.entityBuilderName), contextImplClass) {
-                                    "return·$resultVal.data!!.%T(this@%T, $projectionRef)"
+                                    "return·$resultVal.%T(this@%T, $projectionRef)"
                                 }
                             } else {
                                 statement(node.dtoClass) {
@@ -415,7 +442,7 @@ private fun TypeSpecBuilder.buildContextFunction(
                     }
                 }
                 statement(ClassName(impl.packageName, node.entityBuilderName)) {
-                    "return·$resultVal.data!!.%T(this,·$projectionRef)"
+                    "return·$resultVal.%T(this,·$projectionRef)"
                 }
             } else {
                 if (dto.serialization.enabled) {

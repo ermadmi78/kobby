@@ -733,6 +733,22 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "adapterExtendedApi",
+        description = "Is extended adapter API (with GraphQL errors and extensions) enabled (default false)"
+    )
+    val adapterExtendedApi: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
+        option = "adapterThrowException",
+        description = "Throw exception when receiving non-empty GraphQL errors (default true)"
+    )
+    val adapterThrowException: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "adapterKtorSimpleEnabled",
         description = "Is simple Ktor adapter generation enabled (default false)"
     )
@@ -778,22 +794,6 @@ open class KobbyKotlin : DefaultTask() {
                 "in Ktor composite adapter (default 10000). Set it to zero or a negative value to disable it."
     )
     val adapterKtorReceiveTimeoutMillis: Property<Long> = project.objects.property(Long::class.java)
-
-    @Input
-    @Optional
-    @Option(
-        option = "adapterKtorExtendedApi",
-        description = "Is extended adapter API (with GraphQL errors and extensions) enabled (default false)"
-    )
-    val adapterKtorExtendedApi: Property<Boolean> = project.objects.property(Boolean::class.java)
-
-    @Input
-    @Optional
-    @Option(
-        option = "adapterKtorThrowException",
-        description = "Throw exception when receiving non-empty GraphQL errors (default true)"
-    )
-    val adapterKtorThrowException: Property<Boolean> = project.objects.property(Boolean::class.java)
 
     @OutputDirectory
     val outputDirectory: DirectoryProperty = project.objects.directoryProperty()
@@ -888,6 +888,9 @@ open class KobbyKotlin : DefaultTask() {
         implInternal.convention(true)
         implInnerPrefix.convention("__inner")
 
+        adapterExtendedApi.convention(false)
+        adapterThrowException.convention(true)
+
         adapterKtorSimpleEnabled.convention(project.provider {
             project.hasDependency("io.ktor", "ktor-client-cio")
         })
@@ -897,8 +900,6 @@ open class KobbyKotlin : DefaultTask() {
         adapterKtorPackageName.convention("adapter.ktor")
         adapterKtorPostfix.convention("KtorAdapter")
         adapterKtorReceiveTimeoutMillis.convention(10_000L)
-        adapterKtorExtendedApi.convention(false)
-        adapterKtorThrowException.convention(true)
 
         outputDirectory.convention(project.layout.buildDirectory.dir("generated/sources/kobby/main/kotlin"))
     }
@@ -1027,6 +1028,8 @@ open class KobbyKotlin : DefaultTask() {
                 entityEnabled.get(),
                 entityPackage.toPackageName(),
                 Decoration(entityPrefix.orNull, entityPostfix.orNull),
+                "__errors", // TODO errorsFunName
+                "__extensions", // TODO extensionsFunName
                 entityContextFunEnabled.get(),
                 entityContextFunName.get(),
                 entityWithCurrentProjectionFun.get(),
@@ -1054,6 +1057,8 @@ open class KobbyKotlin : DefaultTask() {
                 Decoration(implInnerPrefix.orNull, implInnerPostfix.orNull)
             ),
             KotlinAdapterLayout(
+                adapterExtendedApi.get() || !adapterThrowException.get(),
+                adapterThrowException.get(),
                 KotlinAdapterKtorLayout(
                     adapterKtorSimpleEnabled.get(),
                     adapterKtorCompositeEnabled.get(),
@@ -1062,9 +1067,7 @@ open class KobbyKotlin : DefaultTask() {
                         adapterKtorPrefix.orNull?.trim() ?: capitalizedContextName,
                         adapterKtorPostfix.orNull
                     ),
-                    adapterKtorReceiveTimeoutMillis.orNull?.takeIf { it > 0L },
-                    adapterKtorExtendedApi.get() || !adapterKtorThrowException.get(),
-                    adapterKtorThrowException.get()
+                    adapterKtorReceiveTimeoutMillis.orNull?.takeIf { it > 0L }
                 )
             )
         )

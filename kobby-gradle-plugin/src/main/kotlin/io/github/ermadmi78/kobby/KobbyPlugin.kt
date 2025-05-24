@@ -398,6 +398,12 @@ class KobbyPlugin : Plugin<Project> {
                     }
                 }
                 kotlinExtension.adapterExtension.valueOrNull?.apply {
+                    extendedApi?.also {
+                        kotlinTask.adapterExtendedApi.convention(it)
+                    }
+                    throwException?.also {
+                        kotlinTask.adapterThrowException.convention(it)
+                    }
                     ktorExtension.valueOrNull?.apply {
                         simpleEnabled?.also {
                             kotlinTask.adapterKtorSimpleEnabled.convention(it)
@@ -416,12 +422,6 @@ class KobbyPlugin : Plugin<Project> {
                         }
                         receiveTimeoutMillis?.also {
                             kotlinTask.adapterKtorReceiveTimeoutMillis.convention(it)
-                        }
-                        extendedApi?.also {
-                            kotlinTask.adapterKtorExtendedApi.convention(it)
-                        }
-                        throwException?.also {
-                            kotlinTask.adapterKtorThrowException.convention(it)
                         }
                     }
                 }

@@ -467,12 +467,8 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
             }
         }
 
-        val argErrors = "errors" to LIST.parameterizedBy(dto.graphql.errorClass).nullable()
-        val argExtensions = if (dto.serialization.enabled) {
-            "extensions" to SerializationJson.JSON_OBJECT.nullable()
-        } else {
-            "extensions" to MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
-        }
+        val argErrors = "errors" to dto.errorsType.nullable()
+        val argExtensions = "extensions" to dto.extensionsType.nullable()
 
         // GraphQL Exception
         files += buildFile(dto.graphql.packageName, dto.graphql.exceptionName) {
@@ -815,10 +811,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
                                 buildProperty("id", STRING)
-                                buildProperty(
-                                    "payload",
-                                    LIST.parameterizedBy(dto.graphql.errorClass).nullable()
-                                ) {
+                                buildProperty("payload", dto.errorsType.nullable()) {
                                     jacksonIncludeNonEmpty()
                                 }
                             }
