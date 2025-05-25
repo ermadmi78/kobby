@@ -16,7 +16,10 @@
 package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.countryEmptyJsonObject
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryError
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryQueryResult
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.Country
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.CountryProjection
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.Query
@@ -28,6 +31,7 @@ import kotlin.apply
 import kotlin.collections.List
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
+import kotlin.collections.emptyList
 import kotlin.collections.listOf
 import kotlin.collections.map
 import kotlin.collections.setOf
@@ -35,11 +39,14 @@ import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 
 internal class QueryImpl(
   internal val __innerContext: CountryContext,
   internal val __innerProjection: QueryProjectionImpl,
   internal val __innerDto: QueryDto,
+  internal val __innerErrors: List<CountryError>,
+  internal val __innerExtensions: JsonObject,
 ) : Query {
   override val countries: List<Country> by lazy {
     if (__innerProjection.__innerCountries0 == null) {
@@ -63,6 +70,10 @@ internal class QueryImpl(
 
     append(')')
   }
+
+  override fun __errors(): List<CountryError> = __innerErrors
+
+  override fun __extensions(): JsonObject = __innerExtensions
 
   override fun __context(): CountryContext = __innerContext
 
@@ -111,9 +122,14 @@ internal open class QueryProjectionImpl : QueryProjection {
   }
 }
 
-internal fun QueryDto.buildEntity(__innerContext: CountryContext,
-    __innerProjection: QueryProjectionImpl): Query =
-    QueryImpl(__innerContext, __innerProjection, this)
+internal fun CountryQueryResult.buildEntity(__innerContext: CountryContext,
+    __innerProjection: QueryProjectionImpl): Query = QueryImpl(
+  __innerContext,
+  __innerProjection,
+  this.data ?: QueryDto(),
+  this.errors ?: emptyList(),
+  this.extensions ?: countryEmptyJsonObject
+)
 
 internal fun QueryDto.resolveCountries(__innerContext: CountryContext,
     __innerProjection: CountryProjectionImpl): List<Country> =

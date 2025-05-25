@@ -16,8 +16,6 @@
 package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.adapter.ktor
 
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryAdapter
-import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.MutationDto
-import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.QueryDto
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryMutationException
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryMutationResult
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryQueryException
@@ -47,7 +45,7 @@ public open class CountrySimpleKtorAdapter(
   protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
   protected val listener: (CountryRequest) -> Unit = {},
 ) : CountryAdapter {
-  override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+  override suspend fun executeQuery(query: String, variables: JsonObject): CountryQueryResult {
     val request = CountryRequest(query, variables)
     listener(request)
 
@@ -73,16 +71,20 @@ public open class CountrySimpleKtorAdapter(
             result.data
           )
     }
-    return result.data ?: throw CountryQueryException(
-          "GraphQL query completes successfully but returns no data",
-          request,
-          result.errors,
-          result.extensions,
-          null
-        )
+    if (result.data == null) {
+      throw CountryQueryException(
+            "GraphQL query completes successfully but returns no data",
+            request,
+            result.errors,
+            result.extensions,
+            null
+          )
+    }
+    return result
   }
 
-  override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+  override suspend fun executeMutation(query: String, variables: JsonObject):
+      CountryMutationResult {
     val request = CountryRequest(query, variables)
     listener(request)
 
@@ -108,12 +110,15 @@ public open class CountrySimpleKtorAdapter(
             result.data
           )
     }
-    return result.data ?: throw CountryMutationException(
-          "GraphQL mutation completes successfully but returns no data",
-          request,
-          result.errors,
-          result.extensions,
-          null
-        )
+    if (result.data == null) {
+      throw CountryMutationException(
+            "GraphQL mutation completes successfully but returns no data",
+            request,
+            result.errors,
+            result.extensions,
+            null
+          )
+    }
+    return result
   }
 }

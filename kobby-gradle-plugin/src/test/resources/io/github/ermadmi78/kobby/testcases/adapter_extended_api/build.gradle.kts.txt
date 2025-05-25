@@ -21,7 +21,7 @@ plugins {
 kobby {
     kotlin {
         adapter {
-            // todo
+            extendedApi = true
         }
     }
 }

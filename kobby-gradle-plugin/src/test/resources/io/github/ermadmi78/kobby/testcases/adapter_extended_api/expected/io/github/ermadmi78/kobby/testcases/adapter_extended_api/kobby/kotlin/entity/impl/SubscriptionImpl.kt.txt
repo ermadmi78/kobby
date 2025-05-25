@@ -16,7 +16,10 @@
 package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.countryEmptyJsonObject
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryError
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountrySubscriptionResult
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.Country
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.CountryProjection
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.Subscription
@@ -25,18 +28,23 @@ import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 import kotlin.apply
+import kotlin.collections.List
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
+import kotlin.collections.emptyList
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 
 internal class SubscriptionImpl(
   internal val __innerContext: CountryContext,
   internal val __innerProjection: SubscriptionProjectionImpl,
   internal val __innerDto: SubscriptionDto,
+  internal val __innerErrors: List<CountryError>,
+  internal val __innerExtensions: JsonObject,
 ) : Subscription {
   override val countryCreated: Country by lazy {
     if (__innerProjection.__innerCountryCreated0 == null) {
@@ -60,6 +68,10 @@ internal class SubscriptionImpl(
 
     append(')')
   }
+
+  override fun __errors(): List<CountryError> = __innerErrors
+
+  override fun __extensions(): JsonObject = __innerExtensions
 
   override fun __context(): CountryContext = __innerContext
 
@@ -108,9 +120,14 @@ internal open class SubscriptionProjectionImpl : SubscriptionProjection {
   }
 }
 
-internal fun SubscriptionDto.buildEntity(__innerContext: CountryContext,
-    __innerProjection: SubscriptionProjectionImpl): Subscription =
-    SubscriptionImpl(__innerContext, __innerProjection, this)
+internal fun CountrySubscriptionResult.buildEntity(__innerContext: CountryContext,
+    __innerProjection: SubscriptionProjectionImpl): Subscription = SubscriptionImpl(
+  __innerContext,
+  __innerProjection,
+  this.data ?: SubscriptionDto(),
+  this.errors ?: emptyList(),
+  this.extensions ?: countryEmptyJsonObject
+)
 
 internal fun SubscriptionDto.resolveCountryCreated(__innerContext: CountryContext,
     __innerProjection: CountryProjectionImpl): Country =

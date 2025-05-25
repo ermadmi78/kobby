@@ -17,11 +17,27 @@ package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.en
 
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryContext
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryDSL
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryResponse
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryError
 import kotlin.Suppress
 import kotlin.Unit
+import kotlin.collections.List
+import kotlinx.serialization.json.JsonObject
 
-public interface Subscription {
+public interface Subscription : CountryResponse {
   public val countryCreated: Country
+
+  /**
+   * GraphQL response errors access function generated for adapters with extended API. To enable
+   * GraphQL error propagation to the entity layer, set Kobby configuration property
+   * `adapter.throwException` to `false`.
+   */
+  override fun __errors(): List<CountryError>
+
+  /**
+   * GraphQL response extensions access function generated for adapters with extended API.
+   */
+  override fun __extensions(): JsonObject
 
   public fun __context(): CountryContext
 

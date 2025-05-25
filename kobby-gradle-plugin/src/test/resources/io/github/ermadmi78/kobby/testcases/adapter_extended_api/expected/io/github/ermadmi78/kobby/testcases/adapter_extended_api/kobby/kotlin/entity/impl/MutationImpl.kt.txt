@@ -16,8 +16,11 @@
 package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.`impl`
 
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.countryEmptyJsonObject
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.countryJson
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryError
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryMutationResult
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.Country
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.CountryProjection
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.entity.Mutation
@@ -26,20 +29,25 @@ import kotlin.String
 import kotlin.Suppress
 import kotlin.Unit
 import kotlin.apply
+import kotlin.collections.List
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
+import kotlin.collections.emptyList
 import kotlin.collections.setOf
 import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.encodeToJsonElement
 
 internal class MutationImpl(
   internal val __innerContext: CountryContext,
   internal val __innerProjection: MutationProjectionImpl,
   internal val __innerDto: MutationDto,
+  internal val __innerErrors: List<CountryError>,
+  internal val __innerExtensions: JsonObject,
 ) : Mutation {
   override val createCountry: Country by lazy {
     if (__innerProjection.__innerCreateCountry0 == null) {
@@ -63,6 +71,10 @@ internal class MutationImpl(
 
     append(')')
   }
+
+  override fun __errors(): List<CountryError> = __innerErrors
+
+  override fun __extensions(): JsonObject = __innerExtensions
 
   override fun __context(): CountryContext = __innerContext
 
@@ -151,9 +163,14 @@ internal open class MutationProjectionImpl : MutationProjection {
   }
 }
 
-internal fun MutationDto.buildEntity(__innerContext: CountryContext,
-    __innerProjection: MutationProjectionImpl): Mutation =
-    MutationImpl(__innerContext, __innerProjection, this)
+internal fun CountryMutationResult.buildEntity(__innerContext: CountryContext,
+    __innerProjection: MutationProjectionImpl): Mutation = MutationImpl(
+  __innerContext,
+  __innerProjection,
+  this.data ?: MutationDto(),
+  this.errors ?: emptyList(),
+  this.extensions ?: countryEmptyJsonObject
+)
 
 internal fun MutationDto.resolveCreateCountry(__innerContext: CountryContext,
     __innerProjection: CountryProjectionImpl): Country =

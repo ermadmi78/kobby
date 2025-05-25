@@ -18,9 +18,6 @@ package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.ad
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryAdapter
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryReceiver
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.countryJson
-import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.MutationDto
-import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.QueryDto
-import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.SubscriptionDto
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryClientMessage
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryClientMessageComplete
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryClientMessageConnectionInit
@@ -40,6 +37,7 @@ import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryServerMessagePing
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryServerMessagePong
 import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountrySubscriptionException
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountrySubscriptionResult
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.post
@@ -89,7 +87,7 @@ public open class CountryCompositeKtorAdapter(
   protected val idGenerator: () -> String = { Random.nextLong().toString() },
   protected val listener: (CountryRequest) -> Unit = {},
 ) : CountryAdapter {
-  override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+  override suspend fun executeQuery(query: String, variables: JsonObject): CountryQueryResult {
     val request = CountryRequest(query, variables)
     listener(request)
 
@@ -115,16 +113,20 @@ public open class CountryCompositeKtorAdapter(
             result.data
           )
     }
-    return result.data ?: throw CountryQueryException(
-          "GraphQL query completes successfully but returns no data",
-          request,
-          result.errors,
-          result.extensions,
-          null
-        )
+    if (result.data == null) {
+      throw CountryQueryException(
+            "GraphQL query completes successfully but returns no data",
+            request,
+            result.errors,
+            result.extensions,
+            null
+          )
+    }
+    return result
   }
 
-  override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+  override suspend fun executeMutation(query: String, variables: JsonObject):
+      CountryMutationResult {
     val request = CountryRequest(query, variables)
     listener(request)
 
@@ -150,19 +152,22 @@ public open class CountryCompositeKtorAdapter(
             result.data
           )
     }
-    return result.data ?: throw CountryMutationException(
-          "GraphQL mutation completes successfully but returns no data",
-          request,
-          result.errors,
-          result.extensions,
-          null
-        )
+    if (result.data == null) {
+      throw CountryMutationException(
+            "GraphQL mutation completes successfully but returns no data",
+            request,
+            result.errors,
+            result.extensions,
+            null
+          )
+    }
+    return result
   }
 
   override suspend fun executeSubscription(
     query: String,
     variables: JsonObject,
-    block: suspend CountryReceiver<SubscriptionDto>.() -> Unit,
+    block: suspend CountryReceiver<CountrySubscriptionResult>.() -> Unit,
   ) {
     val httpHeaders: Map<String, String> = requestHeaders()
     val payload: JsonObject? = subscriptionPayload()
@@ -195,7 +200,7 @@ public open class CountryCompositeKtorAdapter(
   protected open suspend fun WebSocketSession.executeSubscriptionImpl(
     initPayload: JsonObject?,
     request: CountryRequest,
-    block: suspend CountryReceiver<SubscriptionDto>.() -> Unit,
+    block: suspend CountryReceiver<CountrySubscriptionResult>.() -> Unit,
   ) {
     val socket = this
     sendMessage(socket, CountryClientMessageConnectionInit(initPayload))
@@ -221,8 +226,8 @@ public open class CountryCompositeKtorAdapter(
     sendMessage(socket, CountryClientMessageSubscribe(subscriptionId, request))
 
     try {
-      block.invoke(object : CountryReceiver<SubscriptionDto> {
-        override suspend fun receive(): SubscriptionDto {
+      block.invoke(object : CountryReceiver<CountrySubscriptionResult> {
+        override suspend fun receive(): CountrySubscriptionResult {
           while (true) {
             var reply = receiveMessage(socket)
             if (reply == null) {
@@ -244,13 +249,16 @@ public open class CountryCompositeKtorAdapter(
                         result.data
                       )
                 }
-                return result.data ?: throw CountrySubscriptionException(
-                      "GraphQL subscription completes successfully but returns no data",
-                      request,
-                      result.errors,
-                      result.extensions,
-                      null
-                    )
+                if (result.data == null) {
+                  throw CountrySubscriptionException(
+                        "GraphQL subscription completes successfully but returns no data",
+                        request,
+                        result.errors,
+                        result.extensions,
+                        null
+                      )
+                }
+                return result
               }
               is CountryServerMessageError -> {
                 require(reply.id == subscriptionId)
