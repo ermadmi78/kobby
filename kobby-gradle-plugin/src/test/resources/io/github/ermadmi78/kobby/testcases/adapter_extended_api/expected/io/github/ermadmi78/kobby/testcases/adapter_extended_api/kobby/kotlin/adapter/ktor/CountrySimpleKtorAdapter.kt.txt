@@ -1,0 +1,119 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.adapter.ktor
+
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryAdapter
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryMutationException
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryMutationResult
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryQueryException
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryQueryResult
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql.CountryRequest
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.collections.Map
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapOf
+import kotlin.let
+import kotlin.takeIf
+import kotlinx.serialization.json.JsonObject
+
+public open class CountrySimpleKtorAdapter(
+  protected val client: HttpClient,
+  protected val url: String? = null,
+  protected val headers: suspend () -> Map<String, String> = { mapOf<String, String>() },
+  protected val listener: (CountryRequest) -> Unit = {},
+) : CountryAdapter {
+  override suspend fun executeQuery(query: String, variables: JsonObject): QueryDto {
+    val request = CountryRequest(query, variables)
+    listener(request)
+
+    val httpHeaders: Map<String, String> = headers()
+    val result = client.post {
+      setBody<CountryRequest>(request)
+      contentType(ContentType.Application.Json)
+      this@CountrySimpleKtorAdapter.url?.also {
+        url(it)
+      }
+      for (element in httpHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .body<CountryQueryResult>()
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw CountryQueryException(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
+    }
+    return result.data ?: throw CountryQueryException(
+          "GraphQL query completes successfully but returns no data",
+          request,
+          result.errors,
+          result.extensions,
+          null
+        )
+  }
+
+  override suspend fun executeMutation(query: String, variables: JsonObject): MutationDto {
+    val request = CountryRequest(query, variables)
+    listener(request)
+
+    val httpHeaders: Map<String, String> = headers()
+    val result = client.post {
+      setBody<CountryRequest>(request)
+      contentType(ContentType.Application.Json)
+      this@CountrySimpleKtorAdapter.url?.also {
+        url(it)
+      }
+      for (element in httpHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .body<CountryMutationResult>()
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw CountryMutationException(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
+    }
+    return result.data ?: throw CountryMutationException(
+          "GraphQL mutation completes successfully but returns no data",
+          request,
+          result.errors,
+          result.extensions,
+          null
+        )
+  }
+}

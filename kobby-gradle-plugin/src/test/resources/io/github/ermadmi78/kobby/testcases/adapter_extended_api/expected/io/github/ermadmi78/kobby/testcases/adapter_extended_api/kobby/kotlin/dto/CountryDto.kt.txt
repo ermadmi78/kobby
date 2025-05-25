@@ -1,0 +1,56 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.CountryDSL
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+@SerialName("Country")
+public data class CountryDto(
+  public val id: Long? = null,
+  public val name: String? = null,
+)
+
+public fun CountryDto.toBuilder(): CountryDtoBuilder = CountryDtoBuilder().also {
+  it.id = this.id
+  it.name = this.name
+}
+
+public fun CountryDtoBuilder.toDto(): CountryDto = CountryDto(
+  id,
+  name
+)
+
+public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto =
+    CountryDtoBuilder().apply(block).toDto()
+
+public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto =
+    toBuilder().apply(block).toDto()
+
+@CountryDSL
+public class CountryDtoBuilder {
+  public var id: Long? = null
+
+  public var name: String? = null
+}

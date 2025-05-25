@@ -1,0 +1,32 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.adapter_extended_api.kobby.kotlin.dto.graphql
+
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+
+@Serializable
+public data class CountryError(
+  public val message: String,
+  public val locations: List<CountryErrorSourceLocation>? = null,
+  public val errorType: String? = null,
+  public val path: JsonArray? = null,
+  public val extensions: JsonObject? = null,
+)
