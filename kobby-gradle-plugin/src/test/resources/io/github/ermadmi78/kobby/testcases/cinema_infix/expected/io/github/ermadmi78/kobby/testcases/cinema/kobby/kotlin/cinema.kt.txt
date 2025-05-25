@@ -1,0 +1,234 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.SubscriptionProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.`impl`.MutationProjectionImpl
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.`impl`.QueryProjectionImpl
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.`impl`.SubscriptionProjectionImpl
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.`impl`.buildEntity
+import kotlin.Any
+import kotlin.DslMarker
+import kotlin.NotImplementedError
+import kotlin.Pair
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.mutableMapOf
+import kotlin.collections.setOf
+import kotlin.reflect.KClass
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+import kotlin.to
+
+public fun cinemaContextOf(adapter: CinemaAdapter): CinemaContext = CinemaContextImpl(adapter)
+
+public fun buildCinemaQuery(__projection: QueryProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
+  val projectionRef = QueryProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val query = buildString(header.length + body.length + 7) {
+    append("query")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return query to arguments
+}
+
+public fun buildCinemaMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
+  val projectionRef = MutationProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val mutation = buildString(header.length + body.length + 10) {
+    append("mutation")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return mutation to arguments
+}
+
+public fun buildCinemaSubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, Map<String, Any>> {
+  val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, Any> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val subscription = buildString(header.length + body.length + 14) {
+    append("subscription")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return subscription to arguments
+}
+
+public interface CinemaContext {
+  public suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CinemaSubscriber<Subscription>
+}
+
+public fun interface CinemaSubscriber<T> {
+  public suspend fun subscribe(block: suspend CinemaReceiver<T>.() -> Unit)
+}
+
+@CinemaDSL
+public fun interface CinemaReceiver<out T> {
+  public suspend fun receive(): T
+}
+
+public interface CinemaAdapter {
+  public suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto =
+      throw NotImplementedError("Adapter function executeQuery is not implemented")
+
+  public suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto =
+      throw NotImplementedError("Adapter function executeMutation is not implemented")
+
+  public suspend fun executeSubscription(
+    query: String,
+    variables: Map<String, Any?>,
+    block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit,
+  ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
+}
+
+private class CinemaContextImpl(
+  private val adapter: CinemaAdapter,
+) : CinemaContext {
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+    val projectionRef = QueryProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val query = buildString(header.length + body.length + 7) {
+      append("query")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    val queryDto: QueryDto = adapter.executeQuery(query, arguments)
+    return queryDto.buildEntity(this, projectionRef)
+  }
+
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+    val projectionRef = MutationProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val mutation = buildString(header.length + body.length + 10) {
+      append("mutation")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    val mutationDto: MutationDto = adapter.executeMutation(mutation, arguments)
+    return mutationDto.buildEntity(this, projectionRef)
+  }
+
+  override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CinemaSubscriber<Subscription> {
+    val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, Any> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val subscription = buildString(header.length + body.length + 14) {
+      append("subscription")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    return CinemaSubscriber<Subscription> {
+      adapter.executeSubscription(subscription, arguments) {
+        it.invoke(object : CinemaReceiver<Subscription> {
+          override suspend fun receive(): Subscription {
+            val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
+            return subscriptionDto.buildEntity(this@CinemaContextImpl, projectionRef)
+          }
+        })
+      }
+    }
+  }
+}
+
+/**
+ * Helper interface for default adapter implementations
+ */
+public interface CinemaMapper {
+  public fun serialize(`value`: Any): String
+
+  public fun <T : Any> deserialize(content: String, contentType: KClass<T>): T
+}
+
+@DslMarker
+public annotation class CinemaDSL

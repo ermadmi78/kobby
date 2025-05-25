@@ -1,0 +1,70 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+
+/**
+ * Type Tag is introduced for testing types with single value.
+ * See class TagDto.
+ */
+@JsonTypeName(value = "Tag")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = TagDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class TagDto @JsonCreator constructor(
+  /**
+   * The tag value
+   */
+  public val `value`: String? = null,
+)
+
+public fun TagDto.toBuilder(): TagDtoBuilder = TagDtoBuilder().also {
+  it.`value` = this.`value`
+}
+
+public fun TagDtoBuilder.toDto(): TagDto = TagDto(
+  `value`
+)
+
+public fun TagDto(block: TagDtoBuilder.() -> Unit): TagDto = TagDtoBuilder().apply(block).toDto()
+
+public fun TagDto.copy(block: TagDtoBuilder.() -> Unit): TagDto = toBuilder().apply(block).toDto()
+
+/**
+ * Type Tag is introduced for testing types with single value.
+ * See class TagDto.
+ */
+@CinemaDSL
+public class TagDtoBuilder {
+  /**
+   * The tag value
+   */
+  public var `value`: String? = null
+}

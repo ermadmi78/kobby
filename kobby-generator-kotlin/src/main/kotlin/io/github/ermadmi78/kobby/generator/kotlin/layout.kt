@@ -396,6 +396,9 @@ data class KotlinLayout(
         get() = (field.name + field.number + name._capitalize())
             .decorate(impl.innerDecoration)
 
+    internal val KobbyField.isProjectionPropertyEnabled: Boolean
+        get() = entity.projection.enableNotationWithoutParentheses && !isDefault && isProperty
+
     // *****************************************************************************************************************
     //                                          Context
     // *****************************************************************************************************************
@@ -606,7 +609,8 @@ class KotlinEntityProjectionLayout(
     val minimizeFun: String,
     val qualificationDecoration: Decoration,
     val qualifiedProjectionDecoration: Decoration,
-    val onDecoration: Decoration
+    val onDecoration: Decoration,
+    val enableNotationWithoutParentheses: Boolean
 )
 
 class KotlinEntitySelectionLayout(

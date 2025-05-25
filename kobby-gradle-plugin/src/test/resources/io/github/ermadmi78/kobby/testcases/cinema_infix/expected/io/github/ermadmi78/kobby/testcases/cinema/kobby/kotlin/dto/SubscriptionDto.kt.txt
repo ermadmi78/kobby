@@ -1,0 +1,84 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+
+@JsonTypeName(value = "Subscription")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = SubscriptionDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class SubscriptionDto(
+  /**
+   * Listen new countries
+   */
+  public val countryCreated: CountryDto? = null,
+  /**
+   * Listen new films
+   */
+  public val filmCreated: FilmDto? = null,
+  /**
+   * Listen new actors
+   */
+  public val actorCreated: ActorDto? = null,
+)
+
+public fun SubscriptionDto.toBuilder(): SubscriptionDtoBuilder = SubscriptionDtoBuilder().also {
+  it.countryCreated = this.countryCreated
+  it.filmCreated = this.filmCreated
+  it.actorCreated = this.actorCreated
+}
+
+public fun SubscriptionDtoBuilder.toDto(): SubscriptionDto = SubscriptionDto(
+  countryCreated,
+  filmCreated,
+  actorCreated
+)
+
+public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto =
+    SubscriptionDtoBuilder().apply(block).toDto()
+
+public fun SubscriptionDto.copy(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto =
+    toBuilder().apply(block).toDto()
+
+@CinemaDSL
+public class SubscriptionDtoBuilder {
+  /**
+   * Listen new countries
+   */
+  public var countryCreated: CountryDto? = null
+
+  /**
+   * Listen new films
+   */
+  public var filmCreated: FilmDto? = null
+
+  /**
+   * Listen new actors
+   */
+  public var actorCreated: ActorDto? = null
+}

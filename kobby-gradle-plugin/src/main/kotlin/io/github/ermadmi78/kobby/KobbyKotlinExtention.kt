@@ -701,6 +701,13 @@ open class KobbyKotlinEntityProjectionExtension {
 
     /** Postfix for qualification functions */
     var onPostfix: String? = null
+
+    /**
+     * Enable notation without parentheses for projection field getters
+     *
+     * Default: false
+     */
+    var enableNotationWithoutParentheses: Boolean? = false
 }
 
 /**

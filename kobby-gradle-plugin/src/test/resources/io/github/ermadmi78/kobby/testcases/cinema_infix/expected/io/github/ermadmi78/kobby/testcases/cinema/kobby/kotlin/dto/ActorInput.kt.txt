@@ -1,0 +1,97 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import java.time.LocalDate
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+
+/**
+ * Actor input data
+ */
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class ActorInput(
+  /**
+   * First name of actor.
+   */
+  public val firstName: String,
+  /**
+   * Surname of the actor.
+   * This field is nullable because the actor can use an alias and not have a last name.
+   */
+  public val lastName: String? = null,
+  /**
+   * Actor's birthday
+   */
+  public val birthday: LocalDate,
+  /**
+   * Actor's gender
+   */
+  public val gender: Gender,
+)
+
+public fun ActorInput.toBuilder(): ActorInputBuilder = ActorInputBuilder().also {
+  it.firstName = this.firstName
+  it.lastName = this.lastName
+  it.birthday = this.birthday
+  it.gender = this.gender
+}
+
+public fun ActorInputBuilder.toInput(): ActorInput = ActorInput(
+  firstName ?: error("ActorInput: 'firstName' must not be null"),
+  lastName,
+  birthday ?: error("ActorInput: 'birthday' must not be null"),
+  gender ?: error("ActorInput: 'gender' must not be null")
+)
+
+public fun ActorInput(block: ActorInputBuilder.() -> Unit): ActorInput =
+    ActorInputBuilder().apply(block).toInput()
+
+public fun ActorInput.copy(block: ActorInputBuilder.() -> Unit): ActorInput =
+    toBuilder().apply(block).toInput()
+
+/**
+ * Actor input data
+ */
+@CinemaDSL
+public class ActorInputBuilder {
+  /**
+   * First name of actor.
+   */
+  public var firstName: String? = null
+
+  /**
+   * Surname of the actor.
+   * This field is nullable because the actor can use an alias and not have a last name.
+   */
+  public var lastName: String? = null
+
+  /**
+   * Actor's birthday
+   */
+  public var birthday: LocalDate? = null
+
+  /**
+   * Actor's gender
+   */
+  public var gender: Gender? = null
+}

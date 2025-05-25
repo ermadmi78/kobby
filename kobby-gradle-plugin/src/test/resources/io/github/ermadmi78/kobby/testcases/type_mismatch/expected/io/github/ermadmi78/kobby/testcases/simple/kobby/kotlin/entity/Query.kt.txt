@@ -1,0 +1,59 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchContext
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchDSL
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Query {
+  public val fakeInt: Fake?
+
+  public val fakeString: Fake?
+
+  public fun __context(): MismatchContext
+
+  public fun QueryProjection.__withCurrentProjection()
+}
+
+@MismatchDSL
+public interface QueryProjection {
+  public fun fakeInt(__query: QueryFakeIntQuery.() -> Unit)
+
+  public fun fakeString(__query: QueryFakeStringQuery.() -> Unit)
+
+  public fun __minimize() {
+  }
+}
+
+@MismatchDSL
+public interface QueryFakeIntSelection {
+  public var fake: Int?
+}
+
+@MismatchDSL
+public interface QueryFakeIntQuery : QueryFakeIntSelection, FakeProjection
+
+@MismatchDSL
+public interface QueryFakeStringSelection {
+  public var fake: String?
+}
+
+@MismatchDSL
+public interface QueryFakeStringQuery : QueryFakeStringSelection, FakeProjection

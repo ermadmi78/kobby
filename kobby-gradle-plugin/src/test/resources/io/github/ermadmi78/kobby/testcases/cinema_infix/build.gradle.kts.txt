@@ -1,0 +1,52 @@
+import io.github.ermadmi78.kobby.kobby
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    kotlin("jvm") version "testKotlinVersion"
+    id("io.github.ermadmi78.kobby")
+}
+
+kobby {
+    kotlin {
+        entity {
+            projection {
+                enableNotationWithoutParentheses = false
+            }
+        }
+
+        scalars = mapOf(
+            "Date" to typeOf("java.time", "LocalDate"),
+            "JSON" to typeMap.parameterize(typeString, typeAny.nullable())
+        )
+    }
+}
+
+dependencies {
+    // Add this dependency to enable Jackson annotation generation in DTO classes by Kobby
+    compileOnly("com.fasterxml.jackson.core:jackson-annotations:testJacksonVersion")
+
+    // Add this dependency to enable default Ktor adapters generation
+    compileOnly("io.ktor:ktor-client-cio:testKtorVersion")
+
+    // Add this dependencies to remove warning "Runtime JAR files in the classpath should have the same version"
+    compileOnly(kotlin("stdlib"))
+    compileOnly(kotlin("stdlib-jdk7"))
+    compileOnly(kotlin("reflect"))
+}
+
+tasks {
+    jar {
+        enabled = false
+    }
+}

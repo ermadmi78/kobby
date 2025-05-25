@@ -1,0 +1,105 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchContext
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.FakeDto
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Fake
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.FakeProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class FakeImpl(
+  internal val __innerContext: MismatchContext,
+  internal val __innerProjection: FakeProjectionImpl,
+  internal val __innerDto: FakeDto,
+) : Fake {
+  override val fake: Boolean
+    get() {
+      if (!__innerProjection.__innerFake0) {
+        error("Property [fake] is not available - add [fake] projection to switch on it")
+      }
+      return __innerDto.fake!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Fake").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerFake0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("fake").append('=').append(fake)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): MismatchContext = __innerContext
+
+  override fun FakeProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class FakeProjectionImpl : FakeProjection {
+  internal var __innerFake0: Boolean = false
+
+  override fun fake() {
+    __innerFake0 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: FakeProjection) {
+    if ("fake" !in ignore && __innerFake0) {
+      __projection.fake()
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: fake
+    if ("fake" !in ignore && __innerFake0) {
+      body.append(' ').append("fake")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun FakeDto.buildEntity(__innerContext: MismatchContext,
+    __innerProjection: FakeProjectionImpl): Fake = FakeImpl(__innerContext, __innerProjection, this)

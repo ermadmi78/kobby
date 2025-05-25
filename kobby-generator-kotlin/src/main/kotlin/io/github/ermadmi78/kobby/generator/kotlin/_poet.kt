@@ -172,6 +172,12 @@ internal fun PropertySpecBuilder.buildGetter(
     getter(it)
 }
 
+internal fun PropertySpecBuilder.buildSetter(
+    block: FunSpecBuilder.() -> Unit
+): FunSpec = FunSpec.setterBuilder().apply(block).build().also {
+    setter(it)
+}
+
 internal fun PropertySpecBuilder.buildDelegate(
     block: CodeBlockBuilder.() -> Unit
 ): CodeBlock = CodeBlock.builder().apply(block).build().also {

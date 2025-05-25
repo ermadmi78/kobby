@@ -1,0 +1,72 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchContext
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.MutationProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class MutationImpl(
+  internal val __innerContext: MismatchContext,
+  internal val __innerProjection: MutationProjectionImpl,
+  internal val __innerDto: MutationDto,
+) : Mutation {
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Mutation").append('(')
+    append(')')
+  }
+
+  override fun __context(): MismatchContext = __innerContext
+
+  override fun MutationProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class MutationProjectionImpl : MutationProjection {
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection) {
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun MutationDto.buildEntity(__innerContext: MismatchContext,
+    __innerProjection: MutationProjectionImpl): Mutation =
+    MutationImpl(__innerContext, __innerProjection, this)

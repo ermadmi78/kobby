@@ -1,0 +1,36 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+plugins {
+    kotlin("jvm") version "testKotlinVersion"
+    id("io.github.ermadmi78.kobby")
+}
+
+kobby {
+    kotlin {
+        entity {
+            projection {
+                enableNotationWithoutParentheses = false
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation(kotlin("stdlib"))
+}
+
+tasks {
+    jar {
+        enabled = false
+    }
+}

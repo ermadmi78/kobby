@@ -1,0 +1,173 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Country entity.
+ * The country can be home to several films and several actors. %
+ */
+@JsonTypeName(value = "Country")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = CountryDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CountryDto(
+  /**
+   * Unique identifier of entity %
+   */
+  override val id: Long? = null,
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  override val fields: Map<String, Any?>? = null,
+  /**
+   * The name of the country %
+   */
+  public val name: String? = null,
+  /**
+   * Find film by id.
+   * Returns null if not found.
+   */
+  public val film: FilmDto? = null,
+  /**
+   * Find films of country by title and genre.
+   * Returns empty list if not found.
+   */
+  public val films: List<FilmDto>? = null,
+  /**
+   * Find actor by id.
+   * Returns null if not found.
+   */
+  public val actor: ActorDto? = null,
+  /**
+   * Find actors of country by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public val actors: List<ActorDto>? = null,
+  /**
+   * Find entities of this country by tag
+   */
+  public val taggable: List<TaggableDto>? = null,
+  /**
+   * Find native entities of this country
+   */
+  public val native: List<NativeDto>? = null,
+) : EntityDto
+
+public fun CountryDto.toBuilder(): CountryDtoBuilder = CountryDtoBuilder().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.name = this.name
+  it.film = this.film
+  it.films = this.films
+  it.actor = this.actor
+  it.actors = this.actors
+  it.taggable = this.taggable
+  it.native = this.native
+}
+
+public fun CountryDtoBuilder.toDto(): CountryDto = CountryDto(
+  id,
+  fields,
+  name,
+  film,
+  films,
+  actor,
+  actors,
+  taggable,
+  native
+)
+
+public fun CountryDto(block: CountryDtoBuilder.() -> Unit): CountryDto =
+    CountryDtoBuilder().apply(block).toDto()
+
+public fun CountryDto.copy(block: CountryDtoBuilder.() -> Unit): CountryDto =
+    toBuilder().apply(block).toDto()
+
+/**
+ * Country entity.
+ * The country can be home to several films and several actors. %
+ */
+@CinemaDSL
+public class CountryDtoBuilder {
+  /**
+   * Unique identifier of entity %
+   */
+  public var id: Long? = null
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public var fields: Map<String, Any?>? = null
+
+  /**
+   * The name of the country %
+   */
+  public var name: String? = null
+
+  /**
+   * Find film by id.
+   * Returns null if not found.
+   */
+  public var film: FilmDto? = null
+
+  /**
+   * Find films of country by title and genre.
+   * Returns empty list if not found.
+   */
+  public var films: List<FilmDto>? = null
+
+  /**
+   * Find actor by id.
+   * Returns null if not found.
+   */
+  public var actor: ActorDto? = null
+
+  /**
+   * Find actors of country by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public var actors: List<ActorDto>? = null
+
+  /**
+   * Find entities of this country by tag
+   */
+  public var taggable: List<TaggableDto>? = null
+
+  /**
+   * Find native entities of this country
+   */
+  public var native: List<NativeDto>? = null
+}

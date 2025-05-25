@@ -262,7 +262,8 @@ class GenerateKotlinMojo : AbstractMojo() {
                         entity.projection.qualifiedProjectionPrefix,
                         entity.projection.qualifiedProjectionPostfix
                     ),
-                    Decoration(entity.projection.onPrefix, entity.projection.onPostfix)
+                    Decoration(entity.projection.onPrefix, entity.projection.onPostfix),
+                    entity.projection.enableNotationWithoutParentheses
                 ),
                 KotlinEntitySelectionLayout(
                     Decoration(entity.selection.selectionPrefix, entity.selection.selectionPostfix),

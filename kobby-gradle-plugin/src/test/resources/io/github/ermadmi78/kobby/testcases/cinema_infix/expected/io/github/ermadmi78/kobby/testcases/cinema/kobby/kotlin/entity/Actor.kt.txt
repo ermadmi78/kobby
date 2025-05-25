@@ -1,0 +1,183 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Gender
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Genre
+import java.time.LocalDate
+import kotlin.Any
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Actor entity.
+ * The actor belongs to one country and can play in several films.
+ */
+public interface Actor : Entity, Taggable, Native {
+  /**
+   * Unique identifier of actor
+   */
+  override val id: Long
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  override val fields: Map<String, Any?>
+
+  /**
+   * Tags of entity
+   */
+  override val tags: List<Tag>
+
+  /**
+   * First name of actor.
+   * I assume all actors have a first name - so field is not null.
+   */
+  public val firstName: String
+
+  /**
+   * Surname of the actor.
+   * This field is nullable because the actor can use an alias and not have a last name.
+   */
+  public val lastName: String?
+
+  /**
+   * Actor's birthday
+   */
+  public val birthday: LocalDate
+
+  /**
+   * Actor's gender
+   */
+  public val gender: Gender
+
+  /**
+   * ID of the country to which the actor belongs
+   * (@primaryKey added to test complex primary keys)
+   */
+  public val countryId: Long
+
+  /**
+   * The country to which the actor belongs
+   */
+  public val country: Country
+
+  /**
+   * Find films of actor by title and genre.
+   * Returns empty list if not found.
+   */
+  public val films: List<Film>
+
+  override fun __context(): CinemaContext
+
+  public fun ActorProjection.__withCurrentProjection()
+}
+
+/**
+ * Actor entity.
+ * The actor belongs to one country and can play in several films.
+ */
+@CinemaDSL
+public interface ActorProjection : EntityProjection, TaggableProjection, NativeProjection {
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit)
+
+  /**
+   * Tags of entity
+   */
+  override fun tags(__projection: TagProjection.() -> Unit)
+
+  /**
+   * First name of actor.
+   * I assume all actors have a first name - so field is not null.
+   */
+  public fun __withoutFirstName()
+
+  /**
+   * Surname of the actor.
+   * This field is nullable because the actor can use an alias and not have a last name.
+   */
+  public fun __withoutLastName()
+
+  /**
+   * Actor's gender
+   */
+  public fun gender()
+
+  /**
+   * The country to which the actor belongs
+   */
+  public fun country(__projection: CountryProjection.() -> Unit = {})
+
+  /**
+   * Find films of actor by title and genre.
+   * Returns empty list if not found.
+   */
+  public fun films(__query: ActorFilmsQuery.() -> Unit = {})
+
+  override fun __minimize() {
+    __withoutFirstName()
+    __withoutLastName()
+  }
+}
+
+/**
+ * Find films of actor by title and genre.
+ * Returns empty list if not found.
+ */
+@CinemaDSL
+public interface ActorFilmsSelection {
+  /**
+   * Part of title of film to search
+   */
+  public var title: String?
+
+  /**
+   * Genre of film to search
+   */
+  public var genre: Genre?
+
+  /**
+   * Limit of result list.
+   * Put -1 to be unlimited.  
+   * > Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Offset of result list.  
+   * > Default: 0
+   */
+  public var offset: Int?
+}
+
+/**
+ * Find films of actor by title and genre.
+ * Returns empty list if not found.
+ */
+@CinemaDSL
+public interface ActorFilmsQuery : ActorFilmsSelection, FilmProjection

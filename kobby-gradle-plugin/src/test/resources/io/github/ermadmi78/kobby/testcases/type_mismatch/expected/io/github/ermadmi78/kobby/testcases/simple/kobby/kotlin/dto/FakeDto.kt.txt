@@ -1,0 +1,46 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchDSL
+import kotlin.Boolean
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+
+public data class FakeDto(
+  public val fake: Boolean? = null,
+)
+
+public fun FakeDto.toBuilder(): FakeDtoBuilder = FakeDtoBuilder().also {
+  it.fake = this.fake
+}
+
+public fun FakeDtoBuilder.toDto(): FakeDto = FakeDto(
+  fake
+)
+
+public fun FakeDto(block: FakeDtoBuilder.() -> Unit): FakeDto =
+    FakeDtoBuilder().apply(block).toDto()
+
+public fun FakeDto.copy(block: FakeDtoBuilder.() -> Unit): FakeDto =
+    toBuilder().apply(block).toDto()
+
+@MismatchDSL
+public class FakeDtoBuilder {
+  public var fake: Boolean? = null
+}

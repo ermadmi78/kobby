@@ -1,0 +1,162 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.ActorInput
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.FilmInput
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.TagInput
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Mutation {
+  /**
+   * Create country
+   */
+  public val createCountry: Country
+
+  /**
+   * Create film
+   */
+  public val createFilm: Film
+
+  /**
+   * Create actor
+   */
+  public val createActor: Actor
+
+  /**
+   * Associate film with actor
+   */
+  public val associate: Boolean
+
+  /**
+   * Add tag to film.
+   * Returns false if the film already had such a tag
+   */
+  public val tagFilm: Boolean
+
+  /**
+   * Add tag to actor.
+   * Returns false if the actor already had such a tag
+   */
+  public val tagActor: Boolean
+
+  public fun __context(): CinemaContext
+
+  public fun MutationProjection.__withCurrentProjection()
+}
+
+@CinemaDSL
+public interface MutationProjection {
+  /**
+   * Create country
+   *
+   * @param name Name of the country
+   */
+  public fun createCountry(name: String, __projection: CountryProjection.() -> Unit = {})
+
+  /**
+   * Create film
+   *
+   * @param countryId ID of the country to which the film belongs
+   * @param film Film input data
+   */
+  public fun createFilm(
+    countryId: Long,
+    film: FilmInput,
+    __query: MutationCreateFilmQuery.() -> Unit = {},
+  )
+
+  /**
+   * Create actor
+   *
+   * @param countryId ID of the country to which the actor belongs
+   * @param actor Actor input data
+   */
+  public fun createActor(
+    countryId: Long,
+    actor: ActorInput,
+    __query: MutationCreateActorQuery.() -> Unit = {},
+  )
+
+  /**
+   * Associate film with actor
+   *
+   * @param filmId ID of film %
+   * @param actorId ID of actor
+   */
+  public fun associate(filmId: Long, actorId: Long)
+
+  /**
+   * Add tag to film.
+   * Returns false if the film already had such a tag
+   *
+   * @param filmId ID of film
+   * @param tagValue Tag value
+   */
+  public fun tagFilm(filmId: Long, tagValue: String)
+
+  /**
+   * Add tag to actor.
+   * Returns false if the actor already had such a tag
+   *
+   * @param actorId ID of actor
+   * @param tagValue Tag value
+   */
+  public fun tagActor(actorId: Long, tagValue: String)
+
+  public fun __minimize() {
+  }
+}
+
+/**
+ * Create film
+ */
+@CinemaDSL
+public interface MutationCreateFilmSelection {
+  /**
+   * Add tag to film if tag is not null
+   */
+  public var tags: TagInput?
+}
+
+/**
+ * Create film
+ */
+@CinemaDSL
+public interface MutationCreateFilmQuery : MutationCreateFilmSelection, FilmProjection
+
+/**
+ * Create actor
+ */
+@CinemaDSL
+public interface MutationCreateActorSelection {
+  /**
+   * Add tag to actor if tag is not null
+   */
+  public var tags: TagInput?
+}
+
+/**
+ * Create actor
+ */
+@CinemaDSL
+public interface MutationCreateActorQuery : MutationCreateActorSelection, ActorProjection

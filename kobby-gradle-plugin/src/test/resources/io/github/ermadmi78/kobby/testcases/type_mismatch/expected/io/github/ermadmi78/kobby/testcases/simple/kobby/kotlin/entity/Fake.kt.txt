@@ -1,0 +1,37 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchContext
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchDSL
+import kotlin.Boolean
+import kotlin.Suppress
+
+public interface Fake {
+  public val fake: Boolean
+
+  public fun __context(): MismatchContext
+
+  public fun FakeProjection.__withCurrentProjection()
+}
+
+@MismatchDSL
+public interface FakeProjection {
+  public fun fake()
+
+  public fun __minimize() {
+  }
+}

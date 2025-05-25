@@ -1,0 +1,177 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Gender
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Genre
+import java.time.LocalDate
+import kotlin.Any
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Film entity.
+ * The film belongs to one country and can be played by several actors.
+ */
+public interface Film : Entity, Taggable, Native {
+  /**
+   * Unique identifier of entity %
+   */
+  override val id: Long
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  override val fields: Map<String, Any?>
+
+  /**
+   * Tags of entity
+   */
+  override val tags: List<Tag>
+
+  /**
+   * Title of film
+   */
+  public val title: String
+
+  /**
+   * Genre of film.
+   */
+  public val genre: Genre
+
+  /**
+   * ID of the country to which the film belongs
+   */
+  public val countryId: Long
+
+  /**
+   * The country to which the film belongs
+   */
+  public val country: Country
+
+  /**
+   * Find actors of film by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public val actors: List<Actor>
+
+  override fun __context(): CinemaContext
+
+  public fun FilmProjection.__withCurrentProjection()
+}
+
+/**
+ * Film entity.
+ * The film belongs to one country and can be played by several actors.
+ */
+@CinemaDSL
+public interface FilmProjection : EntityProjection, TaggableProjection, NativeProjection {
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit)
+
+  /**
+   * Tags of entity
+   */
+  override fun tags(__projection: TagProjection.() -> Unit)
+
+  /**
+   * Title of film
+   */
+  public fun __withoutTitle()
+
+  /**
+   * Genre of film.
+   */
+  public fun genre()
+
+  /**
+   * The country to which the film belongs
+   */
+  public fun country(__projection: CountryProjection.() -> Unit = {})
+
+  /**
+   * Find actors of film by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public fun actors(__query: FilmActorsQuery.() -> Unit = {})
+
+  override fun __minimize() {
+    __withoutTitle()
+  }
+}
+
+/**
+ * Find actors of film by firstName, lastName, birthday and gender.
+ * Returns empty list if not found.
+ */
+@CinemaDSL
+public interface FilmActorsSelection {
+  /**
+   * Part of first name of actor to search
+   */
+  public var firstName: String?
+
+  /**
+   * Part of last name of actor to search
+   */
+  public var lastName: String?
+
+  /**
+   * Find actors whose birthday is greater than or equal to birthdayFrom
+   */
+  public var birthdayFrom: LocalDate?
+
+  /**
+   * Find actors whose birthday is less than or equal to birthdayTo
+   */
+  public var birthdayTo: LocalDate?
+
+  /**
+   * Gender of actor to search
+   */
+  public var gender: Gender?
+
+  /**
+   * Limit of result list.
+   * Put -1 to be unlimited.  
+   * > Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Offset of result list.  
+   * > Default: 0
+   */
+  public var offset: Int?
+}
+
+/**
+ * Find actors of film by firstName, lastName, birthday and gender.
+ * Returns empty list if not found.
+ */
+@CinemaDSL
+public interface FilmActorsQuery : FilmActorsSelection, ActorProjection

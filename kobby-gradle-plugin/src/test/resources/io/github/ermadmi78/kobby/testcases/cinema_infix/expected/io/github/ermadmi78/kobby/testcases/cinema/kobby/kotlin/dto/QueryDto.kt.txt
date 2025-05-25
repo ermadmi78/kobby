@@ -1,0 +1,141 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+
+@JsonTypeName(value = "Query")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = QueryDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class QueryDto(
+  /**
+   * Find country by id.
+   * Returns null if not found.
+   */
+  public val country: CountryDto? = null,
+  /**
+   * Find countries by name.
+   * Returns empty list if not found.
+   */
+  public val countries: List<CountryDto>? = null,
+  /**
+   * Find film by id.
+   * Returns null if not found.
+   */
+  public val film: FilmDto? = null,
+  /**
+   * Find films by title and genre.
+   * Returns empty list if not found.
+   */
+  public val films: List<FilmDto>? = null,
+  /**
+   * Find actor by id.
+   * Returns null if not found.
+   */
+  public val actor: ActorDto? = null,
+  /**
+   * Find actors by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public val actors: List<ActorDto>? = null,
+  /**
+   * Find entities by tag
+   */
+  public val taggable: List<TaggableDto>? = null,
+)
+
+public fun QueryDto.toBuilder(): QueryDtoBuilder = QueryDtoBuilder().also {
+  it.country = this.country
+  it.countries = this.countries
+  it.film = this.film
+  it.films = this.films
+  it.actor = this.actor
+  it.actors = this.actors
+  it.taggable = this.taggable
+}
+
+public fun QueryDtoBuilder.toDto(): QueryDto = QueryDto(
+  country,
+  countries,
+  film,
+  films,
+  actor,
+  actors,
+  taggable
+)
+
+public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    QueryDtoBuilder().apply(block).toDto()
+
+public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    toBuilder().apply(block).toDto()
+
+@CinemaDSL
+public class QueryDtoBuilder {
+  /**
+   * Find country by id.
+   * Returns null if not found.
+   */
+  public var country: CountryDto? = null
+
+  /**
+   * Find countries by name.
+   * Returns empty list if not found.
+   */
+  public var countries: List<CountryDto>? = null
+
+  /**
+   * Find film by id.
+   * Returns null if not found.
+   */
+  public var film: FilmDto? = null
+
+  /**
+   * Find films by title and genre.
+   * Returns empty list if not found.
+   */
+  public var films: List<FilmDto>? = null
+
+  /**
+   * Find actor by id.
+   * Returns null if not found.
+   */
+  public var actor: ActorDto? = null
+
+  /**
+   * Find actors by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public var actors: List<ActorDto>? = null
+
+  /**
+   * Find entities by tag
+   */
+  public var taggable: List<TaggableDto>? = null
+}

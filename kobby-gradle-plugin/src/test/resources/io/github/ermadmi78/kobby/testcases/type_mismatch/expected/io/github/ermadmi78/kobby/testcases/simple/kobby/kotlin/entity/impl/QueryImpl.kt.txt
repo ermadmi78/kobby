@@ -1,0 +1,253 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchContext
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Fake
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.QueryFakeIntQuery
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.QueryFakeIntSelection
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.QueryFakeStringQuery
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.QueryFakeStringSelection
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.QueryProjection
+import kotlin.Any
+import kotlin.Int
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class QueryImpl(
+  internal val __innerContext: MismatchContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto,
+) : Query {
+  override val fakeInt: Fake? by lazy {
+    if (__innerProjection.__innerFakeInt0 == null) {
+      error("Property [fakeInt] is not available - add [fakeInt] projection to switch on it")
+    }
+    __innerDto.resolveFakeInt(__innerContext, __innerProjection.__innerFakeInt0!!)
+  }
+
+  override val fakeString: Fake? by lazy {
+    if (__innerProjection.__innerFakeString1 == null) {
+      error("Property [fakeString] is not available - add [fakeString] projection to switch on it")
+    }
+    __innerDto.resolveFakeString(__innerContext, __innerProjection.__innerFakeString1!!)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerFakeInt0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("fakeInt").append('=').append(fakeInt)
+    }
+
+    if (__innerProjection.__innerFakeString1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("fakeString").append('=').append(fakeString)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): MismatchContext = __innerContext
+
+  override fun QueryProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerFakeInt0: QueryFakeIntQueryImpl? = null
+
+  internal var __innerFakeString1: QueryFakeStringQueryImpl? = null
+
+  override fun fakeInt(__query: QueryFakeIntQuery.() -> Unit) {
+    __innerFakeInt0 = QueryFakeIntQueryImpl().apply(__query)
+  }
+
+  override fun fakeString(__query: QueryFakeStringQuery.() -> Unit) {
+    __innerFakeString1 = QueryFakeStringQueryImpl().apply(__query)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection) {
+    if ("fakeInt" !in ignore && __innerFakeInt0 != null) {
+      __projection.fakeInt {
+        this@QueryProjectionImpl.__innerFakeInt0!!.___innerRepeatProjection(setOf(), this)
+        this@QueryProjectionImpl.__innerFakeInt0!!.___innerRepeatSelection(this)
+      }
+    }
+    if ("fakeString" !in ignore && __innerFakeString1 != null) {
+      __projection.fakeString {
+        this@QueryProjectionImpl.__innerFakeString1!!.___innerRepeatProjection(setOf(), this)
+        this@QueryProjectionImpl.__innerFakeString1!!.___innerRepeatSelection(this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: fakeInt
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFakeInt0(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("fakeInt" !in ignore && __innerFakeInt0 != null) {
+      body.append(' ').append("fakeInt")
+      var counter = 0
+      val addBrackets = __innerFakeInt0!!.fake != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: fakeInt.fake
+      if (__innerFakeInt0!!.fake != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFakeInt0!!.fake!!
+        body.append("fake").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("Int")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Fake
+      __innerFakeInt0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection for field: fakeString
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFakeString1(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("fakeString" !in ignore && __innerFakeString1 != null) {
+      body.append(' ').append("fakeString")
+      var counter = 0
+      val addBrackets = __innerFakeString1!!.fake != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: fakeString.fake
+      if (__innerFakeString1!!.fake != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFakeString1!!.fake!!
+        body.append("fake").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Fake
+      __innerFakeString1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: fakeInt
+    ____innerBuildFakeInt0(ignore, header, body, arguments)
+
+    // Field: fakeString
+    ____innerBuildFakeString1(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal class QueryFakeIntQueryImpl : FakeProjectionImpl(), QueryFakeIntQuery {
+  override var fake: Int? = null
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatSelection(__selection: QueryFakeIntSelection) {
+    __selection.fake = fake
+  }
+}
+
+internal class QueryFakeStringQueryImpl : FakeProjectionImpl(), QueryFakeStringQuery {
+  override var fake: String? = null
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatSelection(__selection: QueryFakeStringSelection) {
+    __selection.fake = fake
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: MismatchContext,
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
+
+internal fun QueryDto.resolveFakeInt(__innerContext: MismatchContext,
+    __innerProjection: FakeProjectionImpl): Fake? =
+    fakeInt?.buildEntity(__innerContext, __innerProjection)
+
+internal fun QueryDto.resolveFakeString(__innerContext: MismatchContext,
+    __innerProjection: FakeProjectionImpl): Fake? =
+    fakeString?.buildEntity(__innerContext, __innerProjection)

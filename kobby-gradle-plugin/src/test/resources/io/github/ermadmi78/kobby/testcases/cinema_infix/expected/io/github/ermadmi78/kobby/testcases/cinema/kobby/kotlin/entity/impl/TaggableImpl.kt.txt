@@ -1,0 +1,196 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.ActorDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.FilmDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.TaggableDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.ActorProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.EntityFieldsSelection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.FilmProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.TagProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Taggable
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.TaggableQualifiedProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.MutableSet
+import kotlin.collections.Set
+import kotlin.collections.mutableSetOf
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.isNotEmpty
+
+internal open class TaggableQualifiedProjectionImpl : TaggableQualifiedProjection {
+  internal val ___innerIgnore: MutableSet<String> = mutableSetOf("id")
+
+  internal var __innerFields1: EntityFieldsSelectionImpl? = null
+
+  internal var __innerTags2: TagProjectionImpl? = null
+
+  internal val ___inner__onFilm: FilmProjectionImpl = FilmProjectionImpl()
+
+  internal val ___inner__onActor: ActorProjectionImpl = ActorProjectionImpl()
+
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit) {
+    __innerFields1 = EntityFieldsSelectionImpl().apply(__selection)
+
+    ___inner__onFilm.__innerFields1 = __innerFields1
+
+    ___inner__onActor.__innerFields1 = __innerFields1
+
+    ___innerIgnore += "fields"
+  }
+
+  override fun tags(__projection: TagProjection.() -> Unit) {
+    __innerTags2 = TagProjectionImpl().apply(__projection)
+
+    ___inner__onFilm.__innerTags2 = __innerTags2
+
+    ___inner__onActor.__innerTags2 = __innerTags2
+
+    ___innerIgnore += "tags"
+  }
+
+  override fun __onFilm(__projection: FilmProjection.() -> Unit) {
+    FilmProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onFilm)
+  }
+
+  override fun __onActor(__projection: ActorProjection.() -> Unit) {
+    ActorProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onActor)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>,
+      __projection: TaggableQualifiedProjection) {
+    if ("fields" !in ignore && __innerFields1 != null) {
+      __projection.fields {
+        this@TaggableQualifiedProjectionImpl.__innerFields1!!.___innerRepeatSelection(this)
+      }
+    }
+    if ("tags" !in ignore && __innerTags2 != null) {
+      __projection.tags {
+        this@TaggableQualifiedProjectionImpl.__innerTags2!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    __projection.__onFilm {
+      this@TaggableQualifiedProjectionImpl.___inner__onFilm.___innerRepeatProjection(setOf(), this)
+    }
+    __projection.__onActor {
+      this@TaggableQualifiedProjectionImpl.___inner__onActor.___innerRepeatProjection(setOf(), this)
+    }
+  }
+
+  /**
+   * Projection for field: fields
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFields1(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("fields" !in ignore && __innerFields1 != null) {
+      body.append(' ').append("fields")
+      var counter = 0
+      val addBrackets = __innerFields1!!.keys != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: fields.keys
+      if (__innerFields1!!.keys != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFields1!!.keys!!
+        body.append("keys").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("[String!]")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore) {
+      body.append(' ').append("id")
+    }
+
+    // Field: fields
+    ____innerBuildFields1(ignore, header, body, arguments)
+
+    // Field: tags
+    if ("tags" !in ignore && __innerTags2 != null) {
+      body.append(' ').append("tags")
+
+      // Build nested projection of Tag
+      __innerTags2!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append("__typename")
+
+    val subBody = StringBuilder()
+
+    // Qualification of: Film
+    subBody.clear()
+    ___inner__onFilm.___innerBuild(___innerIgnore, header, subBody, arguments)
+    if (subBody.length > 4) {
+      body.append(" ... on ").append("Film").append(subBody)
+    }
+
+    // Qualification of: Actor
+    subBody.clear()
+    ___inner__onActor.___innerBuild(___innerIgnore, header, subBody, arguments)
+    if (subBody.length > 4) {
+      body.append(" ... on ").append("Actor").append(subBody)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun TaggableDto.buildEntity(__innerContext: CinemaContext,
+    __innerProjection: TaggableQualifiedProjectionImpl): Taggable = when(this) {
+  is FilmDto -> FilmImpl(__innerContext, __innerProjection.___inner__onFilm, this)
+  is ActorDto -> ActorImpl(__innerContext, __innerProjection.___inner__onActor, this)
+  else -> error("""Invalid algorithm - unexpected dto type: ${this::class.simpleName}""")
+}

@@ -1,0 +1,61 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Suppress
+import kotlin.Unit
+
+/**
+ * Union of natives %
+ */
+public interface Native {
+  public fun __context(): CinemaContext
+}
+
+/**
+ * Union of natives %
+ */
+@CinemaDSL
+public interface NativeProjection {
+  public fun __minimize() {
+  }
+}
+
+/**
+ * Union of natives %
+ */
+@CinemaDSL
+public interface NativeQualification {
+  /**
+   * Film entity.
+   * The film belongs to one country and can be played by several actors.
+   */
+  public fun __onFilm(__projection: FilmProjection.() -> Unit = {})
+
+  /**
+   * Actor entity.
+   * The actor belongs to one country and can play in several films.
+   */
+  public fun __onActor(__projection: ActorProjection.() -> Unit = {})
+}
+
+/**
+ * Union of natives %
+ */
+@CinemaDSL
+public interface NativeQualifiedProjection : NativeProjection, NativeQualification

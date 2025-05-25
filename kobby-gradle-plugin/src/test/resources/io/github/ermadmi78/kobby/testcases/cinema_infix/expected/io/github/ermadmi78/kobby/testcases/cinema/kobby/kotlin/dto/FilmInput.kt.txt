@@ -1,0 +1,74 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+
+/**
+ * Film input data %
+ */
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class FilmInput(
+  /**
+   * Title of film %
+   */
+  public val title: String,
+  /**
+   * Genre of film  
+   * > Default: DRAMA
+   */
+  public val genre: Genre = Genre.DRAMA,
+)
+
+public fun FilmInput.toBuilder(): FilmInputBuilder = FilmInputBuilder().also {
+  it.title = this.title
+  it.genre = this.genre
+}
+
+public fun FilmInputBuilder.toInput(): FilmInput = FilmInput(
+  title ?: error("FilmInput: 'title' must not be null"),
+  genre
+)
+
+public fun FilmInput(block: FilmInputBuilder.() -> Unit): FilmInput =
+    FilmInputBuilder().apply(block).toInput()
+
+public fun FilmInput.copy(block: FilmInputBuilder.() -> Unit): FilmInput =
+    toBuilder().apply(block).toInput()
+
+/**
+ * Film input data %
+ */
+@CinemaDSL
+public class FilmInputBuilder {
+  /**
+   * Title of film %
+   */
+  public var title: String? = null
+
+  /**
+   * Genre of film  
+   * > Default: DRAMA
+   */
+  public var genre: Genre = Genre.DRAMA
+}

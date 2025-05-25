@@ -1,0 +1,307 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.adapter.ktor
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaAdapter
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaMapper
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaReceiver
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessage
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessageComplete
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessageConnectionInit
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessagePing
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessagePong
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessageSubscribe
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaMutationException
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaMutationResult
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaQueryException
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaQueryResult
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaRequest
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessage
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessageComplete
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessageConnectionAck
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessageError
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessageNext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessagePing
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessagePong
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaSubscriptionException
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.websocket.webSocket
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.request.url
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.websocket.Frame
+import io.ktor.websocket.WebSocketSession
+import io.ktor.websocket.readText
+import io.ktor.websocket.send
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.Map
+import kotlin.collections.contains
+import kotlin.collections.forEach
+import kotlin.collections.isNotEmpty
+import kotlin.collections.mapOf
+import kotlin.collections.plus
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.error
+import kotlin.let
+import kotlin.random.Random
+import kotlin.require
+import kotlin.takeIf
+import kotlin.to
+import kotlinx.coroutines.withTimeoutOrNull
+
+public open class CinemaCompositeKtorAdapter(
+  protected val client: HttpClient,
+  protected val httpUrl: String,
+  protected val webSocketUrl: String,
+  protected val mapper: CinemaMapper,
+  protected val requestHeaders: suspend () -> Map<String, String> = { mapOf<String, String>() },
+  protected val subscriptionPayload: suspend () -> Map<String, Any?>? = { null },
+  protected val subscriptionReceiveTimeoutMillis: Long? = 10_000,
+  protected val httpAuthorizationTokenHeader: String = "Authorization",
+  protected val webSocketAuthorizationTokenHeader: String = "authToken",
+  protected val idGenerator: () -> String = { Random.nextLong().toString() },
+  protected val listener: (CinemaRequest) -> Unit = {},
+) : CinemaAdapter {
+  override suspend fun executeQuery(query: String, variables: Map<String, Any?>): QueryDto {
+    val request = CinemaRequest(query, variables)
+    listener(request)
+
+    val httpHeaders: Map<String, String> = requestHeaders()
+    val content = client.post {
+      setBody<String>(mapper.serialize(request))
+      contentType(ContentType.Application.Json)
+      url(httpUrl)
+      for (element in httpHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .bodyAsText()
+
+    val result = mapper.deserialize(content, CinemaQueryResult::class)
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw CinemaQueryException(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
+    }
+    return result.data ?: throw CinemaQueryException(
+          "GraphQL query completes successfully but returns no data",
+          request,
+          result.errors,
+          result.extensions,
+          null
+        )
+  }
+
+  override suspend fun executeMutation(query: String, variables: Map<String, Any?>): MutationDto {
+    val request = CinemaRequest(query, variables)
+    listener(request)
+
+    val httpHeaders: Map<String, String> = requestHeaders()
+    val content = client.post {
+      setBody<String>(mapper.serialize(request))
+      contentType(ContentType.Application.Json)
+      url(httpUrl)
+      for (element in httpHeaders) {
+        headers[element.key] = element.value
+      }
+    }
+    .bodyAsText()
+
+    val result = mapper.deserialize(content, CinemaMutationResult::class)
+
+    result.errors?.takeIf { it.isNotEmpty() }?.let {
+      throw CinemaMutationException(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
+    }
+    return result.data ?: throw CinemaMutationException(
+          "GraphQL mutation completes successfully but returns no data",
+          request,
+          result.errors,
+          result.extensions,
+          null
+        )
+  }
+
+  override suspend fun executeSubscription(
+    query: String,
+    variables: Map<String, Any?>,
+    block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit,
+  ) {
+    val httpHeaders: Map<String, String> = requestHeaders()
+    val payload: Map<String, Any?>? = subscriptionPayload()
+    client.webSocket(
+      webSocketUrl,
+      request = {
+        httpHeaders.forEach { (key, value) ->
+          headers[key] = value
+        }
+      }
+    ) {
+      var initPayload: Map<String, Any?>? = payload
+      if (httpAuthorizationTokenHeader in httpHeaders) {
+        if (initPayload == null) {
+          initPayload = mapOf()
+        }
+
+        if (webSocketAuthorizationTokenHeader !in initPayload) {
+          @Suppress("SuspiciousCollectionReassignment")
+          initPayload += mapOf(webSocketAuthorizationTokenHeader to
+              httpHeaders[httpAuthorizationTokenHeader])
+        }
+      }
+
+      val request = CinemaRequest(query, variables)
+      listener(request)
+
+      executeSubscriptionImpl(initPayload, request, block)
+    }
+  }
+
+  protected open suspend fun WebSocketSession.executeSubscriptionImpl(
+    initPayload: Map<String, Any?>?,
+    request: CinemaRequest,
+    block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit,
+  ) {
+    val socket = this
+    sendMessage(socket, CinemaClientMessageConnectionInit(initPayload))
+
+    while (true) {
+      when (val reply = receiveMessage(socket) ?: throw CinemaSubscriptionException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+          request)) {
+        is CinemaServerMessageConnectionAck -> {
+          break
+        }
+        is CinemaServerMessagePing -> {
+          sendMessage(socket, CinemaClientMessagePong())
+          continue
+        }
+        else -> {
+          throw CinemaSubscriptionException("""Invalid protocol - unexpected reply: $reply""",
+              request)
+        }
+      }
+    }
+
+    val subscriptionId = idGenerator()
+    sendMessage(socket, CinemaClientMessageSubscribe(subscriptionId, request))
+
+    try {
+      block.invoke(object : CinemaReceiver<SubscriptionDto> {
+        override suspend fun receive(): SubscriptionDto {
+          while (true) {
+            var reply = receiveMessage(socket)
+            if (reply == null) {
+              sendMessage(socket, CinemaClientMessagePing())
+              reply = receiveMessage(socket) ?: throw CinemaSubscriptionException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+                  request)
+            }
+            when (reply) {
+              is CinemaServerMessageNext -> {
+                require(reply.id == subscriptionId)
+
+                val result = reply.payload
+                result.errors?.takeIf { it.isNotEmpty() }?.let {
+                  throw CinemaSubscriptionException(
+                        "GraphQL subscription failed",
+                        request,
+                        it,
+                        result.extensions,
+                        result.data
+                      )
+                }
+                return result.data ?: throw CinemaSubscriptionException(
+                      "GraphQL subscription completes successfully but returns no data",
+                      request,
+                      result.errors,
+                      result.extensions,
+                      null
+                    )
+              }
+              is CinemaServerMessageError -> {
+                require(reply.id == subscriptionId)
+                throw CinemaSubscriptionException("Subscription failed", request, reply.payload)
+              }
+              is CinemaServerMessageComplete -> {
+                require(reply.id == subscriptionId)
+                throw CancellationException("Subscription finished")
+              }
+              is CinemaServerMessagePing -> {
+                sendMessage(socket, CinemaClientMessagePong())
+                continue
+              }
+              is CinemaServerMessagePong -> {
+                continue
+              }
+              else -> {
+                throw CinemaSubscriptionException("""Invalid protocol - unexpected reply: $reply""",
+                    request)
+              }
+            }
+          }
+
+          @Suppress("UNREACHABLE_CODE")
+          error("Invalid algorithm")
+        }
+      })
+    }
+    finally {
+      sendMessage(socket, CinemaClientMessageComplete(subscriptionId))
+    }
+  }
+
+  protected open suspend fun sendMessage(socket: WebSocketSession, message: CinemaClientMessage) {
+    val content = mapper.serialize(message)
+    socket.send(content)
+  }
+
+  protected open suspend fun receiveMessage(socket: WebSocketSession): CinemaServerMessage? {
+    val message = if (subscriptionReceiveTimeoutMillis == null) {
+      socket.incoming.receive()
+    }
+    else {
+      withTimeoutOrNull(subscriptionReceiveTimeoutMillis) {
+        socket.incoming.receive()
+      }
+    }
+
+    if (message == null) {
+      return null
+    }
+
+    val content = (message as Frame.Text).readText()
+    return mapper.deserialize(content, CinemaServerMessage::class)
+  }
+}

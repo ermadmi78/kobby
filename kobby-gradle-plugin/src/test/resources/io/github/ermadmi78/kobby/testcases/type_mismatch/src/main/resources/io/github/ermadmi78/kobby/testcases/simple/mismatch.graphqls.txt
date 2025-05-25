@@ -1,0 +1,11 @@
+directive @selection on FIELD_DEFINITION
+
+type Query {
+    fakeInt(fake: Int): Fake @selection
+
+    fakeString(fake: String): Fake @selection
+}
+
+type Fake {
+    fake: Boolean!
+}

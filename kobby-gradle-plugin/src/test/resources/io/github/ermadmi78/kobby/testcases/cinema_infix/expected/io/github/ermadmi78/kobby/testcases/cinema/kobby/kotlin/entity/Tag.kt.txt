@@ -1,0 +1,51 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+
+/**
+ * Type Tag is introduced for testing types with single value.
+ * See class TagDto.
+ */
+public interface Tag {
+  /**
+   * The tag value
+   */
+  public val `value`: String
+
+  public fun __context(): CinemaContext
+
+  public fun TagProjection.__withCurrentProjection()
+}
+
+/**
+ * Type Tag is introduced for testing types with single value.
+ * See class TagDto.
+ */
+@CinemaDSL
+public interface TagProjection {
+  /**
+   * The tag value
+   */
+  public fun `value`()
+
+  public fun __minimize() {
+  }
+}
