@@ -24,9 +24,7 @@ import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.
 import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryClientMessagePing
 import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryClientMessagePong
 import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryClientMessageSubscribe
-import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryMutationException
 import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryMutationResult
-import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryQueryException
 import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryQueryResult
 import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryRequest
 import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryServerMessage
@@ -58,15 +56,12 @@ import kotlin.Unit
 import kotlin.collections.Map
 import kotlin.collections.contains
 import kotlin.collections.forEach
-import kotlin.collections.isNotEmpty
 import kotlin.collections.mapOf
 import kotlin.collections.plus
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.error
-import kotlin.let
 import kotlin.random.Random
 import kotlin.require
-import kotlin.takeIf
 import kotlin.to
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -101,24 +96,6 @@ public open class CountryCompositeKtorAdapter(
 
     val result = mapper.deserialize(content, CountryQueryResult::class)
 
-    result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CountryQueryException(
-            "GraphQL query failed",
-            request,
-            it,
-            result.extensions,
-            result.data
-          )
-    }
-    if (result.data == null) {
-      throw CountryQueryException(
-            "GraphQL query completes successfully but returns no data",
-            request,
-            result.errors,
-            result.extensions,
-            null
-          )
-    }
     return result
   }
 
@@ -140,24 +117,6 @@ public open class CountryCompositeKtorAdapter(
 
     val result = mapper.deserialize(content, CountryMutationResult::class)
 
-    result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CountryMutationException(
-            "GraphQL mutation failed",
-            request,
-            it,
-            result.extensions,
-            result.data
-          )
-    }
-    if (result.data == null) {
-      throw CountryMutationException(
-            "GraphQL mutation completes successfully but returns no data",
-            request,
-            result.errors,
-            result.extensions,
-            null
-          )
-    }
     return result
   }
 
@@ -239,24 +198,6 @@ public open class CountryCompositeKtorAdapter(
                 require(reply.id == subscriptionId)
 
                 val result = reply.payload
-                result.errors?.takeIf { it.isNotEmpty() }?.let {
-                  throw CountrySubscriptionException(
-                        "GraphQL subscription failed",
-                        request,
-                        it,
-                        result.extensions,
-                        result.data
-                      )
-                }
-                if (result.data == null) {
-                  throw CountrySubscriptionException(
-                        "GraphQL subscription completes successfully but returns no data",
-                        request,
-                        result.errors,
-                        result.extensions,
-                        null
-                      )
-                }
                 return result
               }
               is CountryServerMessageError -> {

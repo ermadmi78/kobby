@@ -20,7 +20,11 @@ plugins {
 kobby {
     kotlin {
         adapter {
-            extendedApi = true // todo
+            throwException = false
+        }
+        entity {
+            errorsFunName = "myErrors"
+            extensionsFunName = "myExtensions"
         }
     }
 }

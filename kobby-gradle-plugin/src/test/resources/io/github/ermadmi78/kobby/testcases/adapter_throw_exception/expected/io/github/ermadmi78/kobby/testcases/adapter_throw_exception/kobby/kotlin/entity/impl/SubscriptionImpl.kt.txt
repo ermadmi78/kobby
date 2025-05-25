@@ -69,9 +69,9 @@ internal class SubscriptionImpl(
     append(')')
   }
 
-  override fun __errors(): List<CountryError> = __innerErrors
+  override fun myErrors(): List<CountryError> = __innerErrors
 
-  override fun __extensions(): Map<String, Any?> = __innerExtensions
+  override fun myExtensions(): Map<String, Any?> = __innerExtensions
 
   override fun __context(): CountryContext = __innerContext
 

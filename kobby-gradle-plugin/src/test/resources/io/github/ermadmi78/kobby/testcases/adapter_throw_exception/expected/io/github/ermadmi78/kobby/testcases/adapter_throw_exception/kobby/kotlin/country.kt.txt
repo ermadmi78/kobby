@@ -130,16 +130,14 @@ public fun interface CountryReceiver<out T> {
 
 public interface CountryResponse {
   /**
-   * GraphQL response errors access function generated for adapters with extended API. To enable
-   * GraphQL error propagation to the entity layer, set Kobby configuration property
-   * `adapter.throwException` to `false`.
+   * GraphQL response errors access function generated for adapters with extended API.
    */
-  public fun __errors(): List<CountryError>
+  public fun myErrors(): List<CountryError>
 
   /**
    * GraphQL response extensions access function generated for adapters with extended API.
    */
-  public fun __extensions(): Map<String, Any?>
+  public fun myExtensions(): Map<String, Any?>
 }
 
 public interface CountryAdapter {
