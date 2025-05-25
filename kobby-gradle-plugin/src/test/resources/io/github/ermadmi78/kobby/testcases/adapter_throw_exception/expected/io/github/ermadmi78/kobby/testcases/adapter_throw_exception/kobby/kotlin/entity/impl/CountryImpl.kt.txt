@@ -1,0 +1,136 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.CountryDto
+import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.entity.CountryProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class CountryImpl(
+  internal val __innerContext: CountryContext,
+  internal val __innerProjection: CountryProjectionImpl,
+  internal val __innerDto: CountryDto,
+) : Country {
+  override val id: Long
+    get() {
+      if (!__innerProjection.__innerId0) {
+        error("Property [id] is not available - add [id] projection to switch on it")
+      }
+      return __innerDto.id!!
+    }
+
+  override val name: String
+    get() {
+      if (!__innerProjection.__innerName1) {
+        error("Property [name] is not available - add [name] projection to switch on it")
+      }
+      return __innerDto.name!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Country").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerId0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerName1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("name").append('=').append(name)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): CountryContext = __innerContext
+
+  override fun CountryProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class CountryProjectionImpl : CountryProjection {
+  internal var __innerId0: Boolean = false
+
+  internal var __innerName1: Boolean = false
+
+  override fun id() {
+    __innerId0 = true
+  }
+
+  override fun name() {
+    __innerName1 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CountryProjection) {
+    if ("id" !in ignore && __innerId0) {
+      __projection.id()
+    }
+    if ("name" !in ignore && __innerName1) {
+      __projection.name()
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore && __innerId0) {
+      body.append(' ').append("id")
+    }
+
+    // Field: name
+    if ("name" !in ignore && __innerName1) {
+      body.append(' ').append("name")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun CountryDto.buildEntity(__innerContext: CountryContext,
+    __innerProjection: CountryProjectionImpl): Country =
+    CountryImpl(__innerContext, __innerProjection, this)

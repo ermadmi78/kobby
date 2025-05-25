@@ -1,0 +1,55 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.CountryContext
+import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.CountryDSL
+import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.CountryResponse
+import io.github.ermadmi78.kobby.testcases.adapter_throw_exception.kobby.kotlin.dto.graphql.CountryError
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import kotlin.collections.Map
+
+public interface Mutation : CountryResponse {
+  public val createCountry: Country
+
+  /**
+   * GraphQL response errors access function generated for adapters with extended API. To enable
+   * GraphQL error propagation to the entity layer, set Kobby configuration property
+   * `adapter.throwException` to `false`.
+   */
+  override fun __errors(): List<CountryError>
+
+  /**
+   * GraphQL response extensions access function generated for adapters with extended API.
+   */
+  override fun __extensions(): Map<String, Any?>
+
+  public fun __context(): CountryContext
+
+  public fun MutationProjection.__withCurrentProjection()
+}
+
+@CountryDSL
+public interface MutationProjection {
+  public fun createCountry(name: String, __projection: CountryProjection.() -> Unit)
+
+  public fun __minimize() {
+  }
+}
