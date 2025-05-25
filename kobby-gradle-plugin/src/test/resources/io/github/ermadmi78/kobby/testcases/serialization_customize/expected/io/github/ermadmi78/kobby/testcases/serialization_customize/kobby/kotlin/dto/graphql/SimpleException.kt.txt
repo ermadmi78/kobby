@@ -20,10 +20,12 @@ import kotlin.String
 import kotlin.Suppress
 import kotlin.collections.List
 import kotlin.collections.joinToString
+import kotlinx.serialization.json.JsonObject
 
-public class SimpleException(
+public open class SimpleException(
   message: String,
   public val request: SimpleRequest,
   public val errors: List<SimpleError>? = null,
+  public val extensions: JsonObject? = null,
 ) : RuntimeException(message + (errors?.joinToString(",\n  ", "\n  ", "\n") { it.toString() } ?:
     ""))

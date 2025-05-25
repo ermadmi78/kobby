@@ -18,8 +18,9 @@ package io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.a
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.SimpleAdapter
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.MutationDto
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.QueryDto
-import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleException
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMutationException
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleMutationResult
+import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleQueryException
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleQueryResult
 import io.github.ermadmi78.kobby.testcases.serialization_disable.kobby.kotlin.dto.graphql.SimpleRequest
 import io.ktor.client.HttpClient
@@ -64,11 +65,20 @@ public open class SimpleSimpleKtorAdapter(
     .body<SimpleQueryResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw SimpleException("GraphQL query failed", request, it)
+      throw SimpleQueryException(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw SimpleException(
+    return result.data ?: throw SimpleQueryException(
           "GraphQL query completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -90,11 +100,20 @@ public open class SimpleSimpleKtorAdapter(
     .body<SimpleMutationResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw SimpleException("GraphQL mutation failed", request, it)
+      throw SimpleMutationException(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw SimpleException(
+    return result.data ?: throw SimpleMutationException(
           "GraphQL mutation completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 }

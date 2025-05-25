@@ -58,8 +58,9 @@ import my.root.dto1.gr_ql.GPrefClientMessageGPost
 import my.root.dto1.gr_ql.GPrefClientMessagePingGPost
 import my.root.dto1.gr_ql.GPrefClientMessagePongGPost
 import my.root.dto1.gr_ql.GPrefClientMessageSubscribeGPost
-import my.root.dto1.gr_ql.GPrefExceptionGPost
+import my.root.dto1.gr_ql.GPrefMutationExceptionGPost
 import my.root.dto1.gr_ql.GPrefMutationResultGPost
+import my.root.dto1.gr_ql.GPrefQueryExceptionGPost
 import my.root.dto1.gr_ql.GPrefQueryResultGPost
 import my.root.dto1.gr_ql.GPrefRequestGPost
 import my.root.dto1.gr_ql.GPrefServerMessageCompleteGPost
@@ -69,6 +70,7 @@ import my.root.dto1.gr_ql.GPrefServerMessageGPost
 import my.root.dto1.gr_ql.GPrefServerMessageNextGPost
 import my.root.dto1.gr_ql.GPrefServerMessagePingGPost
 import my.root.dto1.gr_ql.GPrefServerMessagePongGPost
+import my.root.dto1.gr_ql.GPrefSubscriptionExceptionGPost
 
 public open class KtoPrCompositeKtoPo(
   protected val client: HttpClient,
@@ -102,11 +104,20 @@ public open class KtoPrCompositeKtoPo(
     val result = mapper.deserialize(content, GPrefQueryResultGPost::class)
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw GPrefExceptionGPost("GraphQL query failed", request, it)
+      throw GPrefQueryExceptionGPost(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw GPrefExceptionGPost(
+    return result.data ?: throw GPrefQueryExceptionGPost(
           "GraphQL query completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -129,11 +140,20 @@ public open class KtoPrCompositeKtoPo(
     val result = mapper.deserialize(content, GPrefMutationResultGPost::class)
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw GPrefExceptionGPost("GraphQL mutation failed", request, it)
+      throw GPrefMutationExceptionGPost(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw GPrefExceptionGPost(
+    return result.data ?: throw GPrefMutationExceptionGPost(
           "GraphQL mutation completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -181,7 +201,7 @@ public open class KtoPrCompositeKtoPo(
     sendMessage(socket, GPrefClientMessageConnectionInitGPost(initPayload))
 
     while (true) {
-      when (val reply = receiveMessage(socket) ?: throw GPrefExceptionGPost("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+      when (val reply = receiveMessage(socket) ?: throw GPrefSubscriptionExceptionGPost("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
           request)) {
         is GPrefServerMessageConnectionAckGPost -> {
           break
@@ -191,7 +211,8 @@ public open class KtoPrCompositeKtoPo(
           continue
         }
         else -> {
-          throw GPrefExceptionGPost("""Invalid protocol - unexpected reply: $reply""", request)
+          throw GPrefSubscriptionExceptionGPost("""Invalid protocol - unexpected reply: $reply""",
+              request)
         }
       }
     }
@@ -206,7 +227,7 @@ public open class KtoPrCompositeKtoPo(
             var reply = receiveMessage(socket)
             if (reply == null) {
               sendMessage(socket, GPrefClientMessagePingGPost())
-              reply = receiveMessage(socket) ?: throw GPrefExceptionGPost("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+              reply = receiveMessage(socket) ?: throw GPrefSubscriptionExceptionGPost("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
                   request)
             }
             when (reply) {
@@ -215,16 +236,25 @@ public open class KtoPrCompositeKtoPo(
 
                 val result = reply.payload
                 result.errors?.takeIf { it.isNotEmpty() }?.let {
-                  throw GPrefExceptionGPost("GraphQL subscription failed", request, it)
+                  throw GPrefSubscriptionExceptionGPost(
+                        "GraphQL subscription failed",
+                        request,
+                        it,
+                        result.extensions,
+                        result.data
+                      )
                 }
-                return result.data ?: throw GPrefExceptionGPost(
+                return result.data ?: throw GPrefSubscriptionExceptionGPost(
                       "GraphQL subscription completes successfully but returns no data",
-                      request
+                      request,
+                      result.errors,
+                      result.extensions,
+                      null
                     )
               }
               is GPrefServerMessageErrorGPost -> {
                 require(reply.id == subscriptionId)
-                throw GPrefExceptionGPost("Subscription failed", request, reply.payload)
+                throw GPrefSubscriptionExceptionGPost("Subscription failed", request, reply.payload)
               }
               is GPrefServerMessageCompleteGPost -> {
                 require(reply.id == subscriptionId)
@@ -238,7 +268,7 @@ public open class KtoPrCompositeKtoPo(
                 continue
               }
               else -> {
-                throw GPrefExceptionGPost("""Invalid protocol - unexpected reply: $reply""",
+                throw GPrefSubscriptionExceptionGPost("""Invalid protocol - unexpected reply: $reply""",
                     request)
               }
             }

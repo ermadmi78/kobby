@@ -35,8 +35,9 @@ import kotlin.takeIf
 import my.root.ctx.PrefCtxAdapterPostCtx
 import my.root.dto1.DPrefMyMutationDPost
 import my.root.dto1.DPrefMyQueryDPost
-import my.root.dto1.gr_ql.GPrefExceptionGPost
+import my.root.dto1.gr_ql.GPrefMutationExceptionGPost
 import my.root.dto1.gr_ql.GPrefMutationResultGPost
+import my.root.dto1.gr_ql.GPrefQueryExceptionGPost
 import my.root.dto1.gr_ql.GPrefQueryResultGPost
 import my.root.dto1.gr_ql.GPrefRequestGPost
 
@@ -65,11 +66,20 @@ public open class KtoPrSimpleKtoPo(
     .body<GPrefQueryResultGPost>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw GPrefExceptionGPost("GraphQL query failed", request, it)
+      throw GPrefQueryExceptionGPost(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw GPrefExceptionGPost(
+    return result.data ?: throw GPrefQueryExceptionGPost(
           "GraphQL query completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -92,11 +102,20 @@ public open class KtoPrSimpleKtoPo(
     .body<GPrefMutationResultGPost>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw GPrefExceptionGPost("GraphQL mutation failed", request, it)
+      throw GPrefMutationExceptionGPost(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw GPrefExceptionGPost(
+    return result.data ?: throw GPrefMutationExceptionGPost(
           "GraphQL mutation completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 }

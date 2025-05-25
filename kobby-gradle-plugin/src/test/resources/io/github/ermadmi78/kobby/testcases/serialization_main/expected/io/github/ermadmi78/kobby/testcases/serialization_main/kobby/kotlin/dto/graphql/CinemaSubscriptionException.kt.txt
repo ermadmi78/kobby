@@ -1,0 +1,30 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.SubscriptionDto
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlinx.serialization.json.JsonObject
+
+public class CinemaSubscriptionException(
+  message: String,
+  request: CinemaRequest,
+  errors: List<CinemaError>? = null,
+  extensions: JsonObject? = null,
+  public val `data`: SubscriptionDto? = null,
+) : CinemaException(message, request, errors, extensions)

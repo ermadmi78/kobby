@@ -27,8 +27,9 @@ import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.grap
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryClientMessagePing
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryClientMessagePong
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryClientMessageSubscribe
-import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryException
+import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryMutationException
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryMutationResult
+import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryQueryException
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryQueryResult
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryRequest
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryServerMessage
@@ -38,6 +39,7 @@ import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.grap
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryServerMessageNext
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryServerMessagePing
 import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountryServerMessagePong
+import io.github.ermadmi78.kobby.testcases.disable_builder.kobby.kotlin.dto.graphql.CountrySubscriptionException
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.post
@@ -101,11 +103,20 @@ public open class CountryCompositeKtorAdapter(
     val result = mapper.deserialize(content, CountryQueryResult::class)
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CountryException("GraphQL query failed", request, it)
+      throw CountryQueryException(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw CountryException(
+    return result.data ?: throw CountryQueryException(
           "GraphQL query completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -127,11 +138,20 @@ public open class CountryCompositeKtorAdapter(
     val result = mapper.deserialize(content, CountryMutationResult::class)
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CountryException("GraphQL mutation failed", request, it)
+      throw CountryMutationException(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw CountryException(
+    return result.data ?: throw CountryMutationException(
           "GraphQL mutation completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -179,7 +199,7 @@ public open class CountryCompositeKtorAdapter(
     sendMessage(socket, CountryClientMessageConnectionInit(initPayload))
 
     while (true) {
-      when (val reply = receiveMessage(socket) ?: throw CountryException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+      when (val reply = receiveMessage(socket) ?: throw CountrySubscriptionException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
           request)) {
         is CountryServerMessageConnectionAck -> {
           break
@@ -189,7 +209,8 @@ public open class CountryCompositeKtorAdapter(
           continue
         }
         else -> {
-          throw CountryException("""Invalid protocol - unexpected reply: $reply""", request)
+          throw CountrySubscriptionException("""Invalid protocol - unexpected reply: $reply""",
+              request)
         }
       }
     }
@@ -204,7 +225,7 @@ public open class CountryCompositeKtorAdapter(
             var reply = receiveMessage(socket)
             if (reply == null) {
               sendMessage(socket, CountryClientMessagePing())
-              reply = receiveMessage(socket) ?: throw CountryException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+              reply = receiveMessage(socket) ?: throw CountrySubscriptionException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
                   request)
             }
             when (reply) {
@@ -213,16 +234,25 @@ public open class CountryCompositeKtorAdapter(
 
                 val result = reply.payload
                 result.errors?.takeIf { it.isNotEmpty() }?.let {
-                  throw CountryException("GraphQL subscription failed", request, it)
+                  throw CountrySubscriptionException(
+                        "GraphQL subscription failed",
+                        request,
+                        it,
+                        result.extensions,
+                        result.data
+                      )
                 }
-                return result.data ?: throw CountryException(
+                return result.data ?: throw CountrySubscriptionException(
                       "GraphQL subscription completes successfully but returns no data",
-                      request
+                      request,
+                      result.errors,
+                      result.extensions,
+                      null
                     )
               }
               is CountryServerMessageError -> {
                 require(reply.id == subscriptionId)
-                throw CountryException("Subscription failed", request, reply.payload)
+                throw CountrySubscriptionException("Subscription failed", request, reply.payload)
               }
               is CountryServerMessageComplete -> {
                 require(reply.id == subscriptionId)
@@ -236,7 +266,8 @@ public open class CountryCompositeKtorAdapter(
                 continue
               }
               else -> {
-                throw CountryException("""Invalid protocol - unexpected reply: $reply""", request)
+                throw CountrySubscriptionException("""Invalid protocol - unexpected reply: $reply""",
+                    request)
               }
             }
           }

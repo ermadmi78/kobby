@@ -18,8 +18,9 @@ package io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.adapter.ktor
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.GraphqlAdapter
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyMutationDto
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.MyQueryDto
-import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlException
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMutationException
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlMutationResult
+import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlQueryException
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlQueryResult
 import io.github.ermadmi78.kobby.testcases.multifile.kobby.kotlin.dto.graphql.GraphqlRequest
 import io.ktor.client.HttpClient
@@ -64,11 +65,20 @@ public open class GraphqlSimpleKtorAdapter(
     .body<GraphqlQueryResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw GraphqlException("GraphQL query failed", request, it)
+      throw GraphqlQueryException(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw GraphqlException(
+    return result.data ?: throw GraphqlQueryException(
           "GraphQL query completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -90,11 +100,20 @@ public open class GraphqlSimpleKtorAdapter(
     .body<GraphqlMutationResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw GraphqlException("GraphQL mutation failed", request, it)
+      throw GraphqlMutationException(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw GraphqlException(
+    return result.data ?: throw GraphqlMutationException(
           "GraphQL mutation completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 }

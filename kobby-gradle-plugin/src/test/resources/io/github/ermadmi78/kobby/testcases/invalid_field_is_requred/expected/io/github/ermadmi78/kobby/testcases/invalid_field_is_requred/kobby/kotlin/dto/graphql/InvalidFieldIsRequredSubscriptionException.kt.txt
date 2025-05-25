@@ -1,0 +1,31 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.invalid_field_is_requred.kobby.kotlin.dto.SubscriptionDto
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+
+public class InvalidFieldIsRequredSubscriptionException(
+  message: String,
+  request: InvalidFieldIsRequredRequest,
+  errors: List<InvalidFieldIsRequredError>? = null,
+  extensions: Map<String, Any?>? = null,
+  public val `data`: SubscriptionDto? = null,
+) : InvalidFieldIsRequredException(message, request, errors, extensions)

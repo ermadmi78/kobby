@@ -18,8 +18,9 @@ package io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.adapter
 import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.CountryAdapter
 import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.MutationDto
 import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.QueryDto
-import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryException
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryMutationException
 import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryMutationResult
+import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryQueryException
 import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryQueryResult
 import io.github.ermadmi78.kobby.testcases.disable_jackson.kobby.kotlin.dto.graphql.CountryRequest
 import io.ktor.client.HttpClient
@@ -64,11 +65,20 @@ public open class CountrySimpleKtorAdapter(
     .body<CountryQueryResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CountryException("GraphQL query failed", request, it)
+      throw CountryQueryException(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw CountryException(
+    return result.data ?: throw CountryQueryException(
           "GraphQL query completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -90,11 +100,20 @@ public open class CountrySimpleKtorAdapter(
     .body<CountryMutationResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CountryException("GraphQL mutation failed", request, it)
+      throw CountryMutationException(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw CountryException(
+    return result.data ?: throw CountryMutationException(
           "GraphQL mutation completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 }

@@ -27,8 +27,9 @@ import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.Cinem
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessagePing
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessagePong
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaClientMessageSubscribe
-import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaException
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaMutationException
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaMutationResult
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaQueryException
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaQueryResult
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaRequest
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessage
@@ -38,6 +39,7 @@ import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.Cinem
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessageNext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessagePing
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaServerMessagePong
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql.CinemaSubscriptionException
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.websocket.webSocket
 import io.ktor.client.request.post
@@ -101,11 +103,20 @@ public open class CinemaCompositeKtorAdapter(
     val result = mapper.deserialize(content, CinemaQueryResult::class)
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CinemaException("GraphQL query failed", request, it)
+      throw CinemaQueryException(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw CinemaException(
+    return result.data ?: throw CinemaQueryException(
           "GraphQL query completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -127,11 +138,20 @@ public open class CinemaCompositeKtorAdapter(
     val result = mapper.deserialize(content, CinemaMutationResult::class)
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CinemaException("GraphQL mutation failed", request, it)
+      throw CinemaMutationException(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw CinemaException(
+    return result.data ?: throw CinemaMutationException(
           "GraphQL mutation completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -179,7 +199,7 @@ public open class CinemaCompositeKtorAdapter(
     sendMessage(socket, CinemaClientMessageConnectionInit(initPayload))
 
     while (true) {
-      when (val reply = receiveMessage(socket) ?: throw CinemaException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+      when (val reply = receiveMessage(socket) ?: throw CinemaSubscriptionException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
           request)) {
         is CinemaServerMessageConnectionAck -> {
           break
@@ -189,7 +209,8 @@ public open class CinemaCompositeKtorAdapter(
           continue
         }
         else -> {
-          throw CinemaException("""Invalid protocol - unexpected reply: $reply""", request)
+          throw CinemaSubscriptionException("""Invalid protocol - unexpected reply: $reply""",
+              request)
         }
       }
     }
@@ -204,7 +225,7 @@ public open class CinemaCompositeKtorAdapter(
             var reply = receiveMessage(socket)
             if (reply == null) {
               sendMessage(socket, CinemaClientMessagePing())
-              reply = receiveMessage(socket) ?: throw CinemaException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
+              reply = receiveMessage(socket) ?: throw CinemaSubscriptionException("""Receive timeout expired ($subscriptionReceiveTimeoutMillis millis)""",
                   request)
             }
             when (reply) {
@@ -213,16 +234,25 @@ public open class CinemaCompositeKtorAdapter(
 
                 val result = reply.payload
                 result.errors?.takeIf { it.isNotEmpty() }?.let {
-                  throw CinemaException("GraphQL subscription failed", request, it)
+                  throw CinemaSubscriptionException(
+                        "GraphQL subscription failed",
+                        request,
+                        it,
+                        result.extensions,
+                        result.data
+                      )
                 }
-                return result.data ?: throw CinemaException(
+                return result.data ?: throw CinemaSubscriptionException(
                       "GraphQL subscription completes successfully but returns no data",
-                      request
+                      request,
+                      result.errors,
+                      result.extensions,
+                      null
                     )
               }
               is CinemaServerMessageError -> {
                 require(reply.id == subscriptionId)
-                throw CinemaException("Subscription failed", request, reply.payload)
+                throw CinemaSubscriptionException("Subscription failed", request, reply.payload)
               }
               is CinemaServerMessageComplete -> {
                 require(reply.id == subscriptionId)
@@ -236,7 +266,8 @@ public open class CinemaCompositeKtorAdapter(
                 continue
               }
               else -> {
-                throw CinemaException("""Invalid protocol - unexpected reply: $reply""", request)
+                throw CinemaSubscriptionException("""Invalid protocol - unexpected reply: $reply""",
+                    request)
               }
             }
           }

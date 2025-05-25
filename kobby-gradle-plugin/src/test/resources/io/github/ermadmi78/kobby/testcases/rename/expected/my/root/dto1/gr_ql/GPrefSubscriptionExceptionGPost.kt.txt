@@ -1,0 +1,31 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package my.root.dto1.gr_ql
+
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+import my.root.dto1.DPrefMySubscriptionDPost
+
+public class GPrefSubscriptionExceptionGPost(
+  message: String,
+  request: GPrefRequestGPost,
+  errors: List<GPrefErrorGPost>? = null,
+  extensions: Map<String, Any?>? = null,
+  public val `data`: DPrefMySubscriptionDPost? = null,
+) : GPrefExceptionGPost(message, request, errors, extensions)

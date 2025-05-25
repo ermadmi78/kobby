@@ -18,8 +18,9 @@ package io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.adap
 import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.CinemaAdapter
 import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.MutationDto
 import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.QueryDto
-import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.graphql.CinemaException
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.graphql.CinemaMutationException
 import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.graphql.CinemaMutationResult
+import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.graphql.CinemaQueryException
 import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.graphql.CinemaQueryResult
 import io.github.ermadmi78.kobby.testcases.serialization_main.kobby.kotlin.dto.graphql.CinemaRequest
 import io.ktor.client.HttpClient
@@ -64,11 +65,20 @@ public open class CinemaSimpleKtorAdapter(
     .body<CinemaQueryResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CinemaException("GraphQL query failed", request, it)
+      throw CinemaQueryException(
+            "GraphQL query failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw CinemaException(
+    return result.data ?: throw CinemaQueryException(
           "GraphQL query completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 
@@ -90,11 +100,20 @@ public open class CinemaSimpleKtorAdapter(
     .body<CinemaMutationResult>()
 
     result.errors?.takeIf { it.isNotEmpty() }?.let {
-      throw CinemaException("GraphQL mutation failed", request, it)
+      throw CinemaMutationException(
+            "GraphQL mutation failed",
+            request,
+            it,
+            result.extensions,
+            result.data
+          )
     }
-    return result.data ?: throw CinemaException(
+    return result.data ?: throw CinemaMutationException(
           "GraphQL mutation completes successfully but returns no data",
-          request
+          request,
+          result.errors,
+          result.extensions,
+          null
         )
   }
 }

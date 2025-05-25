@@ -19,9 +19,11 @@ import io.github.ermadmi78.kobby.testcases.schema_truncation.kobby.kotlin.dto.Su
 import kotlin.Suppress
 import kotlin.collections.List
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 public data class CinemaSubscriptionResult(
   public val `data`: SubscriptionDto? = null,
   public val errors: List<CinemaError>? = null,
+  public val extensions: JsonObject? = null,
 )

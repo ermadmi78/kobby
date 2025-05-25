@@ -1,0 +1,30 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.serialization_customize.kobby.kotlin.dto.MutationDto
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlinx.serialization.json.JsonObject
+
+public class SimpleMutationException(
+  message: String,
+  request: SimpleRequest,
+  errors: List<SimpleError>? = null,
+  extensions: JsonObject? = null,
+  public val `data`: MutationDto? = null,
+) : SimpleException(message, request, errors, extensions)
