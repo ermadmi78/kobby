@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen)](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
 [![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v5.1.0-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
-[![Maven Central](https://img.shields.io/badge/Maven%20Central-v5.1.0-orange)](https://search.maven.org/artifact/io.github.ermadmi78/kobby-maven-plugin)
+[![Maven Central](https://img.shields.io/badge/Maven%20Central-v5.1.0-orange)](https://repo.maven.apache.org/maven2/io/github/ermadmi78/kobby-maven-plugin/)
 [![Discussions](https://img.shields.io/badge/Discussions-On%20GitHub-blue)](https://github.com/ermadmi78/kobby/discussions)
 
 [![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)](https://github.com/ermadmi78/kobby/wiki)
