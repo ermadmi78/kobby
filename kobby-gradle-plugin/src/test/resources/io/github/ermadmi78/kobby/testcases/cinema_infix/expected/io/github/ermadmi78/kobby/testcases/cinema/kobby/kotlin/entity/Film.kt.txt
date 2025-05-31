@@ -88,6 +88,11 @@ public interface Film : Entity, Taggable, Native {
 @CinemaDSL
 public interface FilmProjection : EntityProjection, TaggableProjection, NativeProjection {
   /**
+   * Genre of film.
+   */
+  public val genre: Any?
+
+  /**
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
    */
@@ -102,11 +107,6 @@ public interface FilmProjection : EntityProjection, TaggableProjection, NativePr
    * Title of film
    */
   public fun __withoutTitle()
-
-  /**
-   * Genre of film.
-   */
-  public fun genre()
 
   /**
    * The country to which the film belongs

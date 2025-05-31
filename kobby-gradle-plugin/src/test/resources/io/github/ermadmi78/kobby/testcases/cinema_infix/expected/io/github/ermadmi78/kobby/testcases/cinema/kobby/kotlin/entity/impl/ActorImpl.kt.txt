@@ -240,6 +240,12 @@ internal open class ActorProjectionImpl : ActorProjection {
 
   internal var __innerGender6: Boolean = false
 
+  override val gender: Any?
+    get() {
+      __innerGender6 = true
+      return null
+    }
+
   internal var __innerCountry8: CountryProjectionImpl? = null
 
   internal var __innerFilms9: ActorFilmsQueryImpl? = null
@@ -258,10 +264,6 @@ internal open class ActorProjectionImpl : ActorProjection {
 
   override fun __withoutLastName() {
     __innerLastName4 = false
-  }
-
-  override fun gender() {
-    __innerGender6 = true
   }
 
   override fun country(__projection: CountryProjection.() -> Unit) {
@@ -291,7 +293,7 @@ internal open class ActorProjectionImpl : ActorProjection {
       __projection.__withoutLastName()
     }
     if ("gender" !in ignore && __innerGender6) {
-      __projection.gender()
+      __projection.gender
     }
     if ("country" !in ignore && __innerCountry8 != null) {
       __projection.country {
@@ -504,7 +506,16 @@ internal open class ActorProjectionImpl : ActorProjection {
 internal class ActorFilmsQueryImpl : FilmProjectionImpl(), ActorFilmsQuery {
   override var title: String? = null
 
-  override var genre: Genre? = null
+  internal var __innerFilms9Genre: Genre? = null
+
+  override var genre: Genre?
+    get() {
+      super.__innerGenre4 = true
+      return __innerFilms9Genre
+    }
+    set(`value`) {
+      __innerFilms9Genre = value
+    }
 
   override var limit: Int? = null
 
@@ -513,7 +524,7 @@ internal class ActorFilmsQueryImpl : FilmProjectionImpl(), ActorFilmsQuery {
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatSelection(__selection: ActorFilmsSelection) {
     __selection.title = title
-    __selection.genre = genre
+    __selection.genre = __innerFilms9Genre
     __selection.limit = limit
     __selection.offset = offset
   }

@@ -69,14 +69,16 @@ internal class TagImpl(
 internal open class TagProjectionImpl : TagProjection {
   internal var __innerValue0: Boolean = false
 
-  override fun `value`() {
-    __innerValue0 = true
-  }
+  override val `value`: Any?
+    get() {
+      __innerValue0 = true
+      return null
+    }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: TagProjection) {
     if ("value" !in ignore && __innerValue0) {
-      __projection.`value`()
+      __projection.`value`
     }
   }
 

@@ -17,6 +17,7 @@ package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
 
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
 import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
 
@@ -44,7 +45,7 @@ public interface TagProjection {
   /**
    * The tag value
    */
-  public fun `value`()
+  public val `value`: Any?
 
   public fun __minimize() {
   }

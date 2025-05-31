@@ -101,6 +101,11 @@ public interface Actor : Entity, Taggable, Native {
 @CinemaDSL
 public interface ActorProjection : EntityProjection, TaggableProjection, NativeProjection {
   /**
+   * Actor's gender
+   */
+  public val gender: Any?
+
+  /**
    * Fields of entity in key-value map.
    * Introduced for testing complex scalars.
    */
@@ -122,11 +127,6 @@ public interface ActorProjection : EntityProjection, TaggableProjection, NativeP
    * This field is nullable because the actor can use an alias and not have a last name.
    */
   public fun __withoutLastName()
-
-  /**
-   * Actor's gender
-   */
-  public fun gender()
 
   /**
    * The country to which the actor belongs

@@ -201,6 +201,12 @@ internal open class FilmProjectionImpl : FilmProjection {
 
   internal var __innerGenre4: Boolean = false
 
+  override val genre: Any?
+    get() {
+      __innerGenre4 = true
+      return null
+    }
+
   internal var __innerCountry6: CountryProjectionImpl? = null
 
   internal var __innerActors7: FilmActorsQueryImpl? = null
@@ -215,10 +221,6 @@ internal open class FilmProjectionImpl : FilmProjection {
 
   override fun __withoutTitle() {
     __innerTitle3 = false
-  }
-
-  override fun genre() {
-    __innerGenre4 = true
   }
 
   override fun country(__projection: CountryProjection.() -> Unit) {
@@ -245,7 +247,7 @@ internal open class FilmProjectionImpl : FilmProjection {
       __projection.__withoutTitle()
     }
     if ("genre" !in ignore && __innerGenre4) {
-      __projection.genre()
+      __projection.genre
     }
     if ("country" !in ignore && __innerCountry6 != null) {
       __projection.country {
@@ -501,7 +503,16 @@ internal class FilmActorsQueryImpl : ActorProjectionImpl(), FilmActorsQuery {
 
   override var birthdayTo: LocalDate? = null
 
-  override var gender: Gender? = null
+  internal var __innerActors7Gender: Gender? = null
+
+  override var gender: Gender?
+    get() {
+      super.__innerGender6 = true
+      return __innerActors7Gender
+    }
+    set(`value`) {
+      __innerActors7Gender = value
+    }
 
   override var limit: Int? = null
 
@@ -513,7 +524,7 @@ internal class FilmActorsQueryImpl : ActorProjectionImpl(), FilmActorsQuery {
     __selection.lastName = lastName
     __selection.birthdayFrom = birthdayFrom
     __selection.birthdayTo = birthdayTo
-    __selection.gender = gender
+    __selection.gender = __innerActors7Gender
     __selection.limit = limit
     __selection.offset = offset
   }

@@ -223,20 +223,38 @@ internal open class QueryProjectionImpl : QueryProjection {
 }
 
 internal class QueryFakeIntQueryImpl : FakeProjectionImpl(), QueryFakeIntQuery {
-  override var fake: Int? = null
+  internal var __innerFakeInt0Fake: Int? = null
+
+  override var fake: Int?
+    get() {
+      super.__innerFake0 = true
+      return __innerFakeInt0Fake
+    }
+    set(`value`) {
+      __innerFakeInt0Fake = value
+    }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatSelection(__selection: QueryFakeIntSelection) {
-    __selection.fake = fake
+    __selection.fake = __innerFakeInt0Fake
   }
 }
 
 internal class QueryFakeStringQueryImpl : FakeProjectionImpl(), QueryFakeStringQuery {
-  override var fake: String? = null
+  internal var __innerFakeString1Fake: String? = null
+
+  override var fake: String?
+    get() {
+      super.__innerFake0 = true
+      return __innerFakeString1Fake
+    }
+    set(`value`) {
+      __innerFakeString1Fake = value
+    }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatSelection(__selection: QueryFakeStringSelection) {
-    __selection.fake = fake
+    __selection.fake = __innerFakeString1Fake
   }
 }
 

@@ -69,14 +69,16 @@ internal class FakeImpl(
 internal open class FakeProjectionImpl : FakeProjection {
   internal var __innerFake0: Boolean = false
 
-  override fun fake() {
-    __innerFake0 = true
-  }
+  override val fake: Any?
+    get() {
+      __innerFake0 = true
+      return null
+    }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: FakeProjection) {
     if ("fake" !in ignore && __innerFake0) {
-      __projection.fake()
+      __projection.fake
     }
   }
 

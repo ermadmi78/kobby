@@ -19,7 +19,7 @@ kobby {
     kotlin {
         entity {
             projection {
-                enableNotationWithoutParentheses = false
+                enableNotationWithoutParentheses = true
             }
         }
     }
