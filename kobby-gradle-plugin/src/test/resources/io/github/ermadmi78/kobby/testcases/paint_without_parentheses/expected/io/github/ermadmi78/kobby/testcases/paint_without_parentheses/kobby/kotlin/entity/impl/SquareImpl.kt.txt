@@ -101,32 +101,38 @@ internal class SquareImpl(
 internal open class SquareProjectionImpl : SquareProjection {
   internal var __innerId0: Boolean = false
 
+  override val id: Any?
+    get() {
+      __innerId0 = true
+      return null
+    }
+
   internal var __innerOpaque1: Boolean = false
+
+  override val opaque: Any?
+    get() {
+      __innerOpaque1 = true
+      return null
+    }
 
   internal var __innerLength2: Boolean = false
 
-  override fun id() {
-    __innerId0 = true
-  }
-
-  override fun opaque() {
-    __innerOpaque1 = true
-  }
-
-  override fun length() {
-    __innerLength2 = true
-  }
+  override val length: Any?
+    get() {
+      __innerLength2 = true
+      return null
+    }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SquareProjection) {
     if ("id" !in ignore && __innerId0) {
-      __projection.id()
+      __projection.id
     }
     if ("opaque" !in ignore && __innerOpaque1) {
-      __projection.opaque()
+      __projection.opaque
     }
     if ("length" !in ignore && __innerLength2) {
-      __projection.length()
+      __projection.length
     }
   }
 

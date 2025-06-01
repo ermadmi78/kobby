@@ -21,7 +21,7 @@ kobby {
     kotlin {
         entity {
             projection {
-                // todo enableNotationWithoutParentheses = true
+                enableNotationWithoutParentheses = true
             }
         }
     }

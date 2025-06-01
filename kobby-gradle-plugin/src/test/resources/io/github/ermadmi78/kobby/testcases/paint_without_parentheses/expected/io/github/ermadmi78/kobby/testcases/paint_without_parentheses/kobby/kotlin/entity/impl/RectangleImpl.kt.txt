@@ -132,50 +132,60 @@ internal class RectangleImpl(
 internal open class RectangleProjectionImpl : RectangleProjection {
   internal var __innerId0: Boolean = false
 
+  override val id: Any?
+    get() {
+      __innerId0 = true
+      return null
+    }
+
   internal var __innerOpaque1: Boolean = false
+
+  override val opaque: Any?
+    get() {
+      __innerOpaque1 = true
+      return null
+    }
 
   internal var __innerWidth2: Boolean = false
 
+  override val width: Any?
+    get() {
+      __innerWidth2 = true
+      return null
+    }
+
   internal var __innerHeight3: Boolean = false
+
+  override val height: Any?
+    get() {
+      __innerHeight3 = true
+      return null
+    }
 
   internal var __innerTempIds4: Boolean = false
 
-  override fun id() {
-    __innerId0 = true
-  }
-
-  override fun opaque() {
-    __innerOpaque1 = true
-  }
-
-  override fun width() {
-    __innerWidth2 = true
-  }
-
-  override fun height() {
-    __innerHeight3 = true
-  }
-
-  override fun tempIds() {
-    __innerTempIds4 = true
-  }
+  override val tempIds: Any?
+    get() {
+      __innerTempIds4 = true
+      return null
+    }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: RectangleProjection) {
     if ("id" !in ignore && __innerId0) {
-      __projection.id()
+      __projection.id
     }
     if ("opaque" !in ignore && __innerOpaque1) {
-      __projection.opaque()
+      __projection.opaque
     }
     if ("width" !in ignore && __innerWidth2) {
-      __projection.width()
+      __projection.width
     }
     if ("height" !in ignore && __innerHeight3) {
-      __projection.height()
+      __projection.height
     }
     if ("tempIds" !in ignore && __innerTempIds4) {
-      __projection.tempIds()
+      __projection.tempIds
     }
   }
 

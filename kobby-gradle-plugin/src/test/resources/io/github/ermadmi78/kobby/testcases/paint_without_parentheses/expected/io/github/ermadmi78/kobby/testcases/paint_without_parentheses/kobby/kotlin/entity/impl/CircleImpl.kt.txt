@@ -101,32 +101,38 @@ internal class CircleImpl(
 internal open class CircleProjectionImpl : CircleProjection {
   internal var __innerId0: Boolean = false
 
+  override val id: Any?
+    get() {
+      __innerId0 = true
+      return null
+    }
+
   internal var __innerOpaque1: Boolean = false
+
+  override val opaque: Any?
+    get() {
+      __innerOpaque1 = true
+      return null
+    }
 
   internal var __innerRadius2: Boolean = false
 
-  override fun id() {
-    __innerId0 = true
-  }
-
-  override fun opaque() {
-    __innerOpaque1 = true
-  }
-
-  override fun radius() {
-    __innerRadius2 = true
-  }
+  override val radius: Any?
+    get() {
+      __innerRadius2 = true
+      return null
+    }
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CircleProjection) {
     if ("id" !in ignore && __innerId0) {
-      __projection.id()
+      __projection.id
     }
     if ("opaque" !in ignore && __innerOpaque1) {
-      __projection.opaque()
+      __projection.opaque
     }
     if ("radius" !in ignore && __innerRadius2) {
-      __projection.radius()
+      __projection.radius
     }
   }
 

@@ -17,6 +17,7 @@ package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotl
 
 import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
 import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Any
 import kotlin.Boolean
 import kotlin.Long
 import kotlin.Suppress
@@ -32,9 +33,9 @@ public interface Shape {
 
 @PaintDSL
 public interface ShapeProjection {
-  public fun id()
+  public val id: Any?
 
-  public fun opaque()
+  public val opaque: Any?
 
   public fun __minimize() {
   }

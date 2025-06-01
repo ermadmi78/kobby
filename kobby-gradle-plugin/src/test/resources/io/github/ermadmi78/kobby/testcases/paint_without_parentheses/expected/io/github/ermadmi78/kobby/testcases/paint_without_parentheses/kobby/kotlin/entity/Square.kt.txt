@@ -17,6 +17,7 @@ package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotl
 
 import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
 import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Any
 import kotlin.Boolean
 import kotlin.Int
 import kotlin.Long
@@ -36,11 +37,11 @@ public interface Square : Shape, Polygon {
 
 @PaintDSL
 public interface SquareProjection : ShapeProjection, PolygonProjection {
-  override fun id()
+  override val id: Any?
 
-  override fun opaque()
+  override val opaque: Any?
 
-  public fun length()
+  public val length: Any?
 
   override fun __minimize() {
   }

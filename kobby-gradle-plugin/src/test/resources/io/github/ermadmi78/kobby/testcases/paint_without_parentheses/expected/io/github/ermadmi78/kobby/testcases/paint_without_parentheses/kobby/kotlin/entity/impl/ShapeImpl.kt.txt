@@ -44,37 +44,25 @@ internal open class ShapeQualifiedProjectionImpl : ShapeQualifiedProjection {
 
   internal var __innerId0: Boolean = false
 
+  override val id: Any?
+    get() {
+      __innerId0 = true
+      return null
+    }
+
   internal var __innerOpaque1: Boolean = false
+
+  override val opaque: Any?
+    get() {
+      __innerOpaque1 = true
+      return null
+    }
 
   internal val ___inner__onCircle: CircleProjectionImpl = CircleProjectionImpl()
 
   internal val ___inner__onSquare: SquareProjectionImpl = SquareProjectionImpl()
 
   internal val ___inner__onRectangle: RectangleProjectionImpl = RectangleProjectionImpl()
-
-  override fun id() {
-    __innerId0 = true
-
-    ___inner__onCircle.__innerId0 = __innerId0
-
-    ___inner__onSquare.__innerId0 = __innerId0
-
-    ___inner__onRectangle.__innerId0 = __innerId0
-
-    ___innerIgnore += "id"
-  }
-
-  override fun opaque() {
-    __innerOpaque1 = true
-
-    ___inner__onCircle.__innerOpaque1 = __innerOpaque1
-
-    ___inner__onSquare.__innerOpaque1 = __innerOpaque1
-
-    ___inner__onRectangle.__innerOpaque1 = __innerOpaque1
-
-    ___innerIgnore += "opaque"
-  }
 
   override fun __onCircle(__projection: CircleProjection.() -> Unit) {
     CircleProjectionImpl().apply(__projection).___innerRepeatProjection(___innerIgnore, ___inner__onCircle)
@@ -92,10 +80,10 @@ internal open class ShapeQualifiedProjectionImpl : ShapeQualifiedProjection {
   internal fun ___innerRepeatProjection(ignore: Set<String>,
       __projection: ShapeQualifiedProjection) {
     if ("id" !in ignore && __innerId0) {
-      __projection.id()
+      __projection.id
     }
     if ("opaque" !in ignore && __innerOpaque1) {
-      __projection.opaque()
+      __projection.opaque
     }
     __projection.__onCircle {
       this@ShapeQualifiedProjectionImpl.___inner__onCircle.___innerRepeatProjection(setOf(), this)
