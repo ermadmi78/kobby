@@ -707,7 +707,7 @@ open class KobbyKotlinEntityProjectionExtension {
      *
      * Default: false
      */
-    var enableNotationWithoutParentheses: Boolean? = false
+    var enableNotationWithoutParentheses: Boolean? = null
 }
 
 /**
