@@ -1,0 +1,320 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.CircleInput
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.RectangleInput
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.SquareInput
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Circle
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.CircleProjection
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Rectangle
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.RectangleProjection
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Square
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.SquareProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class MutationImpl(
+  internal val __innerContext: PaintContext,
+  internal val __innerProjection: MutationProjectionImpl,
+  internal val __innerDto: MutationDto,
+) : Mutation {
+  override val createCircle: Circle by lazy {
+    if (__innerProjection.__innerCreateCircle0 == null) {
+      error("Property [createCircle] is not available - add [createCircle] projection to switch on it")
+    }
+    __innerDto.resolveCreateCircle(__innerContext, __innerProjection.__innerCreateCircle0!!)
+  }
+
+  override val createSquare: Square by lazy {
+    if (__innerProjection.__innerCreateSquare1 == null) {
+      error("Property [createSquare] is not available - add [createSquare] projection to switch on it")
+    }
+    __innerDto.resolveCreateSquare(__innerContext, __innerProjection.__innerCreateSquare1!!)
+  }
+
+  override val createRectangle: Rectangle by lazy {
+    if (__innerProjection.__innerCreateRectangle2 == null) {
+      error("Property [createRectangle] is not available - add [createRectangle] projection to switch on it")
+    }
+    __innerDto.resolveCreateRectangle(__innerContext, __innerProjection.__innerCreateRectangle2!!)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Mutation").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCreateCircle0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createCircle").append('=').append(createCircle)
+    }
+
+    if (__innerProjection.__innerCreateSquare1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createSquare").append('=').append(createSquare)
+    }
+
+    if (__innerProjection.__innerCreateRectangle2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createRectangle").append('=').append(createRectangle)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): PaintContext = __innerContext
+
+  override fun MutationProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class MutationProjectionImpl : MutationProjection {
+  internal var __innerCreateCircle0: CircleProjectionImpl? = null
+
+  internal var __innerCreateCircle0Circle: CircleInput? = null
+
+  internal var __innerCreateSquare1: SquareProjectionImpl? = null
+
+  internal var __innerCreateSquare1Square: SquareInput? = null
+
+  internal var __innerCreateRectangle2: RectangleProjectionImpl? = null
+
+  internal var __innerCreateRectangle2Rectangle: RectangleInput? = null
+
+  override fun createCircle(circle: CircleInput?, __projection: CircleProjection.() -> Unit) {
+    __innerCreateCircle0 = CircleProjectionImpl().apply(__projection)
+    __innerCreateCircle0Circle = circle
+  }
+
+  override fun createSquare(square: SquareInput?, __projection: SquareProjection.() -> Unit) {
+    __innerCreateSquare1 = SquareProjectionImpl().apply(__projection)
+    __innerCreateSquare1Square = square
+  }
+
+  override fun createRectangle(rectangle: RectangleInput?,
+      __projection: RectangleProjection.() -> Unit) {
+    __innerCreateRectangle2 = RectangleProjectionImpl().apply(__projection)
+    __innerCreateRectangle2Rectangle = rectangle
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection) {
+    if ("createCircle" !in ignore && __innerCreateCircle0 != null) {
+      __projection.createCircle(__innerCreateCircle0Circle) {
+        this@MutationProjectionImpl.__innerCreateCircle0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("createSquare" !in ignore && __innerCreateSquare1 != null) {
+      __projection.createSquare(__innerCreateSquare1Square) {
+        this@MutationProjectionImpl.__innerCreateSquare1!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("createRectangle" !in ignore && __innerCreateRectangle2 != null) {
+      __projection.createRectangle(__innerCreateRectangle2Rectangle) {
+        this@MutationProjectionImpl.__innerCreateRectangle2!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: createCircle
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCreateCircle0(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("createCircle" !in ignore && __innerCreateCircle0 != null) {
+      body.append(' ').append("createCircle")
+      var counter = 0
+      val addBrackets = __innerCreateCircle0Circle != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createCircle.circle
+      if (__innerCreateCircle0Circle != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateCircle0Circle!!
+        body.append("circle").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("CircleInput")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Circle
+      __innerCreateCircle0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection for field: createSquare
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCreateSquare1(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("createSquare" !in ignore && __innerCreateSquare1 != null) {
+      body.append(' ').append("createSquare")
+      var counter = 0
+      val addBrackets = __innerCreateSquare1Square != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createSquare.square
+      if (__innerCreateSquare1Square != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateSquare1Square!!
+        body.append("square").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("SquareInput")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Square
+      __innerCreateSquare1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection for field: createRectangle
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCreateRectangle2(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("createRectangle" !in ignore && __innerCreateRectangle2 != null) {
+      body.append(' ').append("createRectangle")
+      var counter = 0
+      val addBrackets = __innerCreateRectangle2Rectangle != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createRectangle.rectangle
+      if (__innerCreateRectangle2Rectangle != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateRectangle2Rectangle!!
+        body.append("rectangle").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("RectangleInput")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Rectangle
+      __innerCreateRectangle2!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: createCircle
+    ____innerBuildCreateCircle0(ignore, header, body, arguments)
+
+    // Field: createSquare
+    ____innerBuildCreateSquare1(ignore, header, body, arguments)
+
+    // Field: createRectangle
+    ____innerBuildCreateRectangle2(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun MutationDto.buildEntity(__innerContext: PaintContext,
+    __innerProjection: MutationProjectionImpl): Mutation =
+    MutationImpl(__innerContext, __innerProjection, this)
+
+internal fun MutationDto.resolveCreateCircle(__innerContext: PaintContext,
+    __innerProjection: CircleProjectionImpl): Circle =
+    createCircle?.buildEntity(__innerContext, __innerProjection)!!
+
+internal fun MutationDto.resolveCreateSquare(__innerContext: PaintContext,
+    __innerProjection: SquareProjectionImpl): Square =
+    createSquare?.buildEntity(__innerContext, __innerProjection)!!
+
+internal fun MutationDto.resolveCreateRectangle(__innerContext: PaintContext,
+    __innerProjection: RectangleProjectionImpl): Rectangle =
+    createRectangle?.buildEntity(__innerContext, __innerProjection)!!

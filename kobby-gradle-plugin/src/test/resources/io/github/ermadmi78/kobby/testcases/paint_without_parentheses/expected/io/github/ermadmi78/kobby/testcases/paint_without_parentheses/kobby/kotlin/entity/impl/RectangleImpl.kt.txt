@@ -1,0 +1,225 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.RectangleDto
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Rectangle
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.RectangleProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class RectangleImpl(
+  internal val __innerContext: PaintContext,
+  internal val __innerProjection: RectangleProjectionImpl,
+  internal val __innerDto: RectangleDto,
+) : Rectangle {
+  override val id: Long
+    get() {
+      if (!__innerProjection.__innerId0) {
+        error("Property [id] is not available - add [id] projection to switch on it")
+      }
+      return __innerDto.id!!
+    }
+
+  override val opaque: Boolean
+    get() {
+      if (!__innerProjection.__innerOpaque1) {
+        error("Property [opaque] is not available - add [opaque] projection to switch on it")
+      }
+      return __innerDto.opaque!!
+    }
+
+  override val width: Int
+    get() {
+      if (!__innerProjection.__innerWidth2) {
+        error("Property [width] is not available - add [width] projection to switch on it")
+      }
+      return __innerDto.width!!
+    }
+
+  override val height: Int
+    get() {
+      if (!__innerProjection.__innerHeight3) {
+        error("Property [height] is not available - add [height] projection to switch on it")
+      }
+      return __innerDto.height!!
+    }
+
+  override val tempIds: List<Long?>?
+    get() {
+      if (!__innerProjection.__innerTempIds4) {
+        error("Property [tempIds] is not available - add [tempIds] projection to switch on it")
+      }
+      return __innerDto.tempIds
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Rectangle").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerId0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerOpaque1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("opaque").append('=').append(opaque)
+    }
+
+    if (__innerProjection.__innerWidth2) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("width").append('=').append(width)
+    }
+
+    if (__innerProjection.__innerHeight3) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("height").append('=').append(height)
+    }
+
+    if (__innerProjection.__innerTempIds4) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tempIds").append('=').append(tempIds)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): PaintContext = __innerContext
+
+  override fun RectangleProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class RectangleProjectionImpl : RectangleProjection {
+  internal var __innerId0: Boolean = false
+
+  internal var __innerOpaque1: Boolean = false
+
+  internal var __innerWidth2: Boolean = false
+
+  internal var __innerHeight3: Boolean = false
+
+  internal var __innerTempIds4: Boolean = false
+
+  override fun id() {
+    __innerId0 = true
+  }
+
+  override fun opaque() {
+    __innerOpaque1 = true
+  }
+
+  override fun width() {
+    __innerWidth2 = true
+  }
+
+  override fun height() {
+    __innerHeight3 = true
+  }
+
+  override fun tempIds() {
+    __innerTempIds4 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: RectangleProjection) {
+    if ("id" !in ignore && __innerId0) {
+      __projection.id()
+    }
+    if ("opaque" !in ignore && __innerOpaque1) {
+      __projection.opaque()
+    }
+    if ("width" !in ignore && __innerWidth2) {
+      __projection.width()
+    }
+    if ("height" !in ignore && __innerHeight3) {
+      __projection.height()
+    }
+    if ("tempIds" !in ignore && __innerTempIds4) {
+      __projection.tempIds()
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore && __innerId0) {
+      body.append(' ').append("id")
+    }
+
+    // Field: opaque
+    if ("opaque" !in ignore && __innerOpaque1) {
+      body.append(' ').append("opaque")
+    }
+
+    // Field: width
+    if ("width" !in ignore && __innerWidth2) {
+      body.append(' ').append("width")
+    }
+
+    // Field: height
+    if ("height" !in ignore && __innerHeight3) {
+      body.append(' ').append("height")
+    }
+
+    // Field: tempIds
+    if ("tempIds" !in ignore && __innerTempIds4) {
+      body.append(' ').append("tempIds")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun RectangleDto.buildEntity(__innerContext: PaintContext,
+    __innerProjection: RectangleProjectionImpl): Rectangle =
+    RectangleImpl(__innerContext, __innerProjection, this)

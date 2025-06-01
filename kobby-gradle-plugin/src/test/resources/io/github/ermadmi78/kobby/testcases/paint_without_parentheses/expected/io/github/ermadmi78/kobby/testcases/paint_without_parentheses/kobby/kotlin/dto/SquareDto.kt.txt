@@ -1,0 +1,70 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+
+@JsonTypeName(value = "Square")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = SquareDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class SquareDto(
+  override val id: Long? = null,
+  override val opaque: Boolean? = null,
+  public val length: Int? = null,
+) : ShapeDto,
+    PolygonDto
+
+public fun SquareDto.toBuilder(): SquareDtoBuilder = SquareDtoBuilder().also {
+  it.id = this.id
+  it.opaque = this.opaque
+  it.length = this.length
+}
+
+public fun SquareDtoBuilder.toDto(): SquareDto = SquareDto(
+  id,
+  opaque,
+  length
+)
+
+public fun SquareDto(block: SquareDtoBuilder.() -> Unit): SquareDto =
+    SquareDtoBuilder().apply(block).toDto()
+
+public fun SquareDto.copy(block: SquareDtoBuilder.() -> Unit): SquareDto =
+    toBuilder().apply(block).toDto()
+
+@PaintDSL
+public class SquareDtoBuilder {
+  public var id: Long? = null
+
+  public var opaque: Boolean? = null
+
+  public var length: Int? = null
+}

@@ -1,0 +1,67 @@
+type Query {
+    shape(id: [ID!]!): Shape
+    shapes: [Shape!]!
+
+    polygons: [Polygon!]!
+}
+
+type Mutation {
+    createCircle(circle: CircleInput): Circle!
+    createSquare(square: SquareInput): Square!
+    createRectangle(rectangle: RectangleInput): Rectangle!
+}
+
+type Subscription {
+    shapeCreated: Shape!
+    polygonCreated: Polygon!
+}
+
+interface Shape {
+    id: ID!
+    opaque: Boolean!
+}
+
+type Circle implements Shape {
+    id: ID!
+    opaque: Boolean!
+    radius: Int!
+}
+
+type Square implements Shape {
+    id: ID!
+    opaque: Boolean!
+    length: Int!
+}
+
+type Rectangle implements Shape {
+    id: ID!
+    opaque: Boolean!
+    width: Int!
+    height: Int!
+
+    tempIds: [ID]
+}
+
+union Polygon = Square | Rectangle
+
+input CircleInput {
+    tempId: [ID!]!
+    opaque: Boolean!
+    radius: Int!
+}
+
+input SquareInput {
+    opaque: Boolean!
+    length: Int! = 10
+}
+
+input RectangleInput {
+    opaque: Boolean!
+    width: Int!
+    height: Int!
+}
+
+enum Temp {
+    name
+    kind
+}

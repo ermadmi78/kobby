@@ -1,0 +1,166 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.CircleDto
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Circle
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.CircleProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class CircleImpl(
+  internal val __innerContext: PaintContext,
+  internal val __innerProjection: CircleProjectionImpl,
+  internal val __innerDto: CircleDto,
+) : Circle {
+  override val id: Long
+    get() {
+      if (!__innerProjection.__innerId0) {
+        error("Property [id] is not available - add [id] projection to switch on it")
+      }
+      return __innerDto.id!!
+    }
+
+  override val opaque: Boolean
+    get() {
+      if (!__innerProjection.__innerOpaque1) {
+        error("Property [opaque] is not available - add [opaque] projection to switch on it")
+      }
+      return __innerDto.opaque!!
+    }
+
+  override val radius: Int
+    get() {
+      if (!__innerProjection.__innerRadius2) {
+        error("Property [radius] is not available - add [radius] projection to switch on it")
+      }
+      return __innerDto.radius!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Circle").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerId0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerOpaque1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("opaque").append('=').append(opaque)
+    }
+
+    if (__innerProjection.__innerRadius2) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("radius").append('=').append(radius)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): PaintContext = __innerContext
+
+  override fun CircleProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class CircleProjectionImpl : CircleProjection {
+  internal var __innerId0: Boolean = false
+
+  internal var __innerOpaque1: Boolean = false
+
+  internal var __innerRadius2: Boolean = false
+
+  override fun id() {
+    __innerId0 = true
+  }
+
+  override fun opaque() {
+    __innerOpaque1 = true
+  }
+
+  override fun radius() {
+    __innerRadius2 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: CircleProjection) {
+    if ("id" !in ignore && __innerId0) {
+      __projection.id()
+    }
+    if ("opaque" !in ignore && __innerOpaque1) {
+      __projection.opaque()
+    }
+    if ("radius" !in ignore && __innerRadius2) {
+      __projection.radius()
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore && __innerId0) {
+      body.append(' ').append("id")
+    }
+
+    // Field: opaque
+    if ("opaque" !in ignore && __innerOpaque1) {
+      body.append(' ').append("opaque")
+    }
+
+    // Field: radius
+    if ("radius" !in ignore && __innerRadius2) {
+      body.append(' ').append("radius")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun CircleDto.buildEntity(__innerContext: PaintContext,
+    __innerProjection: CircleProjectionImpl): Circle =
+    CircleImpl(__innerContext, __innerProjection, this)

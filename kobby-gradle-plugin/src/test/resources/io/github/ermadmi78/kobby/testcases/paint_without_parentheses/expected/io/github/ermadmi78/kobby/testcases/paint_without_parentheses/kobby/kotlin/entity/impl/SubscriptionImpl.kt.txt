@@ -1,0 +1,156 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Polygon
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.PolygonQualifiedProjection
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Shape
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.ShapeQualifiedProjection
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class SubscriptionImpl(
+  internal val __innerContext: PaintContext,
+  internal val __innerProjection: SubscriptionProjectionImpl,
+  internal val __innerDto: SubscriptionDto,
+) : Subscription {
+  override val shapeCreated: Shape by lazy {
+    if (__innerProjection.__innerShapeCreated0 == null) {
+      error("Property [shapeCreated] is not available - add [shapeCreated] projection to switch on it")
+    }
+    __innerDto.resolveShapeCreated(__innerContext, __innerProjection.__innerShapeCreated0!!)
+  }
+
+  override val polygonCreated: Polygon by lazy {
+    if (__innerProjection.__innerPolygonCreated1 == null) {
+      error("Property [polygonCreated] is not available - add [polygonCreated] projection to switch on it")
+    }
+    __innerDto.resolvePolygonCreated(__innerContext, __innerProjection.__innerPolygonCreated1!!)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Subscription").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerShapeCreated0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("shapeCreated").append('=').append(shapeCreated)
+    }
+
+    if (__innerProjection.__innerPolygonCreated1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("polygonCreated").append('=').append(polygonCreated)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): PaintContext = __innerContext
+
+  override fun SubscriptionProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class SubscriptionProjectionImpl : SubscriptionProjection {
+  internal var __innerShapeCreated0: ShapeQualifiedProjectionImpl? = null
+
+  internal var __innerPolygonCreated1: PolygonQualifiedProjectionImpl? = null
+
+  override fun shapeCreated(__projection: ShapeQualifiedProjection.() -> Unit) {
+    __innerShapeCreated0 = ShapeQualifiedProjectionImpl().apply(__projection)
+  }
+
+  override fun polygonCreated(__projection: PolygonQualifiedProjection.() -> Unit) {
+    __innerPolygonCreated1 = PolygonQualifiedProjectionImpl().apply(__projection)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection) {
+    if ("shapeCreated" !in ignore && __innerShapeCreated0 != null) {
+      __projection.shapeCreated {
+        this@SubscriptionProjectionImpl.__innerShapeCreated0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("polygonCreated" !in ignore && __innerPolygonCreated1 != null) {
+      __projection.polygonCreated {
+        this@SubscriptionProjectionImpl.__innerPolygonCreated1!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: shapeCreated
+    if ("shapeCreated" !in ignore && __innerShapeCreated0 != null) {
+      body.append(' ').append("shapeCreated")
+
+      // Build nested projection of Shape
+      __innerShapeCreated0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: polygonCreated
+    if ("polygonCreated" !in ignore && __innerPolygonCreated1 != null) {
+      body.append(' ').append("polygonCreated")
+
+      // Build nested projection of Polygon
+      __innerPolygonCreated1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun SubscriptionDto.buildEntity(__innerContext: PaintContext,
+    __innerProjection: SubscriptionProjectionImpl): Subscription =
+    SubscriptionImpl(__innerContext, __innerProjection, this)
+
+internal fun SubscriptionDto.resolveShapeCreated(__innerContext: PaintContext,
+    __innerProjection: ShapeQualifiedProjectionImpl): Shape =
+    shapeCreated?.buildEntity(__innerContext, __innerProjection)!!
+
+internal fun SubscriptionDto.resolvePolygonCreated(__innerContext: PaintContext,
+    __innerProjection: PolygonQualifiedProjectionImpl): Polygon =
+    polygonCreated?.buildEntity(__innerContext, __innerProjection)!!

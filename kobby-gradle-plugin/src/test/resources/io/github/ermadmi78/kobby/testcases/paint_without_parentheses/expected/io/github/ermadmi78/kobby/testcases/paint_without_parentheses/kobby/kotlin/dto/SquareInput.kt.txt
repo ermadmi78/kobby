@@ -1,0 +1,61 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class SquareInput(
+  public val opaque: Boolean,
+  /**
+   * Default: 10
+   */
+  public val length: Int = 10,
+)
+
+public fun SquareInput.toBuilder(): SquareInputBuilder = SquareInputBuilder().also {
+  it.opaque = this.opaque
+  it.length = this.length
+}
+
+public fun SquareInputBuilder.toInput(): SquareInput = SquareInput(
+  opaque ?: error("SquareInput: 'opaque' must not be null"),
+  length
+)
+
+public fun SquareInput(block: SquareInputBuilder.() -> Unit): SquareInput =
+    SquareInputBuilder().apply(block).toInput()
+
+public fun SquareInput.copy(block: SquareInputBuilder.() -> Unit): SquareInput =
+    toBuilder().apply(block).toInput()
+
+@PaintDSL
+public class SquareInputBuilder {
+  public var opaque: Boolean? = null
+
+  /**
+   * Default: 10
+   */
+  public var length: Int = 10
+}

@@ -1,0 +1,41 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Subscription {
+  public val shapeCreated: Shape
+
+  public val polygonCreated: Polygon
+
+  public fun __context(): PaintContext
+
+  public fun SubscriptionProjection.__withCurrentProjection()
+}
+
+@PaintDSL
+public interface SubscriptionProjection {
+  public fun shapeCreated(__projection: ShapeQualifiedProjection.() -> Unit = {})
+
+  public fun polygonCreated(__projection: PolygonQualifiedProjection.() -> Unit = {})
+
+  public fun __minimize() {
+  }
+}

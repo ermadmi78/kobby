@@ -1,0 +1,81 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+
+@JsonTypeName(value = "Rectangle")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = RectangleDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class RectangleDto(
+  override val id: Long? = null,
+  override val opaque: Boolean? = null,
+  public val width: Int? = null,
+  public val height: Int? = null,
+  public val tempIds: List<Long?>? = null,
+) : ShapeDto,
+    PolygonDto
+
+public fun RectangleDto.toBuilder(): RectangleDtoBuilder = RectangleDtoBuilder().also {
+  it.id = this.id
+  it.opaque = this.opaque
+  it.width = this.width
+  it.height = this.height
+  it.tempIds = this.tempIds
+}
+
+public fun RectangleDtoBuilder.toDto(): RectangleDto = RectangleDto(
+  id,
+  opaque,
+  width,
+  height,
+  tempIds
+)
+
+public fun RectangleDto(block: RectangleDtoBuilder.() -> Unit): RectangleDto =
+    RectangleDtoBuilder().apply(block).toDto()
+
+public fun RectangleDto.copy(block: RectangleDtoBuilder.() -> Unit): RectangleDto =
+    toBuilder().apply(block).toDto()
+
+@PaintDSL
+public class RectangleDtoBuilder {
+  public var id: Long? = null
+
+  public var opaque: Boolean? = null
+
+  public var width: Int? = null
+
+  public var height: Int? = null
+
+  public var tempIds: List<Long?>? = null
+}

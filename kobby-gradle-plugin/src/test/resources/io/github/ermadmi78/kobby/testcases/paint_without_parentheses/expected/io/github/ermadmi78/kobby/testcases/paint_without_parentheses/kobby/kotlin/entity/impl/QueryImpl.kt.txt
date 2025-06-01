@@ -1,0 +1,238 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Polygon
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.PolygonQualifiedProjection
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Shape
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.ShapeQualifiedProjection
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.listOf
+import kotlin.collections.map
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class QueryImpl(
+  internal val __innerContext: PaintContext,
+  internal val __innerProjection: QueryProjectionImpl,
+  internal val __innerDto: QueryDto,
+) : Query {
+  override val shape: Shape? by lazy {
+    if (__innerProjection.__innerShape0 == null) {
+      error("Property [shape] is not available - add [shape] projection to switch on it")
+    }
+    __innerDto.resolveShape(__innerContext, __innerProjection.__innerShape0!!)
+  }
+
+  override val shapes: List<Shape> by lazy {
+    if (__innerProjection.__innerShapes1 == null) {
+      error("Property [shapes] is not available - add [shapes] projection to switch on it")
+    }
+    __innerDto.resolveShapes(__innerContext, __innerProjection.__innerShapes1!!)
+  }
+
+  override val polygons: List<Polygon> by lazy {
+    if (__innerProjection.__innerPolygons2 == null) {
+      error("Property [polygons] is not available - add [polygons] projection to switch on it")
+    }
+    __innerDto.resolvePolygons(__innerContext, __innerProjection.__innerPolygons2!!)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Query").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerShape0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("shape").append('=').append(shape)
+    }
+
+    if (__innerProjection.__innerShapes1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("shapes").append('=').append(shapes)
+    }
+
+    if (__innerProjection.__innerPolygons2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("polygons").append('=').append(polygons)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): PaintContext = __innerContext
+
+  override fun QueryProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class QueryProjectionImpl : QueryProjection {
+  internal var __innerShape0: ShapeQualifiedProjectionImpl? = null
+
+  internal var __innerShape0Id: List<Long>? = null
+
+  internal var __innerShapes1: ShapeQualifiedProjectionImpl? = null
+
+  internal var __innerPolygons2: PolygonQualifiedProjectionImpl? = null
+
+  override fun shape(id: List<Long>, __projection: ShapeQualifiedProjection.() -> Unit) {
+    __innerShape0 = ShapeQualifiedProjectionImpl().apply(__projection)
+    __innerShape0Id = id
+  }
+
+  override fun shapes(__projection: ShapeQualifiedProjection.() -> Unit) {
+    __innerShapes1 = ShapeQualifiedProjectionImpl().apply(__projection)
+  }
+
+  override fun polygons(__projection: PolygonQualifiedProjection.() -> Unit) {
+    __innerPolygons2 = PolygonQualifiedProjectionImpl().apply(__projection)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: QueryProjection) {
+    if ("shape" !in ignore && __innerShape0 != null) {
+      __projection.shape(__innerShape0Id!!) {
+        this@QueryProjectionImpl.__innerShape0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("shapes" !in ignore && __innerShapes1 != null) {
+      __projection.shapes {
+        this@QueryProjectionImpl.__innerShapes1!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("polygons" !in ignore && __innerPolygons2 != null) {
+      __projection.polygons {
+        this@QueryProjectionImpl.__innerPolygons2!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: shape
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildShape0(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("shape" !in ignore && __innerShape0 != null) {
+      body.append(' ').append("shape")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: shape.id
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerShape0Id!!
+        body.append("id").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("[ID!]!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Shape
+      __innerShape0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: shape
+    ____innerBuildShape0(ignore, header, body, arguments)
+
+    // Field: shapes
+    if ("shapes" !in ignore && __innerShapes1 != null) {
+      body.append(' ').append("shapes")
+
+      // Build nested projection of Shape
+      __innerShapes1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: polygons
+    if ("polygons" !in ignore && __innerPolygons2 != null) {
+      body.append(' ').append("polygons")
+
+      // Build nested projection of Polygon
+      __innerPolygons2!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun QueryDto.buildEntity(__innerContext: PaintContext,
+    __innerProjection: QueryProjectionImpl): Query =
+    QueryImpl(__innerContext, __innerProjection, this)
+
+internal fun QueryDto.resolveShape(__innerContext: PaintContext,
+    __innerProjection: ShapeQualifiedProjectionImpl): Shape? =
+    shape?.buildEntity(__innerContext, __innerProjection)
+
+internal fun QueryDto.resolveShapes(__innerContext: PaintContext,
+    __innerProjection: ShapeQualifiedProjectionImpl): List<Shape> =
+    shapes?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()
+
+internal fun QueryDto.resolvePolygons(__innerContext: PaintContext,
+    __innerProjection: PolygonQualifiedProjectionImpl): List<Polygon> =
+    polygons?.map { it.buildEntity(__innerContext, __innerProjection) } ?: listOf()

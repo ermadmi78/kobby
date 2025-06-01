@@ -1,0 +1,67 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+
+@JsonTypeName(value = "Query")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = QueryDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class QueryDto(
+  public val shape: ShapeDto? = null,
+  public val shapes: List<ShapeDto>? = null,
+  public val polygons: List<PolygonDto>? = null,
+)
+
+public fun QueryDto.toBuilder(): QueryDtoBuilder = QueryDtoBuilder().also {
+  it.shape = this.shape
+  it.shapes = this.shapes
+  it.polygons = this.polygons
+}
+
+public fun QueryDtoBuilder.toDto(): QueryDto = QueryDto(
+  shape,
+  shapes,
+  polygons
+)
+
+public fun QueryDto(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    QueryDtoBuilder().apply(block).toDto()
+
+public fun QueryDto.copy(block: QueryDtoBuilder.() -> Unit): QueryDto =
+    toBuilder().apply(block).toDto()
+
+@PaintDSL
+public class QueryDtoBuilder {
+  public var shape: ShapeDto? = null
+
+  public var shapes: List<ShapeDto>? = null
+
+  public var polygons: List<PolygonDto>? = null
+}

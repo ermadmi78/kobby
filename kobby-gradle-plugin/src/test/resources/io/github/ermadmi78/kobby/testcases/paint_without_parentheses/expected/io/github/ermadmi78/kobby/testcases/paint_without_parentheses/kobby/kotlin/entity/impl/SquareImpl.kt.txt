@@ -1,0 +1,166 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.SquareDto
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.Square
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity.SquareProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class SquareImpl(
+  internal val __innerContext: PaintContext,
+  internal val __innerProjection: SquareProjectionImpl,
+  internal val __innerDto: SquareDto,
+) : Square {
+  override val id: Long
+    get() {
+      if (!__innerProjection.__innerId0) {
+        error("Property [id] is not available - add [id] projection to switch on it")
+      }
+      return __innerDto.id!!
+    }
+
+  override val opaque: Boolean
+    get() {
+      if (!__innerProjection.__innerOpaque1) {
+        error("Property [opaque] is not available - add [opaque] projection to switch on it")
+      }
+      return __innerDto.opaque!!
+    }
+
+  override val length: Int
+    get() {
+      if (!__innerProjection.__innerLength2) {
+        error("Property [length] is not available - add [length] projection to switch on it")
+      }
+      return __innerDto.length!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Square").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerId0) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("id").append('=').append(id)
+    }
+
+    if (__innerProjection.__innerOpaque1) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("opaque").append('=').append(opaque)
+    }
+
+    if (__innerProjection.__innerLength2) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("length").append('=').append(length)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): PaintContext = __innerContext
+
+  override fun SquareProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class SquareProjectionImpl : SquareProjection {
+  internal var __innerId0: Boolean = false
+
+  internal var __innerOpaque1: Boolean = false
+
+  internal var __innerLength2: Boolean = false
+
+  override fun id() {
+    __innerId0 = true
+  }
+
+  override fun opaque() {
+    __innerOpaque1 = true
+  }
+
+  override fun length() {
+    __innerLength2 = true
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SquareProjection) {
+    if ("id" !in ignore && __innerId0) {
+      __projection.id()
+    }
+    if ("opaque" !in ignore && __innerOpaque1) {
+      __projection.opaque()
+    }
+    if ("length" !in ignore && __innerLength2) {
+      __projection.length()
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: id
+    if ("id" !in ignore && __innerId0) {
+      body.append(' ').append("id")
+    }
+
+    // Field: opaque
+    if ("opaque" !in ignore && __innerOpaque1) {
+      body.append(' ').append("opaque")
+    }
+
+    // Field: length
+    if ("length" !in ignore && __innerLength2) {
+      body.append(' ').append("length")
+    }
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun SquareDto.buildEntity(__innerContext: PaintContext,
+    __innerProjection: SquareProjectionImpl): Square =
+    SquareImpl(__innerContext, __innerProjection, this)

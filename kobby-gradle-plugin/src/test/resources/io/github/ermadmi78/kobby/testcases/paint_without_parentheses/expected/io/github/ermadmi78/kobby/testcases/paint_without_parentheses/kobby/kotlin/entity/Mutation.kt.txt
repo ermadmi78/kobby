@@ -1,0 +1,49 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.CircleInput
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.RectangleInput
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.SquareInput
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Mutation {
+  public val createCircle: Circle
+
+  public val createSquare: Square
+
+  public val createRectangle: Rectangle
+
+  public fun __context(): PaintContext
+
+  public fun MutationProjection.__withCurrentProjection()
+}
+
+@PaintDSL
+public interface MutationProjection {
+  public fun createCircle(circle: CircleInput? = null, __projection: CircleProjection.() -> Unit)
+
+  public fun createSquare(square: SquareInput? = null, __projection: SquareProjection.() -> Unit)
+
+  public fun createRectangle(rectangle: RectangleInput? = null,
+      __projection: RectangleProjection.() -> Unit)
+
+  public fun __minimize() {
+  }
+}

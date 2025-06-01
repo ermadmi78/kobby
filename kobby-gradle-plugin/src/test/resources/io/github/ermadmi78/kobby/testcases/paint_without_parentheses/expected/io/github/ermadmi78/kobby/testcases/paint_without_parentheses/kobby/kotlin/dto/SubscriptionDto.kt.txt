@@ -1,0 +1,61 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+
+@JsonTypeName(value = "Subscription")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = SubscriptionDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class SubscriptionDto(
+  public val shapeCreated: ShapeDto? = null,
+  public val polygonCreated: PolygonDto? = null,
+)
+
+public fun SubscriptionDto.toBuilder(): SubscriptionDtoBuilder = SubscriptionDtoBuilder().also {
+  it.shapeCreated = this.shapeCreated
+  it.polygonCreated = this.polygonCreated
+}
+
+public fun SubscriptionDtoBuilder.toDto(): SubscriptionDto = SubscriptionDto(
+  shapeCreated,
+  polygonCreated
+)
+
+public fun SubscriptionDto(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto =
+    SubscriptionDtoBuilder().apply(block).toDto()
+
+public fun SubscriptionDto.copy(block: SubscriptionDtoBuilder.() -> Unit): SubscriptionDto =
+    toBuilder().apply(block).toDto()
+
+@PaintDSL
+public class SubscriptionDtoBuilder {
+  public var shapeCreated: ShapeDto? = null
+
+  public var polygonCreated: PolygonDto? = null
+}

@@ -1,0 +1,53 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+
+public interface Shape {
+  public val id: Long
+
+  public val opaque: Boolean
+
+  public fun __context(): PaintContext
+}
+
+@PaintDSL
+public interface ShapeProjection {
+  public fun id()
+
+  public fun opaque()
+
+  public fun __minimize() {
+  }
+}
+
+@PaintDSL
+public interface ShapeQualification {
+  public fun __onCircle(__projection: CircleProjection.() -> Unit)
+
+  public fun __onSquare(__projection: SquareProjection.() -> Unit)
+
+  public fun __onRectangle(__projection: RectangleProjection.() -> Unit)
+}
+
+@PaintDSL
+public interface ShapeQualifiedProjection : ShapeProjection, ShapeQualification

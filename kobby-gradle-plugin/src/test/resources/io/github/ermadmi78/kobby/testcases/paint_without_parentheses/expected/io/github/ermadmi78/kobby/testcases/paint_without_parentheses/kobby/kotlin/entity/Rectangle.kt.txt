@@ -1,0 +1,56 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.collections.List
+
+public interface Rectangle : Shape, Polygon {
+  override val id: Long
+
+  override val opaque: Boolean
+
+  public val width: Int
+
+  public val height: Int
+
+  public val tempIds: List<Long?>?
+
+  override fun __context(): PaintContext
+
+  public fun RectangleProjection.__withCurrentProjection()
+}
+
+@PaintDSL
+public interface RectangleProjection : ShapeProjection, PolygonProjection {
+  override fun id()
+
+  override fun opaque()
+
+  public fun width()
+
+  public fun height()
+
+  public fun tempIds()
+
+  override fun __minimize() {
+  }
+}

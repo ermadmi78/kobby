@@ -1,0 +1,236 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto.graphql
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonIgnoreProperties
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonSubTypes
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = PaintClientMessageConnectionInit::class, name = "connection_init"),
+  JsonSubTypes.Type(value = PaintClientMessagePing::class, name = "ping"),
+  JsonSubTypes.Type(value = PaintClientMessagePong::class, name = "pong"),
+  JsonSubTypes.Type(value = PaintClientMessageSubscribe::class, name = "subscribe"),
+  JsonSubTypes.Type(value = PaintClientMessageComplete::class, name = "complete"),
+)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public sealed class PaintClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = PaintServerMessageConnectionAck::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = PaintServerMessagePing::class, name = "ping"),
+  JsonSubTypes.Type(value = PaintServerMessagePong::class, name = "pong"),
+  JsonSubTypes.Type(value = PaintServerMessageNext::class, name = "next"),
+  JsonSubTypes.Type(value = PaintServerMessageError::class, name = "error"),
+  JsonSubTypes.Type(value = PaintServerMessageComplete::class, name = "complete"),
+)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public sealed class PaintServerMessage
+
+/**
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_init")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintClientMessageConnectionInit::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintClientMessageConnectionInit @JsonCreator constructor(
+  public val payload: Map<String, Any?>? = null,
+) : PaintClientMessage()
+
+/**
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_ack")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintServerMessageConnectionAck::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintServerMessageConnectionAck @JsonCreator constructor(
+  public val payload: Any? = null,
+) : PaintServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ping")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintClientMessagePing::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintClientMessagePing @JsonCreator constructor(
+  public val payload: Any? = null,
+) : PaintClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "pong")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintClientMessagePong::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintClientMessagePong @JsonCreator constructor(
+  public val payload: Any? = null,
+) : PaintClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ping")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintServerMessagePing::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintServerMessagePing @JsonCreator constructor(
+  public val payload: Any? = null,
+) : PaintServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "pong")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintServerMessagePong::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintServerMessagePong @JsonCreator constructor(
+  public val payload: Any? = null,
+) : PaintServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "subscribe")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintClientMessageSubscribe::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintClientMessageSubscribe(
+  public val id: String,
+  public val payload: PaintRequest,
+) : PaintClientMessage()
+
+/**
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "next")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintServerMessageNext::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintServerMessageNext(
+  public val id: String,
+  public val payload: PaintSubscriptionResult,
+) : PaintServerMessage()
+
+/**
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "error")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintServerMessageError::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintServerMessageError(
+  public val id: String,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val payload: List<PaintError>? = null,
+) : PaintServerMessage()
+
+/**
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "complete")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintClientMessageComplete::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintClientMessageComplete @JsonCreator constructor(
+  public val id: String,
+) : PaintClientMessage()
+
+/**
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "complete")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = PaintServerMessageComplete::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class PaintServerMessageComplete @JsonCreator constructor(
+  public val id: String,
+) : PaintServerMessage()

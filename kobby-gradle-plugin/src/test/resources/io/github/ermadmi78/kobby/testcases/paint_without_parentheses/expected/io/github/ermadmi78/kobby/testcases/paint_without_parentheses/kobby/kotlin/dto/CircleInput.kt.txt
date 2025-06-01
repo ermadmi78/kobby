@@ -1,0 +1,62 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.error
+
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CircleInput(
+  public val tempId: List<Long>,
+  public val opaque: Boolean,
+  public val radius: Int,
+)
+
+public fun CircleInput.toBuilder(): CircleInputBuilder = CircleInputBuilder().also {
+  it.tempId = this.tempId
+  it.opaque = this.opaque
+  it.radius = this.radius
+}
+
+public fun CircleInputBuilder.toInput(): CircleInput = CircleInput(
+  tempId ?: error("CircleInput: 'tempId' must not be null"),
+  opaque ?: error("CircleInput: 'opaque' must not be null"),
+  radius ?: error("CircleInput: 'radius' must not be null")
+)
+
+public fun CircleInput(block: CircleInputBuilder.() -> Unit): CircleInput =
+    CircleInputBuilder().apply(block).toInput()
+
+public fun CircleInput.copy(block: CircleInputBuilder.() -> Unit): CircleInput =
+    toBuilder().apply(block).toInput()
+
+@PaintDSL
+public class CircleInputBuilder {
+  public var tempId: List<Long>? = null
+
+  public var opaque: Boolean? = null
+
+  public var radius: Int? = null
+}

@@ -1,0 +1,47 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Boolean
+import kotlin.Int
+import kotlin.Long
+import kotlin.Suppress
+
+public interface Circle : Shape {
+  override val id: Long
+
+  override val opaque: Boolean
+
+  public val radius: Int
+
+  override fun __context(): PaintContext
+
+  public fun CircleProjection.__withCurrentProjection()
+}
+
+@PaintDSL
+public interface CircleProjection : ShapeProjection {
+  override fun id()
+
+  override fun opaque()
+
+  public fun radius()
+
+  override fun __minimize() {
+  }
+}

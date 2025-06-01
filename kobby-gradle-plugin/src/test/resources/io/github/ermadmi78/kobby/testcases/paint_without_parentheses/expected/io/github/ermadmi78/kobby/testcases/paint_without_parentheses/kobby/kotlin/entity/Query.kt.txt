@@ -1,0 +1,47 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintContext
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Long
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Query {
+  public val shape: Shape?
+
+  public val shapes: List<Shape>
+
+  public val polygons: List<Polygon>
+
+  public fun __context(): PaintContext
+
+  public fun QueryProjection.__withCurrentProjection()
+}
+
+@PaintDSL
+public interface QueryProjection {
+  public fun shape(id: List<Long>, __projection: ShapeQualifiedProjection.() -> Unit = {})
+
+  public fun shapes(__projection: ShapeQualifiedProjection.() -> Unit = {})
+
+  public fun polygons(__projection: PolygonQualifiedProjection.() -> Unit = {})
+
+  public fun __minimize() {
+  }
+}

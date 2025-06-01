@@ -1,0 +1,66 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.paint_without_parentheses.kobby.kotlin.PaintDSL
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+
+@JsonTypeName(value = "Mutation")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = MutationDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class MutationDto(
+  public val createCircle: CircleDto? = null,
+  public val createSquare: SquareDto? = null,
+  public val createRectangle: RectangleDto? = null,
+)
+
+public fun MutationDto.toBuilder(): MutationDtoBuilder = MutationDtoBuilder().also {
+  it.createCircle = this.createCircle
+  it.createSquare = this.createSquare
+  it.createRectangle = this.createRectangle
+}
+
+public fun MutationDtoBuilder.toDto(): MutationDto = MutationDto(
+  createCircle,
+  createSquare,
+  createRectangle
+)
+
+public fun MutationDto(block: MutationDtoBuilder.() -> Unit): MutationDto =
+    MutationDtoBuilder().apply(block).toDto()
+
+public fun MutationDto.copy(block: MutationDtoBuilder.() -> Unit): MutationDto =
+    toBuilder().apply(block).toDto()
+
+@PaintDSL
+public class MutationDtoBuilder {
+  public var createCircle: CircleDto? = null
+
+  public var createSquare: SquareDto? = null
+
+  public var createRectangle: RectangleDto? = null
+}
