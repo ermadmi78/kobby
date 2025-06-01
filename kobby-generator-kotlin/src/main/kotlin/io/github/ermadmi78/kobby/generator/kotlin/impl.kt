@@ -415,8 +415,12 @@ private fun FileSpecBuilder.buildSelection(node: KobbyNode, layout: KotlinLayout
                 superclass(field.type.node.implProjectionClass)
             }
 
-            val parentFields = if (!isQuery) emptyMap() else field.type.node.fields.values.filter { it.isProjectionPropertyEnabled }.associateBy { it.name }
-            fun KobbyArgument.isProjectionPropertyEnabled() = layout.entity.projection.enableNotationWithoutParentheses && name in parentFields
+            val parentFields = if (!isQuery) emptyMap() else field.type.node.fields.values.asSequence()
+                .filter { it.isProjectionPropertyEnabled }
+                .associateBy { it.name }
+
+            fun KobbyArgument.isProjectionPropertyEnabled() =
+                layout.entity.projection.enableNotationWithoutParentheses && name in parentFields
 
             addSuperinterface(if (isQuery) field.queryClass else field.selectionClass)
             field.arguments.values.asSequence().filter { it.isInitialized }.forEach { arg ->

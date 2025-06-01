@@ -654,6 +654,14 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "entityEnableNotationWithoutParentheses",
+        description = "Is notation without parentheses for projection field getters enabled (default false)"
+    )
+    val entityEnableNotationWithoutParentheses: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "entitySelectionPrefix",
         description = "Prefix for selection interfaces (default null)"
     )
@@ -813,14 +821,6 @@ open class KobbyKotlin : DefaultTask() {
     )
     val adapterKtorReceiveTimeoutMillis: Property<Long> = project.objects.property(Long::class.java)
 
-    @Input
-    @Optional
-    @Option(
-        option = "enableNotationWithoutParentheses",
-        description = "Is notation without parentheses for projection field getters enabled (default false)"
-    )
-    val enableNotationWithoutParentheses: Property<Boolean> = project.objects.property(Boolean::class.java)
-
     @OutputDirectory
     val outputDirectory: DirectoryProperty = project.objects.directoryProperty()
 
@@ -906,6 +906,7 @@ open class KobbyKotlin : DefaultTask() {
         entityQualificationPostfix.convention("Qualification")
         entityQualifiedProjectionPostfix.convention("QualifiedProjection")
         entityOnPrefix.convention("__on")
+        entityEnableNotationWithoutParentheses.convention(false)
         entitySelectionPostfix.convention("Selection")
         entitySelectionArgument.convention("__selection")
         entityQueryPostfix.convention("Query")
@@ -928,7 +929,6 @@ open class KobbyKotlin : DefaultTask() {
         adapterKtorPackageName.convention("adapter.ktor")
         adapterKtorPostfix.convention("KtorAdapter")
         adapterKtorReceiveTimeoutMillis.convention(10_000L)
-        enableNotationWithoutParentheses.convention(false)
 
         outputDirectory.convention(project.layout.buildDirectory.dir("generated/sources/kobby/main/kotlin"))
     }
@@ -1071,7 +1071,7 @@ open class KobbyKotlin : DefaultTask() {
                     Decoration(entityQualificationPrefix.orNull, entityQualificationPostfix.orNull),
                     Decoration(entityQualifiedProjectionPrefix.orNull, entityQualifiedProjectionPostfix.orNull),
                     Decoration(entityOnPrefix.orNull, entityOnPostfix.orNull),
-                    enableNotationWithoutParentheses.get()
+                    entityEnableNotationWithoutParentheses.get()
                 ),
                 KotlinEntitySelectionLayout(
                     Decoration(entitySelectionPrefix.orNull, entitySelectionPostfix.orNull),
