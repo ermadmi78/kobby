@@ -1,0 +1,26 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import kotlin.Suppress
+
+/**
+ * The gender of the actor
+ */
+public enum class Gender {
+  MALE,
+  FEMALE,
+}

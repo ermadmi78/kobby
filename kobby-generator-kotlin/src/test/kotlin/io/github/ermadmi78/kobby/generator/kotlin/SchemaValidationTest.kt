@@ -85,7 +85,8 @@ class SchemaValidationTest {
                 "__minimize",
                 Decoration(null, "Qualification"),
                 Decoration(null, "QualifiedProjection"),
-                Decoration("__on", null)
+                Decoration("__on", null),
+                false
             ),
             KotlinEntitySelectionLayout(
                 Decoration(null, "Selection"),

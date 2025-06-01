@@ -1,0 +1,31 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.MutationDto
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+
+public class CinemaMutationException(
+  message: String,
+  request: CinemaRequest,
+  errors: List<CinemaError>? = null,
+  extensions: Map<String, Any?>? = null,
+  public val `data`: MutationDto? = null,
+) : CinemaException(message, request, errors, extensions)

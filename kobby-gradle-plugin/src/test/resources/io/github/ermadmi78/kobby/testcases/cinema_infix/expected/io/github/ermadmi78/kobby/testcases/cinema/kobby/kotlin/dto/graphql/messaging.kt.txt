@@ -1,0 +1,236 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.graphql
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonIgnoreProperties
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonSubTypes
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = CinemaClientMessageConnectionInit::class, name = "connection_init"),
+  JsonSubTypes.Type(value = CinemaClientMessagePing::class, name = "ping"),
+  JsonSubTypes.Type(value = CinemaClientMessagePong::class, name = "pong"),
+  JsonSubTypes.Type(value = CinemaClientMessageSubscribe::class, name = "subscribe"),
+  JsonSubTypes.Type(value = CinemaClientMessageComplete::class, name = "complete"),
+)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public sealed class CinemaClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+)
+@JsonSubTypes(
+  JsonSubTypes.Type(value = CinemaServerMessageConnectionAck::class, name = "connection_ack"),
+  JsonSubTypes.Type(value = CinemaServerMessagePing::class, name = "ping"),
+  JsonSubTypes.Type(value = CinemaServerMessagePong::class, name = "pong"),
+  JsonSubTypes.Type(value = CinemaServerMessageNext::class, name = "next"),
+  JsonSubTypes.Type(value = CinemaServerMessageError::class, name = "error"),
+  JsonSubTypes.Type(value = CinemaServerMessageComplete::class, name = "complete"),
+)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public sealed class CinemaServerMessage
+
+/**
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_init")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaClientMessageConnectionInit::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaClientMessageConnectionInit @JsonCreator constructor(
+  public val payload: Map<String, Any?>? = null,
+) : CinemaClientMessage()
+
+/**
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "connection_ack")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaServerMessageConnectionAck::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaServerMessageConnectionAck @JsonCreator constructor(
+  public val payload: Any? = null,
+) : CinemaServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ping")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaClientMessagePing::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaClientMessagePing @JsonCreator constructor(
+  public val payload: Any? = null,
+) : CinemaClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "pong")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaClientMessagePong::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaClientMessagePong @JsonCreator constructor(
+  public val payload: Any? = null,
+) : CinemaClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "ping")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaServerMessagePing::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaServerMessagePing @JsonCreator constructor(
+  public val payload: Any? = null,
+) : CinemaServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "pong")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaServerMessagePong::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaServerMessagePong @JsonCreator constructor(
+  public val payload: Any? = null,
+) : CinemaServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "subscribe")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaClientMessageSubscribe::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaClientMessageSubscribe(
+  public val id: String,
+  public val payload: CinemaRequest,
+) : CinemaClientMessage()
+
+/**
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "next")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaServerMessageNext::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaServerMessageNext(
+  public val id: String,
+  public val payload: CinemaSubscriptionResult,
+) : CinemaServerMessage()
+
+/**
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "error")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaServerMessageError::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaServerMessageError(
+  public val id: String,
+  @JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+  public val payload: List<CinemaError>? = null,
+) : CinemaServerMessage()
+
+/**
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "complete")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaClientMessageComplete::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaClientMessageComplete @JsonCreator constructor(
+  public val id: String,
+) : CinemaClientMessage()
+
+/**
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@JsonTypeName(value = "complete")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "type",
+  defaultImpl = CinemaServerMessageComplete::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class CinemaServerMessageComplete @JsonCreator constructor(
+  public val id: String,
+) : CinemaServerMessage()

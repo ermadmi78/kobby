@@ -1,0 +1,678 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.ActorInput
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.FilmInput
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.TagInput
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Actor
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Film
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationCreateActorQuery
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationCreateActorSelection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationCreateFilmQuery
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationCreateFilmSelection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.MutationProjection
+import kotlin.Any
+import kotlin.Boolean
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class MutationImpl(
+  internal val __innerContext: CinemaContext,
+  internal val __innerProjection: MutationProjectionImpl,
+  internal val __innerDto: MutationDto,
+) : Mutation {
+  override val createCountry: Country by lazy {
+    if (__innerProjection.__innerCreateCountry0 == null) {
+      error("Property [createCountry] is not available - add [createCountry] projection to switch on it")
+    }
+    __innerDto.resolveCreateCountry(__innerContext, __innerProjection.__innerCreateCountry0!!)
+  }
+
+  override val createFilm: Film by lazy {
+    if (__innerProjection.__innerCreateFilm1 == null) {
+      error("Property [createFilm] is not available - add [createFilm] projection to switch on it")
+    }
+    __innerDto.resolveCreateFilm(__innerContext, __innerProjection.__innerCreateFilm1!!)
+  }
+
+  override val createActor: Actor by lazy {
+    if (__innerProjection.__innerCreateActor2 == null) {
+      error("Property [createActor] is not available - add [createActor] projection to switch on it")
+    }
+    __innerDto.resolveCreateActor(__innerContext, __innerProjection.__innerCreateActor2!!)
+  }
+
+  override val associate: Boolean
+    get() {
+      if (!__innerProjection.__innerAssociate3) {
+        error("Property [associate] is not available - add [associate] projection to switch on it")
+      }
+      return __innerDto.associate!!
+    }
+
+  override val tagFilm: Boolean
+    get() {
+      if (!__innerProjection.__innerTagFilm4) {
+        error("Property [tagFilm] is not available - add [tagFilm] projection to switch on it")
+      }
+      return __innerDto.tagFilm!!
+    }
+
+  override val tagActor: Boolean
+    get() {
+      if (!__innerProjection.__innerTagActor5) {
+        error("Property [tagActor] is not available - add [tagActor] projection to switch on it")
+      }
+      return __innerDto.tagActor!!
+    }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Mutation").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCreateCountry0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createCountry").append('=').append(createCountry)
+    }
+
+    if (__innerProjection.__innerCreateFilm1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createFilm").append('=').append(createFilm)
+    }
+
+    if (__innerProjection.__innerCreateActor2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("createActor").append('=').append(createActor)
+    }
+
+    if (__innerProjection.__innerAssociate3) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("associate").append('=').append(associate)
+    }
+
+    if (__innerProjection.__innerTagFilm4) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tagFilm").append('=').append(tagFilm)
+    }
+
+    if (__innerProjection.__innerTagActor5) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("tagActor").append('=').append(tagActor)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): CinemaContext = __innerContext
+
+  override fun MutationProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class MutationProjectionImpl : MutationProjection {
+  internal var __innerCreateCountry0: CountryProjectionImpl? = null
+
+  internal var __innerCreateCountry0Name: String? = null
+
+  internal var __innerCreateFilm1: MutationCreateFilmQueryImpl? = null
+
+  internal var __innerCreateFilm1CountryId: Long? = null
+
+  internal var __innerCreateFilm1Film: FilmInput? = null
+
+  internal var __innerCreateActor2: MutationCreateActorQueryImpl? = null
+
+  internal var __innerCreateActor2CountryId: Long? = null
+
+  internal var __innerCreateActor2Actor: ActorInput? = null
+
+  internal var __innerAssociate3: Boolean = false
+
+  internal var __innerAssociate3FilmId: Long? = null
+
+  internal var __innerAssociate3ActorId: Long? = null
+
+  internal var __innerTagFilm4: Boolean = false
+
+  internal var __innerTagFilm4FilmId: Long? = null
+
+  internal var __innerTagFilm4TagValue: String? = null
+
+  internal var __innerTagActor5: Boolean = false
+
+  internal var __innerTagActor5ActorId: Long? = null
+
+  internal var __innerTagActor5TagValue: String? = null
+
+  override fun createCountry(name: String, __projection: CountryProjection.() -> Unit) {
+    __innerCreateCountry0 = CountryProjectionImpl().apply(__projection)
+    __innerCreateCountry0Name = name
+  }
+
+  override fun createFilm(
+    countryId: Long,
+    film: FilmInput,
+    __query: MutationCreateFilmQuery.() -> Unit,
+  ) {
+    __innerCreateFilm1 = MutationCreateFilmQueryImpl().apply(__query)
+    __innerCreateFilm1CountryId = countryId
+    __innerCreateFilm1Film = film
+  }
+
+  override fun createActor(
+    countryId: Long,
+    actor: ActorInput,
+    __query: MutationCreateActorQuery.() -> Unit,
+  ) {
+    __innerCreateActor2 = MutationCreateActorQueryImpl().apply(__query)
+    __innerCreateActor2CountryId = countryId
+    __innerCreateActor2Actor = actor
+  }
+
+  override fun associate(filmId: Long, actorId: Long) {
+    __innerAssociate3 = true
+    __innerAssociate3FilmId = filmId
+    __innerAssociate3ActorId = actorId
+  }
+
+  override fun tagFilm(filmId: Long, tagValue: String) {
+    __innerTagFilm4 = true
+    __innerTagFilm4FilmId = filmId
+    __innerTagFilm4TagValue = tagValue
+  }
+
+  override fun tagActor(actorId: Long, tagValue: String) {
+    __innerTagActor5 = true
+    __innerTagActor5ActorId = actorId
+    __innerTagActor5TagValue = tagValue
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: MutationProjection) {
+    if ("createCountry" !in ignore && __innerCreateCountry0 != null) {
+      __projection.createCountry(__innerCreateCountry0Name!!) {
+        this@MutationProjectionImpl.__innerCreateCountry0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("createFilm" !in ignore && __innerCreateFilm1 != null) {
+      __projection.createFilm(__innerCreateFilm1CountryId!!, __innerCreateFilm1Film!!) {
+        this@MutationProjectionImpl.__innerCreateFilm1!!.___innerRepeatProjection(setOf(), this)
+        this@MutationProjectionImpl.__innerCreateFilm1!!.___innerRepeatSelection(this)
+      }
+    }
+    if ("createActor" !in ignore && __innerCreateActor2 != null) {
+      __projection.createActor(__innerCreateActor2CountryId!!, __innerCreateActor2Actor!!) {
+        this@MutationProjectionImpl.__innerCreateActor2!!.___innerRepeatProjection(setOf(), this)
+        this@MutationProjectionImpl.__innerCreateActor2!!.___innerRepeatSelection(this)
+      }
+    }
+    if ("associate" !in ignore && __innerAssociate3) {
+      __projection.associate(__innerAssociate3FilmId!!, __innerAssociate3ActorId!!)
+    }
+    if ("tagFilm" !in ignore && __innerTagFilm4) {
+      __projection.tagFilm(__innerTagFilm4FilmId!!, __innerTagFilm4TagValue!!)
+    }
+    if ("tagActor" !in ignore && __innerTagActor5) {
+      __projection.tagActor(__innerTagActor5ActorId!!, __innerTagActor5TagValue!!)
+    }
+  }
+
+  /**
+   * Projection for field: createCountry
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCreateCountry0(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("createCountry" !in ignore && __innerCreateCountry0 != null) {
+      body.append(' ').append("createCountry")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createCountry.name
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateCountry0Name!!
+        body.append("name").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Country
+      __innerCreateCountry0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection for field: createFilm
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCreateFilm1(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("createFilm" !in ignore && __innerCreateFilm1 != null) {
+      body.append(' ').append("createFilm")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createFilm.countryId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateFilm1CountryId!!
+        body.append("countryId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: createFilm.film
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateFilm1Film!!
+        body.append("film").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("FilmInput!")
+      }
+
+      // Argument: createFilm.tags
+      if (__innerCreateFilm1!!.tags != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateFilm1!!.tags!!
+        body.append("tags").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("TagInput")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Film
+      __innerCreateFilm1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection for field: createActor
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildCreateActor2(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("createActor" !in ignore && __innerCreateActor2 != null) {
+      body.append(' ').append("createActor")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: createActor.countryId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateActor2CountryId!!
+        body.append("countryId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: createActor.actor
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateActor2Actor!!
+        body.append("actor").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ActorInput!")
+      }
+
+      // Argument: createActor.tags
+      if (__innerCreateActor2!!.tags != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerCreateActor2!!.tags!!
+        body.append("tags").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("TagInput")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Actor
+      __innerCreateActor2!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection for field: associate
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildAssociate3(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("associate" !in ignore && __innerAssociate3) {
+      body.append(' ').append("associate")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: associate.filmId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerAssociate3FilmId!!
+        body.append("filmId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: associate.actorId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerAssociate3ActorId!!
+        body.append("actorId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection for field: tagFilm
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildTagFilm4(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("tagFilm" !in ignore && __innerTagFilm4) {
+      body.append(' ').append("tagFilm")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: tagFilm.filmId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerTagFilm4FilmId!!
+        body.append("filmId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: tagFilm.tagValue
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerTagFilm4TagValue!!
+        body.append("tagValue").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection for field: tagActor
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildTagActor5(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("tagActor" !in ignore && __innerTagActor5) {
+      body.append(' ').append("tagActor")
+      var counter = 0
+      val addBrackets = true
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: tagActor.actorId
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerTagActor5ActorId!!
+        body.append("actorId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID!")
+      }
+
+      // Argument: tagActor.tagValue
+      if (true) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerTagActor5TagValue!!
+        body.append("tagValue").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("String!")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: createCountry
+    ____innerBuildCreateCountry0(ignore, header, body, arguments)
+
+    // Field: createFilm
+    ____innerBuildCreateFilm1(ignore, header, body, arguments)
+
+    // Field: createActor
+    ____innerBuildCreateActor2(ignore, header, body, arguments)
+
+    // Field: associate
+    ____innerBuildAssociate3(ignore, header, body, arguments)
+
+    // Field: tagFilm
+    ____innerBuildTagFilm4(ignore, header, body, arguments)
+
+    // Field: tagActor
+    ____innerBuildTagActor5(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal class MutationCreateFilmQueryImpl : FilmProjectionImpl(), MutationCreateFilmQuery {
+  override var tags: TagInput? = null
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatSelection(__selection: MutationCreateFilmSelection) {
+    __selection.tags = tags
+  }
+}
+
+internal class MutationCreateActorQueryImpl : ActorProjectionImpl(), MutationCreateActorQuery {
+  override var tags: TagInput? = null
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatSelection(__selection: MutationCreateActorSelection) {
+    __selection.tags = tags
+  }
+}
+
+internal fun MutationDto.buildEntity(__innerContext: CinemaContext,
+    __innerProjection: MutationProjectionImpl): Mutation =
+    MutationImpl(__innerContext, __innerProjection, this)
+
+internal fun MutationDto.resolveCreateCountry(__innerContext: CinemaContext,
+    __innerProjection: CountryProjectionImpl): Country =
+    createCountry?.buildEntity(__innerContext, __innerProjection)!!
+
+internal fun MutationDto.resolveCreateFilm(__innerContext: CinemaContext,
+    __innerProjection: FilmProjectionImpl): Film =
+    createFilm?.buildEntity(__innerContext, __innerProjection)!!
+
+internal fun MutationDto.resolveCreateActor(__innerContext: CinemaContext,
+    __innerProjection: ActorProjectionImpl): Actor =
+    createActor?.buildEntity(__innerContext, __innerProjection)!!

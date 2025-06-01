@@ -1,0 +1,40 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import kotlin.Suppress
+
+/**
+ * Enum of available film genres %
+ */
+public enum class Genre {
+  /**
+   * Drama %
+   */
+  DRAMA,
+  /**
+   * Comedy
+   */
+  COMEDY,
+  /**
+   * Thriller
+   */
+  THRILLER,
+  /**
+   * Horror
+   */
+  HORROR,
+}

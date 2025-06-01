@@ -1,0 +1,221 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Gender
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.Genre
+import java.time.LocalDate
+import kotlin.Int
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+
+public interface Query {
+  /**
+   * Find country by id.
+   * Returns null if not found.
+   */
+  public val country: Country?
+
+  /**
+   * Find countries by name.
+   * Returns empty list if not found.
+   */
+  public val countries: List<Country>
+
+  /**
+   * Find film by id.
+   * Returns null if not found.
+   */
+  public val film: Film?
+
+  /**
+   * Find films by title and genre.
+   * Returns empty list if not found.
+   */
+  public val films: List<Film>
+
+  /**
+   * Find actor by id.
+   * Returns null if not found.
+   */
+  public val actor: Actor?
+
+  /**
+   * Find actors by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public val actors: List<Actor>
+
+  /**
+   * Find entities by tag
+   */
+  public val taggable: List<Taggable>
+
+  public fun __context(): CinemaContext
+
+  public fun QueryProjection.__withCurrentProjection()
+}
+
+@CinemaDSL
+public interface QueryProjection {
+  /**
+   * Find country by id.
+   * Returns null if not found.
+   */
+  public fun country(id: Long, __projection: CountryProjection.() -> Unit = {})
+
+  /**
+   * Find countries by name.
+   * Returns empty list if not found.
+   *
+   * @param name Part of name of country to search %
+   * @param limit Limit of result list.
+   * Put -1 to be unlimited. Default: 10
+   * @param offset Offset of result list. Default: 0
+   */
+  public fun countries(
+    name: String? = null,
+    limit: Int? = null,
+    offset: Int? = null,
+    __projection: CountryProjection.() -> Unit = {},
+  )
+
+  /**
+   * Find film by id.
+   * Returns null if not found.
+   */
+  public fun film(id: Long, __projection: FilmProjection.() -> Unit = {})
+
+  /**
+   * Find films by title and genre.
+   * Returns empty list if not found.
+   */
+  public fun films(__query: QueryFilmsQuery.() -> Unit = {})
+
+  /**
+   * Find actor by id.
+   * Returns null if not found.
+   */
+  public fun actor(id: Long, __projection: ActorProjection.() -> Unit = {})
+
+  /**
+   * Find actors by firstName, lastName, birthday and gender.
+   * Returns empty list if not found.
+   */
+  public fun actors(__query: QueryActorsQuery.() -> Unit = {})
+
+  /**
+   * Find entities by tag
+   */
+  public fun taggable(tag: String, __projection: TaggableQualifiedProjection.() -> Unit = {})
+
+  public fun __minimize() {
+  }
+}
+
+/**
+ * Find films by title and genre.
+ * Returns empty list if not found.
+ */
+@CinemaDSL
+public interface QueryFilmsSelection {
+  /**
+   * Part of title of film to search
+   */
+  public var title: String?
+
+  /**
+   * Genre of film to search
+   */
+  public var genre: Genre?
+
+  /**
+   * Limit of result list.
+   * Put -1 to be unlimited.  
+   * > Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Offset of result list.  
+   * > Default: 0
+   */
+  public var offset: Int?
+}
+
+/**
+ * Find films by title and genre.
+ * Returns empty list if not found.
+ */
+@CinemaDSL
+public interface QueryFilmsQuery : QueryFilmsSelection, FilmProjection
+
+/**
+ * Find actors by firstName, lastName, birthday and gender.
+ * Returns empty list if not found.
+ */
+@CinemaDSL
+public interface QueryActorsSelection {
+  /**
+   * Part of first name of actor to search
+   */
+  public var firstName: String?
+
+  /**
+   * Part of last name of actor to search
+   */
+  public var lastName: String?
+
+  /**
+   * Find actors whose birthday is greater than or equal to birthdayFrom
+   */
+  public var birthdayFrom: LocalDate?
+
+  /**
+   * Find actors whose birthday is less than or equal to birthdayTo
+   */
+  public var birthdayTo: LocalDate?
+
+  /**
+   * Gender of actor to search
+   */
+  public var gender: Gender?
+
+  /**
+   * Limit of result list.
+   * Put -1 to be unlimited.  
+   * > Default: 10
+   */
+  public var limit: Int?
+
+  /**
+   * Offset of result list.  
+   * > Default: 0
+   */
+  public var offset: Int?
+}
+
+/**
+ * Find actors by firstName, lastName, birthday and gender.
+ * Returns empty list if not found.
+ */
+@CinemaDSL
+public interface QueryActorsQuery : QueryActorsSelection, ActorProjection

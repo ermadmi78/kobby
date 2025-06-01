@@ -364,6 +364,9 @@ class KobbyPlugin : Plugin<Project> {
                         onPostfix?.also {
                             kotlinTask.entityOnPostfix.convention(it)
                         }
+                        enableNotationWithoutParentheses?.also {
+                            kotlinTask.enableNotationWithoutParentheses.convention(it)
+                        }
                     }
                     selectionExtension.valueOrNull?.apply {
                         selectionPrefix?.also {

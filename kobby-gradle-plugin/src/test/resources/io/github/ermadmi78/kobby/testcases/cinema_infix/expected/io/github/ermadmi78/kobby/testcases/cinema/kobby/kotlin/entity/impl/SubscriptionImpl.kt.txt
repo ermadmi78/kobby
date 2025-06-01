@@ -1,0 +1,277 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Actor
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.ActorProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Country
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.CountryProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Film
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.FilmProjection
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.error
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+
+internal class SubscriptionImpl(
+  internal val __innerContext: CinemaContext,
+  internal val __innerProjection: SubscriptionProjectionImpl,
+  internal val __innerDto: SubscriptionDto,
+) : Subscription {
+  override val countryCreated: Country by lazy {
+    if (__innerProjection.__innerCountryCreated0 == null) {
+      error("Property [countryCreated] is not available - add [countryCreated] projection to switch on it")
+    }
+    __innerDto.resolveCountryCreated(__innerContext, __innerProjection.__innerCountryCreated0!!)
+  }
+
+  override val filmCreated: Film by lazy {
+    if (__innerProjection.__innerFilmCreated1 == null) {
+      error("Property [filmCreated] is not available - add [filmCreated] projection to switch on it")
+    }
+    __innerDto.resolveFilmCreated(__innerContext, __innerProjection.__innerFilmCreated1!!)
+  }
+
+  override val actorCreated: Actor by lazy {
+    if (__innerProjection.__innerActorCreated2 == null) {
+      error("Property [actorCreated] is not available - add [actorCreated] projection to switch on it")
+    }
+    __innerDto.resolveActorCreated(__innerContext, __innerProjection.__innerActorCreated2!!)
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Subscription").append('(')
+
+    var counter = 0
+
+    if (__innerProjection.__innerCountryCreated0 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("countryCreated").append('=').append(countryCreated)
+    }
+
+    if (__innerProjection.__innerFilmCreated1 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("filmCreated").append('=').append(filmCreated)
+    }
+
+    if (__innerProjection.__innerActorCreated2 != null) {
+      if (counter++ > 0) {
+        append(", ")
+      }
+      append("actorCreated").append('=').append(actorCreated)
+    }
+
+    append(')')
+  }
+
+  override fun __context(): CinemaContext = __innerContext
+
+  override fun SubscriptionProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class SubscriptionProjectionImpl : SubscriptionProjection {
+  internal var __innerCountryCreated0: CountryProjectionImpl? = null
+
+  internal var __innerFilmCreated1: FilmProjectionImpl? = null
+
+  internal var __innerFilmCreated1CountryId: Long? = null
+
+  internal var __innerActorCreated2: ActorProjectionImpl? = null
+
+  internal var __innerActorCreated2CountryId: Long? = null
+
+  override fun countryCreated(__projection: CountryProjection.() -> Unit) {
+    __innerCountryCreated0 = CountryProjectionImpl().apply(__projection)
+  }
+
+  override fun filmCreated(countryId: Long?, __projection: FilmProjection.() -> Unit) {
+    __innerFilmCreated1 = FilmProjectionImpl().apply(__projection)
+    __innerFilmCreated1CountryId = countryId
+  }
+
+  override fun actorCreated(countryId: Long?, __projection: ActorProjection.() -> Unit) {
+    __innerActorCreated2 = ActorProjectionImpl().apply(__projection)
+    __innerActorCreated2CountryId = countryId
+  }
+
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection) {
+    if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
+      __projection.countryCreated {
+        this@SubscriptionProjectionImpl.__innerCountryCreated0!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("filmCreated" !in ignore && __innerFilmCreated1 != null) {
+      __projection.filmCreated(__innerFilmCreated1CountryId) {
+        this@SubscriptionProjectionImpl.__innerFilmCreated1!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+    if ("actorCreated" !in ignore && __innerActorCreated2 != null) {
+      __projection.actorCreated(__innerActorCreated2CountryId) {
+        this@SubscriptionProjectionImpl.__innerActorCreated2!!.___innerRepeatProjection(setOf(), this)
+      }
+    }
+  }
+
+  /**
+   * Projection for field: filmCreated
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildFilmCreated1(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("filmCreated" !in ignore && __innerFilmCreated1 != null) {
+      body.append(' ').append("filmCreated")
+      var counter = 0
+      val addBrackets = __innerFilmCreated1CountryId != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: filmCreated.countryId
+      if (__innerFilmCreated1CountryId != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerFilmCreated1CountryId!!
+        body.append("countryId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Film
+      __innerFilmCreated1!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection for field: actorCreated
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  private fun ____innerBuildActorCreated2(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    if ("actorCreated" !in ignore && __innerActorCreated2 != null) {
+      body.append(' ').append("actorCreated")
+      var counter = 0
+      val addBrackets = __innerActorCreated2CountryId != null
+      if (addBrackets) {
+        body.append('(')
+      }
+
+      // Argument: actorCreated.countryId
+      if (__innerActorCreated2CountryId != null) {
+        if (counter++ > 0) {
+          body.append(", ")
+        }
+        val arg = "arg" + arguments.size
+        arguments[arg] = __innerActorCreated2CountryId!!
+        body.append("countryId").append(": ").append('$').append(arg)
+
+        if (header.isNotEmpty()) {
+          header.append(", ")
+        }
+        header.append('$').append(arg).append(": ").append("ID")
+      }
+
+      if (addBrackets) {
+        body.append(')')
+      }
+
+      // Build nested projection of Actor
+      __innerActorCreated2!!.___innerBuild(setOf(), header, body, arguments)
+    }
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    // Field: countryCreated
+    if ("countryCreated" !in ignore && __innerCountryCreated0 != null) {
+      body.append(' ').append("countryCreated")
+
+      // Build nested projection of Country
+      __innerCountryCreated0!!.___innerBuild(setOf(), header, body, arguments)
+    }
+
+    // Field: filmCreated
+    ____innerBuildFilmCreated1(ignore, header, body, arguments)
+
+    // Field: actorCreated
+    ____innerBuildActorCreated2(ignore, header, body, arguments)
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun SubscriptionDto.buildEntity(__innerContext: CinemaContext,
+    __innerProjection: SubscriptionProjectionImpl): Subscription =
+    SubscriptionImpl(__innerContext, __innerProjection, this)
+
+internal fun SubscriptionDto.resolveCountryCreated(__innerContext: CinemaContext,
+    __innerProjection: CountryProjectionImpl): Country =
+    countryCreated?.buildEntity(__innerContext, __innerProjection)!!
+
+internal fun SubscriptionDto.resolveFilmCreated(__innerContext: CinemaContext,
+    __innerProjection: FilmProjectionImpl): Film =
+    filmCreated?.buildEntity(__innerContext, __innerProjection)!!
+
+internal fun SubscriptionDto.resolveActorCreated(__innerContext: CinemaContext,
+    __innerProjection: ActorProjectionImpl): Actor =
+    actorCreated?.buildEntity(__innerContext, __innerProjection)!!

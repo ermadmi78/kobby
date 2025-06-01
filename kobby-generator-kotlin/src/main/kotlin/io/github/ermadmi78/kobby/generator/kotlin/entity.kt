@@ -1,5 +1,6 @@
 package io.github.ermadmi78.kobby.generator.kotlin
 
+import com.squareup.kotlinpoet.ANY
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.KModifier.ABSTRACT
 import com.squareup.kotlinpoet.KModifier.OVERRIDE
@@ -134,37 +135,49 @@ private fun FileSpecBuilder.buildProjection(node: KobbyNode, layout: KotlinLayou
             addKdoc("%L", it)
         }
         node.fields.values.asSequence().filter { !it.isRequired }.forEach { field ->
-            buildFunction(field.projectionFieldName) {
-                addModifiers(ABSTRACT)
-                if (field.isOverride) {
-                    addModifiers(OVERRIDE)
+            if (field.isProjectionPropertyEnabled) {
+                buildProperty(field.projectionFieldName, ANY.nullable()) {
+                    addModifiers(ABSTRACT)
+                    if (field.isOverride) {
+                        addModifiers(OVERRIDE)
+                    }
+                    field.comments {
+                        addKdoc("%L", it)
+                    }
                 }
-                field.comments {
-                    addKdoc("%L", it)
-                }
+            } else {
+                buildFunction(field.projectionFieldName) {
+                    addModifiers(ABSTRACT)
+                    if (field.isOverride) {
+                        addModifiers(OVERRIDE)
+                    }
+                    field.comments {
+                        addKdoc("%L", it)
+                    }
 
-                field.arguments.values.asSequence()
-                    .filter { !field.isSelection || !it.isInitialized }
-                    .forEach { arg ->
-                        buildParameter(arg.name, arg.entityType) {
-                            if (!field.isOverride && arg.isInitialized && !field.isMultiBase) {
-                                defaultValue("null")
-                            }
-                            arg.comments {
-                                addKdoc("%L", it)
-                            }
-                            arg.defaultValue?.also { literal ->
-                                if (arg.comments.isNotEmpty()) {
-                                    addKdoc("%L", " ");
+                    field.arguments.values.asSequence()
+                        .filter { !field.isSelection || !it.isInitialized }
+                        .forEach { arg ->
+                            buildParameter(arg.name, arg.entityType) {
+                                if (!field.isOverride && arg.isInitialized && !field.isMultiBase) {
+                                    defaultValue("null")
                                 }
-                                addKdoc("%L", "Default: $literal")
+                                arg.comments {
+                                    addKdoc("%L", it)
+                                }
+                                arg.defaultValue?.also { literal ->
+                                    if (arg.comments.isNotEmpty()) {
+                                        addKdoc("%L", " ");
+                                    }
+                                    addKdoc("%L", "Default: $literal")
+                                }
                             }
                         }
-                    }
-                field.lambda?.also {
-                    buildParameter(it) {
-                        if (!field.isOverride && field.type.node.hasDefaults) {
-                            defaultValue("{}")
+                    field.lambda?.also {
+                        buildParameter(it) {
+                            if (!field.isOverride && field.type.node.hasDefaults) {
+                                defaultValue("{}")
+                            }
                         }
                     }
                 }

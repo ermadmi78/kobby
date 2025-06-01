@@ -1,0 +1,102 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Base interface for all entities. %
+ */
+public interface Entity {
+  /**
+   * Unique identifier of entity %
+   */
+  public val id: Long
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public val fields: Map<String, Any?>
+
+  public fun __context(): CinemaContext
+}
+
+/**
+ * Base interface for all entities. %
+ */
+@CinemaDSL
+public interface EntityProjection {
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public fun fields(__selection: EntityFieldsSelection.() -> Unit = {})
+
+  public fun __minimize() {
+  }
+}
+
+/**
+ * Base interface for all entities. %
+ */
+@CinemaDSL
+public interface EntityQualification {
+  /**
+   * Film entity.
+   * The film belongs to one country and can be played by several actors.
+   */
+  public fun __onFilm(__projection: FilmProjection.() -> Unit = {})
+
+  /**
+   * Actor entity.
+   * The actor belongs to one country and can play in several films.
+   */
+  public fun __onActor(__projection: ActorProjection.() -> Unit = {})
+
+  /**
+   * Country entity.
+   * The country can be home to several films and several actors. %
+   */
+  public fun __onCountry(__projection: CountryProjection.() -> Unit = {})
+}
+
+/**
+ * Base interface for all entities. %
+ */
+@CinemaDSL
+public interface EntityQualifiedProjection : EntityProjection, EntityQualification
+
+/**
+ * Fields of entity in key-value map.
+ * Introduced for testing complex scalars.
+ */
+@CinemaDSL
+public interface EntityFieldsSelection {
+  /**
+   * List of field keys to load. %
+   * If no keys specified all entity fields will be loaded.
+   */
+  public var keys: List<String>?
+}

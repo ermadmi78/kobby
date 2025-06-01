@@ -1,0 +1,32 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchContext
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchDSL
+import kotlin.Suppress
+
+public interface Mutation {
+  public fun __context(): MismatchContext
+
+  public fun MutationProjection.__withCurrentProjection()
+}
+
+@MismatchDSL
+public interface MutationProjection {
+  public fun __minimize() {
+  }
+}

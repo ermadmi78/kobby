@@ -1,0 +1,64 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonCreator
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.error
+
+/**
+ * Input TagInput is introduced for testing inputs with single value.
+ * See class TagInput.
+ */
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class TagInput @JsonCreator constructor(
+  /**
+   * The tag value
+   */
+  public val `value`: String,
+)
+
+public fun TagInput.toBuilder(): TagInputBuilder = TagInputBuilder().also {
+  it.`value` = this.`value`
+}
+
+public fun TagInputBuilder.toInput(): TagInput = TagInput(
+  `value` ?: error("TagInput: 'value' must not be null")
+)
+
+public fun TagInput(block: TagInputBuilder.() -> Unit): TagInput =
+    TagInputBuilder().apply(block).toInput()
+
+public fun TagInput.copy(block: TagInputBuilder.() -> Unit): TagInput =
+    toBuilder().apply(block).toInput()
+
+/**
+ * Input TagInput is introduced for testing inputs with single value.
+ * See class TagInput.
+ */
+@CinemaDSL
+public class TagInputBuilder {
+  /**
+   * The tag value
+   */
+  public var `value`: String? = null
+}

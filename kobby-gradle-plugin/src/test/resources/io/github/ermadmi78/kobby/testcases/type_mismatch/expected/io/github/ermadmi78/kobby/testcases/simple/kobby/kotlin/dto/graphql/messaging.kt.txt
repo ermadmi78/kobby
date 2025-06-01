@@ -1,0 +1,114 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.graphql
+
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public sealed class MismatchClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public sealed class MismatchServerMessage
+
+/**
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchClientMessageConnectionInit(
+  public val payload: Map<String, Any?>? = null,
+) : MismatchClientMessage()
+
+/**
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchServerMessageConnectionAck(
+  public val payload: Any? = null,
+) : MismatchServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchClientMessagePing(
+  public val payload: Any? = null,
+) : MismatchClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchClientMessagePong(
+  public val payload: Any? = null,
+) : MismatchClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchServerMessagePing(
+  public val payload: Any? = null,
+) : MismatchServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchServerMessagePong(
+  public val payload: Any? = null,
+) : MismatchServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchClientMessageSubscribe(
+  public val id: String,
+  public val payload: MismatchRequest,
+) : MismatchClientMessage()
+
+/**
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchServerMessageNext(
+  public val id: String,
+  public val payload: MismatchSubscriptionResult,
+) : MismatchServerMessage()
+
+/**
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchServerMessageError(
+  public val id: String,
+  public val payload: List<MismatchError>? = null,
+) : MismatchServerMessage()
+
+/**
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchClientMessageComplete(
+  public val id: String,
+) : MismatchClientMessage()
+
+/**
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+public data class MismatchServerMessageComplete(
+  public val id: String,
+) : MismatchServerMessage()

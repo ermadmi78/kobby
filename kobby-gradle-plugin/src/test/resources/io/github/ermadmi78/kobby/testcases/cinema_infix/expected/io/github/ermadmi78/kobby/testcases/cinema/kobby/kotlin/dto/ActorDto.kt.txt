@@ -1,0 +1,187 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.dto
+
+import com.fasterxml.jackson.`annotation`.JsonInclude
+import com.fasterxml.jackson.`annotation`.JsonTypeInfo
+import com.fasterxml.jackson.`annotation`.JsonTypeName
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import java.time.LocalDate
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.also
+import kotlin.apply
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Actor entity.
+ * The actor belongs to one country and can play in several films.
+ */
+@JsonTypeName(value = "Actor")
+@JsonTypeInfo(
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "__typename",
+  defaultImpl = ActorDto::class,
+)
+@JsonInclude(value = JsonInclude.Include.NON_ABSENT)
+public data class ActorDto(
+  /**
+   * Unique identifier of actor
+   */
+  override val id: Long? = null,
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  override val fields: Map<String, Any?>? = null,
+  /**
+   * Tags of entity
+   */
+  override val tags: List<TagDto>? = null,
+  /**
+   * First name of actor.
+   * I assume all actors have a first name - so field is not null.
+   */
+  public val firstName: String? = null,
+  /**
+   * Surname of the actor.
+   * This field is nullable because the actor can use an alias and not have a last name.
+   */
+  public val lastName: String? = null,
+  /**
+   * Actor's birthday
+   */
+  public val birthday: LocalDate? = null,
+  /**
+   * Actor's gender
+   */
+  public val gender: Gender? = null,
+  /**
+   * ID of the country to which the actor belongs
+   * (@primaryKey added to test complex primary keys)
+   */
+  public val countryId: Long? = null,
+  /**
+   * The country to which the actor belongs
+   */
+  public val country: CountryDto? = null,
+  /**
+   * Find films of actor by title and genre.
+   * Returns empty list if not found.
+   */
+  public val films: List<FilmDto>? = null,
+) : EntityDto,
+    TaggableDto,
+    NativeDto
+
+public fun ActorDto.toBuilder(): ActorDtoBuilder = ActorDtoBuilder().also {
+  it.id = this.id
+  it.fields = this.fields
+  it.tags = this.tags
+  it.firstName = this.firstName
+  it.lastName = this.lastName
+  it.birthday = this.birthday
+  it.gender = this.gender
+  it.countryId = this.countryId
+  it.country = this.country
+  it.films = this.films
+}
+
+public fun ActorDtoBuilder.toDto(): ActorDto = ActorDto(
+  id,
+  fields,
+  tags,
+  firstName,
+  lastName,
+  birthday,
+  gender,
+  countryId,
+  country,
+  films
+)
+
+public fun ActorDto(block: ActorDtoBuilder.() -> Unit): ActorDto =
+    ActorDtoBuilder().apply(block).toDto()
+
+public fun ActorDto.copy(block: ActorDtoBuilder.() -> Unit): ActorDto =
+    toBuilder().apply(block).toDto()
+
+/**
+ * Actor entity.
+ * The actor belongs to one country and can play in several films.
+ */
+@CinemaDSL
+public class ActorDtoBuilder {
+  /**
+   * Unique identifier of actor
+   */
+  public var id: Long? = null
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  public var fields: Map<String, Any?>? = null
+
+  /**
+   * Tags of entity
+   */
+  public var tags: List<TagDto>? = null
+
+  /**
+   * First name of actor.
+   * I assume all actors have a first name - so field is not null.
+   */
+  public var firstName: String? = null
+
+  /**
+   * Surname of the actor.
+   * This field is nullable because the actor can use an alias and not have a last name.
+   */
+  public var lastName: String? = null
+
+  /**
+   * Actor's birthday
+   */
+  public var birthday: LocalDate? = null
+
+  /**
+   * Actor's gender
+   */
+  public var gender: Gender? = null
+
+  /**
+   * ID of the country to which the actor belongs
+   * (@primaryKey added to test complex primary keys)
+   */
+  public var countryId: Long? = null
+
+  /**
+   * The country to which the actor belongs
+   */
+  public var country: CountryDto? = null
+
+  /**
+   * Find films of actor by title and genre.
+   * Returns empty list if not found.
+   */
+  public var films: List<FilmDto>? = null
+}

@@ -1,0 +1,31 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.graphql
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.MutationDto
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
+
+public class MismatchMutationException(
+  message: String,
+  request: MismatchRequest,
+  errors: List<MismatchError>? = null,
+  extensions: Map<String, Any?>? = null,
+  public val `data`: MutationDto? = null,
+) : MismatchException(message, request, errors, extensions)

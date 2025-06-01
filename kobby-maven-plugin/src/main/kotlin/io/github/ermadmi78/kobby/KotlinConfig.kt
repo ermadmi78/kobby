@@ -460,6 +460,9 @@ class KotlinEntityProjectionConfig {
     @Parameter
     var onPostfix: String? = null
 
+    @Parameter
+    var enableNotationWithoutParentheses: Boolean = false
+
     override fun toString(): String {
         return "KotlinEntityProjectionConfig(" +
                 "\n        projectionPrefix=$projectionPrefix, " +
@@ -476,6 +479,7 @@ class KotlinEntityProjectionConfig {
                 "\n        qualifiedProjectionPostfix=$qualifiedProjectionPostfix, " +
                 "\n        onPrefix=$onPrefix, " +
                 "\n        onPostfix=$onPostfix" +
+                "\n        enableNotationWithoutParentheses=$enableNotationWithoutParentheses" +
                 "\n      )"
     }
 }

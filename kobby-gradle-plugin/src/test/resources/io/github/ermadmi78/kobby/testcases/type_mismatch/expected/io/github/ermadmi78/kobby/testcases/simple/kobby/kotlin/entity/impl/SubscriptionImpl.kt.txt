@@ -1,0 +1,72 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.`impl`
+
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.MismatchContext
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.entity.SubscriptionProjection
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.setOf
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+
+internal class SubscriptionImpl(
+  internal val __innerContext: MismatchContext,
+  internal val __innerProjection: SubscriptionProjectionImpl,
+  internal val __innerDto: SubscriptionDto,
+) : Subscription {
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  override fun toString(): String = buildString {
+    append("Subscription").append('(')
+    append(')')
+  }
+
+  override fun __context(): MismatchContext = __innerContext
+
+  override fun SubscriptionProjection.__withCurrentProjection() {
+    __innerProjection.___innerRepeatProjection(setOf(), this)
+  }
+}
+
+internal open class SubscriptionProjectionImpl : SubscriptionProjection {
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerRepeatProjection(ignore: Set<String>, __projection: SubscriptionProjection) {
+  }
+
+  /**
+   * Projection builder function
+   */
+  @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
+  internal fun ___innerBuild(
+    ignore: Set<String>,
+    `header`: StringBuilder,
+    body: StringBuilder,
+    arguments: MutableMap<String, Any>,
+  ) {
+    body.append(' ').append('{')
+
+    body.append(' ').append('}')
+  }
+}
+
+internal fun SubscriptionDto.buildEntity(__innerContext: MismatchContext,
+    __innerProjection: SubscriptionProjectionImpl): Subscription =
+    SubscriptionImpl(__innerContext, __innerProjection, this)

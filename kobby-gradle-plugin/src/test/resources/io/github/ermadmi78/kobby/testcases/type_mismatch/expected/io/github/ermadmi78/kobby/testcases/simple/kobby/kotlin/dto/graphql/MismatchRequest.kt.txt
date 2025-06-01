@@ -1,0 +1,27 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.simple.kobby.kotlin.dto.graphql
+
+import kotlin.Any
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.Map
+
+public data class MismatchRequest(
+  public val query: String,
+  public val variables: Map<String, Any?>? = null,
+  public val operationName: String? = null,
+)

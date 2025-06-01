@@ -1,0 +1,97 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.entity
+
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaContext
+import io.github.ermadmi78.kobby.testcases.cinema.kobby.kotlin.CinemaDSL
+import kotlin.Any
+import kotlin.Long
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.collections.List
+import kotlin.collections.Map
+
+/**
+ * Entity with tags.
+ * Introduced for testing complex inheritance.
+ */
+public interface Taggable : Entity {
+  /**
+   * Unique identifier of entity %
+   */
+  override val id: Long
+
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  override val fields: Map<String, Any?>
+
+  /**
+   * Tags of entity
+   */
+  public val tags: List<Tag>
+
+  override fun __context(): CinemaContext
+}
+
+/**
+ * Entity with tags.
+ * Introduced for testing complex inheritance.
+ */
+@CinemaDSL
+public interface TaggableProjection : EntityProjection {
+  /**
+   * Fields of entity in key-value map.
+   * Introduced for testing complex scalars.
+   */
+  override fun fields(__selection: EntityFieldsSelection.() -> Unit)
+
+  /**
+   * Tags of entity
+   */
+  public fun tags(__projection: TagProjection.() -> Unit)
+
+  override fun __minimize() {
+  }
+}
+
+/**
+ * Entity with tags.
+ * Introduced for testing complex inheritance.
+ */
+@CinemaDSL
+public interface TaggableQualification {
+  /**
+   * Film entity.
+   * The film belongs to one country and can be played by several actors.
+   */
+  public fun __onFilm(__projection: FilmProjection.() -> Unit = {})
+
+  /**
+   * Actor entity.
+   * The actor belongs to one country and can play in several films.
+   */
+  public fun __onActor(__projection: ActorProjection.() -> Unit = {})
+}
+
+/**
+ * Entity with tags.
+ * Introduced for testing complex inheritance.
+ */
+@CinemaDSL
+public interface TaggableQualifiedProjection : TaggableProjection, TaggableQualification
