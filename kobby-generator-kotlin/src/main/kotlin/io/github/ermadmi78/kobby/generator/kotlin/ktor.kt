@@ -683,6 +683,14 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionImplFun(schema: KobbySchema,
         }
         addStatement("")
 
+        buildSendMessage(layout, WS_CLIENT_MESSAGE_PING)
+        addStatement(
+            "$receiveMessage(${ktor.compositePropertySocket})·?:·throw·%T(%P, $request)",
+            graphql.subscriptionExceptionClass,
+            "Subscription timeout expired"
+        )
+        addStatement("")
+
         val returnClass: ClassName = if (adapter.extendedApi) {
             dto.graphql.subscriptionResultClass
         } else {

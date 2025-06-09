@@ -220,6 +220,10 @@ public open class KtoPrCompositeKtoPo(
     val subscriptionId = idGenerator()
     sendMessage(socket, GPrefClientMessageSubscribeGPost(subscriptionId, request))
 
+    sendMessage(socket, GPrefClientMessagePingGPost())
+    receiveMessage(socket) ?: throw GPrefSubscriptionExceptionGPost("""Subscription timeout expired""",
+        request)
+
     try {
       block.invoke(object : PrefCtxReceiverPostCtx<DPrefMySubscriptionDPost> {
         override suspend fun receive(): DPrefMySubscriptionDPost {

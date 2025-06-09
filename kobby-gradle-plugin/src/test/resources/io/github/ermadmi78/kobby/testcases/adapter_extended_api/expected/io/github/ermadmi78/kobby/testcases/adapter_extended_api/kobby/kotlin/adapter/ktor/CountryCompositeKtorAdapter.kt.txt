@@ -225,6 +225,10 @@ public open class CountryCompositeKtorAdapter(
     val subscriptionId = idGenerator()
     sendMessage(socket, CountryClientMessageSubscribe(subscriptionId, request))
 
+    sendMessage(socket, CountryClientMessagePing())
+    receiveMessage(socket) ?: throw CountrySubscriptionException("""Subscription timeout expired""",
+        request)
+
     try {
       block.invoke(object : CountryReceiver<CountrySubscriptionResult> {
         override suspend fun receive(): CountrySubscriptionResult {

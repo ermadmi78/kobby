@@ -220,6 +220,10 @@ public open class CinemaCompositeKtorAdapter(
     val subscriptionId = idGenerator()
     sendMessage(socket, CinemaClientMessageSubscribe(subscriptionId, request))
 
+    sendMessage(socket, CinemaClientMessagePing())
+    receiveMessage(socket) ?: throw CinemaSubscriptionException("""Subscription timeout expired""",
+        request)
+
     try {
       block.invoke(object : CinemaReceiver<SubscriptionDto> {
         override suspend fun receive(): SubscriptionDto {
