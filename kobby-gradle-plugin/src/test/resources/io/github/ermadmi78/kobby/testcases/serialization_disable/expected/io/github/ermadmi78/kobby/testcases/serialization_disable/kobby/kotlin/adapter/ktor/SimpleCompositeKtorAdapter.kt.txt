@@ -218,6 +218,10 @@ public open class SimpleCompositeKtorAdapter(
     val subscriptionId = idGenerator()
     sendMessage(socket, SimpleClientMessageSubscribe(subscriptionId, request))
 
+    sendMessage(socket, SimpleClientMessagePing())
+    receiveMessage(socket) ?: throw SimpleSubscriptionException("""Subscription timeout expired""",
+        request)
+
     try {
       block.invoke(object : SimpleReceiver<SubscriptionDto> {
         override suspend fun receive(): SubscriptionDto {

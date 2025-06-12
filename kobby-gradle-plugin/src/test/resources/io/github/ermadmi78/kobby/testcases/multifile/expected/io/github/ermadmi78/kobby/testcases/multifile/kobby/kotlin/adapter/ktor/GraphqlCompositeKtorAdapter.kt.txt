@@ -218,6 +218,10 @@ public open class GraphqlCompositeKtorAdapter(
     val subscriptionId = idGenerator()
     sendMessage(socket, GraphqlClientMessageSubscribe(subscriptionId, request))
 
+    sendMessage(socket, GraphqlClientMessagePing())
+    receiveMessage(socket) ?: throw GraphqlSubscriptionException("""Subscription timeout expired""",
+        request)
+
     try {
       block.invoke(object : GraphqlReceiver<MySubscriptionDto> {
         override suspend fun receive(): MySubscriptionDto {
