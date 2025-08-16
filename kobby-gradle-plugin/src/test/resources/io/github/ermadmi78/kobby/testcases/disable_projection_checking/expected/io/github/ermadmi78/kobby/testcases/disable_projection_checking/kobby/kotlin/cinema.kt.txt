@@ -1,0 +1,258 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin
+
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.ActorDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.CountryDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.EntityDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.FilmDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.MutationDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.NativeDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.QueryDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.SubscriptionDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.TaggableDto
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.Mutation
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.MutationProjection
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.Query
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.QueryProjection
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.Subscription
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.SubscriptionProjection
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.`impl`.MutationProjectionImpl
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.`impl`.QueryProjectionImpl
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.`impl`.SubscriptionProjectionImpl
+import io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.entity.`impl`.buildEntity
+import kotlin.DslMarker
+import kotlin.NotImplementedError
+import kotlin.Pair
+import kotlin.String
+import kotlin.Suppress
+import kotlin.Unit
+import kotlin.apply
+import kotlin.collections.MutableMap
+import kotlin.collections.mutableMapOf
+import kotlin.collections.setOf
+import kotlin.text.StringBuilder
+import kotlin.text.buildString
+import kotlin.text.isNotEmpty
+import kotlin.to
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+
+/**
+ * Default entry point to work with JSON serialization.
+ */
+public val cinemaJson: Json = Json {
+  classDiscriminator = "__typename"
+  ignoreUnknownKeys = true
+  encodeDefaults = false
+  prettyPrint = false
+  serializersModule = SerializersModule {
+    polymorphic(EntityDto::class) {
+      subclass(FilmDto::class)
+      subclass(ActorDto::class)
+      subclass(CountryDto::class)
+    }
+    polymorphic(TaggableDto::class) {
+      subclass(FilmDto::class)
+      subclass(ActorDto::class)
+    }
+    polymorphic(NativeDto::class) {
+      subclass(FilmDto::class)
+      subclass(ActorDto::class)
+    }
+  }
+}
+
+public fun cinemaContextOf(adapter: CinemaAdapter): CinemaContext = CinemaContextImpl(adapter)
+
+public fun buildCinemaQuery(__projection: QueryProjection.() -> Unit): Pair<String, JsonObject> {
+  val projectionRef = QueryProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val query = buildString(header.length + body.length + 7) {
+    append("query")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return query to JsonObject(arguments)
+}
+
+public fun buildCinemaMutation(__projection: MutationProjection.() -> Unit):
+    Pair<String, JsonObject> {
+  val projectionRef = MutationProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val mutation = buildString(header.length + body.length + 10) {
+    append("mutation")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return mutation to JsonObject(arguments)
+}
+
+public fun buildCinemaSubscription(__projection: SubscriptionProjection.() -> Unit):
+    Pair<String, JsonObject> {
+  val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+
+  val header = StringBuilder()
+  val body = StringBuilder(64)
+  val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+  projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+  val subscription = buildString(header.length + body.length + 14) {
+    append("subscription")
+    if (header.isNotEmpty()) {
+      append('(').append(header).append(')')
+    }
+    append(body)
+  }
+
+  return subscription to JsonObject(arguments)
+}
+
+public interface CinemaContext {
+  public suspend fun query(__projection: QueryProjection.() -> Unit): Query
+
+  public suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation
+
+  public fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CinemaSubscriber<Subscription>
+}
+
+public fun interface CinemaSubscriber<T> {
+  public suspend fun subscribe(block: suspend CinemaReceiver<T>.() -> Unit)
+}
+
+@CinemaDSL
+public fun interface CinemaReceiver<out T> {
+  public suspend fun receive(): T
+}
+
+public interface CinemaAdapter {
+  public suspend fun executeQuery(query: String, variables: JsonObject): QueryDto =
+      throw NotImplementedError("Adapter function executeQuery is not implemented")
+
+  public suspend fun executeMutation(query: String, variables: JsonObject): MutationDto =
+      throw NotImplementedError("Adapter function executeMutation is not implemented")
+
+  public suspend fun executeSubscription(
+    query: String,
+    variables: JsonObject,
+    block: suspend CinemaReceiver<SubscriptionDto>.() -> Unit,
+  ): Unit = throw NotImplementedError("Adapter function executeSubscription is not implemented")
+}
+
+private class CinemaContextImpl(
+  private val adapter: CinemaAdapter,
+) : CinemaContext {
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  override suspend fun query(__projection: QueryProjection.() -> Unit): Query {
+    val projectionRef = QueryProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val query = buildString(header.length + body.length + 7) {
+      append("query")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    val queryDto: QueryDto = adapter.executeQuery(query, JsonObject(arguments))
+    return queryDto.buildEntity(this, projectionRef)
+  }
+
+  /**
+   * https://youtrack.jetbrains.com/issue/KTIJ-844
+   */
+  @Suppress("BlockingMethodInNonBlockingContext")
+  override suspend fun mutation(__projection: MutationProjection.() -> Unit): Mutation {
+    val projectionRef = MutationProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val mutation = buildString(header.length + body.length + 10) {
+      append("mutation")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    val mutationDto: MutationDto = adapter.executeMutation(mutation, JsonObject(arguments))
+    return mutationDto.buildEntity(this, projectionRef)
+  }
+
+  override fun subscription(__projection: SubscriptionProjection.() -> Unit):
+      CinemaSubscriber<Subscription> {
+    val projectionRef = SubscriptionProjectionImpl().apply(__projection)
+
+    val header = StringBuilder()
+    val body = StringBuilder(64)
+    val arguments: MutableMap<String, JsonElement> = mutableMapOf()
+    projectionRef.___innerBuild(setOf(), header, body, arguments)
+
+    val subscription = buildString(header.length + body.length + 14) {
+      append("subscription")
+      if (header.isNotEmpty()) {
+        append('(').append(header).append(')')
+      }
+      append(body)
+    }
+
+    return CinemaSubscriber<Subscription> {
+      adapter.executeSubscription(subscription, JsonObject(arguments)) {
+        it.invoke(object : CinemaReceiver<Subscription> {
+          override suspend fun receive(): Subscription {
+            val subscriptionDto: SubscriptionDto = this@executeSubscription.receive()
+            return subscriptionDto.buildEntity(this@CinemaContextImpl, projectionRef)
+          }
+        })
+      }
+    }
+  }
+}
+
+@DslMarker
+public annotation class CinemaDSL

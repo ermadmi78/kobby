@@ -1,0 +1,147 @@
+@file:Suppress(
+  "RedundantVisibilityModifier",
+  "RedundantUnitReturnType",
+  "FunctionName",
+  "PropertyName",
+  "ObjectPropertyName",
+  "MemberVisibilityCanBePrivate",
+  "ConstantConditionIf",
+  "CanBeParameter",
+  "unused",
+  "RemoveExplicitTypeArguments",
+  "RedundantSuppression",
+  "KotlinRedundantDiagnosticSuppress",
+)
+
+package io.github.ermadmi78.kobby.testcases.disable_projection_checking.kobby.kotlin.dto.graphql
+
+import kotlin.OptIn
+import kotlin.String
+import kotlin.Suppress
+import kotlin.collections.List
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("type")
+public sealed class CinemaClientMessage
+
+/**
+ * Message protocol description see
+ * [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("type")
+public sealed class CinemaServerMessage
+
+/**
+ * See ConnectionInit [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("connection_init")
+public data class CinemaClientMessageConnectionInit(
+  public val payload: JsonObject? = null,
+) : CinemaClientMessage()
+
+/**
+ * See ConnectionAck [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("connection_ack")
+public data class CinemaServerMessageConnectionAck(
+  public val payload: JsonElement? = null,
+) : CinemaServerMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("ping")
+public data class CinemaClientMessagePing(
+  public val payload: JsonElement? = null,
+) : CinemaClientMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("pong")
+public data class CinemaClientMessagePong(
+  public val payload: JsonElement? = null,
+) : CinemaClientMessage()
+
+/**
+ * See Ping [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("ping")
+public data class CinemaServerMessagePing(
+  public val payload: JsonElement? = null,
+) : CinemaServerMessage()
+
+/**
+ * See Pong [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("pong")
+public data class CinemaServerMessagePong(
+  public val payload: JsonElement? = null,
+) : CinemaServerMessage()
+
+/**
+ * See Subscribe [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("subscribe")
+public data class CinemaClientMessageSubscribe(
+  public val id: String,
+  public val payload: CinemaRequest,
+) : CinemaClientMessage()
+
+/**
+ * See Next [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("next")
+public data class CinemaServerMessageNext(
+  public val id: String,
+  public val payload: CinemaSubscriptionResult,
+) : CinemaServerMessage()
+
+/**
+ * See Error [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("error")
+public data class CinemaServerMessageError(
+  public val id: String,
+  public val payload: List<CinemaError>? = null,
+) : CinemaServerMessage()
+
+/**
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("complete")
+public data class CinemaClientMessageComplete(
+  public val id: String,
+) : CinemaClientMessage()
+
+/**
+ * See Complete [here](https://github.com/enisdenjo/graphql-ws/blob/master/PROTOCOL.md)
+ */
+@Serializable
+@SerialName("complete")
+public data class CinemaServerMessageComplete(
+  public val id: String,
+) : CinemaServerMessage()
