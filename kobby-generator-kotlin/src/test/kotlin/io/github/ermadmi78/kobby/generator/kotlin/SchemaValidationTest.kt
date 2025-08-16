@@ -99,7 +99,8 @@ class SchemaValidationTest {
             "kobby.entity.impl",
             Decoration(null, "Impl"),
             true,
-            Decoration("__inner", null)
+            Decoration("__inner", null),
+            true
         ),
         KotlinAdapterLayout(
             false,

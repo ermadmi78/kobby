@@ -624,7 +624,8 @@ class KotlinImplLayout(
     packageName: String,
     val decoration: Decoration,
     val internal: Boolean,
-    val innerDecoration: Decoration
+    val innerDecoration: Decoration,
+    val projectionCheckingEnabled: Boolean
 ) {
     val packageName: String = packageName.validateKotlinPath()
 }

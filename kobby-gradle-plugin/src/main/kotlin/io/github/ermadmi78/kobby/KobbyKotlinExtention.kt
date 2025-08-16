@@ -788,6 +788,14 @@ open class KobbyKotlinImplExtension {
 
     /** Postfix for inner fields in implementation classes */
     var innerPostfix: String? = null
+
+    /**
+     * Should getter methods of entity implementation classes check for availability of GraphQL projection?
+     * [More details](https://github.com/ermadmi78/kobby/issues/57)
+     *
+     * Default: true
+     */
+    var projectionCheckingEnabled: Boolean? = null
 }
 
 /**

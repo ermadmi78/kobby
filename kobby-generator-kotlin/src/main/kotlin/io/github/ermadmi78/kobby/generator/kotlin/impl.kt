@@ -373,11 +373,13 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 if (field.type.hasProjection) {
                     val projectionRef = "${impl.projectionPropertyName}.${field.innerName}"
                     buildLazyDelegate {
-                        ifFlowStatement(
-                            "$projectionRef·==·null",
-                            ClassName("kotlin", "error"),
-                            field.noProjectionMessage
-                        ) { "%T(%S)" }
+                        if (impl.projectionCheckingEnabled) {
+                            ifFlowStatement(
+                                "$projectionRef·==·null",
+                                ClassName("kotlin", "error"),
+                                field.noProjectionMessage
+                            ) { "%T(%S)" }
+                        }
 
                         statement {
                             "$innerDto.${field.resolverName}(${impl.contextPropertyName},·$projectionRef!!)"
@@ -385,7 +387,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                     }
                 } else {
                     buildGetter {
-                        if (!field.isRequired) {
+                        if (impl.projectionCheckingEnabled && !field.isRequired) {
                             val ref = "${impl.projectionPropertyName}.${field.innerName}"
                             ifFlowStatement(
                                 if (field.innerIsBoolean) "!$ref" else "$ref·==·null",

@@ -408,6 +408,9 @@ class KobbyPlugin : Plugin<Project> {
                     innerPostfix?.also {
                         kotlinTask.implInnerPostfix.convention(it)
                     }
+                    projectionCheckingEnabled?.also {
+                        kotlinTask.implProjectionCheckingEnabled.convention(it)
+                    }
                 }
                 kotlinExtension.adapterExtension.valueOrNull?.apply {
                     extendedApi?.also {

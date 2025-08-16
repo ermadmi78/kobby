@@ -759,6 +759,15 @@ open class KobbyKotlin : DefaultTask() {
     @Input
     @Optional
     @Option(
+        option = "implProjectionCheckingEnabled",
+        description = "Should getter methods of entity implementation classes check for availability " +
+                "of GraphQL projection? (default true)"
+    )
+    val implProjectionCheckingEnabled: Property<Boolean> = project.objects.property(Boolean::class.java)
+
+    @Input
+    @Optional
+    @Option(
         option = "adapterExtendedApi",
         description = "Is extended adapter API (with GraphQL errors and extensions) enabled (default false)"
     )
@@ -916,6 +925,7 @@ open class KobbyKotlin : DefaultTask() {
         implPostfix.convention("Impl")
         implInternal.convention(true)
         implInnerPrefix.convention("__inner")
+        implProjectionCheckingEnabled.convention(true)
 
         adapterExtendedApi.convention(false)
         adapterThrowException.convention(true)
@@ -1084,7 +1094,8 @@ open class KobbyKotlin : DefaultTask() {
                 implPackage.toPackageName(),
                 Decoration(implPrefix.orNull, implPostfix.orNull),
                 implInternal.get(),
-                Decoration(implInnerPrefix.orNull, implInnerPostfix.orNull)
+                Decoration(implInnerPrefix.orNull, implInnerPostfix.orNull),
+                implProjectionCheckingEnabled.get()
             ),
             KotlinAdapterLayout(
                 adapterExtendedApi.get() || !adapterThrowException.get(),

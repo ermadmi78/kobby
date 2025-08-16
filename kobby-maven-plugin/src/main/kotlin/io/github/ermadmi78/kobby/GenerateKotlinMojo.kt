@@ -276,7 +276,8 @@ class GenerateKotlinMojo : AbstractMojo() {
                 implPackage.toPackageName(),
                 Decoration(impl.prefix, impl.postfix),
                 impl.internal,
-                Decoration(impl.innerPrefix, impl.innerPostfix)
+                Decoration(impl.innerPrefix, impl.innerPostfix),
+                impl.projectionCheckingEnabled
             ),
             KotlinAdapterLayout(
                 adapter.extendedApi || !adapter.throwException,

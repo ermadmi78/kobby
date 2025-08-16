@@ -538,6 +538,9 @@ class KotlinImplConfig {
     @Parameter
     var innerPostfix: String? = null
 
+    @Parameter
+    var projectionCheckingEnabled: Boolean = true
+
     override fun toString(): String {
         return "KotlinImplConfig(" +
                 "\n      packageName=$packageName, " +
@@ -545,7 +548,8 @@ class KotlinImplConfig {
                 "\n      postfix=$postfix, " +
                 "\n      internal=$internal, " +
                 "\n      innerPrefix=$innerPrefix, " +
-                "\n      innerPostfix=$innerPostfix" +
+                "\n      innerPostfix=$innerPostfix, " +
+                "\n      projectionCheckingEnabled=$projectionCheckingEnabled" +
                 "\n    )"
     }
 }
