@@ -34,7 +34,6 @@ import kotlin.apply
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
-import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
@@ -47,23 +46,14 @@ internal class SubscriptionImpl(
   internal val __innerDto: SubscriptionDto,
 ) : Subscription {
   override val countryCreated: Country by lazy {
-    if (__innerProjection.__innerCountryCreated0 == null) {
-      error("Property [countryCreated] is not available - add [countryCreated] projection to switch on it")
-    }
     __innerDto.resolveCountryCreated(__innerContext, __innerProjection.__innerCountryCreated0!!)
   }
 
   override val filmCreated: Film by lazy {
-    if (__innerProjection.__innerFilmCreated1 == null) {
-      error("Property [filmCreated] is not available - add [filmCreated] projection to switch on it")
-    }
     __innerDto.resolveFilmCreated(__innerContext, __innerProjection.__innerFilmCreated1!!)
   }
 
   override val actorCreated: Actor by lazy {
-    if (__innerProjection.__innerActorCreated2 == null) {
-      error("Property [actorCreated] is not available - add [actorCreated] projection to switch on it")
-    }
     __innerDto.resolveActorCreated(__innerContext, __innerProjection.__innerActorCreated2!!)
   }
 

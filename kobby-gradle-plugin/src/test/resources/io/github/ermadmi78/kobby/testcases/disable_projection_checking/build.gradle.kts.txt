@@ -30,7 +30,7 @@ kobby {
         )
 
         impl {
-            projectionCheckingEnabled = true
+            projectionCheckingEnabled = false
         }
     }
 }

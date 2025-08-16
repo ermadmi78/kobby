@@ -46,7 +46,6 @@ import kotlin.collections.Set
 import kotlin.collections.listOf
 import kotlin.collections.map
 import kotlin.collections.setOf
-import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
@@ -64,50 +63,26 @@ internal class FilmImpl(
     get() = __innerDto.id!!
 
   override val fields: JsonObject
-    get() {
-      if (__innerProjection.__innerFields1 == null) {
-        error("Property [fields] is not available - add [fields] projection to switch on it")
-      }
-      return __innerDto.fields!!
-    }
+    get() = __innerDto.fields!!
 
   override val tags: List<Tag> by lazy {
-    if (__innerProjection.__innerTags2 == null) {
-      error("Property [tags] is not available - add [tags] projection to switch on it")
-    }
     __innerDto.resolveTags(__innerContext, __innerProjection.__innerTags2!!)
   }
 
   override val title: String
-    get() {
-      if (!__innerProjection.__innerTitle3) {
-        error("Property [title] is not available - remove [__withoutTitle] projection to switch on it")
-      }
-      return __innerDto.title!!
-    }
+    get() = __innerDto.title!!
 
   override val genre: Genre
-    get() {
-      if (!__innerProjection.__innerGenre4) {
-        error("Property [genre] is not available - add [genre] projection to switch on it")
-      }
-      return __innerDto.genre!!
-    }
+    get() = __innerDto.genre!!
 
   override val countryId: Long
     get() = __innerDto.countryId!!
 
   override val country: Country by lazy {
-    if (__innerProjection.__innerCountry6 == null) {
-      error("Property [country] is not available - add [country] projection to switch on it")
-    }
     __innerDto.resolveCountry(__innerContext, __innerProjection.__innerCountry6!!)
   }
 
   override val actors: List<Actor> by lazy {
-    if (__innerProjection.__innerActors7 == null) {
-      error("Property [actors] is not available - add [actors] projection to switch on it")
-    }
     __innerDto.resolveActors(__innerContext, __innerProjection.__innerActors7!!)
   }
 

@@ -45,7 +45,6 @@ import kotlin.collections.Set
 import kotlin.collections.listOf
 import kotlin.collections.map
 import kotlin.collections.setOf
-import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
@@ -62,61 +61,32 @@ internal class ActorImpl(
     get() = __innerDto.id!!
 
   override val fields: JsonObject
-    get() {
-      if (__innerProjection.__innerFields1 == null) {
-        error("Property [fields] is not available - add [fields] projection to switch on it")
-      }
-      return __innerDto.fields!!
-    }
+    get() = __innerDto.fields!!
 
   override val tags: List<Tag> by lazy {
-    if (__innerProjection.__innerTags2 == null) {
-      error("Property [tags] is not available - add [tags] projection to switch on it")
-    }
     __innerDto.resolveTags(__innerContext, __innerProjection.__innerTags2!!)
   }
 
   override val firstName: String
-    get() {
-      if (!__innerProjection.__innerFirstName3) {
-        error("Property [firstName] is not available - remove [__withoutFirstName] projection to switch on it")
-      }
-      return __innerDto.firstName!!
-    }
+    get() = __innerDto.firstName!!
 
   override val lastName: String?
-    get() {
-      if (!__innerProjection.__innerLastName4) {
-        error("Property [lastName] is not available - remove [__withoutLastName] projection to switch on it")
-      }
-      return __innerDto.lastName
-    }
+    get() = __innerDto.lastName
 
   override val birthday: LocalDate
     get() = __innerDto.birthday!!
 
   override val gender: Gender
-    get() {
-      if (!__innerProjection.__innerGender6) {
-        error("Property [gender] is not available - add [gender] projection to switch on it")
-      }
-      return __innerDto.gender!!
-    }
+    get() = __innerDto.gender!!
 
   override val countryId: Long
     get() = __innerDto.countryId!!
 
   override val country: Country by lazy {
-    if (__innerProjection.__innerCountry8 == null) {
-      error("Property [country] is not available - add [country] projection to switch on it")
-    }
     __innerDto.resolveCountry(__innerContext, __innerProjection.__innerCountry8!!)
   }
 
   override val films: List<Film> by lazy {
-    if (__innerProjection.__innerFilms9 == null) {
-      error("Property [films] is not available - add [films] projection to switch on it")
-    }
     __innerDto.resolveFilms(__innerContext, __innerProjection.__innerFilms9!!)
   }
 

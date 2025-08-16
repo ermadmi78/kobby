@@ -25,7 +25,6 @@ import kotlin.Suppress
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
-import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlinx.serialization.json.JsonElement
@@ -36,12 +35,7 @@ internal class TagImpl(
   internal val __innerDto: TagDto,
 ) : Tag {
   override val `value`: String
-    get() {
-      if (!__innerProjection.__innerValue0) {
-        error("Property [value] is not available - add [value] projection to switch on it")
-      }
-      return __innerDto.`value`!!
-    }
+    get() = __innerDto.`value`!!
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   override fun toString(): String = buildString {

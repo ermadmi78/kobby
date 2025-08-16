@@ -51,7 +51,6 @@ import kotlin.collections.Set
 import kotlin.collections.listOf
 import kotlin.collections.map
 import kotlin.collections.setOf
-import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
@@ -69,60 +68,32 @@ internal class CountryImpl(
     get() = __innerDto.id!!
 
   override val fields: JsonObject
-    get() {
-      if (__innerProjection.__innerFields1 == null) {
-        error("Property [fields] is not available - add [fields] projection to switch on it")
-      }
-      return __innerDto.fields!!
-    }
+    get() = __innerDto.fields!!
 
   override val name: String
-    get() {
-      if (!__innerProjection.__innerName2) {
-        error("Property [name] is not available - remove [__withoutName] projection to switch on it")
-      }
-      return __innerDto.name!!
-    }
+    get() = __innerDto.name!!
 
   override val film: Film? by lazy {
-    if (__innerProjection.__innerFilm3 == null) {
-      error("Property [film] is not available - add [film] projection to switch on it")
-    }
     __innerDto.resolveFilm(__innerContext, __innerProjection.__innerFilm3!!)
   }
 
   override val films: List<Film> by lazy {
-    if (__innerProjection.__innerFilms4 == null) {
-      error("Property [films] is not available - add [films] projection to switch on it")
-    }
     __innerDto.resolveFilms(__innerContext, __innerProjection.__innerFilms4!!)
   }
 
   override val actor: Actor? by lazy {
-    if (__innerProjection.__innerActor5 == null) {
-      error("Property [actor] is not available - add [actor] projection to switch on it")
-    }
     __innerDto.resolveActor(__innerContext, __innerProjection.__innerActor5!!)
   }
 
   override val actors: List<Actor> by lazy {
-    if (__innerProjection.__innerActors6 == null) {
-      error("Property [actors] is not available - add [actors] projection to switch on it")
-    }
     __innerDto.resolveActors(__innerContext, __innerProjection.__innerActors6!!)
   }
 
   override val taggable: List<Taggable> by lazy {
-    if (__innerProjection.__innerTaggable7 == null) {
-      error("Property [taggable] is not available - add [taggable] projection to switch on it")
-    }
     __innerDto.resolveTaggable(__innerContext, __innerProjection.__innerTaggable7!!)
   }
 
   override val native: List<Native> by lazy {
-    if (__innerProjection.__innerNative8 == null) {
-      error("Property [native] is not available - add [native] projection to switch on it")
-    }
     __innerDto.resolveNative(__innerContext, __innerProjection.__innerNative8!!)
   }
 

@@ -43,7 +43,6 @@ import kotlin.apply
 import kotlin.collections.MutableMap
 import kotlin.collections.Set
 import kotlin.collections.setOf
-import kotlin.error
 import kotlin.text.StringBuilder
 import kotlin.text.buildString
 import kotlin.text.isNotEmpty
@@ -57,56 +56,29 @@ internal class MutationImpl(
   internal val __innerDto: MutationDto,
 ) : Mutation {
   override val createCountry: Country by lazy {
-    if (__innerProjection.__innerCreateCountry0 == null) {
-      error("Property [createCountry] is not available - add [createCountry] projection to switch on it")
-    }
     __innerDto.resolveCreateCountry(__innerContext, __innerProjection.__innerCreateCountry0!!)
   }
 
   override val createFilm: Film by lazy {
-    if (__innerProjection.__innerCreateFilm1 == null) {
-      error("Property [createFilm] is not available - add [createFilm] projection to switch on it")
-    }
     __innerDto.resolveCreateFilm(__innerContext, __innerProjection.__innerCreateFilm1!!)
   }
 
   override val createActor: Actor by lazy {
-    if (__innerProjection.__innerCreateActor2 == null) {
-      error("Property [createActor] is not available - add [createActor] projection to switch on it")
-    }
     __innerDto.resolveCreateActor(__innerContext, __innerProjection.__innerCreateActor2!!)
   }
 
   override val updateBirthday: Actor? by lazy {
-    if (__innerProjection.__innerUpdateBirthday3 == null) {
-      error("Property [updateBirthday] is not available - add [updateBirthday] projection to switch on it")
-    }
     __innerDto.resolveUpdateBirthday(__innerContext, __innerProjection.__innerUpdateBirthday3!!)
   }
 
   override val associate: Boolean
-    get() {
-      if (!__innerProjection.__innerAssociate4) {
-        error("Property [associate] is not available - add [associate] projection to switch on it")
-      }
-      return __innerDto.associate!!
-    }
+    get() = __innerDto.associate!!
 
   override val tagFilm: Boolean
-    get() {
-      if (!__innerProjection.__innerTagFilm5) {
-        error("Property [tagFilm] is not available - add [tagFilm] projection to switch on it")
-      }
-      return __innerDto.tagFilm!!
-    }
+    get() = __innerDto.tagFilm!!
 
   override val tagActor: Boolean
-    get() {
-      if (!__innerProjection.__innerTagActor6) {
-        error("Property [tagActor] is not available - add [tagActor] projection to switch on it")
-      }
-      return __innerDto.tagActor!!
-    }
+    get() = __innerDto.tagActor!!
 
   @Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE", "KotlinConstantConditions")
   override fun toString(): String = buildString {
