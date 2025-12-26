@@ -225,7 +225,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
                 }
 
                 // extensions
-                buildProperty(impl.extensionsPropertyName, dto.extensionsType) {
+                buildProperty(impl.extensionsPropertyName, extensionsType) {
                     if (impl.internal) {
                         addModifiers(INTERNAL)
                     }
@@ -341,7 +341,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
 
             buildFunction(entity.extensionsFunName) {
                 addModifiers(OVERRIDE)
-                returns(dto.extensionsType)
+                returns(extensionsType)
 
                 addStatement("return·${impl.extensionsPropertyName}")
             }

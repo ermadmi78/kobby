@@ -84,7 +84,7 @@ private fun FileSpecBuilder.buildEntity(node: KobbyNode, layout: KotlinLayout) =
             buildFunction(entity.extensionsFunName) {
                 addModifiers(ABSTRACT)
                 addModifiers(OVERRIDE)
-                returns(dto.extensionsType)
+                returns(extensionsType)
 
                 addKdoc(
                     "%L",
