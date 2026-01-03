@@ -119,13 +119,8 @@ private fun String.isKotlinIdentifier(): Boolean {
 internal val KotlinDtoLayout.errorsType: TypeName
     get() = LIST.parameterizedBy(graphql.errorClass)
 
-internal val KotlinDtoLayout.extensionsType: TypeName
-    get() = if (serialization.enabled) {
-        SerializationJson.JSON_OBJECT
-    } else {
-        MAP.parameterizedBy(STRING, ANY.nullable())
-    }
-
+internal val KotlinLayout.extensionsType: TypeName
+    get() = objectType()
 //******************************************************************************************************************
 //                                   KotlinDtoGraphQLLayout
 //******************************************************************************************************************
@@ -303,11 +298,7 @@ internal val KotlinContextLayout.adapterArgQuery: Pair<String, TypeName>
     get() = "query" to STRING
 
 internal val KotlinLayout.adapterArgVariables: Pair<String, TypeName>
-    get() = if (dto.serialization.enabled) {
-        "variables" to SerializationJson.JSON_OBJECT
-    } else {
-        "variables" to MAP.parameterizedBy(STRING, ANY.nullable())
-    }
+    get() = "variables" to objectType()
 
 internal val KotlinContextLayout.adapterArgBlock: String
     get() = "block"
@@ -435,12 +426,7 @@ internal val KotlinAdapterKtorLayout.compositePropertyRequestHeaders: String get
 internal val KotlinAdapterKtorLayout.compositePropertySubscriptionPayload: String get() = "subscriptionPayload"
 
 internal val KotlinLayout.compositePropertySubscriptionPayloadType: TypeName
-    get() = if (dto.serialization.enabled) {
-        SerializationJson.JSON_OBJECT.nullable()
-    } else {
-        MAP.parameterizedBy(STRING, ANY.nullable()).nullable()
-    }
-
+    get() = objectType().nullable()
 internal val KotlinAdapterKtorLayout.compositePropertySubscriptionReceiveTimeoutMillis: String
     get() = "subscriptionReceiveTimeoutMillis"
 internal val KotlinAdapterKtorLayout.compositePropertyHttpTokenHeader: String
@@ -470,3 +456,15 @@ internal val KotlinAdapterKtorLayout.compositeFunReceiveMessage: String get() = 
 @Suppress("CHANGING_ARGUMENTS_EXECUTION_ORDER_FOR_NAMED_VARARGS")
 internal val KotlinDtoLayout.adapterListenerLambda: LambdaTypeName
     get() = LambdaTypeName.get(parameters = arrayOf(graphql.requestClass), returnType = UNIT)
+
+internal fun KotlinLayout.objectCode(arg: Any): CodeBlock = if (dto.serialization.enabled) {
+    CodeBlock.of("%T(%L)", SerializationJson.JSON_OBJECT, arg)
+} else {
+    CodeBlock.of("%L", arg)
+}
+
+internal fun KotlinLayout.objectType(nullable: Boolean = true): TypeName = if (dto.serialization.enabled) {
+    SerializationJson.JSON_OBJECT
+} else {
+    MAP.parameterizedBy(STRING, if (nullable) ANY.nullable() else ANY)
+}

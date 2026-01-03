@@ -12,6 +12,7 @@ import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_I
 import io.github.ermadmi78.kobby.generator.kotlin.JacksonAnnotations.JSON_TYPE_NAME
 import io.github.ermadmi78.kobby.model.KobbyNode
 import io.github.ermadmi78.kobby.model.KobbySchema
+import io.github.ermadmi78.kobby.model.KobbyType
 
 /**
  * Created on 23.01.2021
@@ -19,6 +20,11 @@ import io.github.ermadmi78.kobby.model.KobbySchema
  * @author Dmitry Ermakov (ermadmi78@gmail.com)
  */
 internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSpec> = with(layout) {
+
+    fun KobbyType.dto(): TypeName = if (dto.serialization.enabled) dtoTypeWithSerializer else dtoType
+    fun elementType() = if (dto.serialization.enabled) SerializationJson.JSON_ELEMENT else ANY
+    fun arrayType(): TypeName = if (dto.serialization.enabled) SerializationJson.JSON_ARRAY else LIST.parameterizedBy(ANY)
+
     val files = mutableListOf<FileSpec>()
 
     //******************************************************************************************************************
@@ -51,12 +57,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 if (immutable) {
                     buildPrimaryConstructorProperties {
                         node.fields { field ->
-                            val fieldType = if (dto.serialization.enabled) {
-                                field.type.dtoTypeWithSerializer.nullable()
-                            } else {
-                                field.type.dtoType.nullable()
-                            }
-                            buildProperty(field.name, fieldType) {
+                            buildProperty(field.name, field.type.dto().nullable()) {
                                 field.comments {
                                     addKdoc("%L", it)
                                 }
@@ -71,12 +72,7 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     }
                 } else {
                     node.fields { field ->
-                        val fieldType = if (dto.serialization.enabled) {
-                            field.type.dtoTypeWithSerializer.nullable()
-                        } else {
-                            field.type.dtoType.nullable()
-                        }
-                        buildProperty(field.name, fieldType) {
+                        buildProperty(field.name, field.type.dto().nullable()) {
                             field.comments {
                                 addKdoc("%L", it)
                             }
@@ -295,17 +291,12 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 if (immutable) {
                     buildPrimaryConstructorProperties {
                         node.fields { field ->
-                            val fieldType = if (dto.serialization.enabled) {
-                                field.type.dtoTypeWithSerializer
-                            } else {
-                                field.type.dtoType
-                            }
                             val defaultValue: CodeBlock? = field.defaultValue?.let { literal ->
                                 val args = mutableListOf<Any?>()
                                 val format = literal.buildInitializer(field.type, args)
                                 CodeBlock.of(format, *args.toTypedArray())
                             }
-                            buildPropertyWithDefault(field.name, fieldType, defaultValue) {
+                            buildPropertyWithDefault(field.name, field.type.dto(), defaultValue) {
                                 field.comments {
                                     addKdoc("%L", it)
                                 }
@@ -323,17 +314,12 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     }
                 } else {
                     node.fields { field ->
-                        val fieldType = if (dto.serialization.enabled) {
-                            field.type.dtoTypeWithSerializer.nullable()
-                        } else {
-                            field.type.dtoType.nullable()
-                        }
                         val defaultValue: CodeBlock? = field.defaultValue?.let { literal ->
                             val args = mutableListOf<Any?>()
                             val format = literal.buildInitializer(field.type, args)
                             CodeBlock.of(format, *args.toTypedArray())
                         }
-                        buildProperty(field.name, fieldType) {
+                        buildProperty(field.name, field.type.dto().nullable()) {
                             field.comments {
                                 addKdoc("%L", it)
                             }
@@ -405,15 +391,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                 addModifiers(KModifier.DATA)
                 buildPrimaryConstructorProperties {
                     buildProperty("query", STRING)
-
-                    if (dto.serialization.enabled) {
-                        buildProperty("variables", SerializationJson.JSON_OBJECT.nullable())
-                    } else {
-                        buildProperty("variables", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
-                            jacksonIncludeNonEmpty()
-                        }
+                    buildProperty("variables", objectType().nullable()) {
+                        jacksonIncludeNonEmpty()
                     }
-
                     buildProperty("operationName", STRING.nullable()) {
                         jacksonIncludeNonAbsent()
                     }
@@ -451,24 +431,18 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                     buildProperty("errorType", STRING.nullable()) {
                         jacksonIncludeNonAbsent()
                     }
-
-                    if (dto.serialization.enabled) {
-                        buildProperty("path", SerializationJson.JSON_ARRAY.nullable())
-                        buildProperty("extensions", SerializationJson.JSON_OBJECT.nullable())
-                    } else {
-                        buildProperty("path", LIST.parameterizedBy(ANY).nullable()) {
-                            jacksonIncludeNonEmpty()
-                        }
-                        buildProperty("extensions", MAP.parameterizedBy(STRING, ANY.nullable()).nullable()) {
-                            jacksonIncludeNonEmpty()
-                        }
+                    buildProperty("path", arrayType().nullable()) {
+                        jacksonIncludeNonEmpty()
+                    }
+                    buildProperty("extensions", objectType().nullable()) {
+                        jacksonIncludeNonEmpty()
                     }
                 }
             }
         }
 
         val argErrors = "errors" to dto.errorsType.nullable()
-        val argExtensions = "extensions" to dto.extensionsType.nullable()
+        val argExtensions = "extensions" to extensionsType.nullable()
 
         // GraphQL Exception
         files += buildFile(dto.graphql.packageName, dto.graphql.exceptionName) {
@@ -710,13 +684,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         WsMessage.WS_CLIENT_MESSAGE_CONNECTION_INIT -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                if (dto.serialization.enabled) {
-                                    buildProperty("payload", SerializationJson.JSON_OBJECT.nullable())
-                                } else {
-                                    buildProperty("payload", MAP.parameterizedBy(STRING, ANY.nullable()).nullable())
-                                    customizeConstructor {
-                                        jacksonizeConstructor()
-                                    }
+                                buildProperty("payload", objectType().nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
                                 }
                             }
                         }
@@ -724,13 +694,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         WsMessage.WS_SERVER_MESSAGE_CONNECTION_ACK -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                if (dto.serialization.enabled) {
-                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
-                                } else {
-                                    buildProperty("payload", ANY.nullable())
-                                    customizeConstructor {
-                                        jacksonizeConstructor()
-                                    }
+                                buildProperty("payload", elementType().nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
                                 }
                             }
                         }
@@ -738,13 +704,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         WsMessage.WS_CLIENT_MESSAGE_PING -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                if (dto.serialization.enabled) {
-                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
-                                } else {
-                                    buildProperty("payload", ANY.nullable())
-                                    customizeConstructor {
-                                        jacksonizeConstructor()
-                                    }
+                                buildProperty("payload", elementType().nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
                                 }
                             }
                         }
@@ -752,13 +714,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         WsMessage.WS_CLIENT_MESSAGE_PONG -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                if (dto.serialization.enabled) {
-                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
-                                } else {
-                                    buildProperty("payload", ANY.nullable())
-                                    customizeConstructor {
-                                        jacksonizeConstructor()
-                                    }
+                                buildProperty("payload", elementType().nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
                                 }
                             }
                         }
@@ -766,13 +724,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         WsMessage.WS_SERVER_MESSAGE_PING -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                if (dto.serialization.enabled) {
-                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
-                                } else {
-                                    buildProperty("payload", ANY.nullable())
-                                    customizeConstructor {
-                                        jacksonizeConstructor()
-                                    }
+                                buildProperty("payload", elementType().nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
                                 }
                             }
                         }
@@ -780,13 +734,9 @@ internal fun generateDto(schema: KobbySchema, layout: KotlinLayout): List<FileSp
                         WsMessage.WS_SERVER_MESSAGE_PONG -> {
                             addModifiers(KModifier.DATA)
                             buildPrimaryConstructorProperties {
-                                if (dto.serialization.enabled) {
-                                    buildProperty("payload", SerializationJson.JSON_ELEMENT.nullable())
-                                } else {
-                                    buildProperty("payload", ANY.nullable())
-                                    customizeConstructor {
-                                        jacksonizeConstructor()
-                                    }
+                                buildProperty("payload", elementType().nullable())
+                                customizeConstructor {
+                                    jacksonizeConstructor()
                                 }
                             }
                         }

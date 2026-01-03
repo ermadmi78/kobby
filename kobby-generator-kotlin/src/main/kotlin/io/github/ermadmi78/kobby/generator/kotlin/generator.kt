@@ -162,7 +162,7 @@ fun generateKotlin(schema: KobbySchema, layout: KotlinLayout): List<KotlinFile> 
 
                     buildFunction(entity.extensionsFunName) {
                         addModifiers(ABSTRACT)
-                        returns(dto.extensionsType)
+                        returns(extensionsType)
 
                         addKdoc(
                             "%L",
@@ -389,17 +389,7 @@ private fun TypeSpecBuilder.buildContextFunction(
 
         if (subscription) {
             controlFlow("return·%T", context.subscriberClass.parameterizedBy(node.entityClass)) {
-                val callAdapterFlow = if (dto.serialization.enabled) {
-                    "${Const.ADAPTER}.$adapterFun($operation, %T(${arguments.first}))"
-                } else {
-                    "${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
-                }
-                val callAdapterArgs: Array<Any> = if (dto.serialization.enabled) {
-                    arrayOf(SerializationJson.JSON_OBJECT)
-                } else {
-                    arrayOf()
-                }
-                controlFlow(callAdapterFlow, *callAdapterArgs) {
+                controlFlow("${Const.ADAPTER}.$adapterFun($operation, %L)", objectCode(arguments.first)) {
                     buildAnonymousClass {
                         addSuperinterface(context.receiverClass.parameterizedBy(node.entityClass))
 
@@ -444,27 +434,15 @@ private fun TypeSpecBuilder.buildContextFunction(
                     node.isMutation -> dto.graphql.mutationResultClass
                     else -> error("Invalid algorithm")
                 }
-                if (dto.serialization.enabled) {
-                    statement(resultClass, SerializationJson.JSON_OBJECT) {
-                        "val·$resultVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, %T(${arguments.first}))"
-                    }
-                } else {
-                    statement(resultClass) {
-                        "val·$resultVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
-                    }
+                statement(resultClass, objectCode(arguments.first)) {
+                    "val·$resultVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, %L)"
                 }
                 statement(ClassName(impl.packageName, node.entityBuilderName)) {
                     "return·$resultVal.%T(this,·$projectionRef)"
                 }
             } else {
-                if (dto.serialization.enabled) {
-                    statement(node.dtoClass, SerializationJson.JSON_OBJECT) {
-                        "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, %T(${arguments.first}))"
-                    }
-                } else {
-                    statement(node.dtoClass) {
-                        "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, ${arguments.first})"
-                    }
+                statement(node.dtoClass, objectCode(arguments.first)) {
+                    "val·$dtoVal:·%T·=·${Const.ADAPTER}.$adapterFun($operation, %L)"
                 }
                 statement(ClassName(impl.packageName, node.entityBuilderName)) {
                     "return·$dtoVal.%T(this,·$projectionRef)"
@@ -482,17 +460,10 @@ private fun FileSpecBuilder.buildBuilderFunction(
 ) = with(layout) {
     buildFunction(name) {
         buildParameter(entity.projection.projectionArgument, node.projectionLambda)
-        if (dto.serialization.enabled) {
-            returns(
-                ClassName("kotlin", "Pair")
-                    .parameterizedBy(STRING, SerializationJson.JSON_OBJECT)
-            )
-        } else {
-            returns(
-                ClassName("kotlin", "Pair")
-                    .parameterizedBy(STRING, MAP.parameterizedBy(STRING, ANY))
-            )
-        }
+        returns(
+            ClassName("kotlin", "Pair")
+                .parameterizedBy(STRING, objectType(nullable = false))
+        )
 
         val projectionRef = entity.projection.projectionArgument.trim('_').decorate(null, "Ref")
         statement(node.implProjectionClass, MemberName("kotlin", "apply")) {
@@ -534,18 +505,11 @@ private fun FileSpecBuilder.buildBuilderFunction(
         }
 
         addStatement("")
-        if (dto.serialization.enabled) {
-            addStatement(
-                "return·$operation·%M·%T(${arguments.first})",
-                MemberName("kotlin", "to"),
-                SerializationJson.JSON_OBJECT
-            )
-        } else {
-            addStatement(
-                "return·$operation·%M·${arguments.first}",
-                MemberName("kotlin", "to")
-            )
-        }
+        addStatement(
+            "return·$operation·%M·%L",
+            MemberName("kotlin", "to"),
+            objectCode(arguments.first)
+        )
     }
 }
 

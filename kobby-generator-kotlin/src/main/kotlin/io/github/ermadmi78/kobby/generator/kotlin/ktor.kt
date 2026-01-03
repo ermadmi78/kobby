@@ -567,13 +567,7 @@ private fun TypeSpecBuilder.buildExecuteSubscriptionFun(schema: KobbySchema, lay
                 Kotlin.contains
             ) {
                 controlFlow("if (${ktor.compositeValInitPayload}·==·null)") {
-                    if (dto.serialization.enabled) {
-                        addStatement(
-                            "${ktor.compositeValInitPayload} = %T(%M())", SerializationJson.JSON_OBJECT, Kotlin.mapOf
-                        )
-                    } else {
-                        addStatement("${ktor.compositeValInitPayload} = %M()", Kotlin.mapOf)
-                    }
+                    addStatement("${ktor.compositeValInitPayload} = %L", objectCode(CodeBlock.of("%M()", Kotlin.mapOf)))
                 }
                 addStatement("")
 
