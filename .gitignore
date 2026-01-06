@@ -24,5 +24,10 @@ hs_err_pid*
 /.idea/
 build/
 
+# composite build
+*/build/
+*/.gradle/
+*/buildSrc/.gradle/
+
 # OS X DS_Store
 .DS_Store
