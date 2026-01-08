@@ -15,7 +15,7 @@ import io.github.ermadmi78.kobby.server.controller.SubscriptionService
 import io.github.ermadmi78.kobby.server.controller.TaggableQueryService
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
-import io.ktor.server.plugins.cors.*
+import io.ktor.server.plugins.cors.routing.CORS
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
