@@ -1,7 +1,6 @@
 package io.github.ermadmi78.kobby.server.models
 
 import com.expediagroup.graphql.generator.annotations.GraphQLUnion
-import com.expediagroup.graphql.generator.scalars.ID
 import io.github.ermadmi78.kobby.server.controller.SubscriptionService.Companion.emit
 import io.github.ermadmi78.kobby.server.models.Actor.Companion.accepted
 import io.github.ermadmi78.kobby.server.models.Film.Companion.accepted
@@ -38,7 +37,7 @@ data class Country(
         private var countries = initial()
         fun truncate() { this.countries = initial() }
         fun all(): List<Country> = countries
-        fun get(id: ID): Country? = countries.firstOrNull { it.id == id.value.toLong() }
+        fun get(id: Long): Country? = countries.firstOrNull { it.id == id }
         suspend fun create(name: String): Country {
             val maxId = countries.maxOfOrNull { it.id } ?: 0
             return Country(maxId.inc(), name).also {
@@ -56,7 +55,7 @@ data class Country(
             .take(limit.asLimit())
     }
 
-    suspend fun film(id: ID): Film? = films().firstOrNull { it.id == id.value.toLong() }
+    suspend fun film(id: Long): Film? = films().firstOrNull { it.id == id }
     suspend fun films(
         title: String? = null,
         genre: Genre? = null,
@@ -65,7 +64,7 @@ data class Country(
     ): List<Film> = Film.all().filter { it.countryId == id }
         .accepted(title, genre, limit, offset)
 
-    suspend fun actor(id: ID): Actor? = films().flatMap { film -> film.actors.filter { it.id == id.value.toLong() } }.firstOrNull()
+    suspend fun actor(id: Long): Actor? = films().flatMap { film -> film.actors.filter { it.id == id } }.firstOrNull()
     suspend fun actors(
         firstName: String? = null,
         lastName: String? = null,

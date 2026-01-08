@@ -1,7 +1,6 @@
 package io.github.ermadmi78.kobby.server.models
 
 import com.expediagroup.graphql.generator.annotations.GraphQLIgnore
-import com.expediagroup.graphql.generator.scalars.ID
 import io.github.ermadmi78.kobby.server.controller.SubscriptionService.Companion.emit
 import io.github.ermadmi78.kobby.server.models.Actor.Companion.accepted
 import io.github.ermadmi78.kobby.server.models.asLimit
@@ -20,7 +19,7 @@ data class Film(
     companion object {
 
         private fun actors(vararg ids: Long): MutableList<Actor> = ids
-            .map { Actor.get(ID(it.toString())) }
+            .map { Actor.get(it) }
             .filterNotNull()
             .toMutableList()
 
@@ -42,7 +41,7 @@ data class Film(
         private var films = initial()
         fun truncate() { this.films = initial() }
         fun all(): List<Film> = films
-        fun get(id: ID): Film? = films.firstOrNull { it.id == id.value.toLong() }
+        fun get(id: Long): Film? = films.firstOrNull { it.id == id }
 
         suspend fun create(countryId: Long, film: FilmInput, tags: TagInput? = null): Film {
             val maxId = films.maxOfOrNull { it.id } ?: 0
@@ -82,7 +81,7 @@ data class Film(
         }
     }
 
-    suspend fun country(): Country = Country.get(ID(countryId.toString()))!!
+    suspend fun country(): Country = Country.get(countryId)!!
     suspend fun actors(
         firstName: String? = null,
         lastName: String? = null,

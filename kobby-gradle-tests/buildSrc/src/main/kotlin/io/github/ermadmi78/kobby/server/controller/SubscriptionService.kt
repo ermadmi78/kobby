@@ -1,6 +1,5 @@
 package io.github.ermadmi78.kobby.server.controller
 
-import com.expediagroup.graphql.generator.scalars.ID
 import com.expediagroup.graphql.server.operations.Subscription
 import io.github.ermadmi78.kobby.server.models.Actor
 import io.github.ermadmi78.kobby.server.models.Country
@@ -31,9 +30,9 @@ class SubscriptionService : Subscription {
 
     fun countryCreated(): Flow<Country> = countriesFlow.asSharedFlow()
 
-    fun filmCreated(countryId: ID? = null): Flow<Film> = filmsFlow.asSharedFlow()
-        .filter { countryId == null || it.countryId == countryId.value.toLong() }
+    fun filmCreated(countryId: Long? = null): Flow<Film> = filmsFlow.asSharedFlow()
+        .filter { countryId == null || it.countryId == countryId }
 
-    fun actorCreated(countryId: ID? = null): Flow<Actor> = actorsFlow.asSharedFlow()
-        .filter { countryId == null || it.countryId == countryId.value.toLong() }
+    fun actorCreated(countryId: Long? = null): Flow<Actor> = actorsFlow.asSharedFlow()
+        .filter { countryId == null || it.countryId == countryId }
 }

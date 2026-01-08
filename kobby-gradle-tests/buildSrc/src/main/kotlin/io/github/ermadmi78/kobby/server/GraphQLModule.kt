@@ -4,7 +4,6 @@ package io.github.ermadmi78.kobby.server
 import com.expediagroup.graphql.dataloader.KotlinDataLoaderRegistryFactory
 import com.expediagroup.graphql.generator.hooks.FlowSubscriptionSchemaGeneratorHooks
 import com.expediagroup.graphql.server.ktor.*
-import graphql.Scalars
 import graphql.scalars.ExtendedScalars
 import graphql.schema.GraphQLType
 import io.github.ermadmi78.kobby.server.controller.ActorQueryService
@@ -13,6 +12,7 @@ import io.github.ermadmi78.kobby.server.controller.FilmQueryService
 import io.github.ermadmi78.kobby.server.controller.MutationsService
 import io.github.ermadmi78.kobby.server.controller.SubscriptionService
 import io.github.ermadmi78.kobby.server.controller.TaggableQueryService
+import io.github.ermadmi78.kobby.server.controller.graphqlIDType
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.cors.routing.CORS
@@ -46,7 +46,7 @@ fun Application.graphQLModule() {
             hooks = object : FlowSubscriptionSchemaGeneratorHooks() {
                 override fun willGenerateGraphQLType(type: KType): GraphQLType? =
                     when (type.classifier as? KClass<*>) {
-                        Long::class -> Scalars.GraphQLID
+                        Long::class -> graphqlIDType
                         Map::class -> ExtendedScalars.Json
                         LocalDate::class -> ExtendedScalars.Date
                         else -> null
