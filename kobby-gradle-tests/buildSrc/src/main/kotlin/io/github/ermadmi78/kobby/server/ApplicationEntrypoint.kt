@@ -12,7 +12,6 @@ class ApplicationEntrypoint {
 
         println("connecting on port $localPort")
         return embeddedServer(Netty, localPort) {
-            developmentMode
             graphQLModule()
         }.start(wait)
     }
