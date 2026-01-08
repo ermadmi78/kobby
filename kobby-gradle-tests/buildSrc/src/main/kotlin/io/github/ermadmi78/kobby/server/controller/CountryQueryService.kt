@@ -7,7 +7,7 @@ import io.github.ermadmi78.kobby.server.models.Country.Companion.accepted
 
 class CountryQueryService : Query {
 
-    suspend fun country(id: ID): Country? = Country.all().find { it.id == id.value.toLong() }
+    suspend fun country(id: ID): Country? = Country.get(id)
 
     suspend fun countries(
         name: String? = null,

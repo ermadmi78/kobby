@@ -12,7 +12,7 @@ import java.time.LocalDate
 
 class ActorQueryService : Query {
 
-    suspend fun actor(id: ID): Actor? = actors().firstOrNull { it.id == id.value.toLong() }
+    suspend fun actor(id: ID): Actor? = Actor.get(id)
 
     suspend fun actors(
         firstName: String? = null,

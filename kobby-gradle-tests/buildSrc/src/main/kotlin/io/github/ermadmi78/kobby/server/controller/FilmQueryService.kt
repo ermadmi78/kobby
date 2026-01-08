@@ -8,7 +8,7 @@ import io.github.ermadmi78.kobby.server.models.Genre
 
 class FilmQueryService : Query {
 
-    suspend fun film(id: ID): Film? = films().firstOrNull { it.id == id.value.toLong() }
+    suspend fun film(id: ID): Film? = Film.get(id)
 
     suspend fun films(
         title: String? = null,
