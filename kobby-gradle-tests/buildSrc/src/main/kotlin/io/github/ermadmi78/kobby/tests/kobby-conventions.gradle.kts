@@ -23,6 +23,7 @@ tasks {
 }
 
 dependencies {
+    testImplementation(testLibs.bundles.slf4j)
     testImplementation(testLibs.bundles.kotest)
 }
 
