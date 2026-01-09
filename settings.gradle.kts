@@ -25,3 +25,5 @@ include(":kobby-generator-kotlin")
 include(":kobby-gradle-plugin")
 include(":kobby-maven-plugin")
 
+includeBuild("kobby-gradle-tests")
+

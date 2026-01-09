@@ -1,0 +1,34 @@
+[versions]
+extended-scalars = "24.0"
+graphql-kotlin = "8.8.1"
+jackson = "2.13.4"
+kotlin-gradle-plugin = "2.3.0"
+ktor = "2.3.13"
+kotest = "5.8.0"
+kotlinx-serialization = "2.3.0"
+slf4j = "2.0.17"
+
+[libraries]
+extended-scalars = { module = "com.graphql-java:graphql-java-extended-scalars", version.ref = "extended-scalars"}
+graphql-kotlin = { module = "com.expediagroup:graphql-kotlin-ktor-server", version.ref = "graphql-kotlin" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin"}
+ktor-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor"}
+ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-websockets = { module = "io.ktor:ktor-server-websockets", version.ref = "ktor" }
+ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+ktor-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor"}
+ktor-serialization-jackson = { module = "io.ktor:ktor-serialization-jackson", version.ref = "ktor"}
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor"}
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+
+[bundles]
+kotest = [ "kotest-runner-junit5", "kotest-assertions-core", "kotest-property" ]
+slf4j = [ "slf4j-api", "slf4j-simple" ]
+
+[plugins]
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinx-serialization" }
