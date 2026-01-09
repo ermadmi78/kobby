@@ -32,7 +32,7 @@ class PluginTest : AnnotationSpec() {
     }
 
     @Test
-    fun `query request`() = runBlocking {
+    suspend fun `query request`() {
         val result = schema().query {
             films {
                 limit = 5
