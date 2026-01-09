@@ -6,6 +6,7 @@ import kotlin.apply
 
 plugins {
     kotlin("jvm")
+    id("com.adarshr.test-logger")
     id("io.github.ermadmi78.kobby")
 }
 

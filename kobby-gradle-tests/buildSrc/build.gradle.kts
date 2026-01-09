@@ -11,6 +11,7 @@ val props = Properties().apply {
 }
 
 val snapshotKobbyVersion = props["version"]
+val testLogger = props["testLogger"]
 
 dependencies {
     implementation(testLibs.ktor.server.netty)
@@ -26,6 +27,7 @@ dependencies {
 
     // firstly run `publishToMavenLocal`
     implementation("io.github.ermadmi78:kobby-gradle-plugin:$snapshotKobbyVersion")
+    implementation("com.adarshr:gradle-test-logger-plugin:$testLogger")
 }
 
 kotlin {
