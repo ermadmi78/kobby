@@ -28,39 +28,56 @@ release [3.0.0](https://github.com/ermadmi78/kobby/releases/tag/3.0.0).
 
 ### Requirements
 
-#### Kobby 4.x.x, 5.x.x
-
 * Gradle at least version 8.0 is required.
 * Maven at least version 3.9.1 is required.
-* Kotlin at least version 1.8.0 is required to compile generated client DSL (use Kobby at least [4.0.1](https://github.com/ermadmi78/kobby/releases/tag/4.0.1) for Kotlin 2.x).
+* Kotlin at least version 1.8.0 is required to compile generated client DSL (use Kobby at
+  least [4.0.1](https://github.com/ermadmi78/kobby/releases/tag/4.0.1) for Kotlin 2.x).
 * Kotlinx Serialization at least version 1.5.0 is required.
 * Ktor at least version 2.0.0 is required to generate default adapters.
 * [graphql-ws](https://github.com/enisdenjo/graphql-ws) GraphQL Websocket protocol.
 
-#### Kobby 3.x.x
+<details>
+  <summary>Version history</summary>
+
+**Kobby 4.x.x, 5.x.x**
+
+* Gradle at least version 8.0 is required.
+* Maven at least version 3.9.1 is required.
+* Kotlin at least version 1.8.0 is required to compile generated client DSL (use Kobby at
+  least [4.0.1](https://github.com/ermadmi78/kobby/releases/tag/4.0.1) for Kotlin 2.x).
+* Kotlinx Serialization at least version 1.5.0 is required.
+* Ktor at least version 2.0.0 is required to generate default adapters.
+* [graphql-ws](https://github.com/enisdenjo/graphql-ws) GraphQL Websocket protocol.
+
+**Kobby 3.x.x**
 
 * Gradle at least version 8.0 is required.
 * Maven at least version 3.9.1 is required.
 * Kotlin at least version 1.8.0 is required to compile generated client DSL.
 * Kotlinx Serialization at least version 1.5.0 is required.
 * Ktor at least version 2.0.0 is required to generate default adapters.
-* [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws) GraphQL Websocket protocol (is legacy now).
+* [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws) GraphQL Websocket protocol (
+  is legacy now).
 
-#### Kobby 2.x.x
+**Kobby 2.x.x**
 
 * Gradle at least version 7.0 is required.
 * Maven at least version 3.6.3 is required.
 * Kotlin at least version 1.6 is required to compile generated client DSL.
 * Ktor at least version 2.0.0 is required to generate default adapters.
-* [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws) GraphQL Websocket protocol (is legacy now).
+* [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws) GraphQL Websocket protocol (
+  is legacy now).
 
-#### Kobby 1.x.x
+**Kobby 1.x.x**
 
 * Gradle at least version 7.0 is required.
 * Maven at least version 3.6.3 is required.
 * Kotlin at least version 1.5 is required to compile generated client DSL.
 * 1.5.0 <= Ktor version < 2.0.0 is required to generate default adapters.
-* [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws) GraphQL Websocket protocol (is legacy now).
+* [subscriptions-transport-ws](https://github.com/apollographql/subscriptions-transport-ws) GraphQL Websocket protocol (
+  is legacy now).
+
+</details>
 
 ### Contributing
 
@@ -106,6 +123,8 @@ schema file and put it in `src/main/resources/io/github/ermadmi78/kobby/cinema/a
 ### Configure Kobby Gradle plugin
 
 * Add Kobby plugin to your `build.gradle.kts`, to generate Kotlin DSL.
+* Configure the GraphQL schema location if necessary (more details
+  see [here](https://github.com/ermadmi78/kobby/wiki/Gradle-GraphQL-Schema-Location)).
 * Configure Kotlin data types for scalars, defined in the GraphQL schema (more details about the scalar mapping
   see [here](https://github.com/ermadmi78/kobby/wiki/Gradle-GraphQL-Scalar-Mapping)).
 * Add Jackson dependency to enable Jackson serialization or
@@ -137,6 +156,36 @@ dependencies {
     compileOnly("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
 }
 ```
+
+### Configure GraphQL schema truncation if necessary
+
+Your does not always need all the types in the GraphQL schema. Often you works with a small subset of fields and types.
+To simplify code generation in such cases, the Kobby plugin provides a
+[mechanism for truncating the GraphQL schema](https://github.com/ermadmi78/kobby/wiki/Gradle-GraphQL-Schema-Truncation)
+using the [GSEL query language](https://github.com/ermadmi78/kobby/wiki/Gradle-GraphQL-Schema-Exploration-Language).
+
+A simple truncation configuration looks like this:
+
+```kotlin
+kobby {
+    schema {
+        truncate {
+            byQuery {
+                forAny {
+                    exclude {
+                        dependency("Film|Actor")
+                        subTypeDependency("Film|Actor")
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+Sometimes choosing an effective GraphQL schema truncation strategy is a difficult task.
+And the [Kobby schema analysis tool](https://github.com/ermadmi78/kobby/wiki/Gradle-GraphQL-Schema-Analysis-Tool)
+can help you solve this problem.
 
 ### Generate Kotlin DSL Client by your GraphQL schema
 
