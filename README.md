@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen)](https://github.com/ermadmi78/kobby/blob/main/LICENSE)
-[![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v5.3.0-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
-[![Maven Central](https://img.shields.io/badge/Maven%20Central-v5.3.0-orange)](https://repo.maven.apache.org/maven2/io/github/ermadmi78/kobby-maven-plugin/)
+[![Plugin Portal](https://img.shields.io/badge/Plugin%20Portal-v5.3.1-orange)](https://plugins.gradle.org/plugin/io.github.ermadmi78.kobby)
+[![Maven Central](https://img.shields.io/badge/Maven%20Central-v5.3.1-orange)](https://repo.maven.apache.org/maven2/io/github/ermadmi78/kobby-maven-plugin/)
 [![Discussions](https://img.shields.io/badge/Discussions-On%20GitHub-blue)](https://github.com/ermadmi78/kobby/discussions)
 
 [![alt text](https://github.com/ermadmi78/kobby/blob/main/images/simple_query.png)](https://github.com/ermadmi78/kobby/wiki)
@@ -87,7 +87,7 @@ Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ```kotlin
 plugins {
-    id("io.github.ermadmi78.kobby") version "5.3.0"
+    id("io.github.ermadmi78.kobby") version "5.3.1"
 }
 ```
 
@@ -100,7 +100,7 @@ plugins {
         <plugin>
             <groupId>io.github.ermadmi78</groupId>
             <artifactId>kobby-maven-plugin</artifactId>
-            <version>5.3.0</version>
+            <version>5.3.1</version>
             <executions>
                 <execution>
                     <phase>generate-sources</phase>
